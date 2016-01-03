@@ -1,0 +1,218 @@
+
+/****
+* Index/Search page
+****/
+.searchPage {
+  //padding-top: 7rem;
+  /*display: flex;*/
+}
+
+.searchPage #resultsOuterContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 7rem;
+  //flex-direction: column;
+  //outline: 2px solid #e9322d;
+  -webkit-transform: translateZ(0);
+}
+
+.searchPage #resultsContainer {
+  flex: 0 1 44rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0 5rem;
+  //justify-content: space-around;
+  //outline: 2px solid #55201B;
+  //margin: 0 10px;
+}
+
+.searchPage #resultsCount {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  top: -1rem;
+  opacity: 0.2;
+  //color: #D9D9D9;
+}
+
+.searchPage .result{
+  flex: 1 1 auto;
+  //outline: 2px solid #D0EDA7;
+  margin-bottom: 1.8rem;
+  display: flex;
+  //flex-direction: column;
+}
+
+.searchPage .result a {
+  text-decoration: none;
+  color: #3498DB;
+}
+
+.searchPage .result a:hover {
+  text-decoration: underline;
+}
+
+.searchPage .mainDetails {
+  //outline: 2px solid #D0EDA7;
+  flex: 1 1 auto;
+
+}
+/****
+ Make super long words/urls break and not overflow
+*/
+.searchPage .mainDetails * {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.searchPage .mainResultLink {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchPage .mainResultLink.warning {
+  flex-direction: row;
+}
+
+.searchPage .mainResultLink {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.searchPage .mainResultLink a:hover{
+  color: #2670A2;
+  text-decoration: none;
+}
+
+.searchPage .mainResultLink .material-icons{
+  position: relative;
+  top: -0.4rem;
+}
+
+.searchPage .mainResultLink .material-icons:hover {
+  cursor: default;
+}
+
+.searchPage .resultUrlText {
+  //color: #77BBEB;
+  //opacity: 0.8;
+  color: #92C8EF;
+  font-size: 0.7rem;
+}
+
+.searchPage .description {
+  font-size: 0.93rem;
+}
+
+//.searchPage .description:after {
+//  content: "";
+//  position: absolute;
+//  bottom: -3px;
+//  left: -3px;
+//  right: -3px;
+//  height: 3px;
+//  //background-image: -webkit-gradient(linear, 0 0, 100% 0, from(#000), to(transparent));
+//  background-image: linear-gradient(left, #000, transparent);
+//  //background-image: -moz-linear-gradient(left, #000, transparent);
+//  //background-image: -o-linear-gradient(left, #000, transparent);
+//}
+
+.searchPage .description{
+  margin: 0;
+}
+
+.searchPage .description strong{
+  color: #2670A2;
+}
+
+.searchPage .safeBrowsing {
+  color:   #F1C40F;
+  font-size: 0.8rem;
+  margin: 0.1rem 0;
+  //margin-bottom: 0.3rem;
+  //display: flex;
+  //flex-direction: column;
+}
+
+.searchPage .safeBrowsing > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchPage .safeBrowsing > div:nth-child(n+2) {
+  margin-top: 0.4rem;
+}
+
+//.searchPage .safeBrowsing > div:nth-child(3) {
+//  margin-bottom: 1rem;
+//}
+
+.searchPage .safeBrowsing a {
+  color:   inherit;
+  //font-weight: bold;
+}
+
+.searchPage .safeBrowsing .material-icons {
+  margin-right: 0.4rem;
+  flex: 0 1 auto;
+}
+
+.searchPage .safeBrowsingBriefDescription {
+  display: flex;
+}
+
+.searchPage .safeBrowsingBriefDescription > a {
+  display: flex;
+  align-items: center;
+  flex:1 1;
+}
+
+.searchPage .safeBrowsingBriefDescription > a:hover {
+  text-decoration: none;
+}
+
+.searchPage .safeBrowsingExplination {
+  display: none;
+  margin-left: 1.6rem;
+}
+
+.searchPage .safeBrowsingExplination a{
+  color: #2670A2;
+}
+
+.searchPage .googleAdvisory {
+  font-size: 0.6rem;
+}
+
+.searchPage .metaIconsContainer {
+  //flex: 1 1 auto;
+  display: flex;
+  flex: 0 0 auto;
+  //justify-content: flex-end;
+  //margin-top: -1.6rem;
+  //align-items: flex-end;
+  //outline: 2px solid #CF5340;
+}
+
+.searchPage .metaIcons {
+  //flex: 1 1 auto;
+  //font-size: 0.8rem;
+  color: #ECF0F1;
+  display: flex;
+  //justify-content: flex-end;
+  //outline: 2px solid #129FEA;
+
+  //color: #2670A2;
+}
+
+.searchPage .metaIcons a{
+  //flex: 1 1 auto;
+  color:   inherit;
+}
+
+.searchPage .metaIcons a:hover{
+  text-decoration: none;
+  color: #77BBEB;
+}

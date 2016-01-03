@@ -1,0 +1,455 @@
+
+//Nav header
+.navHeader {
+  position: fixed;
+  top: 0;
+  z-index: 99;
+  //height: 4rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  //box-shadow: 0px 33px 66px 0px rgba(0,0,0,0.64);
+  //font-size: 3rem;
+  //outline: 3px solid #ffff00;
+  //position: absolute;
+}
+
+.navHeader nav {
+  background-color: @paletteBlue;
+
+  //outline: 2px solid green;
+  //background-color: #EDE480;
+  display: flex;
+  flex: 1 1 4rem;
+  //outline: 3px solid #e9322d;
+}
+
+.navHeader .brandLogo {
+  //outline: 2px solid purple;
+  //background-color: purple;
+  /****
+  * Element is both a flex item for it's parent container,
+  * and a flex container itself for it's child element
+  */
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  font-family: 'exoregular';
+  //background-color: #55201B;
+  //font-size: 1.9rem;
+}
+
+.navHeader .brandLogo a {
+  flex: 1 1 auto;
+  //color: #444;
+  color: @paletteTextColorLight;
+  text-align: right;
+  padding-right: 1rem;
+  //padding-left: 0.5rem;
+  text-decoration: none;
+}
+
+.navHeader .brandLogo a h1{
+  font-size: 2.4rem;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  text-rendering: geometricPrecision;
+}
+
+.navHeader .brandLogo a:hover{
+  //background: rgba(0, 0, 0, 0.1);
+  //opacity: 0.8;
+  color: @paletteTextColorDarker;
+}
+
+.navHeader .searchContainer {
+  //outline: 2px solid #f3f34d;
+  //background-color: #f3f34d;
+  /****
+  * Element is both a flex item for it's parent container,
+  * and a flex container itself for it's child element
+  */
+  flex: 2 2 auto;
+  display: flex;
+  border-top: 3px solid @paletteBlue;
+  border-bottom: 3px solid @paletteBlue;
+}
+
+.navHeader #searchForm {
+  flex: 1 1 auto;
+  display: flex;
+}
+
+.navHeader #searchForm > input{
+  flex: 1 1 auto;
+  display: flex;
+  font-size: 1.5rem;
+  padding-left: 1rem;
+}
+
+.navHeader .rightContainer {
+  flex: 2 1 auto;
+  display: flex;
+  //min-width: 192px;
+}
+
+//.navHeader .rightContainer >*{
+//outline: 1px solid green;
+//}
+
+/***
+* Material design icons in the header
+*/
+.navHeader .material-icons {
+  font-size: 3rem;
+  //color: #BBDEFB;
+  color: #77BBEB;
+  //opacity: 0.5;
+}
+
+.navHeader .dateFilter {
+  //outline: 2px solid #898941;
+  //background-color: #c3c3c3;
+  /****
+  * Element is both a flex item for it's parent container,
+  * and a flex container itself for it's child element
+  */
+  //flex: 0 0 80px;
+  flex: 0 1 4rem;
+  display: flex;
+  //margin: 0 10px;
+}
+
+.navHeader .dateFilter a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-decoration: none;
+}
+
+.navHeader .dateFilter a:hover .material-icons {
+  //background: rgba(0, 0, 0, 0.5);
+  //color: rgba(0, 0, 0, 0.52);
+  color: @paletteTextColorDarker;
+  //color: #2670A2;
+  //opacity: 1;
+}
+
+.navHeader .looseSearch {
+  //outline: 2px solid #898941;
+  //background-color: #c3c3c3;
+
+  //flex: 0 0 80px;
+  flex: 0 1 4rem;
+  display: flex;
+  //TODO maybe bring this back some day if getting perf issues with searches
+  display: none;
+  //margin: 0 10px;
+}
+
+.navHeader .looseSearch a {
+  display: flex;
+  flex: 1 1 auto;
+  //outline: 1px solid red;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.navHeader .looseSearch a i {
+  background-image: url("/images/goose.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.navHeader .looseSearch a:hover i {
+  background-image: url("/images/goosehover.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  cursor: pointer;
+}
+
+.navHeader .addPage {
+  //outline: 2px solid #000000;
+  //background-color: #e46119;
+  flex: 0 1 4rem;
+  display: flex;
+  //position: relative;
+}
+
+.navHeader .addPage a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-decoration: none;
+}
+
+.navHeader .addPage a:hover .material-icons {
+  //background: rgba(0, 0, 0, 0.5);
+  //color: rgba(0, 0, 0, 0.52);
+  color: @paletteTextColorDarker;
+}
+
+.navHeader .settings-etal {
+  //outline: 2px solid #000000;
+  //background-color: #e46119;
+  flex: 0 1 4rem;
+  display: flex;
+}
+
+.navHeader .settings-etal a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-decoration: none;
+}
+
+.navHeader .settings-etal a:hover .material-icons {
+  //background: rgba(0, 0, 0, 0.5);
+  //color: rgba(0, 0, 0, 0.52);
+  color: @paletteTextColorDarker;
+}
+
+/****
+* Header Nav subBars
+*/
+.navHeader .subBar {
+  background-color: @paletteGrey;
+  display: flex;
+  flex: 1 1 auto;
+  //font-size: 1.5rem;
+  justify-content: space-around;
+  box-shadow: 0px 15px 67px 0px rgba(0,0,0,0.64);
+  //margin-top: ;
+  //display: none;
+  //outline: 2px solid green;
+}
+
+/****
+* Date Filter
+*/
+.navHeader .dateFilterSettings {
+  //flex: 0 1 50rem;
+  //justify-content: space-around;
+  height: 50px;
+  font-size: 1rem;
+  //padding: 0.5rem 0;
+  //line-height: 50px;
+  //padding: 0.4rem 0;
+  color: #3498DB;
+  //display: flex;
+  align-items: center;
+}
+
+.navHeader .dateFilterSettings .fromToContainer {
+  flex: 1 1 auto;
+  //justify-content: space-around;
+  /* align-items: stretch; */
+  display: flex;
+  //outline: 2px solid #666666;
+  //color: #90C4E6;
+  //outline: 1px solid green;
+  //width: 25rem;
+}
+
+.navHeader .dateFilterSettings .fromContainer {
+  display: flex;
+  width: 15rem;
+}
+
+//.navHeader .dateFilterSettings .fromContainer .selectFromMonth {
+//  width: 172px;
+//}
+
+.navHeader .dateFilterSettings .toContainer {
+  display: flex;
+  width: 14rem;
+}
+
+.navHeader .dateFilterSettings .shortcutsContainer {
+  //border-right: 2px solid #2670A2;
+  display: flex;
+  width: 9rem;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: #3498DB;
+}
+
+.navHeader .dateFilterSettings .nice-select {
+  border-radius: 0;
+  border: none;
+  float: none;
+  font-size: inherit;
+  height: inherit;
+  line-height: inherit;
+  background-color: #ECF0F1;
+}
+
+.navHeader .dateFilterSettings .nice-select .list {
+  border-radius: 0;
+  margin-top: 0;
+  background-color: #ECF0F1;
+}
+
+
+//.navHeader .dateFilterSettings .fromDate:focus .fromToContainer {
+//  color: #3498DB;
+//}
+/****
+* Add Page Urls
+*/
+.navHeader .addPageUrls {
+  flex: 1 1 auto;
+  //display: flex;
+  flex-direction: column;
+}
+
+.navHeader .addPageUrls textarea {
+  display: flex;
+  flex: 1 1 auto;
+  font-size: 0.9rem;
+  padding: 2rem;
+  text-align: center;
+  line-height: 1rem;
+}
+
+.navHeader .addPageUrls textarea::placeholder {
+  text-align: center;
+}
+
+.navHeader .addPageUrls .progressInfo {
+  display: flex;
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 2rem;
+  justify-content: center;
+  //overflow-y: scroll;
+}
+
+.navHeader .addPageUrls .progressInfo ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navHeader .addPageUrls .addUrlsProgress {
+  display: flex;
+  background-color: #ECF0F1;
+  height: 50px;
+  font-size: 24px;
+  line-height: 50px;
+}
+
+.navHeader .addPageUrls .addUrlsProgress .progressBar {
+  display: flex;
+  background: #F1C40F;
+  width: 0;
+}
+
+.navHeader .addPageUrls .addUrlsProgress .errorOKbutton {
+  display: flex;
+  background: #F1C40F;
+  width: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.navHeader .addPageUrls  .addUrlsProgress .errorOKbutton:hover {
+  color: #2670A2;
+  cursor: pointer;
+}
+
+//.navHeader .addPageUrls .addUrlsProgress #nprogress .bar {
+//  background: #F1C40F;
+//  height: 100%;
+//}
+//
+//.navHeader .addPageUrls .addUrlsProgress #nprogress .peg {
+//  box-shadow: none;
+//}
+
+//.navHeader .addPageUrls .addUrlsProgress::-webkit-progress-bar  {
+//  background-color: #ECF0F1;
+//}
+//
+//.navHeader .addPageUrls .addUrlsProgress::-webkit-progress-value  {
+//  background-color: #F1C40F;
+//}
+//
+//.navHeader .addPageUrls .addUrlsProgress::-moz-progress-bar  {
+//  background-color: #F1C40F;
+//}
+
+.navHeader .addPageUrls .addPageButtons {
+  //text-align: center;
+  display: flex;
+  flex: 1 1 auto;
+  //color: #90C4E6;
+  color: white;
+  height: 50px;
+  font-size: 24px;
+  line-height: 50px;
+}
+
+.navHeader .addPageUrls .addPageButtons div:hover {
+  color: #2670A2;
+  cursor: pointer;
+}
+
+.navHeader .addPageUrls .urlCancelButton {
+  //text-align: center;
+  flex: 1 1 auto;
+  background-color: #34495E;
+  border: none;
+  text-align: center;
+  //padding: 2px 0 3px 0;
+  //border-left: 1px solid #2670A2;
+  //outline: 1px solid #2670A2;
+}
+
+.navHeader .addPageUrls .urlSaveButton {
+  //text-align: center;
+  flex: 1 1 auto;
+  border: none;
+  text-align: center;
+  //padding: 2px 0 3px 0;
+  //border-right: 1px solid #2670A2;
+  //outline: 1px solid #2670A2;
+  background-color: #F1C40F;
+
+}
+
+.navHeader .settingsAndHelp {
+  flex: 1 1 auto;
+  //display: flex;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

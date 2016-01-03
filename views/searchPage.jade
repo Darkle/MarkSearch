@@ -1,0 +1,12 @@
+extends layout
+block vars
+  - var bodyClass = 'searchPage';
+block content
+  #resultsOuterContainer
+    #resultsContainer
+      #resultsCount
+
+  script(src='/bower_components/jquery/dist/jquery.js')
+  script(src='/bower_components/protip/protip.min.js')
+  script(src='/js/nice-select.js')
+  script(src='/js/searchPage-bundle.js')

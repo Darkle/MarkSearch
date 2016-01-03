@@ -1,0 +1,224 @@
+/****
+* Global
+*/
+
+/*****
+54.5em width and wider
+*****/
+@media (min-width: 54.5em) {
+  .navHeader .brandLogo .brandLogoSmall {
+    display: none;
+  }
+  .navHeader .brandLogo .brandLogoLarge {
+    display: flex;
+  }
+}
+
+
+/*****
+57.7em width and less
+*****/
+//@media (max-width: 57.7em) {
+//  //body{
+//  //  color: red !important;
+//  //}
+//  //.navHeader .dateFilterSettings {
+//  //  font-size: 0.9rem;
+//  //}
+//}
+
+/*****
+54.5em width and less
+*****/
+@media (max-width: 54.5em) {
+  html {
+    font-size: 12px;
+  }
+  .navHeader .brandLogo {
+    padding-left: 0.6rem;
+    flex-grow: 0;
+  }
+  .navHeader .brandLogo .brandLogoSmall {
+    display: none;
+  }
+  //.navHeader .brandLogo .brandLogoLarge {
+  //  display: none;
+  //}
+  .navHeader .rightContainer {
+    //padding: 0 2rem;
+    flex-grow: 0;
+  }
+  //.navHeader nav > .searchContainer {
+  //  outline: 1px solid green
+  //}
+  //.navHeader nav > .rightContainer {
+  //  outline: 1px solid red
+  //}
+  .navHeader .rightContainer > div {
+    padding: 0 0.5rem;
+    //outline: 1px solid green
+  }
+  //.navHeader .dateFilterSettings {
+  //  font-size: 1.4rem;
+  //}
+  .navHeader .addPageUrls textarea {
+    font-size: 1.2rem;
+
+  }
+  .navHeader .addPageUrls .addPageButtons {
+    font-size: 1.8rem;
+  }
+  /****
+    Search Page
+  */
+  .searchPage #resultsOuterContainer {
+    //flex-basis: 58rem;
+    //color: red !important;
+  }
+  .searchPage #resultsContainer {
+    flex-basis: 58rem;
+  }
+  .searchPage .mainResultLink {
+    font-size: 1.9rem;
+  }
+  .searchPage .mainResultLink .material-icons {
+    top: -1.1rem;
+  }
+  .searchPage .resultUrlText {
+    font-size: 1.1rem;
+  }
+  .searchPage .safeBrowsing {
+    font-size: 1.3rem;
+  }
+  .searchPage .description {
+    font-size: 1.3rem;
+  }
+  .searchPage .metaIcons a{
+    font-size: 2.4rem;
+  }
+}
+
+/*****
+40em width and less
+*****/
+@media (max-width: 40em) {
+  .navHeader .brandLogo .brandLogoSmall {
+    display: flex;
+  }
+  .navHeader .brandLogo .brandLogoLarge {
+    display: none;
+  }
+}
+
+
+/*****
+35.8em width and less
+*****/
+@media (max-width: 35.8em) {
+  //body{
+  //  color: red !important;
+  //}
+  .searchPage #resultsContainer {
+    margin: 0 3rem;
+  }
+}
+
+/*****
+32.1em width and less
+*****/
+@media (max-width: 32.1em) {
+  body {
+    //color: green !important;
+  }
+  .navHeader .dateFilterSettings {
+    flex-direction: column;
+  }
+  .navHeader .dateFilterSettings .dropdownMenuContainer {
+    border-right: none;
+    //order: 2;
+    //padding
+  }
+  .navHeader .dateFilterSettings .shortcutDropdowns {
+    position: static;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  .navHeader .dateFilterSettings .fromToContainer {
+    padding: 0.3rem 0;
+  }
+  .searchPage #resultsContainer {
+    margin: 0 2rem;
+  }
+}
+
+/*****
+28.6em width and less
+*****/
+@media (max-width: 28.6em) {
+  body {
+    //color: red !important;
+  }
+  .navHeader .searchContainer {
+    padding: 0 0 0 0.3rem;
+  }
+  .navHeader .brandLogo {
+    display: none;
+  }
+
+  .navHeader #searchForm > input{
+    font-size: 1.4rem;
+  }
+  .navHeader .rightContainer {
+    min-width: unset;
+    justify-content: flex-start;
+    padding: 0 0.4rem;
+  }
+  .navHeader .rightContainer > div {
+    padding: 0;
+    //outline: 1px solid green
+    flex: 0 0 auto;
+  }
+  /*****
+    Prevent auto-zoom into the textarea
+  */
+  .navHeader .addPageUrls textarea {
+    font-size: 16px;
+  }
+  .searchPage .mainResultLink {
+    font-size: 1.2rem;
+  }
+  .searchPage .mainResultLink .material-icons {
+    top: -1.2rem;
+  }
+  .searchPage .resultUrlText {
+    font-size: 0.6rem;
+  }
+  .searchPage .safeBrowsing {
+    font-size: 0.8rem;
+  }
+  .searchPage .safeBrowsing .material-icons {
+    font-size: 1.2rem;
+    padding-top: 0.1rem;
+  }
+  .searchPage .description {
+    font-size: 0.75rem;
+  }
+  .searchPage .metaIcons a{
+    font-size: 1.8rem;
+  }
+}
+
+
+/*****
+22.5em width and less
+*****/
+@media (max-width: 22.5em) {
+  .navHeader .searchContainer {
+    flex-basis: 14rem;
+    //outline:1px solid red;
+  }
+  .navHeader .searchContainer #searchInput {
+    flex-basis: 16rem;
+    flex-grow: 0;
+  }
+}

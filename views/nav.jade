@@ -1,0 +1,78 @@
+header.navHeader
+  nav(role='banner')
+    .brandLogo
+      a(href='/', title="MarkSearch Home Page")
+        h1.brandLogoLarge MarkSearch
+        h1.brandLogoSmall MS
+    .searchContainer
+      form#searchForm
+        input#csrfInput(type="hidden", name="_csrf", value="#{csrfToken}")
+        input#searchInput(type='search')
+    .rightContainer
+      .dateFilter
+        a.protip(href='#', title="Filter Search By Date", data-pt-title="Filter Search By Date")
+          i.material-icons date_range
+      .looseSearch
+        a#looseSearchButton.protip(href='#', title="Enable/Disable Search Loose", data-pt-title="Enable/Disable Search Loose")
+          i#looseSearchIcon.material-icons
+      .addPage
+        a.protip(href='#', title="Add Page(s) To MarkSearch", data-pt-title="Add Page(s) To MarkSearch")
+          i.material-icons add
+      .settings-etal
+        a.protip(href='/settings', title="MarkSearch Settings/Help", data-pt-title="MarkSearch Settings/Help")
+          i.material-icons settings
+
+  .subBar
+    .dateFilterSettings.hide-not-i(data-is-shown='false')
+      .fromToContainer
+        .fromContainer.lightBlue
+          span From:
+          select.selectFromMonth
+            option(value='0') January
+            option(value='1') February
+            option(value='2') March
+            option(value='3') April
+            option(value='4') May
+            option(value='5') June
+            option(value='6') July
+            option(value='7') August
+            option(value='8') September
+            option(value='9') October
+            option(value='10') November
+            option(value='11') December
+          select.selectFromYear
+        .toContainer.lightBlue
+          span To:
+          select.selectToMonth
+            option(value='0') January
+            option(value='1') February
+            option(value='2') March
+            option(value='3') April
+            option(value='4') May
+            option(value='5') June
+            option(value='6') July
+            option(value='7') August
+            option(value='8') September
+            option(value='9') October
+            option(value='10') November
+            option(value='11') December
+          select.selectToYear
+      .shortcutsContainer
+        select.shortcuts
+          option(value='Past 3 days') Past 3 days
+          option(value='Past Week') Past Week
+          option(value='Past Month') Past Month
+          option(value='Past 3 Months') Past 3 Months
+          option(value='Past 6 Months') Past 6 Months
+          option(value='Past Year') Past Year
+    .addPageUrls.hide-not-i(data-is-shown='false')
+      textarea(placeholder="Paste URLs here")
+      .progressInfo.hide
+      .addUrlsProgress.hide
+        .errorOKbutton.hide Ok
+        .progressBar
+      .addPageButtons
+        .urlSaveButton Save URLs
+        .urlCancelButton Cancel
+    .settingsAndHelp.hide-not-i(data-is-shown='false')
+      span settings and help
