@@ -28,6 +28,7 @@ var removeResults = () => {
    * this time too because the 0 from last time is still showing, so hide it.
    */
   resultsCountDiv$.addClass('hide')
+  $(window).scrollTop(0)
 }
 /****
  * Exports

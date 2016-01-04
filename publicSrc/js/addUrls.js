@@ -8,6 +8,7 @@ import { csrfToken } from './searchPage'
 import { searchErrorHandler } from './searchErrorsHandler'
 import { queryServerAndRender } from './queryServerAndRender'
 import { removeResults } from './removeResults'
+import { dateFilterResetAll } from './dateFilter'
 
 var addPageUrlsDiv$
 var addPageMaterialIcon$
@@ -90,6 +91,12 @@ var addUrls = () => {
           .then(elems => {
             currentlyShownSubBar$.data('isShown','false')
             otherNavMaterialIcons.removeClass('navBar-materialIcon-selected')
+            /****
+             * If hiding the date filter subbar, reset the results and the settings in the date filter module
+             */
+            if(currentlyShownSubBar$.hasClass('dateFilterSettings')){
+              dateFilterResetAll()
+            }
             hideShowAddPageSubbar()
           })
     }

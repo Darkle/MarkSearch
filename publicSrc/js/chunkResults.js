@@ -10,14 +10,16 @@ function chunkResults(rawResults){
    * displaying the results.
    */
   var chunkAndShownData = {}
-  var chunkedResults = _.chunk(rawResults, 20)
-  chunkedResults.forEach((resultChunk, index) =>{
-    chunkAndShownData[`chunk_${index}`] = {
-      chunkIndex: index,
-      shownYet: false,
-      resultRows: resultChunk
-    }
-  })
+  if(rawResults && rawResults.length){
+    var chunkedResults = _.chunk(rawResults, 20)
+    chunkedResults.forEach((resultChunk, index) =>{
+      chunkAndShownData[`chunk_${index}`] = {
+        chunkIndex: index,
+        shownYet: false,
+        resultRows: resultChunk
+      }
+    })
+  }
   return chunkAndShownData
 }
 

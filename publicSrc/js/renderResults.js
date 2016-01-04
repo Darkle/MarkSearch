@@ -5,6 +5,7 @@ import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEven
 import { generateSearchClipAndHighlight } from './generateSearchClipAndHighlight'
 
 import _ from 'lodash'
+import moment from 'moment'
 
 /****
  * Exports
@@ -18,8 +19,9 @@ var renderResults = (resultsChunk, searchTerms) => {
        * 200 items in each chunk
        * id: `result_${resultID}` is for browser extension, so
        * they can link to a particular result in the MarkSearch results page
+       * (Results are in chunks of 200)
        */
-      var resultID = resultsChunk.chunkIndex * 1000
+      var resultID = resultsChunk.chunkIndex * 200
       /****
        * Not using jQuery here so can more carefully manage the element references and event listener
        * functions myself to make sure we dont get memory leaks when removing the results elements and
@@ -65,12 +67,15 @@ var renderResults = (resultsChunk, searchTerms) => {
         mainResultLink.className = 'mainResultLink'
         mainDetails.appendChild(mainResultLink)
 
-        var pageTitle = _.trim(doc.pageTitle)
         var mainResultA = document.createElement('a')
         mainResultA.setAttribute('href', doc._id)
         /*****
          * If there's no pageTitle text, then just use the page url
          */
+        var pageTitle = ''
+        if(doc.pageTitle){
+          pageTitle = _.trim(doc.pageTitle)
+        }
         mainResultA.textContent = (pageTitle.length > 0) ? pageTitle : doc._id
         mainResultLink.appendChild(mainResultA)
 
@@ -78,6 +83,10 @@ var renderResults = (resultsChunk, searchTerms) => {
         resultUrlText.className = 'resultUrlText'
         resultUrlText.textContent = doc._id
         mainDetails.appendChild(resultUrlText)
+
+        var resultDateCreated = document.createElement('div')
+        resultDateCreated.textContent = moment(doc.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
+        mainDetails.appendChild(resultDateCreated)
 
         /*****
          * SafeBrowsing
@@ -140,7 +149,9 @@ var renderResults = (resultsChunk, searchTerms) => {
         }
         var description = document.createElement('p')
         description.className = 'description'
-        description.textContent = _.trim(doc.pageDescription)
+        if(doc.pageDescription){
+          description.textContent = _.trim(doc.pageDescription)
+        }
         mainDetails.appendChild(description)
 
         var metaIconsContainer = document.createElement('div')

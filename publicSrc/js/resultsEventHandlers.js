@@ -3,6 +3,7 @@
 import { csrfToken } from './searchPage'
 import { resultsObject, replaceResults } from './resultsObject'
 import { chunkResults } from './chunkResults'
+import { updateResultsCountDiv } from './updateResultsCountDiv'
 
 import got from 'got'
 import _ from 'lodash'
@@ -51,6 +52,7 @@ var deletePageFromMarksearch = (event) => {
           }
           _.remove(fullResultsCacheArrayCopy, document => document.id === jsonResponse.pageDeleted)
           var chunkedResultsObject = chunkResults(fullResultsCacheArrayCopy)
+          updateResultsCountDiv(fullResultsCacheArrayCopy.length)
           replaceResults(fullResultsCacheArrayCopy, chunkedResultsObject)
         })
         .catch(err => console.error(err))

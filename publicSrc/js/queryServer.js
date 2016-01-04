@@ -1,8 +1,9 @@
 'use strict';
 
-import { csrfToken, resultsCountDiv$ } from './searchPage'
+import { csrfToken } from './searchPage'
 import { replaceResults } from './resultsObject'
 import { chunkResults } from './chunkResults'
+import { updateResultsCountDiv } from './updateResultsCountDiv'
 
 import _ from 'lodash'
 import got from 'got'
@@ -27,21 +28,16 @@ var queryServer = (searchTerms) => {
       })
       .then( response => {
         var responseData = JSON.parse(response.body)
-        resultsCountDiv$
-            .text(`${responseData.total_rows} Results`)
-            .data('data-resultsCount', responseData.total_rows)
-            .removeClass('hide')
-
-        var chunkedResultsObject
+        updateResultsCountDiv(responseData.total_rows)
         var responseRowsArray = []
         if(responseData.total_rows > 0){
           window.localStorage.haveResults = 'true'
-          chunkedResultsObject = chunkResults(responseData.rows)
           responseRowsArray = responseData.rows
         }
-        //var a = responseRowsArray
-        //debugger
-        replaceResults(responseRowsArray, chunkedResultsObject)
+        /****
+         * chunkResults returns an empty object if responseData.rows is empty
+         */
+        replaceResults(responseRowsArray, chunkResults(responseData.rows))
       })
 }
 /****

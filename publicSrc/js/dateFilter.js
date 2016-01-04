@@ -4,16 +4,17 @@ import { removeResults } from './removeResults'
 import { resultsObject, replaceResults } from './resultsObject'
 import { chunkResults } from './chunkResults'
 import { renderResults } from './renderResults'
+import { updateResultsCountDiv } from './updateResultsCountDiv'
 
 import velocity from 'velocity-animate'
 import moment from 'moment'
 import _ from 'lodash'
 
-var resultsCountDiv$
 var dateFilterContainer$
 var dateFilterMaterialIcon$
 var fromContainer$
 var toContainer$
+var shortCutsContainer$
 var nsSelectShortcuts$
 var nsSelectFromMonth$
 var nsSelectFromYear$
@@ -26,29 +27,33 @@ var nsToYearCurrentText$
 var nsShortcutsCurrentText$
 var shortCutValues = {
   "Past 3 days": {
-    dateStart: () => moment().subtract(3, 'days'),
-    dateEnd: () => moment()
+    dateStart: () => moment().subtract(3, 'days')
   },
   "Past Week": {
-    dateStart: () => moment().subtract(1, 'weeks'),
-    dateEnd: () => moment()
+    dateStart: () => moment().subtract(1, 'weeks')
   },
   "Past Month": {
-    dateStart: () => moment().subtract(1, 'months'),
-    dateEnd: () => moment()
+    dateStart: () => moment().subtract(1, 'months')
   },
   "Past 3 Months": {
-    dateStart: () => moment().subtract(3, 'months'),
-    dateEnd: () => moment()
+    dateStart: () => moment().subtract(3, 'months')
   },
   "Past 6 Months": {
-    dateStart: () => moment().subtract(6, 'months'),
-    dateEnd: () => moment()
+    dateStart: () => moment().subtract(6, 'months')
   },
   "Past Year": {
-    dateStart: () => moment().subtract(1, 'years'),
-    dateEnd: () => moment()
+    dateStart: () => moment().subtract(1, 'years')
   }
+}
+var fromToSet = {
+  fromMonthSet: false,
+  fromYearSet: false,
+  toMonthSet: false,
+  toYearSet: false,
+}
+
+function allFromToIsSet(){
+  return _.every(fromToSet, item => item)
 }
 
 function hideShowDateFilterSubbar(){
@@ -58,6 +63,7 @@ function hideShowDateFilterSubbar(){
     $.Velocity(dateFilterContainer$[0], "slideUp", { duration: 500, display: 'none' })
         .then(elements => {
           dateFilterMaterialIcon$.removeClass('navBar-materialIcon-selected')
+          dateFilterResetAll()
         })
   }
   else{
@@ -67,6 +73,17 @@ function hideShowDateFilterSubbar(){
   }
 }
 
+function dateFilterResetAll(){
+  resetFromTo()
+  resetShortcuts()
+  resetResults()
+}
+
+function resetShortcuts(){
+  shortCutsContainer$.removeClass('lightBlue')
+  nsShortcutsCurrentText$.text('Shortcuts')
+}
+
 function resetFromTo(){
   nsFromMonthCurrentText$.text('Month')
   nsToMonthCurrentText$.text('Month')
@@ -74,62 +91,85 @@ function resetFromTo(){
   nsToYearCurrentText$.text('Year')
   fromContainer$.addClass('lightBlue')
   toContainer$.addClass('lightBlue')
+  fromToSet.fromMonthSet = false
+  fromToSet.fromYearSet = false
+  fromToSet.toMonthSet = false
+  fromToSet.toYearSet = false
 }
 
-function filterResults(usingShortcut){
+function resetResults(){
+  removeResults()
+  var chunkedResultsObject = {}
+  updateResultsCountDiv(resultsObject.fullResultsCacheArray.length)
+  /****
+   * chunkResults returns an empty object if resultsObject.fullResultsCacheArray is empty
+   */
+  replaceResults(null, chunkResults(resultsObject.fullResultsCacheArray))
+  if(resultsObject.fullResultsCacheArray.length > 0){
+    renderResults(resultsObject.currentResults.chunk_0, null)
+  }
+}
+
+function filterResults(listElement , isShortcut){
   removeResults()
   var dateStartInMilliseconds
   var dateEndInMilliseconds
-  if(usingShortcut){
-    var selectedShortcut$ = $('.selected', nsSelectShortcuts$)
-    var shortObjVal = shortCutValues[selectedShortcut$.data('value')]
+  var elemValue = $(listElement).data('value')
+  if(isShortcut){
+    var shortObjVal = shortCutValues[elemValue]
     dateStartInMilliseconds = shortObjVal.dateStart().valueOf()
-    dateEndInMilliseconds = shortObjVal.dateEnd().valueOf()
-
-    //console.log(JSON.stringify(tempResults))
-    //debugger
+    dateEndInMilliseconds = moment().valueOf()
   }
   else{
-    var selectedFromMonth$ = $('.selected', nsSelectFromMonth$)
-    var selectedFromYear$ = $('.selected', nsSelectFromYear$)
-    var selectedToMonth$ = $('.selected', nsSelectToMonth$)
-    var selectedToYear$ = $('.selected', nsSelectToYear$)
-
-
-
+    var fromToValues = {
+      selectFromMonthValue: $('.selected', nsSelectFromMonth$).data('value'),
+      selectFromYearValue: $('.selected', nsSelectFromYear$).data('value'),
+      selectToMonthValue: $('.selected', nsSelectToMonth$).data('value'),
+      selectToYearValue: $('.selected', nsSelectToYear$).data('value')
+    }
+    /****
+     * The value for the clicked li element isn't set yet, so grab the value of the listElement and
+     * assign it to fromToValues key
+     */
+    fromToValues[$(listElement).data('fromToValueKeyName')] = elemValue
+    dateStartInMilliseconds = moment(`${fromToValues.selectFromYearValue} ${fromToValues.selectFromMonthValue}`, `YYYY MM`).valueOf()
+    dateEndInMilliseconds = moment(`${fromToValues.selectToYearValue} ${fromToValues.selectToMonthValue}`, `YYYY MM`).valueOf()
   }
-  var fullResultsCacheArrayCopy = resultsObject.fullResultsCacheArray.slice()
-  var dateFilteredResults = _.filter(fullResultsCacheArrayCopy, arrayItem => {
-    return (arrayItem.doc.dateCreated >= dateStartInMilliseconds || arrayItem.doc.dateCreated <= dateEndInMilliseconds)
-  })
-  debugger
-  resultsCountDiv$
-      .text(`${dateFilteredResults.length} Results`)
-      .data('data-resultsCount', dateFilteredResults.length)
-      .removeClass('hide')
-  replaceResults(null, chunkResults(dateFilteredResults))
-  if(dateFilteredResults.length > 0){
-    renderResults(resultsObject.currentResults.chunk_0, null)
+  /****
+   * Check in case they mistakenly put the end date before the start date
+   */
+  if(dateEndInMilliseconds > dateStartInMilliseconds){
+    var fullResultsCacheArrayCopy = resultsObject.fullResultsCacheArray.slice()
+    var dateFilteredResults = _.filter(fullResultsCacheArrayCopy, arrayItem =>{
+      return (arrayItem.doc.dateCreated >= dateStartInMilliseconds && arrayItem.doc.dateCreated <= dateEndInMilliseconds)
+    })
+    updateResultsCountDiv(dateFilteredResults.length)
+    replaceResults(null, chunkResults(dateFilteredResults))
+    if(dateFilteredResults.length > 0){
+      renderResults(resultsObject.currentResults.chunk_0, null)
+    }
+  }
+  else{
+    updateResultsCountDiv(0)
   }
 }
 
 function dateFilter(){
   var subBar$ = $('.subBar')
-  var shortCutsContainer$ = $('.shortcutsContainer')
   var dateFilterNavButtonContainer$ = $('.dateFilter')
   var dateFilterButton$ = $('a', dateFilterNavButtonContainer$)
   var otherNavMaterialIcons$ = $('.addPage .material-icons, .settings-etal .material-icons')
+  shortCutsContainer$ = $('.shortcutsContainer')
   dateFilterContainer$ = $('.dateFilterSettings')
   dateFilterMaterialIcon$ = $('.material-icons', dateFilterButton$)
   fromContainer$ = $('.fromContainer')
   toContainer$ = $('.toContainer')
-  resultsCountDiv$ = $('#resultsCount')
-  
+
   var currentYear = moment().year()
   /****
    * 2016 - year MarkSearch was released, so don't need any earlier
    */
-  var msReleaseDate = 2010
+  var msReleaseDate = 2000
   var numYearsToInclude = (currentYear - msReleaseDate) + 1
 
   _.times(numYearsToInclude, num => {
@@ -153,49 +193,65 @@ function dateFilter(){
   nsToMonthCurrentText$ = $('.current', nsSelectToMonth$)
   nsToYearCurrentText$ = $('.current', nsSelectToYear$)
   nsShortcutsCurrentText$ = $('.current', nsSelectShortcuts$)
+  $([nsSelectFromMonth$, nsSelectFromYear$, nsSelectToMonth$, nsSelectToYear$]).each( (index, element$) => {
+    element$.find('li').attr('data-from-to-value-key-name', `${element$[0].className.slice(12)}Value`)
+  })
 
   resetFromTo()
   nsShortcutsCurrentText$.text('Shortcuts')
 
-  $('.nice-select.shortcuts .list').click(event => {
+  $('.list li', nsSelectShortcuts$).click(event => {
     resetFromTo()
     shortCutsContainer$.removeClass('lightBlue')
-    filterResults(true)
+    filterResults(event.currentTarget, true)
   })
 
-  $('.nice-select.selectFromYear .list').click(event => {
+  $('.list li', nsSelectFromMonth$).click(event => {
+    fromToSet.fromMonthSet = true
+    /****
+     * check if all rest is set, then filter results
+     */
+    if(allFromToIsSet()){
+      filterResults(event.currentTarget, false)
+    }
+  })
+
+  $('.list li', nsSelectFromYear$).click(event => {
     fromContainer$.removeClass('lightBlue')
-    if(nsFromMonthCurrentText$.text() === 'Month'){
+    fromToSet.fromYearSet = true
+    if(!fromToSet.fromMonthSet){
+      fromToSet.fromMonthSet = true
       nsFromMonthCurrentText$.text('January')
     }
-    /****
-     * check if To is set and if so, filter results
-     */
-    if(nsToYearCurrentText$.text() !== 'Year'){
+    if(allFromToIsSet()){
       shortCutsContainer$.addClass('lightBlue')
       nsShortcutsCurrentText$.text('Shortcuts')
-      console.log('ready to filter: selectFromYear')
-      filterResults()
+      filterResults(event.currentTarget, false)
     }
   })
 
-  $('.nice-select.selectToYear .list').click(event => {
+  $('.list li', nsSelectToMonth$).click(event => {
+    fromToSet.toMonthSet = true
+    if(allFromToIsSet()){
+      filterResults(event.currentTarget, false)
+    }
+  })
+
+  $('.list li', nsSelectToYear$).click(event => {
     toContainer$.removeClass('lightBlue')
-    if(nsToMonthCurrentText$.text() === 'Month'){
+    fromToSet.toYearSet = true
+    if(!fromToSet.toMonthSet){
       nsToMonthCurrentText$.text('January')
+      fromToSet.toMonthSet = true
     }
-    /****
-     * check if From is set and if so, filter results
-     */
-    if(nsFromYearCurrentText$.text() !== 'Year'){
+    if(allFromToIsSet()){
       shortCutsContainer$.addClass('lightBlue')
       nsShortcutsCurrentText$.text('Shortcuts')
-      console.log('ready to filter: selectToYear')
-      filterResults()
+      filterResults(event.currentTarget, false)
     }
   })
 
-  dateFilterButton$.click(event =>{
+  dateFilterButton$.click(event => {
     event.preventDefault()
     var currentlyShownSubBar$ = subBar$.children()
         .filter( (index, elem) => $(elem).data('isShown') === 'true')
@@ -224,4 +280,4 @@ function dateFilter(){
 /****
  * Exports
  */
-export { dateFilter }
+export { dateFilter, dateFilterResetAll }

@@ -36552,6 +36552,8 @@ var _queryServerAndRender = require('./queryServerAndRender');
 
 var _removeResults = require('./removeResults');
 
+var _dateFilter = require('./dateFilter');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var addPageUrlsDiv$;
@@ -36632,6 +36634,12 @@ var addUrls = function addUrls() {
       $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elems) {
         currentlyShownSubBar$.data('isShown', 'false');
         otherNavMaterialIcons.removeClass('navBar-materialIcon-selected');
+        /****
+         * If hiding the date filter subbar, reset the results and the settings in the date filter module
+         */
+        if (currentlyShownSubBar$.hasClass('dateFilterSettings')) {
+          (0, _dateFilter.dateFilterResetAll)();
+        }
         hideShowAddPageSubbar();
       });
     }
@@ -36813,7 +36821,7 @@ var addUrls = function addUrls() {
  */
 exports.addUrls = addUrls;
 
-},{"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"./searchPage":286,"got":203,"suspend":257,"velocity-animate":265}],269:[function(require,module,exports){
+},{"./dateFilter":272,"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"./searchPage":286,"got":203,"suspend":257,"velocity-animate":265}],269:[function(require,module,exports){
 'use strict';
 /****
  * Hear me out Bro! We're not aiming for perfection here, just trying to have the search
@@ -36885,14 +36893,16 @@ function chunkResults(rawResults) {
    * displaying the results.
    */
   var chunkAndShownData = {};
-  var chunkedResults = _lodash2.default.chunk(rawResults, 20);
-  chunkedResults.forEach(function (resultChunk, index) {
-    chunkAndShownData['chunk_' + index] = {
-      chunkIndex: index,
-      shownYet: false,
-      resultRows: resultChunk
-    };
-  });
+  if (rawResults && rawResults.length) {
+    var chunkedResults = _lodash2.default.chunk(rawResults, 20);
+    chunkedResults.forEach(function (resultChunk, index) {
+      chunkAndShownData['chunk_' + index] = {
+        chunkIndex: index,
+        shownYet: false,
+        resultRows: resultChunk
+      };
+    });
+  }
   return chunkAndShownData;
 }
 
@@ -36904,7 +36914,7 @@ exports.chunkResults = chunkResults;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.dateFilter = undefined;
+exports.dateFilterResetAll = exports.dateFilter = undefined;
 
 var _removeResults = require('./removeResults');
 
@@ -36913,6 +36923,8 @@ var _resultsObject = require('./resultsObject');
 var _chunkResults = require('./chunkResults');
 
 var _renderResults = require('./renderResults');
+
+var _updateResultsCountDiv = require('./updateResultsCountDiv');
 
 var _velocityAnimate = require('velocity-animate');
 
@@ -36928,11 +36940,11 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var resultsCountDiv$;
 var dateFilterContainer$;
 var dateFilterMaterialIcon$;
 var fromContainer$;
 var toContainer$;
+var shortCutsContainer$;
 var nsSelectShortcuts$;
 var nsSelectFromMonth$;
 var nsSelectFromYear$;
@@ -36947,42 +36959,46 @@ var shortCutValues = {
   "Past 3 days": {
     dateStart: function dateStart() {
       return (0, _moment2.default)().subtract(3, 'days');
-    },
-    dateEnd: function dateEnd() {
-      return (0, _moment2.default)();
     }
   },
   "Past Week": {
-    dateStart: (0, _moment2.default)().subtract(1, 'weeks'),
-    dateEnd: function dateEnd() {
-      return (0, _moment2.default)();
+    dateStart: function dateStart() {
+      return (0, _moment2.default)().subtract(1, 'weeks');
     }
   },
   "Past Month": {
-    dateStart: (0, _moment2.default)().subtract(1, 'months'),
-    dateEnd: function dateEnd() {
-      return (0, _moment2.default)();
+    dateStart: function dateStart() {
+      return (0, _moment2.default)().subtract(1, 'months');
     }
   },
   "Past 3 Months": {
-    dateStart: (0, _moment2.default)().subtract(3, 'months'),
-    dateEnd: function dateEnd() {
-      return (0, _moment2.default)();
+    dateStart: function dateStart() {
+      return (0, _moment2.default)().subtract(3, 'months');
     }
   },
   "Past 6 Months": {
-    dateStart: (0, _moment2.default)().subtract(6, 'months'),
-    dateEnd: function dateEnd() {
-      return (0, _moment2.default)();
+    dateStart: function dateStart() {
+      return (0, _moment2.default)().subtract(6, 'months');
     }
   },
   "Past Year": {
-    dateStart: (0, _moment2.default)().subtract(1, 'years'),
-    dateEnd: function dateEnd() {
-      return (0, _moment2.default)();
+    dateStart: function dateStart() {
+      return (0, _moment2.default)().subtract(1, 'years');
     }
   }
 };
+var fromToSet = {
+  fromMonthSet: false,
+  fromYearSet: false,
+  toMonthSet: false,
+  toYearSet: false
+};
+
+function allFromToIsSet() {
+  return _lodash2.default.every(fromToSet, function (item) {
+    return item;
+  });
+}
 
 function hideShowDateFilterSubbar() {
   var dataIsShown = dateFilterContainer$.data('isShown');
@@ -36990,12 +37006,24 @@ function hideShowDateFilterSubbar() {
     dateFilterContainer$.data('isShown', 'false');
     $.Velocity(dateFilterContainer$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elements) {
       dateFilterMaterialIcon$.removeClass('navBar-materialIcon-selected');
+      dateFilterResetAll();
     });
   } else {
     dateFilterContainer$.data('isShown', 'true');
     dateFilterMaterialIcon$.addClass('navBar-materialIcon-selected');
     $.Velocity(dateFilterContainer$[0], "slideDown", { duration: 500, display: 'flex' });
   }
+}
+
+function dateFilterResetAll() {
+  resetFromTo();
+  resetShortcuts();
+  resetResults();
+}
+
+function resetShortcuts() {
+  shortCutsContainer$.removeClass('lightBlue');
+  nsShortcutsCurrentText$.text('Shortcuts');
 }
 
 function resetFromTo() {
@@ -37005,55 +37033,83 @@ function resetFromTo() {
   nsToYearCurrentText$.text('Year');
   fromContainer$.addClass('lightBlue');
   toContainer$.addClass('lightBlue');
+  fromToSet.fromMonthSet = false;
+  fromToSet.fromYearSet = false;
+  fromToSet.toMonthSet = false;
+  fromToSet.toYearSet = false;
 }
 
-function filterResults(usingShortcut) {
+function resetResults() {
+  (0, _removeResults.removeResults)();
+  var chunkedResultsObject = {};
+  (0, _updateResultsCountDiv.updateResultsCountDiv)(_resultsObject.resultsObject.fullResultsCacheArray.length);
+  /****
+   * chunkResults returns an empty object if resultsObject.fullResultsCacheArray is empty
+   */
+  (0, _resultsObject.replaceResults)(null, (0, _chunkResults.chunkResults)(_resultsObject.resultsObject.fullResultsCacheArray));
+  if (_resultsObject.resultsObject.fullResultsCacheArray.length > 0) {
+    (0, _renderResults.renderResults)(_resultsObject.resultsObject.currentResults.chunk_0, null);
+  }
+}
+
+function filterResults(listElement, isShortcut) {
   (0, _removeResults.removeResults)();
   var dateStartInMilliseconds;
   var dateEndInMilliseconds;
-  if (usingShortcut) {
-    var selectedShortcut$ = $('.selected', nsSelectShortcuts$);
-    var shortObjVal = shortCutValues[selectedShortcut$.data('value')];
+  var elemValue = $(listElement).data('value');
+  if (isShortcut) {
+    var shortObjVal = shortCutValues[elemValue];
     dateStartInMilliseconds = shortObjVal.dateStart().valueOf();
-    dateEndInMilliseconds = shortObjVal.dateEnd().valueOf();
-
-    //console.log(JSON.stringify(tempResults))
-    //debugger
+    dateEndInMilliseconds = (0, _moment2.default)().valueOf();
   } else {
-      var selectedFromMonth$ = $('.selected', nsSelectFromMonth$);
-      var selectedFromYear$ = $('.selected', nsSelectFromYear$);
-      var selectedToMonth$ = $('.selected', nsSelectToMonth$);
-      var selectedToYear$ = $('.selected', nsSelectToYear$);
+    var fromToValues = {
+      selectFromMonthValue: $('.selected', nsSelectFromMonth$).data('value'),
+      selectFromYearValue: $('.selected', nsSelectFromYear$).data('value'),
+      selectToMonthValue: $('.selected', nsSelectToMonth$).data('value'),
+      selectToYearValue: $('.selected', nsSelectToYear$).data('value')
+    };
+    /****
+     * The value for the clicked li element isn't set yet, so grab the value of the listElement and
+     * assign it to fromToValues key
+     */
+    fromToValues[$(listElement).data('fromToValueKeyName')] = elemValue;
+    dateStartInMilliseconds = (0, _moment2.default)(fromToValues.selectFromYearValue + ' ' + fromToValues.selectFromMonthValue, 'YYYY MM').valueOf();
+    dateEndInMilliseconds = (0, _moment2.default)(fromToValues.selectToYearValue + ' ' + fromToValues.selectToMonthValue, 'YYYY MM').valueOf();
+  }
+  /****
+   * Check in case they mistakenly put the end date before the start date
+   */
+  if (dateEndInMilliseconds > dateStartInMilliseconds) {
+    var fullResultsCacheArrayCopy = _resultsObject.resultsObject.fullResultsCacheArray.slice();
+    var dateFilteredResults = _lodash2.default.filter(fullResultsCacheArrayCopy, function (arrayItem) {
+      return arrayItem.doc.dateCreated >= dateStartInMilliseconds && arrayItem.doc.dateCreated <= dateEndInMilliseconds;
+    });
+    (0, _updateResultsCountDiv.updateResultsCountDiv)(dateFilteredResults.length);
+    (0, _resultsObject.replaceResults)(null, (0, _chunkResults.chunkResults)(dateFilteredResults));
+    if (dateFilteredResults.length > 0) {
+      (0, _renderResults.renderResults)(_resultsObject.resultsObject.currentResults.chunk_0, null);
     }
-  var fullResultsCacheArrayCopy = _resultsObject.resultsObject.fullResultsCacheArray.slice();
-  var dateFilteredResults = _lodash2.default.filter(fullResultsCacheArrayCopy, function (arrayItem) {
-    return arrayItem.doc.dateCreated >= dateStartInMilliseconds || arrayItem.doc.dateCreated <= dateEndInMilliseconds;
-  });
-  debugger;
-  resultsCountDiv$.text(dateFilteredResults.length + ' Results').data('data-resultsCount', dateFilteredResults.length).removeClass('hide');
-  (0, _resultsObject.replaceResults)(null, (0, _chunkResults.chunkResults)(dateFilteredResults));
-  if (dateFilteredResults.length > 0) {
-    (0, _renderResults.renderResults)(_resultsObject.resultsObject.currentResults.chunk_0, null);
+  } else {
+    (0, _updateResultsCountDiv.updateResultsCountDiv)(0);
   }
 }
 
 function dateFilter() {
   var subBar$ = $('.subBar');
-  var shortCutsContainer$ = $('.shortcutsContainer');
   var dateFilterNavButtonContainer$ = $('.dateFilter');
   var dateFilterButton$ = $('a', dateFilterNavButtonContainer$);
   var otherNavMaterialIcons$ = $('.addPage .material-icons, .settings-etal .material-icons');
+  shortCutsContainer$ = $('.shortcutsContainer');
   dateFilterContainer$ = $('.dateFilterSettings');
   dateFilterMaterialIcon$ = $('.material-icons', dateFilterButton$);
   fromContainer$ = $('.fromContainer');
   toContainer$ = $('.toContainer');
-  resultsCountDiv$ = $('#resultsCount');
 
   var currentYear = (0, _moment2.default)().year();
   /****
    * 2016 - year MarkSearch was released, so don't need any earlier
    */
-  var msReleaseDate = 2010;
+  var msReleaseDate = 2000;
   var numYearsToInclude = currentYear - msReleaseDate + 1;
 
   _lodash2.default.times(numYearsToInclude, function (num) {
@@ -37075,45 +37131,61 @@ function dateFilter() {
   nsToMonthCurrentText$ = $('.current', nsSelectToMonth$);
   nsToYearCurrentText$ = $('.current', nsSelectToYear$);
   nsShortcutsCurrentText$ = $('.current', nsSelectShortcuts$);
+  $([nsSelectFromMonth$, nsSelectFromYear$, nsSelectToMonth$, nsSelectToYear$]).each(function (index, element$) {
+    element$.find('li').attr('data-from-to-value-key-name', element$[0].className.slice(12) + 'Value');
+  });
 
   resetFromTo();
   nsShortcutsCurrentText$.text('Shortcuts');
 
-  $('.nice-select.shortcuts .list').click(function (event) {
+  $('.list li', nsSelectShortcuts$).click(function (event) {
     resetFromTo();
     shortCutsContainer$.removeClass('lightBlue');
-    filterResults(true);
+    filterResults(event.currentTarget, true);
   });
 
-  $('.nice-select.selectFromYear .list').click(function (event) {
+  $('.list li', nsSelectFromMonth$).click(function (event) {
+    fromToSet.fromMonthSet = true;
+    /****
+     * check if all rest is set, then filter results
+     */
+    if (allFromToIsSet()) {
+      filterResults(event.currentTarget, false);
+    }
+  });
+
+  $('.list li', nsSelectFromYear$).click(function (event) {
     fromContainer$.removeClass('lightBlue');
-    if (nsFromMonthCurrentText$.text() === 'Month') {
+    fromToSet.fromYearSet = true;
+    if (!fromToSet.fromMonthSet) {
+      fromToSet.fromMonthSet = true;
       nsFromMonthCurrentText$.text('January');
     }
-    /****
-     * check if To is set and if so, filter results
-     */
-    if (nsToYearCurrentText$.text() !== 'Year') {
+    if (allFromToIsSet()) {
       shortCutsContainer$.addClass('lightBlue');
       nsShortcutsCurrentText$.text('Shortcuts');
-      console.log('ready to filter: selectFromYear');
-      filterResults();
+      filterResults(event.currentTarget, false);
     }
   });
 
-  $('.nice-select.selectToYear .list').click(function (event) {
-    toContainer$.removeClass('lightBlue');
-    if (nsToMonthCurrentText$.text() === 'Month') {
-      nsToMonthCurrentText$.text('January');
+  $('.list li', nsSelectToMonth$).click(function (event) {
+    fromToSet.toMonthSet = true;
+    if (allFromToIsSet()) {
+      filterResults(event.currentTarget, false);
     }
-    /****
-     * check if From is set and if so, filter results
-     */
-    if (nsFromYearCurrentText$.text() !== 'Year') {
+  });
+
+  $('.list li', nsSelectToYear$).click(function (event) {
+    toContainer$.removeClass('lightBlue');
+    fromToSet.toYearSet = true;
+    if (!fromToSet.toMonthSet) {
+      nsToMonthCurrentText$.text('January');
+      fromToSet.toMonthSet = true;
+    }
+    if (allFromToIsSet()) {
       shortCutsContainer$.addClass('lightBlue');
       nsShortcutsCurrentText$.text('Shortcuts');
-      console.log('ready to filter: selectToYear');
-      filterResults();
+      filterResults(event.currentTarget, false);
     }
   });
 
@@ -37147,8 +37219,9 @@ function dateFilter() {
  * Exports
  */
 exports.dateFilter = dateFilter;
+exports.dateFilterResetAll = dateFilterResetAll;
 
-},{"./chunkResults":271,"./removeResults":280,"./renderResults":281,"./resultsObject":283,"lodash":213,"moment":215,"velocity-animate":265}],273:[function(require,module,exports){
+},{"./chunkResults":271,"./removeResults":280,"./renderResults":281,"./resultsObject":283,"./updateResultsCountDiv":288,"lodash":213,"moment":215,"velocity-animate":265}],273:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37514,6 +37587,8 @@ var _resultsObject = require('./resultsObject');
 
 var _chunkResults = require('./chunkResults');
 
+var _updateResultsCountDiv = require('./updateResultsCountDiv');
+
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -37541,18 +37616,16 @@ var queryServer = function queryServer(searchTerms) {
     }
   }).then(function (response) {
     var responseData = JSON.parse(response.body);
-    _searchPage.resultsCountDiv$.text(responseData.total_rows + ' Results').data('data-resultsCount', responseData.total_rows).removeClass('hide');
-
-    var chunkedResultsObject;
+    (0, _updateResultsCountDiv.updateResultsCountDiv)(responseData.total_rows);
     var responseRowsArray = [];
     if (responseData.total_rows > 0) {
       window.localStorage.haveResults = 'true';
-      chunkedResultsObject = (0, _chunkResults.chunkResults)(responseData.rows);
       responseRowsArray = responseData.rows;
     }
-    //var a = responseRowsArray
-    //debugger
-    (0, _resultsObject.replaceResults)(responseRowsArray, chunkedResultsObject);
+    /****
+     * chunkResults returns an empty object if responseData.rows is empty
+     */
+    (0, _resultsObject.replaceResults)(responseRowsArray, (0, _chunkResults.chunkResults)(responseData.rows));
   });
 };
 /****
@@ -37560,7 +37633,7 @@ var queryServer = function queryServer(searchTerms) {
  */
 exports.queryServer = queryServer;
 
-},{"./chunkResults":271,"./resultsObject":283,"./searchPage":286,"got":203,"lodash":213}],279:[function(require,module,exports){
+},{"./chunkResults":271,"./resultsObject":283,"./searchPage":286,"./updateResultsCountDiv":288,"got":203,"lodash":213}],279:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37636,6 +37709,7 @@ var removeResults = function removeResults() {
    * this time too because the 0 from last time is still showing, so hide it.
    */
   _searchPage.resultsCountDiv$.addClass('hide');
+  $(window).scrollTop(0);
 };
 /****
  * Exports
@@ -37660,6 +37734,10 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /****
@@ -37678,8 +37756,9 @@ var renderResults = function renderResults(resultsChunk, searchTerms) {
          * 200 items in each chunk
          * id: `result_${resultID}` is for browser extension, so
          * they can link to a particular result in the MarkSearch results page
+         * (Results are in chunks of 200)
          */
-        resultID = resultsChunk.chunkIndex * 1000;
+        resultID = resultsChunk.chunkIndex * 200;
         /****
          * Not using jQuery here so can more carefully manage the element references and event listener
          * functions myself to make sure we dont get memory leaks when removing the results elements and
@@ -37726,12 +37805,15 @@ var renderResults = function renderResults(resultsChunk, searchTerms) {
           mainResultLink.className = 'mainResultLink';
           mainDetails.appendChild(mainResultLink);
 
-          var pageTitle = _lodash2.default.trim(doc.pageTitle);
           var mainResultA = document.createElement('a');
           mainResultA.setAttribute('href', doc._id);
           /*****
            * If there's no pageTitle text, then just use the page url
            */
+          var pageTitle = '';
+          if (doc.pageTitle) {
+            pageTitle = _lodash2.default.trim(doc.pageTitle);
+          }
           mainResultA.textContent = pageTitle.length > 0 ? pageTitle : doc._id;
           mainResultLink.appendChild(mainResultA);
 
@@ -37739,6 +37821,10 @@ var renderResults = function renderResults(resultsChunk, searchTerms) {
           resultUrlText.className = 'resultUrlText';
           resultUrlText.textContent = doc._id;
           mainDetails.appendChild(resultUrlText);
+
+          var resultDateCreated = document.createElement('div');
+          resultDateCreated.textContent = (0, _moment2.default)(doc.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a");
+          mainDetails.appendChild(resultDateCreated);
 
           /*****
            * SafeBrowsing
@@ -37801,7 +37887,9 @@ var renderResults = function renderResults(resultsChunk, searchTerms) {
           }
           var description = document.createElement('p');
           description.className = 'description';
-          description.textContent = _lodash2.default.trim(doc.pageDescription);
+          if (doc.pageDescription) {
+            description.textContent = _lodash2.default.trim(doc.pageDescription);
+          }
           mainDetails.appendChild(description);
 
           var metaIconsContainer = document.createElement('div');
@@ -37870,7 +37958,7 @@ var renderResults = function renderResults(resultsChunk, searchTerms) {
  */
 exports.renderResults = renderResults;
 
-},{"./generateSearchClipAndHighlight":273,"./resultsEventHandlers":282,"./searchPage":286,"lodash":213}],282:[function(require,module,exports){
+},{"./generateSearchClipAndHighlight":273,"./resultsEventHandlers":282,"./searchPage":286,"lodash":213,"moment":215}],282:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37883,6 +37971,8 @@ var _searchPage = require('./searchPage');
 var _resultsObject = require('./resultsObject');
 
 var _chunkResults = require('./chunkResults');
+
+var _updateResultsCountDiv = require('./updateResultsCountDiv');
 
 var _got = require('got');
 
@@ -37941,6 +38031,7 @@ var deletePageFromMarksearch = function deletePageFromMarksearch(event) {
         return document.id === jsonResponse.pageDeleted;
       });
       var chunkedResultsObject = (0, _chunkResults.chunkResults)(fullResultsCacheArrayCopy);
+      (0, _updateResultsCountDiv.updateResultsCountDiv)(fullResultsCacheArrayCopy.length);
       (0, _resultsObject.replaceResults)(fullResultsCacheArrayCopy, chunkedResultsObject);
     }).catch(function (err) {
       return console.error(err);
@@ -37953,7 +38044,7 @@ var deletePageFromMarksearch = function deletePageFromMarksearch(event) {
 exports.showSafeBrowsingDetails = showSafeBrowsingDetails;
 exports.deletePageFromMarksearch = deletePageFromMarksearch;
 
-},{"./chunkResults":271,"./resultsObject":283,"./searchPage":286,"got":203,"lodash":213,"notie":217}],283:[function(require,module,exports){
+},{"./chunkResults":271,"./resultsObject":283,"./searchPage":286,"./updateResultsCountDiv":288,"got":203,"lodash":213,"notie":217}],283:[function(require,module,exports){
 'use strict';
 
 /****
@@ -38263,7 +38354,23 @@ var tooltips = function tooltips() {
  */
 exports.tooltips = tooltips;
 
-},{}]},{},[286])
+},{}],288:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateResultsCountDiv = undefined;
+
+var _searchPage = require('./searchPage');
+
+function updateResultsCountDiv(resultsCount) {
+  _searchPage.resultsCountDiv$.text(resultsCount + ' Results').removeClass('hide');
+}
+
+exports.updateResultsCountDiv = updateResultsCountDiv;
+
+},{"./searchPage":286}]},{},[286])
 
 
 //# sourceMappingURL=searchPage-bundle.js.map

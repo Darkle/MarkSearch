@@ -910,6 +910,15 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   .navHeader .addPageUrls .addPageButtons {
     font-size: 1.8rem;
   }
+  .navHeader .dateFilterSettings {
+    font-size: 1.5rem;
+  }
+  .navHeader .dateFilterSettings .fromContainer {
+    width: initial;
+  }
+  .navHeader .dateFilterSettings .toContainer {
+    width: initial;
+  }
   /****
     Search Page
   */
@@ -938,6 +947,34 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   }
 }
 /*****
+45em width and less
+*****/
+@media (max-width: 45em) {
+  body {
+    color: red !important;
+  }
+  .navHeader .dateFilterSettings {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    height: inherit;
+  }
+  .navHeader .dateFilterSettings > div {
+    padding: 0.5rem 0;
+  }
+  .navHeader .dateFilterSettings .shortcutsContainer {
+    border-left: none;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #3498DB;
+  }
+  .navHeader .dateFilterSettings {
+    font-size: 1.4rem;
+  }
+}
+/*****
 40em width and less
 *****/
 @media (max-width: 40em) {
@@ -963,27 +1000,6 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 32.1em width and less
 *****/
 @media (max-width: 32.1em) {
-  .navHeader .dateFilterSettings {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-  }
-  .navHeader .dateFilterSettings .dropdownMenuContainer {
-    border-right: none;
-  }
-  .navHeader .dateFilterSettings .shortcutDropdowns {
-    position: static;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
-    margin-top: 1rem;
-  }
-  .navHeader .dateFilterSettings .fromToContainer {
-    padding: 0.3rem 0;
-  }
   .searchPage #resultsContainer {
     margin: 0 2rem;
   }
