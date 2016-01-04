@@ -128,8 +128,9 @@ function filterResults(listElement , isShortcut){
       selectToYearValue: $('.selected', nsSelectToYear$).data('value')
     }
     /****
-     * The value for the clicked li element isn't set yet, so grab the value of the listElement and
-     * assign it to fromToValues key
+     * The .selected class for the clicked li element isn't set yet, so grab the relevant
+     * data fromToValueKeyName from the clicked li element and assign it to fromToValues key
+     * (it made sense when i did it)
      */
     fromToValues[$(listElement).data('fromToValueKeyName')] = elemValue
     var momentFormattedDateStart = `${fromToValues.selectFromYearValue} ${fromToValues.selectFromMonthValue}`
