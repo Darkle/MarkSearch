@@ -36665,7 +36665,9 @@ var addUrls = function addUrls() {
     var trimmedUrlsArray = linesOfTextArray.filter(function (lineOfText) {
       return $.trim(lineOfText).length;
     });
-    if (trimmedUrlsArray.length < 1) return;
+    if (trimmedUrlsArray.length < 1) {
+      return;
+    }
     //addUrlsProgress$.height(addPageButtonsContainer$.height())
     addUrlsTextArea$.toggleClass('hide');
     addUrlsTextArea$.val('');
@@ -37073,8 +37075,10 @@ function filterResults(listElement, isShortcut) {
      * assign it to fromToValues key
      */
     fromToValues[$(listElement).data('fromToValueKeyName')] = elemValue;
-    dateStartInMilliseconds = (0, _moment2.default)(fromToValues.selectFromYearValue + ' ' + fromToValues.selectFromMonthValue, 'YYYY MM').valueOf();
-    dateEndInMilliseconds = (0, _moment2.default)(fromToValues.selectToYearValue + ' ' + fromToValues.selectToMonthValue, 'YYYY MM').valueOf();
+    var momentFormattedDateStart = fromToValues.selectFromYearValue + ' ' + fromToValues.selectFromMonthValue;
+    var momentFormattedDateEnd = fromToValues.selectToYearValue + ' ' + fromToValues.selectToMonthValue;
+    dateStartInMilliseconds = (0, _moment2.default)(momentFormattedDateStart, 'YYYY MM').valueOf();
+    dateEndInMilliseconds = (0, _moment2.default)(momentFormattedDateEnd, 'YYYY MM').valueOf();
   }
   /****
    * Check in case they mistakenly put the end date before the start date
@@ -37114,10 +37118,7 @@ function dateFilter() {
 
   _lodash2.default.times(numYearsToInclude, function (num) {
     var year = num + 1 + msReleaseDate;
-    $('<option>', {
-      text: year,
-      value: year
-    }).appendTo('.selectFromYear, .selectToYear');
+    $('<option>', { text: year, value: year }).appendTo('.selectFromYear, .selectToYear');
   });
 
   $('select').niceSelect();
@@ -37136,7 +37137,7 @@ function dateFilter() {
   });
 
   resetFromTo();
-  nsShortcutsCurrentText$.text('Shortcuts');
+  resetShortcuts();
 
   $('.list li', nsSelectShortcuts$).click(function (event) {
     resetFromTo();

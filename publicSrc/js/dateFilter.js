@@ -132,15 +132,17 @@ function filterResults(listElement , isShortcut){
      * assign it to fromToValues key
      */
     fromToValues[$(listElement).data('fromToValueKeyName')] = elemValue
-    dateStartInMilliseconds = moment(`${fromToValues.selectFromYearValue} ${fromToValues.selectFromMonthValue}`, `YYYY MM`).valueOf()
-    dateEndInMilliseconds = moment(`${fromToValues.selectToYearValue} ${fromToValues.selectToMonthValue}`, `YYYY MM`).valueOf()
+    var momentFormattedDateStart = `${fromToValues.selectFromYearValue} ${fromToValues.selectFromMonthValue}`
+    var momentFormattedDateEnd = `${fromToValues.selectToYearValue} ${fromToValues.selectToMonthValue}`
+    dateStartInMilliseconds = moment(momentFormattedDateStart, `YYYY MM`).valueOf()
+    dateEndInMilliseconds = moment(momentFormattedDateEnd, `YYYY MM`).valueOf()
   }
   /****
    * Check in case they mistakenly put the end date before the start date
    */
   if(dateEndInMilliseconds > dateStartInMilliseconds){
     var fullResultsCacheArrayCopy = resultsObject.fullResultsCacheArray.slice()
-    var dateFilteredResults = _.filter(fullResultsCacheArrayCopy, arrayItem =>{
+    var dateFilteredResults = _.filter(fullResultsCacheArrayCopy, arrayItem => {
       return (arrayItem.doc.dateCreated >= dateStartInMilliseconds && arrayItem.doc.dateCreated <= dateEndInMilliseconds)
     })
     updateResultsCountDiv(dateFilteredResults.length)
@@ -174,12 +176,7 @@ function dateFilter(){
 
   _.times(numYearsToInclude, num => {
     var year = (num + 1) + msReleaseDate
-    $('<option>',
-        {
-          text: year,
-          value: year
-        }
-    ).appendTo('.selectFromYear, .selectToYear')
+    $('<option>', {text: year, value: year}).appendTo('.selectFromYear, .selectToYear')
   })
 
   $('select').niceSelect()
@@ -198,7 +195,7 @@ function dateFilter(){
   })
 
   resetFromTo()
-  nsShortcutsCurrentText$.text('Shortcuts')
+  resetShortcuts()
 
   $('.list li', nsSelectShortcuts$).click(event => {
     resetFromTo()

@@ -120,7 +120,9 @@ var addUrls = () => {
     var textAreaText = addUrlsTextArea$.val()
     var linesOfTextArray = textAreaText.split(/\r?\n/)
     var trimmedUrlsArray = linesOfTextArray.filter(lineOfText => $.trim(lineOfText).length)
-    if(trimmedUrlsArray.length < 1) return
+    if(trimmedUrlsArray.length < 1) {
+      return
+    }
     //addUrlsProgress$.height(addPageButtonsContainer$.height())
     addUrlsTextArea$.toggleClass('hide')
     addUrlsTextArea$.val('')
