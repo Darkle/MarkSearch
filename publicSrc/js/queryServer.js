@@ -1,6 +1,6 @@
 'use strict';
 
-import { csrfToken } from './searchPage'
+import { csrfToken, haveShownSomeResults, set_haveShownSomeResults, searchingLoose } from './searchPage'
 import { replaceResults } from './resultsObject'
 import { chunkResults } from './chunkResults'
 import { updateResultsCountDiv } from './updateResultsCountDiv'
@@ -14,7 +14,7 @@ import got from 'got'
 var queryServer = (searchTerms) => {
   var postUrl = `/indexPage_getall/`
   if(searchTerms){
-    postUrl =`/indexPage_search/${window.localStorage.searchLoose}/${searchTerms}`
+    postUrl =`/indexPage_search/${searchingLoose}/${searchTerms}`
   }
   /****
    * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax
@@ -31,7 +31,10 @@ var queryServer = (searchTerms) => {
         updateResultsCountDiv(responseData.total_rows)
         var responseRowsArray = []
         if(responseData.total_rows > 0){
-          window.localStorage.haveResults = 'true'
+          if(!haveShownSomeResults){
+            window.localStorage.haveShownSomeResults = 'true'
+            set_haveShownSomeResults(true)
+          }
           responseRowsArray = responseData.rows
         }
         /****

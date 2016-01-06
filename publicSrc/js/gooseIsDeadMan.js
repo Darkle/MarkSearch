@@ -3,6 +3,7 @@
 import { queryServerAndRender } from './queryServerAndRender'
 import { removeResults } from './removeResults'
 import { searchErrorHandler } from './searchErrorsHandler'
+import { searchingLoose, set_searchingLoose } from './searchPage'
 
 var stringUtils = require('string')
 
@@ -14,7 +15,7 @@ var goose = () => {
    * On page load set the goose button title and set it to dark version if
    * loose search is the default
    */
-  if(window.localStorage.searchLoose === 'true'){
+  if(searchingLoose === 'true'){
     looseSearchButton$.attr('title', 'Loose Search Currently On')
     looseSearchIcon$[0].style.backgroundImage = 'url("/images/goosehover.svg")'
   }
@@ -28,13 +29,15 @@ var goose = () => {
    */
   looseSearchButton$.click(event =>{
     event.preventDefault()
-    if(window.localStorage.searchLoose === 'true'){
+    if(searchingLoose === 'true'){
       window.localStorage.searchLoose = 'false'
+      set_searchingLoose('false')
       looseSearchIcon$[0].style.backgroundImage = 'url("/images/goose.svg")'
       looseSearchButton$.attr('title', 'Loose Search Currently Off')
     }
     else{
       window.localStorage.searchLoose = 'true'
+      set_searchingLoose('true')
       looseSearchIcon$[0].style.backgroundImage = 'url("/images/goosehover.svg")'
       looseSearchButton$.attr('title', 'Loose Search Currently On')
     }

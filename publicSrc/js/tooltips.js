@@ -1,5 +1,7 @@
 'use strict';
 
+import { haveShownSomeResults, set_haveShownSomeResults } from './searchPage'
+
 /****
  * Show the tooltips for the first three times the page is loaded.
  * Also show the tooltips again when there are results, to help to
@@ -29,7 +31,7 @@ var tooltips = () => {
         }
       })
     }
-    else if(window.localStorage.haveResults === 'true'){
+    else if(haveShownSomeResults){
       if(!resultsToolTipsShown){
         resultsToolTipsShown = window.localStorage.resultsToolTipsShown = '1'
         resultsToolTipsShownAsNumber = Number(resultsToolTipsShown)
