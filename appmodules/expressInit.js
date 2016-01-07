@@ -31,7 +31,7 @@ function expressInit(app, express, databasesAndAppSettings){
   app.use(expressValidator())
   app.use(cookieParser())
   app.use(express.static(path.join(__dirname, '..', 'public')))
-  app.use('/bower_components',  express.static( path.join(__dirname, '..', 'bower_components')));
+  app.use('/bower_components',  express.static( path.join(__dirname, '..', 'bower_components')))
   /****
    * Make the databases available to wherever app is available:
    * http://expressjs.com/api.html#app.set

@@ -136,7 +136,7 @@ function search(req, res, next){
         /****
          * if there are no results, return an empty array
          */
-        var finalResults = [];
+        var finalResults = []
         if(resultsObjectsArray.length > 0){
           /****
            * grab all the "rows" in each of the results objects (i.e. map all the row

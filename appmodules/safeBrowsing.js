@@ -56,7 +56,7 @@ function safeBrowsingCheck(doc){
             //TODO: grab the app version from electron or appDB (wherever ended up storing it)
         '&appver=' + '0.0.1' +
         '&pver=3.1' +
-        '&url=' + encodeURIComponent(doc._id);
+        '&url=' + encodeURIComponent(doc._id)
 
     request(safeBrowsingUrl, (error, response, responseBody) =>{
       debug('***************************************safeBrowsingUrl response ================')

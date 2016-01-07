@@ -7,8 +7,8 @@ var domainParser = require('domain-parser')
 var Promise = require("bluebird")
 var debug = require('debug')('MarkSearch:addPage')
 var save2db = require(path.join('..', 'db', 'save2db'))
-var archiveUrl = require(path.join('..', 'archive.is'));
-var safeBrowsingCheck = require(path.join('..', 'safeBrowsing'));
+var archiveUrl = require(path.join('..', 'archive.is'))
+var safeBrowsingCheck = require(path.join('..', 'safeBrowsing'))
 
 function addPage(req, res, next) {
   debug('addPage running')
@@ -77,7 +77,7 @@ function addPage(req, res, next) {
         return [
           pageDocAndHttpStatus.returnedDoc,
           db.search({fields: ['pageTitle', 'pageText', 'pageDomain'], build: true})
-        ];
+        ]
       })
       .spread(archiveUrl)
       .then(safeBrowsingCheck)

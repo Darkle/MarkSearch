@@ -25,7 +25,7 @@ var rename = require('gulp-rename')
 var eventStream = require('event-stream')
 
 
-gulp.task('default', ['browser-sync', 'watch']);
+gulp.task('default', ['browser-sync', 'watch'])
 
 //http://www.browsersync.io/docs/options/
 gulp.task('browser-sync', ['b', 'nodemon'], () =>{
@@ -83,8 +83,8 @@ gulp.task('less', () =>
   gulp.src('publicSrc/css/styles.less')
       .pipe(sourcemaps.init())
       .pipe(less().on('error', function(err) {
-        gutil.log(err);
-        this.emit('end');
+        gutil.log(err)
+        this.emit('end')
       }))
       .pipe(autoprefixer())
       .pipe(sourcemaps.write('./'))
@@ -101,7 +101,7 @@ gulp.task('b', () =>{
     //'publicSrc/js/common.js',
     'publicSrc/js/searchPage.js',
     'publicSrc/js/settingsPage.js'
-  ];
+  ]
   // map them to our stream function
   var tasks = files.map(function(entry){
     return browserify({
@@ -113,13 +113,13 @@ gulp.task('b', () =>{
           sourceMaps: true
         })
         .on('error', function(err){
-          gutil.log(err.message);
-          this.emit('end');
+          gutil.log(err.message)
+          this.emit('end')
         })
         .bundle()
         .on('error', function(err){
-          gutil.log(err.message);
-          this.emit('end');
+          gutil.log(err.message)
+          this.emit('end')
         })
         .pipe(source(entry))
         .pipe(rename({
@@ -131,7 +131,7 @@ gulp.task('b', () =>{
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('public/'))
         //.pipe(browserSync.stream())
-  });
+  })
   // create a merged stream
   return eventStream.merge.apply(null, tasks)
 })

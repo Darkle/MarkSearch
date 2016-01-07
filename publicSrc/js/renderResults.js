@@ -143,7 +143,7 @@ var renderResults = (resultsChunk, searchTerms) => {
             descrAdropdown = null
             descrAdropdownMatIcon = null
             safeBrowsingExplination = null
-          });
+          })
           mainResultLinkIconWarning = null
           safeBrowsing = null
         }

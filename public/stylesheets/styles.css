@@ -950,9 +950,6 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 45em width and less
 *****/
 @media (max-width: 45em) {
-  body {
-    color: red !important;
-  }
   .navHeader .dateFilterSettings {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -972,6 +969,22 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   }
   .navHeader .dateFilterSettings {
     font-size: 1.4rem;
+  }
+}
+/*****
+35em width and less
+*****/
+@media (max-width: 35em) {
+  body {
+    color: red !important;
+    background-color: aqua;
+  }
+  .navHeader .dateFilterSettings .fromToContainer {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 /*****

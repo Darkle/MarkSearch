@@ -25,6 +25,7 @@ var csrfToken
 var resultsCountDiv$
 var resultsContainer$
 var haveShownSomeResults
+var haveShownResultsTooltips
 var searchingLoose
 
 function set_searchingLoose(val){
@@ -33,6 +34,10 @@ function set_searchingLoose(val){
 
 function set_haveShownSomeResults(val){
   haveShownSomeResults = val
+}
+
+function set_haveShownResultsTooltips(val){
+  haveShownResultsTooltips = val
 }
 
 $(document).ready(searchPageInit)
@@ -52,10 +57,9 @@ function searchPageInit(event){
    * Set the searchLoose value to the user's preference in the markSearchSettings in appDB.
    * User can temporarily enable/disable loose search by clicking on the goose
    */
-  var searchLooseVal = body$.data('searchLoose')
-  window.localStorage.searchLoose = searchLooseVal
-  searchingLoose = searchLooseVal
+  searchingLoose = body$.data('searchLoose')
   haveShownSomeResults = _.get(window.localStorage, 'haveShownSomeResults')
+  haveShownResultsTooltips = _.get(window.localStorage, 'haveShownResultsTooltips')
   /****
    * Display all bookmarks stored in MarkSearch on page load
    */
@@ -177,6 +181,8 @@ export {
     resultsContainer$,
     haveShownSomeResults,
     set_haveShownSomeResults,
+    haveShownResultsTooltips,
+    set_haveShownResultsTooltips,
     searchingLoose,
     set_searchingLoose
 }

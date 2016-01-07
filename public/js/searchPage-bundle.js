@@ -37303,6 +37303,8 @@ var _removeResults = require('./removeResults');
 
 var _searchErrorsHandler = require('./searchErrorsHandler');
 
+var _searchPage = require('./searchPage');
+
 var stringUtils = require('string');
 
 var goose = function goose() {
@@ -37313,7 +37315,7 @@ var goose = function goose() {
    * On page load set the goose button title and set it to dark version if
    * loose search is the default
    */
-  if (window.localStorage.searchLoose === 'true') {
+  if (_searchPage.searchingLoose) {
     looseSearchButton$.attr('title', 'Loose Search Currently On');
     looseSearchIcon$[0].style.backgroundImage = 'url("/images/goosehover.svg")';
   } else {
@@ -37326,12 +37328,12 @@ var goose = function goose() {
    */
   looseSearchButton$.click(function (event) {
     event.preventDefault();
-    if (window.localStorage.searchLoose === 'true') {
-      window.localStorage.searchLoose = 'false';
+    if (_searchPage.searchingLoose) {
+      (0, _searchPage.set_searchingLoose)(false);
       looseSearchIcon$[0].style.backgroundImage = 'url("/images/goose.svg")';
       looseSearchButton$.attr('title', 'Loose Search Currently Off');
     } else {
-      window.localStorage.searchLoose = 'true';
+      (0, _searchPage.set_searchingLoose)(true);
       looseSearchIcon$[0].style.backgroundImage = 'url("/images/goosehover.svg")';
       looseSearchButton$.attr('title', 'Loose Search Currently On');
     }
@@ -37346,7 +37348,7 @@ var goose = function goose() {
    * need to remove the js style
    */
   looseSearchButton$.mouseleave(function (event) {
-    if (window.localStorage.searchLoose !== 'true') {
+    if (!_searchPage.searchingLoose) {
       looseSearchIcon$[0].style.backgroundImage = '';
     }
   });
@@ -37356,7 +37358,7 @@ var goose = function goose() {
  */
 exports.goose = goose;
 
-},{"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"string":255}],275:[function(require,module,exports){
+},{"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"./searchPage":286,"string":255}],275:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37607,7 +37609,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var queryServer = function queryServer(searchTerms) {
   var postUrl = '/indexPage_getall/';
   if (searchTerms) {
-    postUrl = '/indexPage_search/' + window.localStorage.searchLoose + '/' + searchTerms;
+    postUrl = '/indexPage_search/' + _searchPage.searchingLoose + '/' + searchTerms;
   }
   /****
    * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax
@@ -37621,7 +37623,10 @@ var queryServer = function queryServer(searchTerms) {
     (0, _updateResultsCountDiv.updateResultsCountDiv)(responseData.total_rows);
     var responseRowsArray = [];
     if (responseData.total_rows > 0) {
-      window.localStorage.haveResults = 'true';
+      if (!_searchPage.haveShownSomeResults) {
+        window.localStorage.haveShownSomeResults = 'true';
+        (0, _searchPage.set_haveShownSomeResults)(true);
+      }
       responseRowsArray = responseData.rows;
     }
     /****
@@ -38131,7 +38136,7 @@ exports.searchErrorHandler = searchErrorHandler;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.resultsContainer$ = exports.resultsCountDiv$ = exports.csrfToken = undefined;
+exports.set_searchingLoose = exports.searchingLoose = exports.set_haveShownResultsTooltips = exports.haveShownResultsTooltips = exports.set_haveShownSomeResults = exports.haveShownSomeResults = exports.resultsContainer$ = exports.resultsCountDiv$ = exports.csrfToken = undefined;
 
 require('babel-polyfill');
 
@@ -38172,6 +38177,21 @@ var stringUtils = require('string');
 var csrfToken;
 var resultsCountDiv$;
 var resultsContainer$;
+var haveShownSomeResults;
+var haveShownResultsTooltips;
+var searchingLoose;
+
+function set_searchingLoose(val) {
+  exports.searchingLoose = searchingLoose = val;
+}
+
+function set_haveShownSomeResults(val) {
+  exports.haveShownSomeResults = haveShownSomeResults = val;
+}
+
+function set_haveShownResultsTooltips(val) {
+  exports.haveShownResultsTooltips = haveShownResultsTooltips = val;
+}
 
 $(document).ready(searchPageInit);
 
@@ -38194,7 +38214,9 @@ function searchPageInit(event) {
    * Set the searchLoose value to the user's preference in the markSearchSettings in appDB.
    * User can temporarily enable/disable loose search by clicking on the goose
    */
-  window.localStorage.searchLoose = body$.data('searchLoose');
+  exports.searchingLoose = searchingLoose = body$.data('searchLoose');
+  exports.haveShownSomeResults = haveShownSomeResults = _lodash2.default.get(window.localStorage, 'haveShownSomeResults');
+  exports.haveShownResultsTooltips = haveShownResultsTooltips = _lodash2.default.get(window.localStorage, 'haveShownResultsTooltips');
   /****
    * Display all bookmarks stored in MarkSearch on page load
    */
@@ -38299,9 +38321,22 @@ function searchPageInit(event) {
 }exports.csrfToken = csrfToken;
 exports.resultsCountDiv$ = resultsCountDiv$;
 exports.resultsContainer$ = resultsContainer$;
+exports.haveShownSomeResults = haveShownSomeResults;
+exports.set_haveShownSomeResults = set_haveShownSomeResults;
+exports.haveShownResultsTooltips = haveShownResultsTooltips;
+exports.set_haveShownResultsTooltips = set_haveShownResultsTooltips;
+exports.searchingLoose = searchingLoose;
+exports.set_searchingLoose = set_searchingLoose;
 
 },{"./addUrls":268,"./checkIfTouchDevice":269,"./checkIfiOS7":270,"./dateFilter":272,"./gooseIsDeadMan":274,"./infiniteScroll":275,"./initSearchPlaceholder":276,"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"./tooltips":287,"babel-polyfill":2,"lodash":213,"string":255}],287:[function(require,module,exports){
 'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.tooltips = undefined;
+
+var _searchPage = require('./searchPage');
 
 /****
  * Show the tooltips for the first three times the page is loaded.
@@ -38309,14 +38344,30 @@ exports.resultsContainer$ = resultsContainer$;
  * show the user what the archive/delete buttons are.
  */
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+var generalToolTipsShown = window.localStorage.generalToolTipsShown;
+var generalToolTipsShownNumber = Number(generalToolTipsShown);
+var resultsToolTipsShown = window.localStorage.resultsToolTipsShown;
+var resultsToolTipsShownAsNumber = Number(resultsToolTipsShown);
+
+function resultsToolTipsHaveBeenShown() {
+  (0, _searchPage.set_haveShownResultsTooltips)(true);
+  window.localStorage.haveShownResultsTooltips = 'true';
+  if (!resultsToolTipsShown) {
+    resultsToolTipsShownAsNumber = 0;
+  }
+  resultsToolTipsShownAsNumber++;
+  if (resultsToolTipsShownAsNumber < 3) {
+    window.localStorage.resultsToolTipsShown = '' + resultsToolTipsShownAsNumber;
+  }
+}
+
 var tooltips = function tooltips() {
-  var generalToolTipsShown = window.localStorage.generalToolTipsShown;
-  var generalToolTipsShownNumber = Number(generalToolTipsShown);
-  var resultsToolTipsShown = window.localStorage.resultsToolTipsShown;
-  var resultsToolTipsShownAsNumber = Number(resultsToolTipsShown);
+  console.log('generalToolTipsShown : ', generalToolTipsShown);
+  console.log('generalToolTipsShownNumber : ', generalToolTipsShownNumber);
+  console.log('resultsToolTipsShown : ', resultsToolTipsShown);
+  console.log('resultsToolTipsShownAsNumber : ', resultsToolTipsShownAsNumber);
+  console.log('haveShownResultsTooltips : ', _searchPage.haveShownResultsTooltips);
+  console.log('haveShownSomeResults : ', _searchPage.haveShownSomeResults);
   if (!generalToolTipsShown) {
     window.localStorage.generalToolTipsShown = '1';
     $.protip({
@@ -38324,6 +38375,9 @@ var tooltips = function tooltips() {
         position: 'bottom'
       }
     });
+    if (_searchPage.haveShownSomeResults) {
+      resultsToolTipsHaveBeenShown();
+    }
   } else {
     generalToolTipsShownNumber++;
     if (generalToolTipsShownNumber < 4) {
@@ -38333,13 +38387,11 @@ var tooltips = function tooltips() {
           position: 'bottom'
         }
       });
-    } else if (window.localStorage.haveResults === 'true') {
-      if (!resultsToolTipsShown) {
-        resultsToolTipsShown = window.localStorage.resultsToolTipsShown = '1';
-        resultsToolTipsShownAsNumber = Number(resultsToolTipsShown);
-      } else {
-        resultsToolTipsShownAsNumber++;
+      if (_searchPage.haveShownSomeResults) {
+        resultsToolTipsHaveBeenShown();
       }
+    } else if (!_searchPage.haveShownResultsTooltips && _searchPage.haveShownSomeResults || resultsToolTipsShownAsNumber < 3) {
+      resultsToolTipsHaveBeenShown();
       if (resultsToolTipsShownAsNumber < 3) {
         window.localStorage.resultsToolTipsShown = '' + resultsToolTipsShownAsNumber;
         $.protip({
@@ -38356,7 +38408,7 @@ var tooltips = function tooltips() {
  */
 exports.tooltips = tooltips;
 
-},{}],288:[function(require,module,exports){
+},{"./searchPage":286}],288:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
