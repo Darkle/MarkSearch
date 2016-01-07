@@ -12,7 +12,7 @@ import { searchErrorHandler } from './searchErrorsHandler'
 import { checkIfTouchDevice } from './checkIfTouchDevice'
 import { initSearchPlaceholder } from './initSearchPlaceholder'
 import { tooltips } from './tooltips'
-import { dateFilter } from './dateFilter'
+import { dateFilter, filterResults, allFromToIsSet } from './dateFilter'
 
 import _ from 'lodash'
 /****
@@ -47,6 +47,7 @@ function searchPageInit(event){
   csrfToken = $('#csrfInput').val()
   resultsCountDiv$ = $('#resultsCount')
   resultsContainer$ = $('#resultsContainer')
+  var dateFilterContainer$ = $('.dateFilterSettings')
   var isIOS7 = checkIfiOS7(window)
   var body$ = $('body')
   if(!checkIfTouchDevice(window)){
@@ -137,7 +138,16 @@ function searchPageInit(event){
               if(searchInputValue.length){
                 searchTerms = encodeURIComponent(stringUtils(searchInputValue).collapseWhitespace().s)
               }
-              queryServerAndRender(searchTerms).catch(searchErrorHandler)
+              queryServerAndRender(searchTerms)
+                  .then(() => {
+                    /****
+                     * If they were searching when they have the date filter displayed
+                     */
+                    if(dateFilterContainer$.data('isShown') === 'true'){
+                      filterResults(!allFromToIsSet())
+                    }
+                  })
+                  .catch(searchErrorHandler)
             }
           },
           debounceTime,

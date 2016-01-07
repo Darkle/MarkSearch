@@ -448,19 +448,15 @@ body {
   border-left-style: solid;
   border-left-color: #3498DB;
 }
-.navHeader .dateFilterSettings .nice-select {
-  border-radius: 0;
+.navHeader .dateFilterSettings select {
+  background-color: transparent;
   border: none;
-  float: none;
-  font-size: inherit;
-  height: inherit;
-  line-height: inherit;
-  background-color: #ECF0F1;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
-.navHeader .dateFilterSettings .nice-select .list {
-  border-radius: 0;
-  margin-top: 0;
-  background-color: #ECF0F1;
+.navHeader .dateFilterSettings .selectContainer::before {
+  content: "\e601";
 }
 /****
 * Add Page Urls

@@ -22,6 +22,8 @@
     "pure": "~0.6.0",
     "normalize-css": "normalize.css#~3.0.3",
     "jquery": "~2.1.4",
-    "protip": "~1.4.1"
+    "protip": "~1.4.1",
+    "Formplate": "formplate#~2.0.2",
+    "modernizer": "~2.8.2"
   }
 }

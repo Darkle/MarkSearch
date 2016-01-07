@@ -15,16 +15,11 @@ var dateFilterMaterialIcon$
 var fromContainer$
 var toContainer$
 var shortCutsContainer$
-var nsSelectShortcuts$
-var nsSelectFromMonth$
-var nsSelectFromYear$
-var nsSelectToMonth$
-var nsSelectToYear$
-var nsFromMonthCurrentText$
-var nsToMonthCurrentText$
-var nsFromYearCurrentText$
-var nsToYearCurrentText$
-var nsShortcutsCurrentText$
+var selectShortcuts$
+var selectFromMonth$
+var selectFromYear$
+var selectToMonth$
+var selectToYear$
 var shortCutValues = {
   "Past 3 days": {
     dateStart: () => moment().subtract(3, 'days')
@@ -45,15 +40,37 @@ var shortCutValues = {
     dateStart: () => moment().subtract(1, 'years')
   }
 }
-var fromToSet = {
-  fromMonthSet: false,
-  fromYearSet: false,
-  toMonthSet: false,
-  toYearSet: false,
-}
 
 function allFromToIsSet(){
-  return _.every(fromToSet, item => item)
+  var fromToSelectsAsArr = [
+    selectFromMonth$,
+    selectFromYear$,
+    selectToMonth$,
+    selectToYear$
+  ]
+  return _.every(fromToSelectsAsArr, item => item.val() !== 'placeholder')
+}
+
+function dateFilterResetAll(){
+  resetFromTo()
+  shortCutsContainer$.removeClass('lightBlue')
+  selectShortcuts$.val('placeholder')
+  removeResults()
+  updateResultsCountDiv(resultsObject.fullResultsCacheArray.length)
+  /****
+   * chunkResults returns an empty object if resultsObject.fullResultsCacheArray is empty
+   */
+  replaceResults(null, chunkResults(resultsObject.fullResultsCacheArray))
+  if(resultsObject.fullResultsCacheArray.length > 0){
+    renderResults(resultsObject.currentResults.chunk_0, null)
+  }
+}
+
+function resetFromTo(){
+  selectFromMonth$.val('placeholder')
+  selectFromYear$.val('placeholder')
+  selectToMonth$.val('placeholder')
+  selectToYear$.val('placeholder')
 }
 
 function hideShowDateFilterSubbar(){
@@ -73,68 +90,17 @@ function hideShowDateFilterSubbar(){
   }
 }
 
-function dateFilterResetAll(){
-  resetFromTo()
-  resetShortcuts()
-  resetResults()
-}
-
-function resetShortcuts(){
-  shortCutsContainer$.removeClass('lightBlue')
-  nsShortcutsCurrentText$.text('Shortcuts')
-}
-
-function resetFromTo(){
-  nsFromMonthCurrentText$.text('Month')
-  nsToMonthCurrentText$.text('Month')
-  nsFromYearCurrentText$.text('Year')
-  nsToYearCurrentText$.text('Year')
-  fromContainer$.addClass('lightBlue')
-  toContainer$.addClass('lightBlue')
-  fromToSet.fromMonthSet = false
-  fromToSet.fromYearSet = false
-  fromToSet.toMonthSet = false
-  fromToSet.toYearSet = false
-}
-
-function resetResults(){
-  removeResults()
-  var chunkedResultsObject = {}
-  updateResultsCountDiv(resultsObject.fullResultsCacheArray.length)
-  /****
-   * chunkResults returns an empty object if resultsObject.fullResultsCacheArray is empty
-   */
-  replaceResults(null, chunkResults(resultsObject.fullResultsCacheArray))
-  if(resultsObject.fullResultsCacheArray.length > 0){
-    renderResults(resultsObject.currentResults.chunk_0, null)
-  }
-}
-
-function filterResults(listElement , isShortcut){
+function filterResults(isShortcut){
   removeResults()
   var dateStartInMilliseconds
   var dateEndInMilliseconds
-  var elemValue = $(listElement).data('value')
   if(isShortcut){
-    var shortObjVal = shortCutValues[elemValue]
-    dateStartInMilliseconds = shortObjVal.dateStart().valueOf()
+    dateStartInMilliseconds = shortCutValues[selectShortcuts$.val()].dateStart().valueOf()
     dateEndInMilliseconds = moment().valueOf()
   }
   else{
-    var fromToValues = {
-      selectFromMonthValue: $('.selected', nsSelectFromMonth$).data('value'),
-      selectFromYearValue: $('.selected', nsSelectFromYear$).data('value'),
-      selectToMonthValue: $('.selected', nsSelectToMonth$).data('value'),
-      selectToYearValue: $('.selected', nsSelectToYear$).data('value')
-    }
-    /****
-     * The .selected class for the clicked li element isn't set yet, so grab the relevant
-     * data fromToValueKeyName from the clicked li element and assign it to fromToValues key
-     * (it made sense when i did it)
-     */
-    fromToValues[$(listElement).data('fromToValueKeyName')] = elemValue
-    var momentFormattedDateStart = `${fromToValues.selectFromYearValue} ${fromToValues.selectFromMonthValue}`
-    var momentFormattedDateEnd = `${fromToValues.selectToYearValue} ${fromToValues.selectToMonthValue}`
+    var momentFormattedDateStart = `${selectFromYear$.val()} ${selectFromMonth$.val()}`
+    var momentFormattedDateEnd = `${selectToYear$.val()} ${selectToMonth$.val()}`
     dateStartInMilliseconds = moment(momentFormattedDateStart, `YYYY MM`).valueOf()
     dateEndInMilliseconds = moment(momentFormattedDateEnd, `YYYY MM`).valueOf()
   }
@@ -158,15 +124,21 @@ function filterResults(listElement , isShortcut){
 }
 
 function dateFilter(){
+  //formplate($('body'))
   var subBar$ = $('.subBar')
   var dateFilterNavButtonContainer$ = $('.dateFilter')
   var dateFilterButton$ = $('a', dateFilterNavButtonContainer$)
   var otherNavMaterialIcons$ = $('.addPage .material-icons, .settings-etal .material-icons')
+  dateFilterMaterialIcon$ = $('.material-icons', dateFilterButton$)
   shortCutsContainer$ = $('.shortcutsContainer')
   dateFilterContainer$ = $('.dateFilterSettings')
-  dateFilterMaterialIcon$ = $('.material-icons', dateFilterButton$)
   fromContainer$ = $('.fromContainer')
   toContainer$ = $('.toContainer')
+  selectFromMonth$ = $('.selectFromMonth', fromContainer$)
+  selectFromYear$ = $('.selectFromYear', fromContainer$)
+  selectToMonth$ = $('.selectToMonth', toContainer$)
+  selectToYear$ = $('.selectToYear', toContainer$)
+  selectShortcuts$ = $('.shortcuts', shortCutsContainer$)
 
   var currentYear = moment().year()
   /****
@@ -174,78 +146,59 @@ function dateFilter(){
    */
   var msReleaseDate = 2000
   var numYearsToInclude = (currentYear - msReleaseDate) + 1
-
+  /****
+   * num starts at 0
+   */
   _.times(numYearsToInclude, num => {
-    var year = (num + 1) + msReleaseDate
+    var year = msReleaseDate + num
     $('<option>', {text: year, value: year}).appendTo('.selectFromYear, .selectToYear')
   })
 
-  $('select').niceSelect()
-  nsSelectFromMonth$ = $('.nice-select.selectFromMonth')
-  nsSelectFromYear$ = $('.nice-select.selectFromYear')
-  nsSelectToMonth$ = $('.nice-select.selectToMonth')
-  nsSelectToYear$ = $('.nice-select.selectToYear')
-  nsSelectShortcuts$ = $('.nice-select.shortcuts')
-  nsFromMonthCurrentText$ = $('.current', nsSelectFromMonth$)
-  nsFromYearCurrentText$ = $('.current', nsSelectFromYear$)
-  nsToMonthCurrentText$ = $('.current', nsSelectToMonth$)
-  nsToYearCurrentText$ = $('.current', nsSelectToYear$)
-  nsShortcutsCurrentText$ = $('.current', nsSelectShortcuts$)
-  $([nsSelectFromMonth$, nsSelectFromYear$, nsSelectToMonth$, nsSelectToYear$]).each( (index, element$) => {
-    element$.find('li').attr('data-from-to-value-key-name', `${element$[0].className.slice(12)}Value`)
-  })
-
-  resetFromTo()
-  resetShortcuts()
-
-  $('.list li', nsSelectShortcuts$).click(event => {
+  selectShortcuts$.change(event => {
     resetFromTo()
     shortCutsContainer$.removeClass('lightBlue')
-    filterResults(event.currentTarget, true)
+    filterResults(true)
   })
 
-  $('.list li', nsSelectFromMonth$).click(event => {
-    fromToSet.fromMonthSet = true
+  selectFromMonth$.change(event => {
     /****
      * check if all rest is set, then filter results
      */
     if(allFromToIsSet()){
-      filterResults(event.currentTarget, false)
+      filterResults(false)
     }
   })
 
-  $('.list li', nsSelectFromYear$).click(event => {
+  selectFromYear$.change(event => {
     fromContainer$.removeClass('lightBlue')
-    fromToSet.fromYearSet = true
-    if(!fromToSet.fromMonthSet){
-      fromToSet.fromMonthSet = true
-      nsFromMonthCurrentText$.text('January')
+    /****
+     * If the month hasn't been selected yet, select January
+     */
+    if(selectFromMonth$.val() === 'placeholder'){
+      selectFromMonth$.val('1')
     }
     if(allFromToIsSet()){
       shortCutsContainer$.addClass('lightBlue')
-      nsShortcutsCurrentText$.text('Shortcuts')
-      filterResults(event.currentTarget, false)
+      selectShortcuts$.val('placeholder')
+      filterResults(false)
     }
   })
 
-  $('.list li', nsSelectToMonth$).click(event => {
-    fromToSet.toMonthSet = true
+  selectToMonth$.change(event => {
     if(allFromToIsSet()){
-      filterResults(event.currentTarget, false)
+      filterResults(false)
     }
   })
 
-  $('.list li', nsSelectToYear$).click(event => {
+  selectToYear$.change(event => {
     toContainer$.removeClass('lightBlue')
-    fromToSet.toYearSet = true
-    if(!fromToSet.toMonthSet){
-      nsToMonthCurrentText$.text('January')
-      fromToSet.toMonthSet = true
+    if(selectToMonth$.val() === 'placeholder'){
+      selectToMonth$.val('1')
     }
     if(allFromToIsSet()){
       shortCutsContainer$.addClass('lightBlue')
-      nsShortcutsCurrentText$.text('Shortcuts')
-      filterResults(event.currentTarget, false)
+      selectShortcuts$.val('placeholder')
+      filterResults(false)
     }
   })
 
@@ -278,4 +231,4 @@ function dateFilter(){
 /****
  * Exports
  */
-export { dateFilter, dateFilterResetAll }
+export { dateFilter, dateFilterResetAll, filterResults, allFromToIsSet }
