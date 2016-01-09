@@ -5,7 +5,7 @@ import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEven
 import { generateSearchClipAndHighlight } from './generateSearchClipAndHighlight'
 
 import _ from 'lodash'
-import moment from 'moment'
+//import moment from 'moment'
 
 /****
  * Exports
@@ -84,9 +84,9 @@ function renderResults(resultsChunk, searchTerms){
         resultUrlText.textContent = doc._id
         mainDetails.appendChild(resultUrlText)
 
-        var resultDateCreated = document.createElement('div')
-        resultDateCreated.textContent = moment(doc.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
-        mainDetails.appendChild(resultDateCreated)
+        //var resultDateCreated = document.createElement('div')
+        //resultDateCreated.textContent = moment(doc.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
+        //mainDetails.appendChild(resultDateCreated)
 
         /*****
          * SafeBrowsing

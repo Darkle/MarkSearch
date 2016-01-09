@@ -36900,7 +36900,7 @@ function chunkResults(rawResults) {
    */
   var chunkAndShownData = {};
   if (rawResults && rawResults.length) {
-    var chunkedResults = _lodash2.default.chunk(rawResults, 20);
+    var chunkedResults = _lodash2.default.chunk(rawResults, 200);
     chunkedResults.forEach(function (resultChunk, index) {
       chunkAndShownData['chunk_' + index] = {
         chunkIndex: index,
@@ -37191,7 +37191,7 @@ function dateFilter() {
   /****
    * 2016 - year MarkSearch was released, so don't need any earlier
    */
-  var msReleaseDate = 2000;
+  var msReleaseDate = 2016;
   var numYearsToInclude = currentYear - msReleaseDate + 1;
 
   _lodash2.default.times(numYearsToInclude, function (index) {
@@ -37769,11 +37769,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _moment = require('moment');
-
-var _moment2 = _interopRequireDefault(_moment);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//import moment from 'moment'
 
 /****
  * Exports
@@ -37857,9 +37855,9 @@ function renderResults(resultsChunk, searchTerms) {
           resultUrlText.textContent = doc._id;
           mainDetails.appendChild(resultUrlText);
 
-          var resultDateCreated = document.createElement('div');
-          resultDateCreated.textContent = (0, _moment2.default)(doc.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a");
-          mainDetails.appendChild(resultDateCreated);
+          //var resultDateCreated = document.createElement('div')
+          //resultDateCreated.textContent = moment(doc.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
+          //mainDetails.appendChild(resultDateCreated)
 
           /*****
            * SafeBrowsing
@@ -37993,7 +37991,7 @@ function renderResults(resultsChunk, searchTerms) {
  */
 exports.renderResults = renderResults;
 
-},{"./generateSearchClipAndHighlight":273,"./resultsEventHandlers":282,"./searchPage":286,"lodash":213,"moment":215}],282:[function(require,module,exports){
+},{"./generateSearchClipAndHighlight":273,"./resultsEventHandlers":282,"./searchPage":286,"lodash":213}],282:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

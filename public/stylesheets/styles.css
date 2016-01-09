@@ -1163,6 +1163,9 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 #notie-confirm-no:hover #notie-confirm-no-text {
   color: #2670A2 !important;
 }
+.protip-container {
+  z-index: 500;
+}
 .protip-skin-default--scheme-pro.protip-container {
   background: #77BBEB !important;
 }
