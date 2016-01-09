@@ -1,6 +1,6 @@
 'use strict';
 
-import { csrfToken, haveShownSomeResults, set_haveShownSomeResults, searchingLoose } from './searchPage'
+import { csrfToken, haveShownSomeResults, set_haveShownSomeResults } from './searchPage'
 import { replaceResults } from './resultsObject'
 import { chunkResults } from './chunkResults'
 import { updateResultsCountDiv } from './updateResultsCountDiv'

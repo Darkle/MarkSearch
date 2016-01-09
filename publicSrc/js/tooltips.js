@@ -1,6 +1,7 @@
 'use strict';
 
 import { haveShownSomeResults, set_haveShownSomeResults, haveShownResultsTooltips, set_haveShownResultsTooltips } from './searchPage'
+import { checkIfTouchDevice } from './checkIfTouchDevice'
 
 /****
  * Show the tooltips for the first three times the page is loaded.
@@ -26,6 +27,9 @@ function resultsToolTipsHaveBeenShown(){
 }
 
 function tooltips(){
+  if(checkIfTouchDevice(window)){
+    return
+  }
   if(!generalToolTipsShown){
     window.localStorage.generalToolTipsShown = '1'
     $.protip({

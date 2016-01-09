@@ -36835,6 +36835,7 @@ exports.addUrls = addUrls;
  * if a few tablets/mobile devices have the input focused on load too. The user may
  * not be used to seeing the curser flashing in the search box without them
  * tapping on it, but it wont be overly distracting right?...RIGHT?!!
+ * And they dont need tooltips either.
  *
  * Note: some Android devices report as Linux
  * If the user is using a linux laptop with touch enabled it will be caught by this.
@@ -37637,7 +37638,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function queryServer(searchTerms) {
   var postUrl = '/indexPage_getall/';
   if (searchTerms) {
-    postUrl = '/indexPage_search/' + _searchPage.searchingLoose + '/' + searchTerms;
+    postUrl = '/indexPage_search/' + searchingLoose + '/' + searchTerms;
   }
   /****
    * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax
@@ -38241,7 +38242,7 @@ function searchPageInit(event) {
    * Set the searchLoose value to the user's preference in the markSearchSettings in appDB.
    * User can temporarily enable/disable loose search by clicking on the goose
    */
-  exports.searchingLoose = searchingLoose = body$.data('searchLoose');
+  exports.searchingLoose = searchingLoose = markSearchSettings.defaultToSearchLoose;
   exports.haveShownSomeResults = haveShownSomeResults = _lodash2.default.get(window.localStorage, 'haveShownSomeResults');
   exports.haveShownResultsTooltips = haveShownResultsTooltips = _lodash2.default.get(window.localStorage, 'haveShownResultsTooltips');
   /****
@@ -38391,6 +38392,8 @@ exports.tooltips = undefined;
 
 var _searchPage = require('./searchPage');
 
+var _checkIfTouchDevice = require('./checkIfTouchDevice');
+
 /****
  * Show the tooltips for the first three times the page is loaded.
  * Also show the tooltips again when there are results, to help to
@@ -38415,6 +38418,9 @@ function resultsToolTipsHaveBeenShown() {
 }
 
 function tooltips() {
+  if ((0, _checkIfTouchDevice.checkIfTouchDevice)(window)) {
+    return;
+  }
   if (!generalToolTipsShown) {
     window.localStorage.generalToolTipsShown = '1';
     $.protip({
@@ -38455,7 +38461,7 @@ function tooltips() {
  */
 exports.tooltips = tooltips;
 
-},{"./searchPage":286}],288:[function(require,module,exports){
+},{"./checkIfTouchDevice":269,"./searchPage":286}],288:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

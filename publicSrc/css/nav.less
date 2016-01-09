@@ -263,6 +263,11 @@
 .navHeader .dateFilterSettings .formplate-select select {
   font-size: 18px;
 }
+//http://stackoverflow.com/a/18853002/3458681
+.navHeader .dateFilterSettings .formplate-select select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 @paletteBlue;
+}
 
 .formplate-select:hover {
   border: 1px solid #3498db;

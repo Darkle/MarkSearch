@@ -11,10 +11,8 @@ html
     link(rel='stylesheet', href='/bower_components/protip/protip.min.css')
     link(rel='stylesheet', href='/stylesheets/formplate.css')
     link(rel='stylesheet', href='/stylesheets/styles.css')
-  - var bodyClass = 'indexPage';
   block vars
-  // data- attributes can't have capitals
-  body(class='#{bodyClass}', data-search-loose='#{defaultToSearchLoose}' )
+  body(class='#{bodyClass}')
     include ./nav.jade
     block content
 

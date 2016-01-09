@@ -435,6 +435,10 @@ body {
 .navHeader .dateFilterSettings .formplate-select select {
   font-size: 18px;
 }
+.navHeader .dateFilterSettings .formplate-select select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #3498DB;
+}
 .formplate-select:hover {
   border: 1px solid #3498db;
 }

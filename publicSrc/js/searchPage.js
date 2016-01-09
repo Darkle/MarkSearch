@@ -58,7 +58,7 @@ function searchPageInit(event){
    * Set the searchLoose value to the user's preference in the markSearchSettings in appDB.
    * User can temporarily enable/disable loose search by clicking on the goose
    */
-  searchingLoose = body$.data('searchLoose')
+  searchingLoose = markSearchSettings.defaultToSearchLoose
   haveShownSomeResults = _.get(window.localStorage, 'haveShownSomeResults')
   haveShownResultsTooltips = _.get(window.localStorage, 'haveShownResultsTooltips')
   /****
