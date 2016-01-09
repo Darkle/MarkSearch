@@ -7,7 +7,7 @@ import { searchingLoose, set_searchingLoose } from './searchPage'
 
 var stringUtils = require('string')
 
-var goose = () => {
+function goose(){
   var looseSearchButton$ = $("#looseSearchButton")
   var looseSearchIcon$ = $("#looseSearchIcon")
   var searchInput$ = $('#searchInput')
@@ -17,7 +17,7 @@ var goose = () => {
    */
   if(searchingLoose){
     looseSearchButton$.attr('title', 'Loose Search Currently On')
-    looseSearchIcon$[0].style.backgroundImage = 'url("/images/goosehover.svg")'
+    looseSearchIcon$.addClass('gooseSelected')
   }
   else{
     looseSearchButton$.attr('title', 'Loose Search Currently Off')
@@ -31,12 +31,14 @@ var goose = () => {
     event.preventDefault()
     if(searchingLoose){
       set_searchingLoose(false)
-      looseSearchIcon$[0].style.backgroundImage = 'url("/images/goose.svg")'
+      looseSearchIcon$.removeClass('gooseSelected')
+      looseSearchIcon$.removeClass('gooseHover')
       looseSearchButton$.attr('title', 'Loose Search Currently Off')
     }
     else{
       set_searchingLoose(true)
-      looseSearchIcon$[0].style.backgroundImage = 'url("/images/goosehover.svg")'
+      looseSearchIcon$.addClass('gooseSelected')
+      looseSearchIcon$.addClass('gooseHover')
       looseSearchButton$.attr('title', 'Loose Search Currently On')
     }
     let searchInputValue = searchInput$.val()

@@ -4510,7 +4510,7 @@ process.umask = function() { return 0; };
 
 require("babel-polyfill");
 
-//this needs to be first I think
+//needs to be first
 
 $(document).ready(settingsPageInit);
 
@@ -4518,6 +4518,10 @@ function settingsPageInit(event) {
   console.log("settingsPage.js ready!");
   var csrfToken = $('#csrfInput').val();
   console.log(csrfToken);
+
+  //when hiding other subbars, look at what addUrls & dateFilter does when they reset/hide
+  //other subbar in the if(currentlyShownSubBar$[0] && currentlyShownSubBar$[0] !== addPageUrlsDiv$[0])
+  //and other one
 }
 
 },{"babel-polyfill":1}]},{},[191])

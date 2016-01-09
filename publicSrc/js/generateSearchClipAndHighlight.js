@@ -13,7 +13,7 @@ import { lunrStopwordList } from './lunrStopwordFilter'
  * It shouldn't affect client side because we are chunking the results to groups
  * of 200.
  */
-var generateSearchClipAndHighlight = (doc, searchTerms) => {
+function generateSearchClipAndHighlight(doc, searchTerms){
   /****
    * %20 cause the text is encoded with encodeURIComponent
    */

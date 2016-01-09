@@ -2,6 +2,11 @@
 * Global
 */
 
+//body{
+//  color: red !important;
+//  background-color: aqua;
+//}
+
 /*****
 54.5em width and wider
 *****/
@@ -13,19 +18,6 @@
     display: flex;
   }
 }
-
-
-/*****
-57.7em width and less
-*****/
-//@media (max-width: 57.7em) {
-//  //body{
-//  //  color: red !important;
-//  //}
-//  //.navHeader .dateFilterSettings {
-//  //  font-size: 0.9rem;
-//  //}
-//}
 
 /*****
 54.5em width and less
@@ -41,51 +33,49 @@
   .navHeader .brandLogo .brandLogoSmall {
     display: none;
   }
-  //.navHeader .brandLogo .brandLogoLarge {
-  //  display: none;
-  //}
   .navHeader .rightContainer {
-    //padding: 0 2rem;
     flex-grow: 0;
   }
-  //.navHeader nav > .searchContainer {
-  //  outline: 1px solid green
-  //}
-  //.navHeader nav > .rightContainer {
-  //  outline: 1px solid red
-  //}
   .navHeader .rightContainer > div {
     padding: 0 0.5rem;
-    //outline: 1px solid green
   }
-  //.navHeader .dateFilterSettings {
-  //  font-size: 1.4rem;
-  //}
   .navHeader .addPageUrls textarea {
     font-size: 1.2rem;
-
   }
   .navHeader .addPageUrls .addPageButtons {
     font-size: 1.8rem;
   }
   .navHeader .dateFilterSettings {
     font-size: 1.5rem;
+    flex-direction: column;
+    height: 100px
   }
-  //.navHeader .dateFilterSettings .fromToContainer {
-  //  justify-content: center;
-  //}
-  .navHeader .dateFilterSettings .fromContainer {
-    width: initial;
+  .navHeader .dateFilterSettings .formplate-select select {
+    padding-right: 38px;
   }
-  .navHeader .dateFilterSettings .toContainer {
-    width: initial;
+  .navHeader .dateFilterSettings .fromContainer > span {
+    width: 5rem;
+  }
+
+  .navHeader .dateFilterSettings .toContainer > span {
+    width: 3.1rem;
+  }
+  .navHeader .dateFilterSettings .shortcutsContainer {
+    border-left-width: initial;
+    border-left-style: initial;
+    border-left-color: initial;
+    border-top-width: 1px;
+    border-top-color: #3498DB;
+    border-top-style: solid;
   }
   /****
     Search Page
   */
   .searchPage #resultsOuterContainer {
-    //flex-basis: 58rem;
-    //color: red !important;
+    margin-top: 84px;
+  }
+  .searchPage #resultsCount {
+    font-size: 1.3rem;
   }
   .searchPage #resultsContainer {
     flex-basis: 58rem;
@@ -111,41 +101,17 @@
 }
 
 /*****
-45em width and less
-*****/
-@media (max-width: 45em) {
-  //body{
-  //  color: red !important;
-  //}
-  .navHeader .dateFilterSettings {
-    flex-direction: column;
-    height: inherit;
-  }
-  .navHeader .dateFilterSettings>div {
-    padding: 0.5rem 0;
-  }
-  .navHeader .dateFilterSettings .shortcutsContainer {
-    border-left: none;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: #3498DB;
-  }
-  .navHeader .dateFilterSettings {
-    font-size: 1.4rem;
-  }
-}
-
-
-/*****
 35em width and less
 *****/
-@media (max-width: 35em) {
-  body{
-    color: red !important;
-    background-color: aqua;
+@media (max-width: 36em) {
+  .navHeader .dateFilterSettings {
+    height: 140px;
   }
   .navHeader .dateFilterSettings .fromToContainer {
     flex-direction: column;
+  }
+  .navHeader .dateFilterSettings .toContainer {
+    margin-top: 2px;
   }
 }
 
@@ -159,9 +125,6 @@
   .navHeader .brandLogo .brandLogoLarge {
     display: none;
   }
-  //.navHeader .dateFilterSettings {
-  //  font-size: 1.4rem;
-  //}
 }
 
 
@@ -169,9 +132,6 @@
 35.8em width and less
 *****/
 @media (max-width: 35.8em) {
-  //body{
-  //  color: red !important;
-  //}
   .searchPage #resultsContainer {
     margin: 0 3rem;
   }
@@ -181,22 +141,6 @@
 32.1em width and less
 *****/
 @media (max-width: 32.1em) {
-  //body {
-  //  //color: green !important;
-  //}
-  //.navHeader .dateFilterSettings .dropdownMenuContainer {
-  //  border-right: none;
-  //  //order: 2;
-  //  //padding
-  //}
-  //.navHeader .dateFilterSettings .shortcutDropdowns {
-  //  position: static;
-  //  align-items: center;
-  //  margin-top: 1rem;
-  //}
-  //.navHeader .dateFilterSettings .fromToContainer {
-  //  padding: 0.3rem 0;
-  //}
   .searchPage #resultsContainer {
     margin: 0 2rem;
   }
@@ -206,16 +150,12 @@
 28.6em width and less
 *****/
 @media (max-width: 28.6em) {
-  //body {
-  //  //color: red !important;
-  //}
   .navHeader .searchContainer {
     padding: 0 0 0 0.3rem;
   }
   .navHeader .brandLogo {
     display: none;
   }
-
   .navHeader #searchForm > input{
     font-size: 1.4rem;
   }
@@ -226,7 +166,6 @@
   }
   .navHeader .rightContainer > div {
     padding: 0;
-    //outline: 1px solid green
     flex: 0 0 auto;
   }
   /*****
@@ -234,6 +173,9 @@
   */
   .navHeader .addPageUrls textarea {
     font-size: 16px;
+  }
+  .searchPage #resultsCount {
+    font-size: 1rem;
   }
   .searchPage .mainResultLink {
     font-size: 1.2rem;
@@ -266,7 +208,6 @@
 @media (max-width: 22.5em) {
   .navHeader .searchContainer {
     flex-basis: 14rem;
-    //outline:1px solid red;
   }
   .navHeader .searchContainer #searchInput {
     flex-basis: 16rem;

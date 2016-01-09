@@ -10,7 +10,7 @@
  * If the user is using a linux laptop with touch enabled it will be caught by this.
  * And prolly others, but like I said, not trying for perfection here.
  */
-var checkIfTouchDevice = (window) => {
+function checkIfTouchDevice(window){
   return ('ontouchstart' in window) && /iPad|iPhone|iPod|Android|IEMobile|BlackBerry|Linux/.test(navigator.platform)
 }
 /****

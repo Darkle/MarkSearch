@@ -14,7 +14,7 @@ var timeout
 /****
  * Exports
  */
-var initInfiniteScroll = (event) => {
+function initInfiniteScroll(event){
   /****
    * A simple debounce
    */

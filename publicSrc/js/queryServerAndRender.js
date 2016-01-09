@@ -6,7 +6,7 @@ import { renderResults } from './renderResults'
 
 import _ from 'lodash'
 
-var queryServerAndRender = (searchTerms) => {
+function queryServerAndRender(searchTerms){
   return queryServer(searchTerms)
       .then(() => {
         /****

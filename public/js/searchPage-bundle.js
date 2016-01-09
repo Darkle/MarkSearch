@@ -36595,9 +36595,10 @@ function hideShowAddPageSubbar(refreshResults) {
   }
 }
 
-var addUrls = function addUrls() {
+function addUrls() {
   var subBar$ = $('.subBar');
   var nav$ = $('.navHeader nav');
+  var resultsOuterContainer$ = $('#resultsOuterContainer');
   addPageButtonsContainer$ = $('.addPageButtons');
   addPageUrlsDiv$ = $('.addPageUrls');
   addUrlsTextArea$ = $('textarea', addPageUrlsDiv$);
@@ -36606,7 +36607,7 @@ var addUrls = function addUrls() {
   errorOKbutton$ = $('.errorOKbutton');
   var addPage$ = $('.addPage a');
   addPageMaterialIcon$ = $('.material-icons', addPage$);
-  var otherNavMaterialIcons = $('.dateFilter .material-icons, .settings-etal .material-icons');
+  var otherNavMaterialIcons$ = $('.dateFilter .material-icons, .settings-etal .material-icons', nav$);
   addPage$.click(function (event) {
     event.preventDefault();
     /****
@@ -36631,9 +36632,12 @@ var addUrls = function addUrls() {
      */
     if (currentlyShownSubBar$[0] && currentlyShownSubBar$[0] !== addPageUrlsDiv$[0]) {
       addPageMaterialIcon$.addClass('navBar-materialIcon-selected');
+      if (currentlyShownSubBar$.hasClass('dateFilterSettings')) {
+        $.Velocity(resultsOuterContainer$[0], { marginTop: (0, _dateFilter.checkMatchMediaForResultsContainerMarginTop)() }, 500);
+      }
       $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elems) {
         currentlyShownSubBar$.data('isShown', 'false');
-        otherNavMaterialIcons.removeClass('navBar-materialIcon-selected');
+        otherNavMaterialIcons$.removeClass('navBar-materialIcon-selected navBar-materialIcon-hover');
         /****
          * If hiding the date filter subbar, reset the results and the settings in the date filter module
          */
@@ -36817,7 +36821,7 @@ var addUrls = function addUrls() {
   errorOKbutton$.click(function (event) {
     hideShowAddPageSubbar(true);
   });
-};
+}
 /****
  * Exports
  */
@@ -36840,9 +36844,9 @@ exports.addUrls = addUrls;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var checkIfTouchDevice = function checkIfTouchDevice(window) {
+function checkIfTouchDevice(window) {
   return 'ontouchstart' in window && /iPad|iPhone|iPod|Android|IEMobile|BlackBerry|Linux/.test(navigator.platform);
-};
+}
 /****
  * Exports
  */
@@ -36854,7 +36858,7 @@ exports.checkIfTouchDevice = checkIfTouchDevice;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var checkIfiOS7 = function checkIfiOS7(window) {
+function checkIfiOS7(window) {
   /*****
    * old way
    */
@@ -36867,7 +36871,7 @@ var checkIfiOS7 = function checkIfiOS7(window) {
    */
   return (/iPad|iPhone|iPod/.test(navigator.platform) && !window.indexedDB
   );
-};
+}
 /****
  * Exports
  */
@@ -36916,7 +36920,7 @@ exports.chunkResults = chunkResults;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.allFromToIsSet = exports.filterResults = exports.dateFilterResetAll = exports.dateFilter = undefined;
+exports.checkMatchMediaForResultsContainerMarginTop = exports.allFromToIsSet = exports.filterResults = exports.dateFilterResetAll = exports.dateFilter = undefined;
 
 var _removeResults = require('./removeResults');
 
@@ -36942,6 +36946,7 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var resultsOuterContainer$;
 var dateFilterContainer$;
 var dateFilterMaterialIcon$;
 var fromContainer$;
@@ -36984,18 +36989,93 @@ var shortCutValues = {
     }
   }
 };
+var resultsContainerMarginValues = {
+  50: 172,
+  100: 184,
+  140: 220.8
+};
+var selectElemRelatedElements = {
+  'selectFromMonth': {
+    parent: function parent() {
+      return fromContainer$;
+    },
+    siblingSelect: function siblingSelect() {
+      return selectFromYear$;
+    }
+  },
+  'selectFromYear': {
+    parent: function parent() {
+      return fromContainer$;
+    },
+    siblingSelect: function siblingSelect() {
+      return selectFromMonth$;
+    }
+  },
+  'selectToMonth': {
+    parent: function parent() {
+      return toContainer$;
+    },
+    siblingSelect: function siblingSelect() {
+      return selectToYear$;
+    }
+  },
+  'selectToYear': {
+    parent: function parent() {
+      return toContainer$;
+    },
+    siblingSelect: function siblingSelect() {
+      return selectToMonth$;
+    }
+  }
+};
+var ph = 'placeholder';
+
+function checkMatchMediaForResultsContainerMarginTop() {
+  var marginTop = 140;
+  if (window.matchMedia("(max-width: 54.5em)").matches) {
+    marginTop = 84;
+  }
+  return marginTop;
+}
 
 function allFromToIsSet() {
   var fromToSelectsAsArr = [selectFromMonth$, selectFromYear$, selectToMonth$, selectToYear$];
   return _lodash2.default.every(fromToSelectsAsArr, function (item) {
-    return item.val() !== 'placeholder';
+    return item.val() !== ph;
   });
 }
 
-function dateFilterResetAll() {
-  resetFromTo();
-  shortCutsContainer$.removeClass('lightBlue');
-  selectShortcuts$.val('placeholder');
+function selectFromToHandler(event) {
+  var selectElem$ = $(event.currentTarget);
+  var relatedElems = selectElemRelatedElements[selectElem$[0].className];
+  if (selectElem$.val() !== ph && relatedElems.siblingSelect().val() !== ph) {
+    relatedElems.parent().removeClass('lightBlue');
+  }
+  /****
+   * If they are resetting this select
+   */
+  if (selectElem$.val() === ph) {
+    relatedElems.parent().addClass('lightBlue');
+    dateFilterResetAll(true);
+  }
+  /****
+   * If all are set, filter results
+   */
+  else if (allFromToIsSet()) {
+      shortCutsContainer$.addClass('lightBlue');
+      selectShortcuts$.val(ph);
+      filterResults(false);
+    }
+}
+
+function dateFilterResetAll(dateFilterSubbarStillOpen) {
+  if (!dateFilterSubbarStillOpen) {
+    resetFromTo();
+    $(window).off('resize');
+    resultsOuterContainer$.css('margin-top', '');
+    shortCutsContainer$.removeClass('lightBlue');
+  }
+  selectShortcuts$.val(ph);
   (0, _removeResults.removeResults)();
   (0, _updateResultsCountDiv.updateResultsCountDiv)(_resultsObject.resultsObject.fullResultsCacheArray.length);
   /****
@@ -37008,16 +37088,19 @@ function dateFilterResetAll() {
 }
 
 function resetFromTo() {
-  selectFromMonth$.val('placeholder');
-  selectFromYear$.val('placeholder');
-  selectToMonth$.val('placeholder');
-  selectToYear$.val('placeholder');
+  selectFromMonth$.val(ph);
+  selectFromYear$.val(ph);
+  selectToMonth$.val(ph);
+  selectToYear$.val(ph);
+  fromContainer$.addClass('lightBlue');
+  toContainer$.addClass('lightBlue');
 }
 
 function hideShowDateFilterSubbar() {
   var dataIsShown = dateFilterContainer$.data('isShown');
   if (dataIsShown === 'true') {
     dateFilterContainer$.data('isShown', 'false');
+    $.Velocity(resultsOuterContainer$[0], { marginTop: checkMatchMediaForResultsContainerMarginTop() }, 500);
     $.Velocity(dateFilterContainer$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elements) {
       dateFilterMaterialIcon$.removeClass('navBar-materialIcon-selected');
       dateFilterResetAll();
@@ -37025,7 +37108,15 @@ function hideShowDateFilterSubbar() {
   } else {
     dateFilterContainer$.data('isShown', 'true');
     dateFilterMaterialIcon$.addClass('navBar-materialIcon-selected');
+    var marginTopValue = resultsContainerMarginValues[dateFilterContainer$.height()];
+    resultsOuterContainer$.velocity({ marginTop: marginTopValue }, 500);
     $.Velocity(dateFilterContainer$[0], "slideDown", { duration: 500, display: 'flex' });
+    $(window).resize(_lodash2.default.debounce(function () {
+      resultsOuterContainer$.velocity({ marginTop: resultsContainerMarginValues[dateFilterContainer$.height()] }, 500);
+    }, 500, {
+      'leading': false,
+      'trailing': true
+    }));
   }
 }
 
@@ -37037,10 +37128,28 @@ function filterResults(isShortcut) {
     dateStartInMilliseconds = shortCutValues[selectShortcuts$.val()].dateStart().valueOf();
     dateEndInMilliseconds = (0, _moment2.default)().valueOf();
   } else {
-    var momentFormattedDateStart = selectFromYear$.val() + ' ' + selectFromMonth$.val();
-    var momentFormattedDateEnd = selectToYear$.val() + ' ' + selectToMonth$.val();
-    dateStartInMilliseconds = (0, _moment2.default)(momentFormattedDateStart, 'YYYY MM').valueOf();
-    dateEndInMilliseconds = (0, _moment2.default)(momentFormattedDateEnd, 'YYYY MM').valueOf();
+    /****
+     * When using `YYYY MM` format, month starts at 1
+     */
+    dateStartInMilliseconds = (0, _moment2.default)(selectFromYear$.val() + ' ' + selectFromMonth$.val(), 'YYYY MM').valueOf();
+    /****
+     * For date end, we want to include all of the end date month, not just the start
+     * of that month, but include all the days of that month up to 23:59 of the last
+     * day in that month.
+     *
+     * note: When using .add(n, 'months'), if you had a moment that was
+     * "Friday, January 1st 2016, 12:00:00 am", then using .add(12, 'months')
+     * would equate to "Sunday, January 1st 2017, 12:00:00 am", because it's
+     * already in January - remember that you're adding aditional months on to
+     * what is already there, so 12 months after January is January in the next year
+     * - in other words, think of it as zero-based
+     *
+     * So selectToMonthAsNum ends up being a month ahead of what the user selected, then
+     * we take away a second, which leaves us with the whole month the user slelected,
+     * including all the days of that month
+     */
+    var selectToMonthAsNum = Number(selectToMonth$.val());
+    dateEndInMilliseconds = (0, _moment2.default)('' + selectToYear$.val(), 'YYYY').add(selectToMonthAsNum, 'months').subtract().subtract(1, 'second').valueOf();
   }
   /****
    * Check in case they mistakenly put the end date before the start date
@@ -37061,11 +37170,12 @@ function filterResults(isShortcut) {
 }
 
 function dateFilter() {
-  //formplate($('body'))
+  formplate($('body'));
   var subBar$ = $('.subBar');
   var dateFilterNavButtonContainer$ = $('.dateFilter');
   var dateFilterButton$ = $('a', dateFilterNavButtonContainer$);
   var otherNavMaterialIcons$ = $('.addPage .material-icons, .settings-etal .material-icons');
+  resultsOuterContainer$ = $('#resultsOuterContainer');
   dateFilterMaterialIcon$ = $('.material-icons', dateFilterButton$);
   shortCutsContainer$ = $('.shortcutsContainer');
   dateFilterContainer$ = $('.dateFilterSettings');
@@ -37083,61 +37193,26 @@ function dateFilter() {
    */
   var msReleaseDate = 2000;
   var numYearsToInclude = currentYear - msReleaseDate + 1;
-  /****
-   * num starts at 0
-   */
-  _lodash2.default.times(numYearsToInclude, function (num) {
-    var year = msReleaseDate + num;
+
+  _lodash2.default.times(numYearsToInclude, function (index) {
+    var year = msReleaseDate + index;
     $('<option>', { text: year, value: year }).appendTo('.selectFromYear, .selectToYear');
   });
 
   selectShortcuts$.change(function (event) {
-    resetFromTo();
-    shortCutsContainer$.removeClass('lightBlue');
-    filterResults(true);
-  });
-
-  selectFromMonth$.change(function (event) {
-    /****
-     * check if all rest is set, then filter results
-     */
-    if (allFromToIsSet()) {
-      filterResults(false);
+    if (selectShortcuts$.val() === ph) {
+      dateFilterResetAll(true);
+    } else {
+      resetFromTo();
+      shortCutsContainer$.removeClass('lightBlue');
+      filterResults(true);
     }
   });
 
-  selectFromYear$.change(function (event) {
-    fromContainer$.removeClass('lightBlue');
-    /****
-     * If the month hasn't been selected yet, select January
-     */
-    if (selectFromMonth$.val() === 'placeholder') {
-      selectFromMonth$.val('1');
-    }
-    if (allFromToIsSet()) {
-      shortCutsContainer$.addClass('lightBlue');
-      selectShortcuts$.val('placeholder');
-      filterResults(false);
-    }
-  });
-
-  selectToMonth$.change(function (event) {
-    if (allFromToIsSet()) {
-      filterResults(false);
-    }
-  });
-
-  selectToYear$.change(function (event) {
-    toContainer$.removeClass('lightBlue');
-    if (selectToMonth$.val() === 'placeholder') {
-      selectToMonth$.val('1');
-    }
-    if (allFromToIsSet()) {
-      shortCutsContainer$.addClass('lightBlue');
-      selectShortcuts$.val('placeholder');
-      filterResults(false);
-    }
-  });
+  selectFromMonth$.change(selectFromToHandler);
+  selectFromYear$.change(selectFromToHandler);
+  selectToMonth$.change(selectFromToHandler);
+  selectToYear$.change(selectFromToHandler);
 
   dateFilterButton$.click(function (event) {
     event.preventDefault();
@@ -37145,14 +37220,14 @@ function dateFilter() {
       return $(elem).data('isShown') === 'true';
     });
     /****
-     * If there is a subBar being shown and it is not the dateFilterContainer$, then
+     * If there is a subBar being shown and it is not the dateFilterContainer$,
      * hide it and show the dateFilterContainer$
      */
     if (currentlyShownSubBar$[0] && currentlyShownSubBar$[0] !== dateFilterContainer$[0]) {
       dateFilterMaterialIcon$.addClass('navBar-materialIcon-selected');
       $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elems) {
         currentlyShownSubBar$.data('isShown', 'false');
-        otherNavMaterialIcons$.removeClass('navBar-materialIcon-selected');
+        otherNavMaterialIcons$.removeClass('navBar-materialIcon-selected navBar-materialIcon-hover');
         hideShowDateFilterSubbar();
       });
     }
@@ -37172,6 +37247,7 @@ exports.dateFilter = dateFilter;
 exports.dateFilterResetAll = dateFilterResetAll;
 exports.filterResults = filterResults;
 exports.allFromToIsSet = allFromToIsSet;
+exports.checkMatchMediaForResultsContainerMarginTop = checkMatchMediaForResultsContainerMarginTop;
 
 },{"./chunkResults":271,"./removeResults":280,"./renderResults":281,"./resultsObject":283,"./updateResultsCountDiv":288,"lodash":213,"moment":215,"velocity-animate":265}],273:[function(require,module,exports){
 'use strict';
@@ -37194,7 +37270,7 @@ var _lunrStopwordFilter = require('./lunrStopwordFilter');
  * It shouldn't affect client side because we are chunking the results to groups
  * of 200.
  */
-var generateSearchClipAndHighlight = function generateSearchClipAndHighlight(doc, searchTerms) {
+function generateSearchClipAndHighlight(doc, searchTerms) {
   /****
    * %20 cause the text is encoded with encodeURIComponent
    */
@@ -37219,7 +37295,7 @@ var generateSearchClipAndHighlight = function generateSearchClipAndHighlight(doc
   var result = regex.exec(doc.pageText);
   console.log(result);
   debugger;
-};
+}
 /****
  * Exports
  */
@@ -37257,7 +37333,7 @@ var _searchPage = require('./searchPage');
 
 var stringUtils = require('string');
 
-var goose = function goose() {
+function goose() {
   var looseSearchButton$ = $("#looseSearchButton");
   var looseSearchIcon$ = $("#looseSearchIcon");
   var searchInput$ = $('#searchInput');
@@ -37267,7 +37343,7 @@ var goose = function goose() {
    */
   if (_searchPage.searchingLoose) {
     looseSearchButton$.attr('title', 'Loose Search Currently On');
-    looseSearchIcon$[0].style.backgroundImage = 'url("/images/goosehover.svg")';
+    looseSearchIcon$.addClass('gooseSelected');
   } else {
     looseSearchButton$.attr('title', 'Loose Search Currently Off');
   }
@@ -37280,11 +37356,13 @@ var goose = function goose() {
     event.preventDefault();
     if (_searchPage.searchingLoose) {
       (0, _searchPage.set_searchingLoose)(false);
-      looseSearchIcon$[0].style.backgroundImage = 'url("/images/goose.svg")';
+      looseSearchIcon$.removeClass('gooseSelected');
+      looseSearchIcon$.removeClass('gooseHover');
       looseSearchButton$.attr('title', 'Loose Search Currently Off');
     } else {
       (0, _searchPage.set_searchingLoose)(true);
-      looseSearchIcon$[0].style.backgroundImage = 'url("/images/goosehover.svg")';
+      looseSearchIcon$.addClass('gooseSelected');
+      looseSearchIcon$.addClass('gooseHover');
       looseSearchButton$.attr('title', 'Loose Search Currently On');
     }
     var searchInputValue = searchInput$.val();
@@ -37302,7 +37380,7 @@ var goose = function goose() {
       looseSearchIcon$[0].style.backgroundImage = '';
     }
   });
-};
+}
 /****
  * Exports
  */
@@ -37336,7 +37414,7 @@ var timeout;
 /****
  * Exports
  */
-var initInfiniteScroll = function initInfiniteScroll(event) {
+function initInfiniteScroll(event) {
   /****
    * A simple debounce
    */
@@ -37357,7 +37435,7 @@ var initInfiniteScroll = function initInfiniteScroll(event) {
       }
     }
   }, delayTime);
-};
+}
 /****
  * Exports
  */
@@ -37369,7 +37447,7 @@ exports.initInfiniteScroll = initInfiniteScroll;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var initSearchPlaceholder = function initSearchPlaceholder(searchInput$) {
+function initSearchPlaceholder(searchInput$) {
   /****
    * If we're on a small device (e.g. iPhone 4) and there's no
    * Marksearch logo, add some placeholder text to the search
@@ -37389,7 +37467,7 @@ var initSearchPlaceholder = function initSearchPlaceholder(searchInput$) {
       searchInput$.removeAttr('placeholder');
     }
   });
-};
+}
 /****
  * Exports
  */
@@ -37556,7 +37634,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /****
  * Exports
  */
-var queryServer = function queryServer(searchTerms) {
+function queryServer(searchTerms) {
   var postUrl = '/indexPage_getall/';
   if (searchTerms) {
     postUrl = '/indexPage_search/' + _searchPage.searchingLoose + '/' + searchTerms;
@@ -37584,7 +37662,7 @@ var queryServer = function queryServer(searchTerms) {
      */
     (0, _resultsObject.replaceResults)(responseRowsArray, (0, _chunkResults.chunkResults)(responseData.rows));
   });
-};
+}
 /****
  * Exports
  */
@@ -37610,7 +37688,7 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var queryServerAndRender = function queryServerAndRender(searchTerms) {
+function queryServerAndRender(searchTerms) {
   return (0, _queryServer.queryServer)(searchTerms).then(function () {
     /****
      * Check if there are any results
@@ -37619,7 +37697,7 @@ var queryServerAndRender = function queryServerAndRender(searchTerms) {
       (0, _renderResults.renderResults)(_resultsObject.resultsObject.currentResults.chunk_0, searchTerms);
     }
   });
-};
+}
 /****
  * Exports
  */
@@ -37643,7 +37721,7 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var removeResults = function removeResults() {
+function removeResults() {
   /****
    * Remove the event listeners from the results elements before we remove
    * the elements themselves so we dont have any memory leaks.
@@ -37667,7 +37745,7 @@ var removeResults = function removeResults() {
    */
   _searchPage.resultsCountDiv$.addClass('hide');
   $(window).scrollTop(0);
-};
+}
 /****
  * Exports
  */
@@ -37701,7 +37779,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Exports
  */
 
-var renderResults = function renderResults(resultsChunk, searchTerms) {
+function renderResults(resultsChunk, searchTerms) {
   return new Promise(function (resolve, reject) {
     try {
       var resultID;
@@ -37909,7 +37987,7 @@ var renderResults = function renderResults(resultsChunk, searchTerms) {
       reject(error);
     }
   });
-};
+}
 /****
  * Exports
  */
@@ -37950,12 +38028,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * that its easy to remove them (being the event listener functions) when remove old results in
  * removeResults.js module
  */
-var showSafeBrowsingDetails = function showSafeBrowsingDetails(event) {
+function showSafeBrowsingDetails(event) {
   event.preventDefault();
   $(event.currentTarget).parent().next().toggleClass('showBlock');
-};
+}
 
-var deletePageFromMarksearch = function deletePageFromMarksearch(event) {
+function deletePageFromMarksearch(event) {
   event.preventDefault();
   var deleteButton = $(event.currentTarget);
   var pageUrl = encodeURIComponent(deleteButton.data("pageurl"));
@@ -37994,7 +38072,7 @@ var deletePageFromMarksearch = function deletePageFromMarksearch(event) {
       return console.error(err);
     });
   });
-};
+}
 /****
  * Exports
  */
@@ -38020,14 +38098,14 @@ var resultsObject = {
   fullResultsCacheArray: null,
   currentResults: null
 };
-var replaceResults = function replaceResults(fullResultsCacheArray, currrentResults) {
+function replaceResults(fullResultsCacheArray, currrentResults) {
   if (fullResultsCacheArray) {
     resultsObject.fullResultsCacheArray = fullResultsCacheArray;
   }
   if (currrentResults) {
     resultsObject.currentResults = currrentResults;
   }
-};
+}
 /****
  * Exports
  */
@@ -38040,9 +38118,9 @@ exports.replaceResults = replaceResults;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var scrollHeightCheck = function scrollHeightCheck(win, doc, padding) {
+function scrollHeightCheck(win, doc, padding) {
   return $(win).scrollTop() >= $(doc).height() - $(win).height() - padding;
-};
+}
 /****
  * Exports
  */
@@ -38062,7 +38140,7 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var searchErrorHandler = function searchErrorHandler(error) {
+function searchErrorHandler(error) {
   console.error(error);
   /*****
    * If Forbidden/Unauthorized, prolly an issue with csrf
@@ -38074,7 +38152,7 @@ var searchErrorHandler = function searchErrorHandler(error) {
      */
     window.location.reload(true);
   }
-};
+}
 /****
  * Exports
  */
@@ -38227,7 +38305,7 @@ function searchPageInit(event) {
    * Extra events cause of <IE10
    */
   searchForm$.on("propertychange change click keyup input paste", _lodash2.default.debounce(function () {
-    var searchInputValue = searchInput$.val().trim();
+    var searchInputValue = _lodash2.default.trim(searchInput$.val());
     if (searchInputValue !== inputOldValue) {
       inputOldValue = searchInputValue;
       (0, _removeResults.removeResults)();
@@ -38270,6 +38348,25 @@ function searchPageInit(event) {
   /****
    * Nav bar buttons & subbar event listeners
    */
+  /****
+   * Doing hover this way cause of this: http://stackoverflow.com/questions/17233804/
+   */
+  $('#dateFilterButton, #addPageButton, #settingsButton').hover(function (event) {
+    $(event.currentTarget.firstElementChild).addClass('navBar-materialIcon-hover');
+  }, function (event) {
+    $(event.currentTarget.firstElementChild).removeClass('navBar-materialIcon-hover');
+  }).on('touchend', function (event) {
+    $(event.currentTarget.firstElementChild).removeClass('navBar-materialIcon-hover');
+  });
+
+  $('#looseSearchButton').hover(function (event) {
+    $(event.currentTarget.firstElementChild).addClass('gooseHover');
+  }, function (event) {
+    $(event.currentTarget.firstElementChild).removeClass('gooseHover');
+  }).on('touchend', function (event) {
+    $(event.currentTarget.firstElementChild).removeClass('gooseHover');
+  });
+
   /****
    * Loose goose search button (highway to the danger zone)
    */
@@ -38319,13 +38416,7 @@ function resultsToolTipsHaveBeenShown() {
   }
 }
 
-var tooltips = function tooltips() {
-  console.log('generalToolTipsShown : ', generalToolTipsShown);
-  console.log('generalToolTipsShownNumber : ', generalToolTipsShownNumber);
-  console.log('resultsToolTipsShown : ', resultsToolTipsShown);
-  console.log('resultsToolTipsShownAsNumber : ', resultsToolTipsShownAsNumber);
-  console.log('haveShownResultsTooltips : ', _searchPage.haveShownResultsTooltips);
-  console.log('haveShownSomeResults : ', _searchPage.haveShownSomeResults);
+function tooltips() {
   if (!generalToolTipsShown) {
     window.localStorage.generalToolTipsShown = '1';
     $.protip({
@@ -38360,7 +38451,7 @@ var tooltips = function tooltips() {
       }
     }
   }
-};
+}
 /****
  * Exports
  */

@@ -135,7 +135,7 @@
 .navHeader .dateFilter a:hover .material-icons {
   //background: rgba(0, 0, 0, 0.5);
   //color: rgba(0, 0, 0, 0.52);
-  color: @paletteTextColorDarker;
+  //color: @paletteTextColorDarker;
   //color: #2670A2;
   //opacity: 1;
 }
@@ -168,10 +168,10 @@
 }
 
 .navHeader .looseSearch a:hover i {
-  background-image: url("/images/goosehover.svg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  cursor: pointer;
+  //background-image: url("/images/goosehover.svg");
+  //background-repeat: no-repeat;
+  //background-position: center center;
+  //cursor: pointer;
 }
 
 .navHeader .addPage {
@@ -193,7 +193,7 @@
 .navHeader .addPage a:hover .material-icons {
   //background: rgba(0, 0, 0, 0.5);
   //color: rgba(0, 0, 0, 0.52);
-  color: @paletteTextColorDarker;
+  //color: @paletteTextColorDarker;
 }
 
 .navHeader .settings-etal {
@@ -214,7 +214,7 @@
 .navHeader .settings-etal a:hover .material-icons {
   //background: rgba(0, 0, 0, 0.5);
   //color: rgba(0, 0, 0, 0.52);
-  color: @paletteTextColorDarker;
+  //color: @paletteTextColorDarker;
 }
 
 /****
@@ -248,11 +248,32 @@
   align-items: center;
 }
 
+.navHeader .dateFilterSettings .formplate {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  margin-right: 1px;
+}
+
+.navHeader .dateFilterSettings .formplate-select {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.navHeader .dateFilterSettings .formplate-select select {
+  font-size: 18px;
+}
+
+.formplate-select:hover {
+  border: 1px solid #3498db;
+}
+
 .navHeader .dateFilterSettings .fromToContainer {
   flex: 1 1 auto;
   //justify-content: space-around;
   /* align-items: stretch; */
   display: flex;
+  padding: 0.45rem 0;
   //outline: 2px solid #666666;
   //color: #90C4E6;
   //outline: 1px solid green;
@@ -261,8 +282,23 @@
 
 .navHeader .dateFilterSettings .fromContainer {
   display: flex;
-  width: 15rem;
+  flex: 1 1 auto;
+  //width: 16rem;
+  align-items: center;
 }
+
+.navHeader .dateFilterSettings .fromContainer > span {
+  display: flex;
+  justify-content: center;
+  //flex: 1 1 auto;
+  width: 3.5rem;
+}
+
+//.navHeader .dateFilterSettings .formplate select {
+//  display: flex;
+//  justify-content: center;
+//  width: 3.35rem;
+//}
 
 //.navHeader .dateFilterSettings .fromContainer .selectFromMonth {
 //  width: 172px;
@@ -270,35 +306,141 @@
 
 .navHeader .dateFilterSettings .toContainer {
   display: flex;
-  width: 14rem;
+  flex: 1 1 auto;
+  //width: 16rem;
+  align-items: center;
+}
+
+.navHeader .dateFilterSettings .toContainer > span {
+  display: flex;
+  justify-content: space-around;
+  width: 2.2rem;
 }
 
 .navHeader .dateFilterSettings .shortcutsContainer {
   //border-right: 2px solid #2670A2;
   display: flex;
-  width: 9rem;
+  flex: 1 1 auto;
+  padding: 0.45rem 0;
+  //width: 9rem;
   border-left-width: 1px;
   border-left-style: solid;
   border-left-color: #3498DB;
+  margin-left: 0.5rem;
 }
+
+.navHeader .dateFilterSettings .shortcutsContainer .formplate {
+  margin-left: 0.5rem;
+}
+
+//.navHeader .dateFilterSettings .selectContainerShortcuts {
+//  position: relative;
+//  margin-left: 1rem;
+//}
+//
+//.navHeader .dateFilterSettings .selectContainerShortcuts::after {
+//  //position: absolute;
+//  //right: 7px;
+//  //height: 36px;
+//  //content: "\e601";
+//  //font-size: 20px;
+//  //line-height: 37px;
+//  //line-height: 2.3125rem;
+//  //color: #d1d1d1;
+//  //background-color: #fff;
+//  //z-index: 1;
+//  border-bottom: 2px solid #999;
+//  border-right: 2px solid #999;
+//  content: '';
+//  display: block;
+//  height: 5px;
+//  //margin-top: -4px;
+//  pointer-events: none;
+//  position: absolute;
+//  right: 0;
+//  top: 0;
+//  transform-origin: 66% 66%;
+//  transform: rotate(45deg);
+//  transition: all 0.15s ease-in-out;
+//  width: 5px;
+//  //outline: 2px solid red;
+//}
+//
+//.navHeader .dateFilterSettings .selectContainerMonth {
+//  position: relative;
+//  margin-left: 1rem;
+//}
+//
+//.navHeader .dateFilterSettings .selectContainerMonth::after {
+//  //position: absolute;
+//  //right: 7px;
+//  //height: 36px;
+//  //content: "\e601";
+//  //font-size: 20px;
+//  //line-height: 37px;
+//  //line-height: 2.3125rem;
+//  //color: #d1d1d1;
+//  //background-color: #fff;
+//  //z-index: 1;
+//  border-bottom: 2px solid #999;
+//  border-right: 2px solid #999;
+//  content: '';
+//  display: block;
+//  height: 5px;
+//  //margin-top: -4px;
+//  pointer-events: none;
+//  position: absolute;
+//  right: -14px;
+//  top: 12px;
+//  transform-origin: 66% 66%;
+//  transform: rotate(45deg);
+//  transition: all 0.15s ease-in-out;
+//  width: 5px;
+//  //outline: 2px solid red;
+//}
+//
+//.navHeader .dateFilterSettings .selectContainerYear {
+//  position: relative;
+//  margin-left: 1rem;
+//}
+//
+//.navHeader .dateFilterSettings .selectContainerYear::after {
+//  //position: absolute;
+//  //right: 7px;
+//  //height: 36px;
+//  //content: "\e601";
+//  //font-size: 20px;
+//  //line-height: 37px;
+//  //line-height: 2.3125rem;
+//  //color: #d1d1d1;
+//  //background-color: #fff;
+//  //z-index: 1;
+//  border-bottom: 2px solid #999;
+//  border-right: 2px solid #999;
+//  content: '';
+//  display: block;
+//  height: 5px;
+//  //margin-top: -4px;
+//  pointer-events: none;
+//  position: absolute;
+//  right: 0;
+//  top: 0;
+//  transform-origin: 66% 66%;
+//  transform: rotate(45deg);
+//  transition: all 0.15s ease-in-out;
+//  width: 5px;
+//  //outline: 2px solid red;
+//}
 
 .navHeader .dateFilterSettings select {
-  background-color: transparent;
-  border: none;
-  appearance: none;
-}
-
-.navHeader .dateFilterSettings .selectContainer::before {
-  //position: absolute;
-  //right: 7px;
-  //height: 36px;
-  content: "\e601";
-  //font-size: 20px;
-  //line-height: 37px;
-  //line-height: 2.3125rem;
-  //color: #d1d1d1;
-  //background-color: #fff;
-  //z-index: 1;
+  //background-color: transparent;
+  //appearance: none;
+  //margin:0;
+  //border:0;
+  //padding:0;
+  ////vertical-align:middle;
+  //white-space:normal;
+  //line-height:1;
 }
 
 //.navHeader .dateFilterSettings .nice-select {

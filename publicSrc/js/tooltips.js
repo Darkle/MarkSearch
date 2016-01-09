@@ -25,13 +25,7 @@ function resultsToolTipsHaveBeenShown(){
   }
 }
 
-var tooltips = () => {
-  console.log('generalToolTipsShown : ', generalToolTipsShown)
-  console.log('generalToolTipsShownNumber : ', generalToolTipsShownNumber)
-  console.log('resultsToolTipsShown : ', resultsToolTipsShown)
-  console.log('resultsToolTipsShownAsNumber : ', resultsToolTipsShownAsNumber)
-  console.log('haveShownResultsTooltips : ', haveShownResultsTooltips)
-  console.log('haveShownSomeResults : ', haveShownSomeResults)
+function tooltips(){
   if(!generalToolTipsShown){
     window.localStorage.generalToolTipsShown = '1'
     $.protip({

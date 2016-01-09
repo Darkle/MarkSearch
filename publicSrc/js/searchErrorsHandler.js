@@ -2,7 +2,7 @@
 
 import _ from 'lodash'
 
-var searchErrorHandler = (error) => {
+function searchErrorHandler(error){
   console.error(error)
   /*****
    * If Forbidden/Unauthorized, prolly an issue with csrf

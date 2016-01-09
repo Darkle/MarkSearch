@@ -8,7 +8,7 @@ import { csrfToken } from './searchPage'
 import { searchErrorHandler } from './searchErrorsHandler'
 import { queryServerAndRender } from './queryServerAndRender'
 import { removeResults } from './removeResults'
-import { dateFilterResetAll } from './dateFilter'
+import { dateFilterResetAll, checkMatchMediaForResultsContainerMarginTop } from './dateFilter'
 
 var addPageUrlsDiv$
 var addPageMaterialIcon$
@@ -52,9 +52,10 @@ function hideShowAddPageSubbar(refreshResults){
   }
 }
 
-var addUrls = () => {
+function addUrls(){
   var subBar$ = $('.subBar')
   var nav$ = $('.navHeader nav')
+  var resultsOuterContainer$ = $('#resultsOuterContainer')
   addPageButtonsContainer$ = $('.addPageButtons')
   addPageUrlsDiv$ = $('.addPageUrls')
   addUrlsTextArea$ = $('textarea', addPageUrlsDiv$)
@@ -63,7 +64,7 @@ var addUrls = () => {
   errorOKbutton$ = $('.errorOKbutton')
   var addPage$ = $('.addPage a')
   addPageMaterialIcon$ = $('.material-icons', addPage$)
-  var otherNavMaterialIcons = $('.dateFilter .material-icons, .settings-etal .material-icons')
+  var otherNavMaterialIcons$ = $('.dateFilter .material-icons, .settings-etal .material-icons', nav$)
   addPage$.click(event => {
     event.preventDefault()
     /****
@@ -87,10 +88,13 @@ var addUrls = () => {
      */
     if(currentlyShownSubBar$[0] && currentlyShownSubBar$[0] !== addPageUrlsDiv$[0]){
       addPageMaterialIcon$.addClass('navBar-materialIcon-selected')
+      if(currentlyShownSubBar$.hasClass('dateFilterSettings')){
+        $.Velocity(resultsOuterContainer$[0], { marginTop: checkMatchMediaForResultsContainerMarginTop() }, 500)
+      }
       $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' })
           .then(elems => {
             currentlyShownSubBar$.data('isShown','false')
-            otherNavMaterialIcons.removeClass('navBar-materialIcon-selected')
+            otherNavMaterialIcons$.removeClass('navBar-materialIcon-selected navBar-materialIcon-hover')
             /****
              * If hiding the date filter subbar, reset the results and the settings in the date filter module
              */

@@ -5,7 +5,7 @@ import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEven
 
 import _ from 'lodash'
 
-var removeResults = () => {
+function removeResults(){
   /****
    * Remove the event listeners from the results elements before we remove
    * the elements themselves so we dont have any memory leaks.

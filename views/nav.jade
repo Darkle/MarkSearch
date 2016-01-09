@@ -10,16 +10,16 @@ header.navHeader
         input#searchInput(type='search')
     .rightContainer
       .dateFilter
-        a.protip(href='#', title="Filter Search By Date", data-pt-title="Filter Search By Date")
+        a.protip#dateFilterButton(href='#', title="Filter Search By Date", data-pt-title="Filter Search By Date")
           i.material-icons date_range
       .looseSearch
         a#looseSearchButton.protip(href='#', title="Enable/Disable Search Loose", data-pt-title="Enable/Disable Search Loose")
           i#looseSearchIcon.material-icons
       .addPage
-        a.protip(href='#', title="Add Page(s) To MarkSearch", data-pt-title="Add Page(s) To MarkSearch")
+        a.protip#addPageButton(href='#', title="Add Page(s) To MarkSearch", data-pt-title="Add Page(s) To MarkSearch")
           i.material-icons add
       .settings-etal
-        a.protip(href='/settings', title="MarkSearch Settings/Help", data-pt-title="MarkSearch Settings/Help")
+        a.protip#settingsButton(href='/settings', title="MarkSearch Settings/Help", data-pt-title="MarkSearch Settings/Help")
           i.material-icons settings
 
   .subBar
@@ -27,7 +27,7 @@ header.navHeader
       .fromToContainer
         .fromContainer.lightBlue
           span From:
-          .selectContainer
+          .formplate
             select.selectFromMonth
               option(value='placeholder') Month
               option(value='1') January
@@ -42,12 +42,12 @@ header.navHeader
               option(value='10') October
               option(value='11') November
               option(value='12') December
-          .selectContainer
+          .formplate
             select.selectFromYear
               option(value='placeholder') Year
         .toContainer.lightBlue
           span To:
-          .selectContainer
+          .formplate
             select.selectToMonth
               option(value='placeholder') Month
               option(value='1') January
@@ -62,11 +62,11 @@ header.navHeader
               option(value='10') October
               option(value='11') November
               option(value='12') December
-          .selectContainer
+          .formplate
             select.selectToYear
               option(value='placeholder') Year
       .shortcutsContainer
-        .selectContainer
+        .formplate
           select.shortcuts
             option(value='placeholder') Shortcuts
             option(value='Past 3 days') Past 3 days

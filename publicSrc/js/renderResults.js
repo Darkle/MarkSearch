@@ -11,7 +11,7 @@ import moment from 'moment'
  * Exports
  */
 
-var renderResults = (resultsChunk, searchTerms) => {
+function renderResults(resultsChunk, searchTerms){
   return new Promise((resolve, reject) =>{
     try{
       resultsChunk.shownYet = true

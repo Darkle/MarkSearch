@@ -1,6 +1,6 @@
 'use strict';
 
-var initSearchPlaceholder = (searchInput$) => {
+function initSearchPlaceholder(searchInput$){
   /****
    * If we're on a small device (e.g. iPhone 4) and there's no
    * Marksearch logo, add some placeholder text to the search

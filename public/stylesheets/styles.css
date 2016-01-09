@@ -112,8 +112,17 @@ body {
 .navBar-materialIcon-selected {
   color: #2670A2 !important;
 }
+.navBar-materialIcon-hover {
+  color: #2670A2 !important;
+}
 .lightBlue {
   color: #90C4E6 !important;
+}
+.gooseSelected {
+  background-image: url('/images/goosehover.svg') !important;
+}
+.gooseHover {
+  background-image: url('/images/goosehover.svg') !important;
 }
 .navHeader {
   position: fixed;
@@ -277,9 +286,6 @@ body {
   width: 100%;
   text-decoration: none;
 }
-.navHeader .dateFilter a:hover .material-icons {
-  color: #2670A2;
-}
 .navHeader .looseSearch {
   -webkit-box-flex: 0;
   -webkit-flex: 0 1 4rem;
@@ -319,12 +325,6 @@ body {
   background-repeat: no-repeat;
   background-position: center center;
 }
-.navHeader .looseSearch a:hover i {
-  background-image: url("/images/goosehover.svg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  cursor: pointer;
-}
 .navHeader .addPage {
   -webkit-box-flex: 0;
   -webkit-flex: 0 1 4rem;
@@ -351,9 +351,6 @@ body {
   width: 100%;
   text-decoration: none;
 }
-.navHeader .addPage a:hover .material-icons {
-  color: #2670A2;
-}
 .navHeader .settings-etal {
   -webkit-box-flex: 0;
   -webkit-flex: 0 1 4rem;
@@ -379,9 +376,6 @@ body {
           justify-content: center;
   width: 100%;
   text-decoration: none;
-}
-.navHeader .settings-etal a:hover .material-icons {
-  color: #2670A2;
 }
 /****
 * Header Nav subBars
@@ -413,6 +407,37 @@ body {
       -ms-flex-align: center;
           align-items: center;
 }
+.navHeader .dateFilterSettings .formplate {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  margin-right: 1px;
+}
+.navHeader .dateFilterSettings .formplate-select {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+.navHeader .dateFilterSettings .formplate-select select {
+  font-size: 18px;
+}
+.formplate-select:hover {
+  border: 1px solid #3498db;
+}
 .navHeader .dateFilterSettings .fromToContainer {
   -webkit-box-flex: 1;
   -webkit-flex: 1 1 auto;
@@ -423,40 +448,74 @@ body {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  padding: 0.45rem 0;
 }
 .navHeader .dateFilterSettings .fromContainer {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 15rem;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.navHeader .dateFilterSettings .fromContainer > span {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 3.5rem;
 }
 .navHeader .dateFilterSettings .toContainer {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 14rem;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.navHeader .dateFilterSettings .toContainer > span {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+  width: 2.2rem;
 }
 .navHeader .dateFilterSettings .shortcutsContainer {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 9rem;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  padding: 0.45rem 0;
   border-left-width: 1px;
   border-left-style: solid;
   border-left-color: #3498DB;
+  margin-left: 0.5rem;
 }
-.navHeader .dateFilterSettings select {
-  background-color: transparent;
-  border: none;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-}
-.navHeader .dateFilterSettings .selectContainer::before {
-  content: "\e601";
+.navHeader .dateFilterSettings .shortcutsContainer .formplate {
+  margin-left: 0.5rem;
 }
 /****
 * Add Page Urls
@@ -658,7 +717,7 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
-  margin-top: 7rem;
+  margin-top: 140px;
   -webkit-transform: translateZ(0);
 }
 .searchPage #resultsContainer {
@@ -872,9 +931,6 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   }
 }
 /*****
-57.7em width and less
-*****/
-/*****
 54.5em width and less
 *****/
 @media (max-width: 54.5em) {
@@ -908,16 +964,39 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   }
   .navHeader .dateFilterSettings {
     font-size: 1.5rem;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    height: 100px;
   }
-  .navHeader .dateFilterSettings .fromContainer {
-    width: initial;
+  .navHeader .dateFilterSettings .formplate-select select {
+    padding-right: 38px;
   }
-  .navHeader .dateFilterSettings .toContainer {
-    width: initial;
+  .navHeader .dateFilterSettings .fromContainer > span {
+    width: 5rem;
+  }
+  .navHeader .dateFilterSettings .toContainer > span {
+    width: 3.1rem;
+  }
+  .navHeader .dateFilterSettings .shortcutsContainer {
+    border-left-width: initial;
+    border-left-style: initial;
+    border-left-color: initial;
+    border-top-width: 1px;
+    border-top-color: #3498DB;
+    border-top-style: solid;
   }
   /****
     Search Page
   */
+  .searchPage #resultsOuterContainer {
+    margin-top: 84px;
+  }
+  .searchPage #resultsCount {
+    font-size: 1.3rem;
+  }
   .searchPage #resultsContainer {
     -webkit-flex-basis: 58rem;
         -ms-flex-preferred-size: 58rem;
@@ -943,37 +1022,11 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   }
 }
 /*****
-45em width and less
-*****/
-@media (max-width: 45em) {
-  .navHeader .dateFilterSettings {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    height: inherit;
-  }
-  .navHeader .dateFilterSettings > div {
-    padding: 0.5rem 0;
-  }
-  .navHeader .dateFilterSettings .shortcutsContainer {
-    border-left: none;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: #3498DB;
-  }
-  .navHeader .dateFilterSettings {
-    font-size: 1.4rem;
-  }
-}
-/*****
 35em width and less
 *****/
-@media (max-width: 35em) {
-  body {
-    color: red !important;
-    background-color: aqua;
+@media (max-width: 36em) {
+  .navHeader .dateFilterSettings {
+    height: 140px;
   }
   .navHeader .dateFilterSettings .fromToContainer {
     -webkit-box-orient: vertical;
@@ -981,6 +1034,9 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
     -webkit-flex-direction: column;
         -ms-flex-direction: column;
             flex-direction: column;
+  }
+  .navHeader .dateFilterSettings .toContainer {
+    margin-top: 2px;
   }
 }
 /*****
@@ -1046,6 +1102,9 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   */
   .navHeader .addPageUrls textarea {
     font-size: 16px;
+  }
+  .searchPage #resultsCount {
+    font-size: 1rem;
   }
   .searchPage .mainResultLink {
     font-size: 1.2rem;

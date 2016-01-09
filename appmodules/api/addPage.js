@@ -2,6 +2,7 @@
 
 var path = require('path')
 var url = require('url')
+var _ = require('lodash')
 
 var domainParser = require('domain-parser')
 var Promise = require("bluebird")
@@ -79,9 +80,17 @@ function addPage(req, res, next) {
           db.search({fields: ['pageTitle', 'pageText', 'pageDomain'], build: true})
         ]
       })
-      .spread(archiveUrl)
-      .then(safeBrowsingCheck)
-      .then(pDoc => save2db(db, pDoc))
+      /****
+       * Get archiveUrl & safeBrowsingCheck running in parallel, rather than in sequence,
+       * so dont have to wait for archiveUrl to finish before starting safeBrowsingCheck
+       */
+      .spread( (returnedDoc, searchBuild) => {
+        return [archiveUrl(returnedDoc), safeBrowsingCheck(returnedDoc)]
+      })
+      .spread( (archiveReturnedDoc, safeBrowsingReturnedDoc) => {
+        archiveReturnedDoc.safeBrowsing = safeBrowsingReturnedDoc.safeBrowsing
+        return save2db(db, archiveReturnedDoc)
+      })
       .catch(err => {
         /****
          * There was an error with the database, send back an appropriate

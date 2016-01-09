@@ -126,7 +126,7 @@ function searchPageInit(event){
       "propertychange change click keyup input paste",
       _.debounce(
           () =>{
-            var searchInputValue = searchInput$.val().trim()
+            var searchInputValue = _.trim(searchInput$.val())
             if(searchInputValue !== inputOldValue){
               inputOldValue = searchInputValue
               removeResults()
@@ -175,6 +175,35 @@ function searchPageInit(event){
   /****
    * Nav bar buttons & subbar event listeners
    */
+  /****
+   * Doing hover this way cause of this: http://stackoverflow.com/questions/17233804/
+   */
+  $('#dateFilterButton, #addPageButton, #settingsButton').hover(
+      (event) => {
+        $(event.currentTarget.firstElementChild).addClass('navBar-materialIcon-hover')
+      },
+      (event) => {
+        $(event.currentTarget.firstElementChild).removeClass('navBar-materialIcon-hover')
+      }
+  ).on('touchend',
+      (event) => {
+        $(event.currentTarget.firstElementChild).removeClass('navBar-materialIcon-hover')
+      }
+  )
+
+  $('#looseSearchButton').hover(
+      (event) => {
+        $(event.currentTarget.firstElementChild).addClass('gooseHover')
+      },
+      (event) => {
+        $(event.currentTarget.firstElementChild).removeClass('gooseHover')
+      }
+  ).on('touchend',
+      (event) => {
+        $(event.currentTarget.firstElementChild).removeClass('gooseHover')
+      }
+  )
+
   /****
    * Loose goose search button (highway to the danger zone)
    */

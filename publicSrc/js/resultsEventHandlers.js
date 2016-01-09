@@ -14,12 +14,12 @@ import notie from 'notie'
  * that its easy to remove them (being the event listener functions) when remove old results in
  * removeResults.js module
  */
-var showSafeBrowsingDetails = (event) => {
+function showSafeBrowsingDetails(event){
   event.preventDefault()
   $(event.currentTarget).parent().next().toggleClass('showBlock')
 }
 
-var deletePageFromMarksearch = (event) => {
+function deletePageFromMarksearch(event){
   event.preventDefault()
   var deleteButton = $(event.currentTarget)
   var pageUrl = encodeURIComponent(deleteButton.data("pageurl"))

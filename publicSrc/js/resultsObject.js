@@ -12,7 +12,7 @@ var resultsObject = {
   fullResultsCacheArray: null,
   currentResults: null
 }
-var replaceResults = (fullResultsCacheArray, currrentResults) => {
+function replaceResults(fullResultsCacheArray, currrentResults){
   if(fullResultsCacheArray){
     resultsObject.fullResultsCacheArray = fullResultsCacheArray
   }

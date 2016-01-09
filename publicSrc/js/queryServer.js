@@ -11,7 +11,7 @@ import got from 'got'
 /****
  * Exports
  */
-var queryServer = (searchTerms) => {
+function queryServer(searchTerms){
   var postUrl = `/indexPage_getall/`
   if(searchTerms){
     postUrl =`/indexPage_search/${searchingLoose}/${searchTerms}`
