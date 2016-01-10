@@ -37192,7 +37192,7 @@ function dateFilter() {
   /****
    * 2016 - year MarkSearch was released, so don't need any earlier
    */
-  var msReleaseDate = 2016;
+  var msReleaseDate = 2000;
   var numYearsToInclude = currentYear - msReleaseDate + 1;
 
   _lodash2.default.times(numYearsToInclude, function (index) {
@@ -37740,6 +37740,14 @@ function removeResults() {
     _searchPage.resultsContainer$[0].removeChild(addRemoveDiv);
   }
   /****
+   * Also remove the prebrowsing links we made in the head
+   */
+  var head = document.head;
+  var preBrowsingLinks = head.querySelectorAll('.prebrowsing');
+  _lodash2.default.each(preBrowsingLinks, function (elem) {
+    head.removeChild(elem);
+  });
+  /****
    * Hide results count in case the response from the server takes a while
    * - if there were 0 results last time, the user may think there are 0 results
    * this time too because the 0 from last time is still showing, so hide it.
@@ -37826,6 +37834,27 @@ function renderResults(resultsChunk, searchTerms) {
           //  generateSearchClipAndHighlight(doc, searchTerms)
           //}
           resultID++;
+
+          /****
+           * prebrowsing for the first 2 results (if set in settings).
+           * Preconnect for the first and dns-prefetch for the second
+           */
+          if (markSearchSettings.prebrowsing) {
+            if (resultID < 3) {
+              var rel;
+              if (resultID === 1) {
+                rel = 'preconnect';
+              } else if (resultID === 2) {
+                rel = 'dns-prefetch';
+              }
+              var link = document.createElement('link');
+              link.setAttribute('class', 'prebrowsing');
+              link.setAttribute('href', doc._id);
+              link.setAttribute('rel', rel);
+              document.head.appendChild(link);
+            }
+          }
+
           var resultDiv = document.createElement('div');
           resultDiv.setAttribute('id', 'result_' + resultID);
           resultDiv.className = 'result';

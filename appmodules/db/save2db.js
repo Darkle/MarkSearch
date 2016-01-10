@@ -21,10 +21,6 @@ function save2db(db, doc2save){
                */
               reject(err)
             }
-            /****
-             * Seems you can only send one value back (only return one value)
-             * http://stackoverflow.com/questions/22773920/
-             */
             debug('db.put successful')
             resolve({
               returnedDoc: doc2save,

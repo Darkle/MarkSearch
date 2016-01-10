@@ -54,6 +54,28 @@ function renderResults(resultsChunk, searchTerms){
         //  generateSearchClipAndHighlight(doc, searchTerms)
         //}
         resultID++
+
+        /****
+         * prebrowsing for the first 2 results (if set in settings).
+         * Preconnect for the first and dns-prefetch for the second
+         */
+        if(markSearchSettings.prebrowsing){
+          if(resultID < 3){
+            var rel
+            if(resultID === 1){
+              rel = 'preconnect'
+            }
+            else if(resultID === 2){
+              rel = 'dns-prefetch'
+            }
+            var link = document.createElement('link')
+            link.setAttribute('class', 'prebrowsing')
+            link.setAttribute('href', doc._id)
+            link.setAttribute('rel', rel)
+            document.head.appendChild(link)
+          }
+        }
+
         var resultDiv = document.createElement('div')
         resultDiv.setAttribute('id', `result_${resultID}`)
         resultDiv.className = 'result'

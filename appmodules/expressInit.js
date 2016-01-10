@@ -15,23 +15,6 @@ var routes = require(path.join(__dirname, '..', 'routes', 'index'))
 var api = require(path.join(__dirname, '..', 'routes', 'api'))
 
 function expressInit(app, express, databasesAndAppSettings){
-  app.set('views', path.join(__dirname, '..', 'views'))
-  app.set('view engine', 'jade')
-  // uncomment after placing your favicon in /public
-  //app.use(favicon(path.join(__dirname,'..', 'public', 'favicon.ico')))
-  app.use(logger('dev'))
-  /****
-   * The api gets sent the HTML text of the page, so in the off chance that it
-   * encounters a page with a huge amount of text, increase the size limit that
-   * can be sent via post body. (the limit is '100kb')
-   * https://github.com/expressjs/body-parser#limit-3
-   */
-  app.use(bodyParser.json({limit: '1mb'}))
-  app.use(bodyParser.urlencoded({ limit: '1mb', extended: false }))
-  app.use(expressValidator())
-  app.use(cookieParser())
-  app.use(express.static(path.join(__dirname, '..', 'public')))
-  app.use('/bower_components',  express.static( path.join(__dirname, '..', 'bower_components')))
   /****
    * Make the databases available to wherever app is available:
    * http://expressjs.com/api.html#app.set
@@ -52,6 +35,23 @@ function expressInit(app, express, databasesAndAppSettings){
    */
   app.set('appSettings', databasesAndAppSettings.appSettings)
   app.set('JWTsecret', databasesAndAppSettings.appSettings.JWTsecret)
+  app.set('views', path.join(__dirname, '..', 'views'))
+  app.set('view engine', 'jade')
+  // uncomment after placing your favicon in /public
+  //app.use(favicon(path.join(__dirname,'..', 'public', 'favicon.ico')))
+  app.use(logger('dev'))
+  /****
+   * The api gets sent the HTML text of the page, so in the off chance that it
+   * encounters a page with a huge amount of text, increase the size limit that
+   * can be sent via post body. (the limit is '100kb')
+   * https://github.com/expressjs/body-parser#limit-3
+   */
+  app.use(bodyParser.json({limit: '1mb'}))
+  app.use(bodyParser.urlencoded({ limit: '1mb', extended: false }))
+  app.use(expressValidator())
+  app.use(cookieParser())
+  app.use(express.static(path.join(__dirname, '..', 'public')))
+  app.use('/bower_components',  express.static( path.join(__dirname, '..', 'bower_components')))
   /****
    * Routes
    */
@@ -71,33 +71,31 @@ function expressInit(app, express, databasesAndAppSettings){
   })
   /****
    * error handlers
-   * development error handler
-   * will print stacktrace
    */
-  if (app.get('env') === 'development') {
-    app.locals.pretty = true
-    app.use((err, req, res, next) => {
+  app.locals.pretty = true
+  app.use((err, req, res, next) => {
+    /****
+     * errObjectToShow = {} - no stacktraces leaked to user if in production
+     */
+    var errObjectToShow = {}
+    if(app.get('env') === 'development'){
       console.error(err.status)
       console.error(err.message)
       console.error(err)
-      res.status(err.status || 500)
-      res.render('error', {
-        message: err.message,
-        error: err
-      })
-    })
-  }
-  /****
-   * production error handler
-   * no stacktraces leaked to user
-   */
-  app.use((err, req, res, next) => {
+      errObjectToShow = err
+    }
     res.status(err.status || 500)
     res.render('error', {
       message: err.message,
-      error: {}
+      error: errObjectToShow
     })
   })
+  if(app.get('env') === 'development'){
+    /****
+     * Pretty print html
+     */
+    app.locals.pretty = true
+  }
 }
 
 module.exports = expressInit

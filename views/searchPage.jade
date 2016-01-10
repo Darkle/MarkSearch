@@ -14,3 +14,7 @@ block content
   script(type='text/javascript').
     var markSearchSettings = !{markSearchSettings}
   script(src='/js/searchPage-bundle.js')
+
+  // hack to get formplate font to load at startup,
+  // rather than when the date filter shows
+  .formplate-select#formplateFontHack

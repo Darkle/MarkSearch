@@ -41,7 +41,8 @@ function initializeDBs(app){
             pagesDBFilePath: path.join('db', 'pages', 'pages'),
             JWTsecret: Crypto.randomBytes(128).toString('hex'),
             markSearchSettings: {
-              defaultToSearchLoose: true
+              defaultToSearchLoose: true,
+              prebrowsing: true
             }
           }
           return appDB.insertAsync(doc)

@@ -432,15 +432,15 @@ body {
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
 }
+.navHeader .dateFilterSettings .formplate-select:hover {
+  border: 1px solid #3498db;
+}
 .navHeader .dateFilterSettings .formplate-select select {
   font-size: 18px;
 }
 .navHeader .dateFilterSettings .formplate-select select:-moz-focusring {
   color: transparent;
   text-shadow: 0 0 0 #3498DB;
-}
-.formplate-select:hover {
-  border: 1px solid #3498db;
 }
 .navHeader .dateFilterSettings .fromToContainer {
   -webkit-box-flex: 1;
@@ -916,6 +916,9 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 .searchPage .metaIcons a:hover {
   text-decoration: none;
   color: #77BBEB;
+}
+#formplateFontHack {
+  visibility: hidden !important;
 }
 /****
 * Global
