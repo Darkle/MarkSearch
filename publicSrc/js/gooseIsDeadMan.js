@@ -7,7 +7,7 @@ import { searchingLoose, set_searchingLoose } from './searchPage'
 
 var stringUtils = require('string')
 
-function goose(){
+function gooseInit(){
   var looseSearchButton$ = $("#looseSearchButton")
   var looseSearchIcon$ = $("#looseSearchIcon")
   var searchInput$ = $('#searchInput')
@@ -61,4 +61,4 @@ function goose(){
 /****
  * Exports
  */
-export { goose }
+export { gooseInit }

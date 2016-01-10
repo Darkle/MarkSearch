@@ -6,13 +6,13 @@ import { initInfiniteScroll } from './infiniteScroll'
 import { checkIfiOS7 } from './checkIfiOS7'
 import { queryServerAndRender } from './queryServerAndRender'
 import { removeResults } from './removeResults'
-import { goose } from './gooseIsDeadMan'
-import { addUrls } from './addUrls'
+import { gooseInit } from './gooseIsDeadMan'
+import { addUrlsInit } from './addUrls'
 import { searchErrorHandler } from './searchErrorsHandler'
 import { checkIfTouchDevice } from './checkIfTouchDevice'
 import { initSearchPlaceholder } from './initSearchPlaceholder'
 import { tooltips } from './tooltips'
-import { dateFilter, filterResults, allFromToIsSet } from './dateFilter'
+import { dateFilterInit, filterResults, allFromToIsSet } from './dateFilter'
 
 import _ from 'lodash'
 /****
@@ -207,9 +207,9 @@ function searchPageInit(event){
   /****
    * Loose goose search button (highway to the danger zone)
    */
-  //goose()
-  addUrls()
-  dateFilter()
+  //gooseInit()
+  addUrlsInit()
+  dateFilterInit()
 }
 /****
  * Exports

@@ -199,7 +199,7 @@ function filterResults(isShortcut){
     var selectToMonthAsNum = Number(selectToMonth$.val())
     dateEndInMilliseconds = moment(`${selectToYear$.val()}`, `YYYY`)
         .add(selectToMonthAsNum, 'months')
-        .subtract().subtract(1, 'second')
+        .subtract(1, 'second')
         .valueOf()
   }
   /****
@@ -221,7 +221,7 @@ function filterResults(isShortcut){
   }
 }
 
-function dateFilter(){
+function dateFilterInit(){
   formplate($('body'))
   var subBar$ = $('.subBar')
   var dateFilterNavButtonContainer$ = $('.dateFilter')
@@ -296,4 +296,4 @@ function dateFilter(){
 /****
  * Exports
  */
-export { dateFilter, dateFilterResetAll, filterResults, allFromToIsSet, checkMatchMediaForResultsContainerMarginTop }
+export { dateFilterInit, dateFilterResetAll, filterResults, allFromToIsSet, checkMatchMediaForResultsContainerMarginTop }

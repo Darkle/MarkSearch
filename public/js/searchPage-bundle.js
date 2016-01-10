@@ -36530,7 +36530,7 @@ function extend() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addUrls = undefined;
+exports.addUrlsInit = undefined;
 
 var _velocityAnimate = require('velocity-animate');
 
@@ -36595,7 +36595,7 @@ function hideShowAddPageSubbar(refreshResults) {
   }
 }
 
-function addUrls() {
+function addUrlsInit() {
   var subBar$ = $('.subBar');
   var nav$ = $('.navHeader nav');
   var resultsOuterContainer$ = $('#resultsOuterContainer');
@@ -36825,7 +36825,7 @@ function addUrls() {
 /****
  * Exports
  */
-exports.addUrls = addUrls;
+exports.addUrlsInit = addUrlsInit;
 
 },{"./dateFilter":272,"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"./searchPage":286,"got":203,"suspend":257,"velocity-animate":265}],269:[function(require,module,exports){
 'use strict';
@@ -36901,8 +36901,8 @@ function chunkResults(rawResults) {
    */
   var chunkAndShownData = {};
   if (rawResults && rawResults.length) {
-    var chunkedResults = _lodash2.default.chunk(rawResults, 200);
-    chunkedResults.forEach(function (resultChunk, index) {
+    var chunkedResults = _lodash2.default.chunk(rawResults, 20);
+    _lodash2.default.each(chunkedResults, function (resultChunk, index) {
       chunkAndShownData['chunk_' + index] = {
         chunkIndex: index,
         shownYet: false,
@@ -36921,7 +36921,7 @@ exports.chunkResults = chunkResults;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.checkMatchMediaForResultsContainerMarginTop = exports.allFromToIsSet = exports.filterResults = exports.dateFilterResetAll = exports.dateFilter = undefined;
+exports.checkMatchMediaForResultsContainerMarginTop = exports.allFromToIsSet = exports.filterResults = exports.dateFilterResetAll = exports.dateFilterInit = undefined;
 
 var _removeResults = require('./removeResults');
 
@@ -37150,7 +37150,7 @@ function filterResults(isShortcut) {
      * including all the days of that month
      */
     var selectToMonthAsNum = Number(selectToMonth$.val());
-    dateEndInMilliseconds = (0, _moment2.default)('' + selectToYear$.val(), 'YYYY').add(selectToMonthAsNum, 'months').subtract().subtract(1, 'second').valueOf();
+    dateEndInMilliseconds = (0, _moment2.default)('' + selectToYear$.val(), 'YYYY').add(selectToMonthAsNum, 'months').subtract(1, 'second').valueOf();
   }
   /****
    * Check in case they mistakenly put the end date before the start date
@@ -37170,7 +37170,7 @@ function filterResults(isShortcut) {
   }
 }
 
-function dateFilter() {
+function dateFilterInit() {
   formplate($('body'));
   var subBar$ = $('.subBar');
   var dateFilterNavButtonContainer$ = $('.dateFilter');
@@ -37244,7 +37244,7 @@ function dateFilter() {
 /****
  * Exports
  */
-exports.dateFilter = dateFilter;
+exports.dateFilterInit = dateFilterInit;
 exports.dateFilterResetAll = dateFilterResetAll;
 exports.filterResults = filterResults;
 exports.allFromToIsSet = allFromToIsSet;
@@ -37322,7 +37322,7 @@ doc looks like this coming in:
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.goose = undefined;
+exports.gooseInit = undefined;
 
 var _queryServerAndRender = require('./queryServerAndRender');
 
@@ -37334,7 +37334,7 @@ var _searchPage = require('./searchPage');
 
 var stringUtils = require('string');
 
-function goose() {
+function gooseInit() {
   var looseSearchButton$ = $("#looseSearchButton");
   var looseSearchIcon$ = $("#looseSearchIcon");
   var searchInput$ = $('#searchInput');
@@ -37385,7 +37385,7 @@ function goose() {
 /****
  * Exports
  */
-exports.goose = goose;
+exports.gooseInit = gooseInit;
 
 },{"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"./searchPage":286,"string":255}],275:[function(require,module,exports){
 'use strict';
@@ -38398,9 +38398,9 @@ function searchPageInit(event) {
   /****
    * Loose goose search button (highway to the danger zone)
    */
-  //goose()
-  (0, _addUrls.addUrls)();
-  (0, _dateFilter.dateFilter)();
+  //gooseInit()
+  (0, _addUrls.addUrlsInit)();
+  (0, _dateFilter.dateFilterInit)();
 }exports.csrfToken = csrfToken;
 exports.resultsCountDiv$ = resultsCountDiv$;
 exports.resultsContainer$ = resultsContainer$;

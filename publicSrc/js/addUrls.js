@@ -52,7 +52,7 @@ function hideShowAddPageSubbar(refreshResults){
   }
 }
 
-function addUrls(){
+function addUrlsInit(){
   var subBar$ = $('.subBar')
   var nav$ = $('.navHeader nav')
   var resultsOuterContainer$ = $('#resultsOuterContainer')
@@ -197,4 +197,4 @@ function addUrls(){
 /****
  * Exports
  */
-export { addUrls }
+export { addUrlsInit }

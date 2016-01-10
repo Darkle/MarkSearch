@@ -11,8 +11,8 @@ function chunkResults(rawResults){
    */
   var chunkAndShownData = {}
   if(rawResults && rawResults.length){
-    var chunkedResults = _.chunk(rawResults, 200)
-    chunkedResults.forEach((resultChunk, index) =>{
+    var chunkedResults = _.chunk(rawResults, 20)
+    _.each(chunkedResults, (resultChunk, index) => {
       chunkAndShownData[`chunk_${index}`] = {
         chunkIndex: index,
         shownYet: false,
