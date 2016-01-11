@@ -13,6 +13,7 @@ import { checkIfTouchDevice } from './checkIfTouchDevice'
 import { initSearchPlaceholder } from './initSearchPlaceholder'
 import { tooltips } from './tooltips'
 import { dateFilterInit, filterResults, allFromToIsSet } from './dateFilter'
+import { settingsSubbarInit } from './settingsSubbar'
 
 import _ from 'lodash'
 /****
@@ -210,6 +211,7 @@ function searchPageInit(event){
   //gooseInit()
   addUrlsInit()
   dateFilterInit()
+  settingsSubbarInit()
 }
 /****
  * Exports

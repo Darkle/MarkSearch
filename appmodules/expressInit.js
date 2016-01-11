@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var csurf = require('csurf')
 var expressValidator = require('express-validator')
+var compression = require('compression')
 
 var authenticationCheck = require(path.join(__dirname, 'authenticationCheck'))
 
@@ -15,6 +16,7 @@ var routes = require(path.join(__dirname, '..', 'routes', 'index'))
 var api = require(path.join(__dirname, '..', 'routes', 'api'))
 
 function expressInit(app, express, databasesAndAppSettings){
+  app.use(compression())
   /****
    * Make the databases available to wherever app is available:
    * http://expressjs.com/api.html#app.set

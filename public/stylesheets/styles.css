@@ -634,7 +634,16 @@ body {
   font-size: 24px;
   line-height: 50px;
 }
-.navHeader .addPageUrls .addPageButtons div:hover {
+.navHeader .addPageUrls .urlSaveButton {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  border: none;
+  text-align: center;
+  background-color: #3498DB;
+}
+.navHeader .addPageUrls .urlSaveButton:hover {
   color: #2670A2;
   cursor: pointer;
 }
@@ -647,20 +656,46 @@ body {
   border: none;
   text-align: center;
 }
-.navHeader .addPageUrls .urlSaveButton {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
-  border: none;
-  text-align: center;
-  background-color: #F1C40F;
+.navHeader .addPageUrls .urlCancelButton:hover {
+  color: #77BBEB;
+  cursor: pointer;
 }
 .navHeader .settingsAndHelp {
   -webkit-box-flex: 1;
   -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
+  height: 50px;
+  font-size: 24px;
+  line-height: 50px;
+}
+.navHeader .settingsAndHelp .settingsLinkButton {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  border: none;
+  text-align: center;
+  color: white;
+  background-color: #F1C40F;
+}
+.navHeader .settingsAndHelp .settingsLinkButton:hover {
+  color: #34495E;
+  cursor: pointer;
+}
+.navHeader .settingsAndHelp .helpAboutLinkButton {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  border: none;
+  text-align: center;
+  color: white;
+  background-color: #34495E;
+}
+.navHeader .settingsAndHelp .helpAboutLinkButton:hover {
+  color: #77BBEB;
+  cursor: pointer;
 }
 /***
 Some Extra Form Element Resets
@@ -919,6 +954,81 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 }
 #formplateFontHack {
   visibility: hidden !important;
+}
+.settingsPage .navHeader .searchContainer {
+  display: none;
+}
+.settingsPage .navHeader .rightContainer {
+  display: none;
+}
+.settingsPage .navHeader .brandLogo h1 {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.settingsPage #settingsContainer {
+  margin-top: 100px;
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.settingsPage .settingsHeader {
+  text-align: center;
+  opacity: 0.2;
+  font-size: 1rem;
+}
+.settingsPage .settings {
+  margin-top: 1.3rem;
+  width: 31rem;
+  outline: 1px solid green;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+}
+.settingsPage .settings .genTokenContainer {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.settingsPage #formPlateFontHack {
+  visibility: hidden;
+}
+.help_aboutPage .navHeader .searchContainer {
+  display: none;
+}
+.help_aboutPage .navHeader .rightContainer {
+  display: none;
+}
+.help_aboutPage .navHeader .brandLogo h1 {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 /****
 * Global

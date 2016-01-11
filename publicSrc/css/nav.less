@@ -564,7 +564,19 @@
   line-height: 50px;
 }
 
-.navHeader .addPageUrls .addPageButtons div:hover {
+.navHeader .addPageUrls .urlSaveButton {
+  //text-align: center;
+  flex: 1 1 auto;
+  border: none;
+  text-align: center;
+  //padding: 2px 0 3px 0;
+  //border-right: 1px solid #2670A2;
+  //outline: 1px solid #2670A2;
+  //background-color: #F1C40F;
+  background-color: #3498DB;
+}
+
+.navHeader .addPageUrls .urlSaveButton:hover {
   color: #2670A2;
   cursor: pointer;
 }
@@ -580,24 +592,45 @@
   //outline: 1px solid #2670A2;
 }
 
-.navHeader .addPageUrls .urlSaveButton {
-  //text-align: center;
-  flex: 1 1 auto;
-  border: none;
-  text-align: center;
-  //padding: 2px 0 3px 0;
-  //border-right: 1px solid #2670A2;
-  //outline: 1px solid #2670A2;
-  background-color: #F1C40F;
-
+.navHeader .addPageUrls .urlCancelButton:hover {
+  color: #77BBEB;
+  cursor: pointer;
 }
+
 
 .navHeader .settingsAndHelp {
   flex: 1 1 auto;
   //display: flex;
-
+  height: 50px;
+  font-size: 24px;
+  line-height: 50px;
 }
 
+.navHeader .settingsAndHelp .settingsLinkButton {
+  flex: 1 1 auto;
+  border: none;
+  text-align: center;
+  color: white;
+  background-color: #F1C40F;
+}
+
+.navHeader .settingsAndHelp .settingsLinkButton:hover {
+  color: #34495E;
+  cursor: pointer;
+}
+
+.navHeader .settingsAndHelp .helpAboutLinkButton {
+  flex: 1 1 auto;
+  border: none;
+  text-align: center;
+  color: white;
+  background-color: #34495E;
+}
+
+.navHeader .settingsAndHelp .helpAboutLinkButton:hover {
+  color: #77BBEB;
+  cursor: pointer;
+}
 
 
 

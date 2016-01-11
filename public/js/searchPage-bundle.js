@@ -37250,7 +37250,7 @@ exports.filterResults = filterResults;
 exports.allFromToIsSet = allFromToIsSet;
 exports.checkMatchMediaForResultsContainerMarginTop = checkMatchMediaForResultsContainerMarginTop;
 
-},{"./chunkResults":271,"./removeResults":280,"./renderResults":281,"./resultsObject":283,"./updateResultsCountDiv":288,"lodash":213,"moment":215,"velocity-animate":265}],273:[function(require,module,exports){
+},{"./chunkResults":271,"./removeResults":280,"./renderResults":281,"./resultsObject":283,"./updateResultsCountDiv":289,"lodash":213,"moment":215,"velocity-animate":265}],273:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37669,7 +37669,7 @@ function queryServer(searchTerms) {
  */
 exports.queryServer = queryServer;
 
-},{"./chunkResults":271,"./resultsObject":283,"./searchPage":286,"./updateResultsCountDiv":288,"got":203,"lodash":213}],279:[function(require,module,exports){
+},{"./chunkResults":271,"./resultsObject":283,"./searchPage":286,"./updateResultsCountDiv":289,"got":203,"lodash":213}],279:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38107,7 +38107,7 @@ function deletePageFromMarksearch(event) {
 exports.showSafeBrowsingDetails = showSafeBrowsingDetails;
 exports.deletePageFromMarksearch = deletePageFromMarksearch;
 
-},{"./chunkResults":271,"./resultsObject":283,"./searchPage":286,"./updateResultsCountDiv":288,"got":203,"lodash":213,"notie":217}],283:[function(require,module,exports){
+},{"./chunkResults":271,"./resultsObject":283,"./searchPage":286,"./updateResultsCountDiv":289,"got":203,"lodash":213,"notie":217}],283:[function(require,module,exports){
 'use strict';
 
 /****
@@ -38217,6 +38217,8 @@ var _initSearchPlaceholder = require('./initSearchPlaceholder');
 var _tooltips = require('./tooltips');
 
 var _dateFilter = require('./dateFilter');
+
+var _settingsSubbar = require('./settingsSubbar');
 
 var _lodash = require('lodash');
 
@@ -38401,6 +38403,7 @@ function searchPageInit(event) {
   //gooseInit()
   (0, _addUrls.addUrlsInit)();
   (0, _dateFilter.dateFilterInit)();
+  (0, _settingsSubbar.settingsSubbarInit)();
 }exports.csrfToken = csrfToken;
 exports.resultsCountDiv$ = resultsCountDiv$;
 exports.resultsContainer$ = resultsContainer$;
@@ -38411,7 +38414,89 @@ exports.set_haveShownResultsTooltips = set_haveShownResultsTooltips;
 exports.searchingLoose = searchingLoose;
 exports.set_searchingLoose = set_searchingLoose;
 
-},{"./addUrls":268,"./checkIfTouchDevice":269,"./checkIfiOS7":270,"./dateFilter":272,"./gooseIsDeadMan":274,"./infiniteScroll":275,"./initSearchPlaceholder":276,"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"./tooltips":287,"babel-polyfill":2,"lodash":213,"string":255}],287:[function(require,module,exports){
+},{"./addUrls":268,"./checkIfTouchDevice":269,"./checkIfiOS7":270,"./dateFilter":272,"./gooseIsDeadMan":274,"./infiniteScroll":275,"./initSearchPlaceholder":276,"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"./settingsSubbar":287,"./tooltips":288,"babel-polyfill":2,"lodash":213,"string":255}],287:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.settingsSubbarInit = undefined;
+
+var _dateFilter = require('./dateFilter');
+
+var settingsAndHelpContainer$;
+var settingsButtonMaterialIcon$;
+
+function hideShowSettingsSubbar() {
+  var dataIsShown = settingsAndHelpContainer$.data('isShown');
+  if (dataIsShown === 'true') {
+    settingsAndHelpContainer$.data('isShown', 'false');
+    $.Velocity(settingsAndHelpContainer$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elements) {
+      settingsButtonMaterialIcon$.removeClass('navBar-materialIcon-selected');
+    });
+  } else {
+    settingsAndHelpContainer$.data('isShown', 'true');
+    settingsButtonMaterialIcon$.addClass('navBar-materialIcon-selected');
+    $.Velocity(settingsAndHelpContainer$[0], "slideDown", { duration: 500, display: 'flex' });
+  }
+}
+
+function settingsSubbarInit() {
+  var subBar$ = $('.subBar');
+  var settingsButton$ = $('#settingsButton');
+  var otherNavMaterialIcons$ = $('.addPage .material-icons, .dateFilter .material-icons');
+  var resultsOuterContainer$ = $('#resultsOuterContainer');
+  settingsButtonMaterialIcon$ = $('.material-icons', settingsButton$);
+  settingsAndHelpContainer$ = $('.settingsAndHelp');
+
+  $('.settingsLinkButton').click(function (event) {
+    window.location = '/settingsPage';
+  });
+  $('.helpAboutLinkButton').click(function (event) {
+    window.location = '/help_about';
+  });
+
+  settingsButton$.click(function (event) {
+    event.preventDefault();
+    var currentlyShownSubBar$ = subBar$.children().filter(function (index, elem) {
+      return $(elem).data('isShown') === 'true';
+    });
+    /****
+     * If there is a subBar being shown and it is not the settingsAndHelpContainer$,
+     * hide it and show the settingsAndHelpContainer$
+     */
+    if (currentlyShownSubBar$[0] && currentlyShownSubBar$[0] !== settingsAndHelpContainer$[0]) {
+      settingsButtonMaterialIcon$.addClass('navBar-materialIcon-selected');
+      if (currentlyShownSubBar$.hasClass('dateFilterSettings')) {
+        $.Velocity(resultsOuterContainer$[0], { marginTop: (0, _dateFilter.checkMatchMediaForResultsContainerMarginTop)() }, 500);
+      }
+      $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elems) {
+        currentlyShownSubBar$.data('isShown', 'false');
+        otherNavMaterialIcons$.removeClass('navBar-materialIcon-selected navBar-materialIcon-hover');
+        /****
+         * If hiding the date filter subbar, reset the results and the settings in the date filter module
+         */
+        if (currentlyShownSubBar$.hasClass('dateFilterSettings')) {
+          (0, _dateFilter.dateFilterResetAll)();
+        }
+        hideShowSettingsSubbar();
+      });
+    }
+    /****
+     * Else show/hide the Settings subbar
+     */
+    else {
+        hideShowSettingsSubbar();
+      }
+  });
+}
+
+/****
+ * Exports
+ */
+exports.settingsSubbarInit = settingsSubbarInit;
+
+},{"./dateFilter":272}],288:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38490,7 +38575,7 @@ function tooltips() {
  */
 exports.tooltips = tooltips;
 
-},{"./checkIfTouchDevice":269,"./searchPage":286}],288:[function(require,module,exports){
+},{"./checkIfTouchDevice":269,"./searchPage":286}],289:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

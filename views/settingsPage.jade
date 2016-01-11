@@ -1,0 +1,28 @@
+extends layout
+block vars
+  - var bodyClass = 'settingsPage';
+block content
+  #settingsContainer
+
+    .settingsHeader Changes Are Automatically Saved
+
+    .settings
+      input#csrfInput(type="hidden", name="_csrf", value="#{csrfToken}")
+      input#prebrowsingCheckbox(type="checkbox", name="prebrowsingCheckbox", value="prebrowsing")
+      label(for="prebrowsingCheckbox") Prebrowsing
+      .genTokenContainer
+        a#generateTokenButton.button.button-border(href="#") Generate Token
+        input#tokenText(type="text", name="tokenText")
+
+
+
+  #formPlateFontHack.formplate
+    .formplate-checkbox.checked
+
+  script(src='/bower_components/jquery/dist/jquery.js')
+  //script(src='/bower_components/modernizer/modernizr.js')
+  //script(src='/bower_components/Formplate/js/formplate.js')
+  script(type='text/javascript').
+    var markSearchSettings = !{markSearchSettings}
+  script(src='/js/settingsPage-bundle.js')
+

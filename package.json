@@ -9,6 +9,7 @@
     "bluebird": "^3.1.1",
     "body-parser": "^1.14.1",
     "combs": "0.0.1",
+    "compression": "^1.6.0",
     "cookie-parser": "~1.4.0",
     "csurf": "^1.8.3",
     "debug": "~2.2.0",

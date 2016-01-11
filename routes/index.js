@@ -44,9 +44,9 @@ router.get('/about', (req, res, next) => {
 })
 
 /* GET help page. */
-router.get('/help', (req, res, next) => {
-  console.log("help page")
-  res.render('help',
+router.get('/help_about', (req, res, next) => {
+  console.log("help_about page")
+  res.render('help_about',
       {
         title: 'MarkSearch Help'
       }
@@ -54,12 +54,15 @@ router.get('/help', (req, res, next) => {
 })
 
 /* GET settings page. */
-router.get('/settings', (req, res, next) => {
+router.get('/settingsPage', (req, res, next) => {
   console.log("settings page")
-  res.render('settings',
+  var appSettings = req.app.get('appSettings')
+  var marsearchSettingsObjCopy = _.pick(appSettings, 'markSearchSettings')
+  res.render('settingsPage',
       {
         title: 'MarkSearch Settings',
-        csrfToken: req.csrfToken()
+        csrfToken: req.csrfToken(),
+        markSearchSettings: JSON.stringify(marsearchSettingsObjCopy.markSearchSettings)
       }
   )
 })

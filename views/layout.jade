@@ -1,5 +1,6 @@
 doctype html
 html
+  block vars
   head
     title #{title}
     meta(charset='utf-8')
@@ -8,10 +9,12 @@ html
     meta(name='viewport', content='width=device-width, height=device-height, initial-scale=1.0')
     link(rel='apple-touch-icon', href='apple-touch-icon.png')
     link(rel='stylesheet', href='/bower_components/normalize-css/normalize.css')
-    link(rel='stylesheet', href='/bower_components/protip/protip.min.css')
-    link(rel='stylesheet', href='/stylesheets/formplate.css')
+    if bodyClass === 'searchPage'
+      link(rel='stylesheet', href='/bower_components/protip/protip.min.css')
+      link(rel='stylesheet', href='/stylesheets/formplate.css')
+    //if bodyClass === 'settingsPage'
+    //  link(rel='stylesheet', href='/bower_components/pure/pure.css')
     link(rel='stylesheet', href='/stylesheets/styles.css')
-  block vars
   body(class='#{bodyClass}')
     include ./nav.jade
     block content
