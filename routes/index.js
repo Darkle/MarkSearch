@@ -82,8 +82,8 @@ router.post('/settings/update', (req, res, next) => {
 router.post('/settings/generateJWTExtensionToken', (req, res, next) => {
   console.log("settings/generateJWTExtensionToken+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
   /****
-   * Give it a somewhat unique id. Could be helpful for logging which client
-   * is accessing the api.
+   * Give it a somewhat unique id - could be helpful for debugging, so
+   * can see which client is accessing the api.
    */
   var token = jwt.sign(
       {

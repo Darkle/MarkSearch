@@ -8,11 +8,23 @@ block content
 
     .settings
       input#csrfInput(type="hidden", name="_csrf", value="#{csrfToken}")
-      input#prebrowsingCheckbox(type="checkbox", name="prebrowsingCheckbox", value="prebrowsing")
-      label(for="prebrowsingCheckbox") Prebrowsing
+      .prebrowsingSettingContainer
+        .formplate
+          input#prebrowsingCheckbox(type="checkbox", name="prebrowsingCheckbox")
+          label(for="prebrowsingCheckbox") Prebrowsing
+        .settingDetail.
+          When enabled, the first two results will have prebrowsing applied to them.
+          Prebrowsing can make bookmark links load faster when you click on
+          them from the search page. (The first result will have "preconnect" applied, while the second
+          result will have "dns-prefetch" applied. More info <a target="_blank" href='http://blog.cloudimage.io/2015/10/19/what-is-prebrowsing-and-how-it-can-drastically-improve-your-page-loading-time/'>here</a>)
       .genTokenContainer
-        a#generateTokenButton.button.button-border(href="#") Generate Token
-        input#tokenText(type="text", name="tokenText")
+        a#tokenButton.button.black.square(href="#") Generate Browser Token
+        .formplate
+          input#tokenText.square(type="text", name="tokenText")
+          a#clipBoardButton.button.square(data-clipboard-target="#tokenText")
+            img(src="images/clippy.svg", alt="Copy to clipboard")
+      .settingDetail.
+        This token is used in the MarkSearch browser extension.
 
 
 
@@ -20,8 +32,10 @@ block content
     .formplate-checkbox.checked
 
   script(src='/bower_components/jquery/dist/jquery.js')
-  //script(src='/bower_components/modernizer/modernizr.js')
-  //script(src='/bower_components/Formplate/js/formplate.js')
+  script(src='/bower_components/modernizer/modernizr.js')
+  script(src='/bower_components/Formplate/js/formplate.js')
+  script(src='/bower_components/buttonplate/js/buttonplate.js')
+  script(src='/bower_components/clipboard/dist/clipboard.min.js')
   script(type='text/javascript').
     var markSearchSettings = !{markSearchSettings}
   script(src='/js/settingsPage-bundle.js')
