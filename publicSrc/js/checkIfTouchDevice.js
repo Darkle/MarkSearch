@@ -12,7 +12,10 @@
  * And prolly others, but like I said, not trying for perfection here.
  */
 function checkIfTouchDevice(window){
-  return ('ontouchstart' in window) && /iPad|iPhone|iPod|Android|IEMobile|BlackBerry|Linux/.test(navigator.platform)
+  var tt = 'ontouchstart' in window
+  var mtp1 = navigator.MaxTouchPoints > 0
+  var mtp2 = navigator.msMaxTouchPoints > 0
+  return (tt || mtp1 || mtp2) && /iPad|iPhone|iPod|Android|IEMobile|BlackBerry|Linux/.test(navigator.platform)
 }
 /****
  * Exports
