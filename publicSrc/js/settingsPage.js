@@ -24,22 +24,13 @@ function settingsPageInit(event){
    */
   var prebrowsingCheckbox$ = $('#prebrowsingCheckbox')
 
-
-  /****
-   * Formplate adds a 'checked' class to the span parent of the
-   * checkboxes. The 'checked' class adds a ':before" to the span
-   * to show the styled tick checkbox. This seems to mess up the
-   * checkbox onchange event, specifically unchecking the select box
-   * doesn't fire the onchange event anymore, so gonna do onclick
-   * for the .formplate-checkbox spans
-   */
   var formplateCheckBoxes$ = $('.settings .formplate-checkbox')
 
   $('.settings input[type="checkbox"]').change( event => {
     console.log('checkbox change')
     //$(event.currentTarget).parent().toggleClass('checked')
   })
-
+ 
   if(markSearchSettings.prebrowsing){
     prebrowsingCheckbox$.prop('checked', true)
     prebrowsingCheckbox$.parent().addClass('checked')

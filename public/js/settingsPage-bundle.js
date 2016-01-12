@@ -686,8 +686,6 @@ global._babelPolyfill = true;
  */
 /* eslint-disable no-proto */
 
-'use strict'
-
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
 var isArray = require('isarray')
@@ -770,10 +768,8 @@ function Buffer (arg) {
     return new Buffer(arg)
   }
 
-  if (!Buffer.TYPED_ARRAY_SUPPORT) {
-    this.length = 0
-    this.parent = undefined
-  }
+  this.length = 0
+  this.parent = undefined
 
   // Common case.
   if (typeof arg === 'number') {
@@ -904,10 +900,6 @@ function fromJsonObject (that, object) {
 if (Buffer.TYPED_ARRAY_SUPPORT) {
   Buffer.prototype.__proto__ = Uint8Array.prototype
   Buffer.__proto__ = Uint8Array
-} else {
-  // pre-set for values that may exist in the future
-  Buffer.prototype.length = undefined
-  Buffer.prototype.parent = undefined
 }
 
 function allocate (that, length) {
@@ -1057,6 +1049,10 @@ function byteLength (string, encoding) {
   }
 }
 Buffer.byteLength = byteLength
+
+// pre-set for values that may exist in the future
+Buffer.prototype.length = undefined
+Buffer.prototype.parent = undefined
 
 function slowToString (encoding, start, end) {
   var loweredCase = false
@@ -12123,7 +12119,6 @@ Stream.prototype.pipe = function(dest, options) {
 };
 
 },{"events":201,"inherits":205,"readable-stream/duplex.js":231,"readable-stream/passthrough.js":237,"readable-stream/readable.js":238,"readable-stream/transform.js":239,"readable-stream/writable.js":240}],242:[function(require,module,exports){
-(function (global){
 var ClientRequest = require('./lib/request')
 var extend = require('xtend')
 var statusCodes = require('builtin-status-codes')
@@ -12137,12 +12132,7 @@ http.request = function (opts, cb) {
 	else
 		opts = extend(opts)
 
-	// Normally, the page is loaded from http or https, so not specifying a protocol
-	// will result in a (valid) protocol-relative url. However, this won't work if
-	// the protocol is something else, like 'file:'
-	var defaultProtocol = global.location.protocol.search(/^https?:$/) === -1 ? 'http:' : ''
-
-	var protocol = opts.protocol || defaultProtocol
+	var protocol = opts.protocol || ''
 	var host = opts.hostname || opts.host
 	var port = opts.port
 	var path = opts.path || '/'
@@ -12203,8 +12193,6 @@ http.METHODS = [
 	'UNLOCK',
 	'UNSUBSCRIBE'
 ]
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-
 },{"./lib/request":244,"builtin-status-codes":7,"url":249,"xtend":255}],243:[function(require,module,exports){
 (function (global){
 exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableByteStream)
@@ -12437,14 +12425,12 @@ ClientRequest.prototype._onFinish = function () {
 }
 
 /**
- * Checks if xhr.status is readable and non-zero, indicating no error.
- * Even though the spec says it should be available in readyState 3,
- * accessing it throws an exception in IE8
+ * Checks if xhr.status is readable. Even though the spec says it should
+ * be available in readyState 3, accessing it throws an exception in IE8
  */
 function statusValid (xhr) {
 	try {
-		var status = xhr.status
-		return (status !== null && status !== 0)
+		return (xhr.status !== null)
 	} catch (e) {
 		return false
 	}
@@ -14492,14 +14478,6 @@ function settingsPageInit(event) {
    */
   var prebrowsingCheckbox$ = $('#prebrowsingCheckbox');
 
-  /****
-   * Formplate adds a 'checked' class to the span parent of the
-   * checkboxes. The 'checked' class adds a ':before" to the span
-   * to show the styled tick checkbox. This seems to mess up the
-   * checkbox onchange event, specifically unchecking the select box
-   * doesn't fire the onchange event anymore, so gonna do onclick
-   * for the .formplate-checkbox spans
-   */
   var formplateCheckBoxes$ = $('.settings .formplate-checkbox');
 
   $('.settings input[type="checkbox"]').change(function (event) {
