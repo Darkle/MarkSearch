@@ -12,7 +12,7 @@ import { searchErrorHandler } from './searchErrorsHandler'
 import { checkIfTouchDevice } from './checkIfTouchDevice'
 import { initSearchPlaceholder } from './initSearchPlaceholder'
 import { tooltips } from './tooltips'
-import { dateFilterInit, filterResults, allFromToIsSet } from './dateFilter'
+import { dateFilterInit, filterResults, allFromToIsSet, shortCutIsSet } from './dateFilter'
 import { settingsSubbarInit } from './settingsSubbar'
 
 import _ from 'lodash'
@@ -110,7 +110,9 @@ function searchPageInit(event){
    * will grab the lastchange before submit/enter is pressed and get the
    * results anyway
    * For some reason searchForm$.on with lodash debounce doesn't detect
-   * submit event, so doing it here on its own
+   * submit event, so doing it here on its own - could be something to do
+   * with _.debounce only returning a debounced function and not actually
+   * executing the function itself - http://stackoverflow.com/a/24309963/3458681
    */
   searchForm$.on('submit', event =>{
     event.preventDefault()
@@ -126,7 +128,7 @@ function searchPageInit(event){
   searchForm$.on(
       "propertychange change click keyup input paste",
       _.debounce(
-          () =>{
+          () => {
             var searchInputValue = _.trim(searchInput$.val())
             if(searchInputValue !== inputOldValue){
               inputOldValue = searchInputValue
@@ -143,9 +145,15 @@ function searchPageInit(event){
                   .then(() => {
                     /****
                      * If they were searching when they have the date filter displayed
+                     * and either the date filter 'From To' is set or the shortcuts
+                     * is set, then filter the results by date
                      */
                     if(dateFilterContainer$.data('isShown') === 'true'){
-                      filterResults(!allFromToIsSet())
+                      var sCiSet = shortCutIsSet()
+                      var aFTiS = allFromToIsSet()
+                      if(sCiSet || aFTiS){
+                        filterResults(sCiSet)
+                      }
                     }
                   })
                   .catch(searchErrorHandler)

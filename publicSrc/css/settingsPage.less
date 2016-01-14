@@ -33,7 +33,7 @@
   margin-top: 1.3rem;
   //text-align: center;
   width: 31rem;
-  outline: 1px solid green;
+  //outline: 1px solid green;
   //display: flex;
   //flex-direction: column;
   margin-left: auto;
@@ -41,7 +41,36 @@
 }
 
 .settingsPage .settings > div {
-  margin-bottom: 2rem;
+  margin-bottom: 1.6rem;
+  padding-bottom: 1rem;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #77BBEB;
+}
+
+//.settingsPage .settings > div:last-child {
+//  border-bottom: none;
+//}
+
+
+.settingsPage .settings .settingDetail {
+  font-size: 0.7rem;
+  padding: 0 1rem;
+  width: 30rem;
+}
+
+.settingsPage .settingDetail a {
+  text-decoration: none;
+  color: #3498DB;
+}
+
+.settingsPage .settingDetail a:hover {
+  color: #2670A2;
+  text-decoration: none;
+}
+
+.settingsPage .settings .formplate label {
+  font-size: 1rem;
 }
 
 .settingsPage .settings .formplate .formplate-checkbox.checked:before {
@@ -59,26 +88,18 @@
   flex-direction: column;
 }
 
-.settingsPage .prebrowsingSettingContainer .settingDetail {
-  font-size: 0.65rem;
-  padding: 0 1rem;
-  width: 30rem;
-}
-
 .settingsPage .genTokenOuterContainer {
   display: flex;
   flex-direction: column;
 }
 
-.settingsPage .genTokenOuterContainer #tokenText {
+.settingsPage .genTokenOuterContainer #browserAddonTokenButton {
   border-radius: 0;
-  font-size: 16px;
+  font-size: 0.8rem;
+  border-radius: 0;
 }
 
 .settingsPage .genTokenOuterContainer .settingDetail {
-  font-size: 0.65rem;
-  padding: 0 1rem;
-  width: 30rem;
   margin-top: 0.5rem;
 }
 
@@ -101,9 +122,69 @@
   display: flex;
 }
 
-.settingsPage .genTokenContainer #clipBoardButton img {
+.settingsPage .genTokenContainer .clipBoardButton img {
   width: 19px;
 }
+
+.settingsPage .bookmarkletContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsPage .bookmarkletContainer #bookmarkletButton {
+  border-radius: 0;
+  font-size: 0.8rem;
+  border-radius: 0;
+}
+
+.settingsPage .bookmarkletContainer .settingDetail {
+  margin-top: 0.5rem;
+}
+
+.settingsPage .bookmarkletContainer {
+  display: flex;
+}
+
+.settingsPage .bookmarkletContainer .formplate {
+  margin-left: 0.6rem;
+  display: flex;
+  flex-grow: 1;
+}
+
+.settingsPage .bookmarkletContainer .formplate input[type="text"] {
+  margin-bottom: 0;
+}
+
+.settingsPage .bookmarkletContainer .button {
+  align-items: center;
+  display: flex;
+}
+
+.settingsPage .bookmarkletContainer .clipBoardButton img {
+  width: 19px;
+}
+
+//
+//.settingsPage .bookmarkletContainer #bookmarklet {
+//  text-decoration: none;
+//  color: #444;
+//  //font-size: 2.4rem;
+//  display: flex;
+//  //width: auto;
+//  align-items: center;
+//  width: 9rem;
+//  //outline: 1px solid green;
+//
+//}
+//
+//.settingsPage .bookmarkletContainer #bookmarklet .material-icons {
+//  font-size: 2.4rem;
+//}
+//
+//
+//.settingsPage .bookmarkletContainer .settingDetail {
+//  margin-top: 0.3rem;
+//}
 
 
 .settingsPage #formPlateFontHack {

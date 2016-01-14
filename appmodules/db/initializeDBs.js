@@ -38,9 +38,9 @@ function initializeDBs(app){
            */
           var doc = {
             _id: 'appSettingsDoc',
-            pagesDBFilePath: path.join('db', 'pages', 'pages'),
             JWTsecret: Crypto.randomBytes(128).toString('hex'),
             markSearchSettings: {
+              pagesDBFilePath: path.join('db', 'pages', 'pages'),
               defaultToSearchLoose: true,
               prebrowsing: true
             }
@@ -61,17 +61,17 @@ function initializeDBs(app){
          * not exist, it is created.
          * https://nodejs.org/api/path.html#path_path_dirname_p
          */
-        return fsExtra.ensureDirAsync(path.dirname(appSettingsDoc.pagesDBFilePath))
+        return fsExtra.ensureDirAsync(path.dirname(appSettingsDoc.markSearchSettings.pagesDBFilePath))
       })
       .then( appSettingsDoc =>{
-        var pagesDB = new PouchDB(appSettingsDoc.pagesDBFilePath)
+        var pagesDB = new PouchDB(appSettingsDoc.markSearchSettings.pagesDBFilePath)
         /****
          * In development, replicate to couchDB so can use couchDB interface to check database data
          */
         if(app.get('env') === 'development'){
-          //PouchDB.replicate(appSettingsDoc.pagesDBFilePath, 'http://localhost:5984/marksearch_pages', {live: true})
+          //PouchDB.replicate(appSettingsDoc.markSearchSettings.pagesDBFilePath, 'http://localhost:5984/marksearch_pages', {live: true})
           //Using syc so can use couchdb web interface if need to alter database data
-          PouchDB.sync(appSettingsDoc.pagesDBFilePath, 'http://localhost:5984/marksearch_pages')
+          PouchDB.sync(appSettingsDoc.markSearchSettings.pagesDBFilePath, 'http://localhost:5984/marksearch_pages')
         }
         return [pagesDB, appSettingsDoc]
       })

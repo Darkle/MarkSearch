@@ -974,12 +974,31 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 .settingsPage .settings {
   margin-top: 1.3rem;
   width: 31rem;
-  outline: 1px solid green;
   margin-left: auto;
   margin-right: auto;
 }
 .settingsPage .settings > div {
-  margin-bottom: 2rem;
+  margin-bottom: 1.6rem;
+  padding-bottom: 1rem;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #77BBEB;
+}
+.settingsPage .settings .settingDetail {
+  font-size: 0.7rem;
+  padding: 0 1rem;
+  width: 30rem;
+}
+.settingsPage .settingDetail a {
+  text-decoration: none;
+  color: #3498DB;
+}
+.settingsPage .settingDetail a:hover {
+  color: #2670A2;
+  text-decoration: none;
+}
+.settingsPage .settings .formplate label {
+  font-size: 1rem;
 }
 .settingsPage .settings .formplate .formplate-checkbox.checked:before {
   position: absolute;
@@ -1000,11 +1019,6 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
       -ms-flex-direction: column;
           flex-direction: column;
 }
-.settingsPage .prebrowsingSettingContainer .settingDetail {
-  font-size: 0.65rem;
-  padding: 0 1rem;
-  width: 30rem;
-}
 .settingsPage .genTokenOuterContainer {
   display: -webkit-box;
   display: -webkit-flex;
@@ -1016,14 +1030,11 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
       -ms-flex-direction: column;
           flex-direction: column;
 }
-.settingsPage .genTokenOuterContainer #tokenText {
+.settingsPage .genTokenOuterContainer #browserAddonTokenButton {
+  font-size: 0.8rem;
   border-radius: 0;
-  font-size: 16px;
 }
 .settingsPage .genTokenOuterContainer .settingDetail {
-  font-size: 0.65rem;
-  padding: 0 1rem;
-  width: 30rem;
   margin-top: 0.5rem;
 }
 .settingsPage .genTokenContainer {
@@ -1056,7 +1067,58 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   display: -ms-flexbox;
   display: flex;
 }
-.settingsPage .genTokenContainer #clipBoardButton img {
+.settingsPage .genTokenContainer .clipBoardButton img {
+  width: 19px;
+}
+.settingsPage .bookmarkletContainer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.settingsPage .bookmarkletContainer #bookmarkletButton {
+  font-size: 0.8rem;
+  border-radius: 0;
+}
+.settingsPage .bookmarkletContainer .settingDetail {
+  margin-top: 0.5rem;
+}
+.settingsPage .bookmarkletContainer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.settingsPage .bookmarkletContainer .formplate {
+  margin-left: 0.6rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.settingsPage .bookmarkletContainer .formplate input[type="text"] {
+  margin-bottom: 0;
+}
+.settingsPage .bookmarkletContainer .button {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.settingsPage .bookmarkletContainer .clipBoardButton img {
   width: 19px;
 }
 .settingsPage #formPlateFontHack {

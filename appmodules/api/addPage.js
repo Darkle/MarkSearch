@@ -10,8 +10,13 @@ var debug = require('debug')('MarkSearch:addPage')
 var save2db = require(path.join('..', 'db', 'save2db'))
 var archiveUrl = require(path.join('..', 'archive.is'))
 var safeBrowsingCheck = require(path.join('..', 'safeBrowsing'))
+var collapseWhiteSpace = require(path.join('..', 'collapseWhiteSpace'))
 
 function addPage(req, res, next) {
+  var pageUrl = req.params.pageUrl
+  var pageTitle = collapseWhiteSpace(req.body.pageTitle)
+  var pageText = collapseWhiteSpace(req.body.pageText)
+  var pageDescription = collapseWhiteSpace(req.body.pageDescription)
   debug('addPage running')
   /******
    *  When saving a page, we’re saving:
@@ -25,22 +30,22 @@ function addPage(req, res, next) {
    ******/
     //do some validation on this
     //console.log('hello colors test'.red);
-  debug(req.params.pageUrl)
+  debug(pageUrl)
   debug(req.body)
   debug('url domain')
   /****
-   * Parse the params.pageUrl string into a url and then get the domain from that url
+   * Parse the pageUrl string into a url and then get the domain from that url
    * and remove any subdomains
    */
-  var pageUrlHostname = url.parse(req.params.pageUrl).hostname
+  var pageUrlHostname = url.parse(pageUrl).hostname
   var domain = domainParser(pageUrlHostname).domainName
   debug('tld.getDomain')
   debug(domain)
   var pageDoc = {
-    _id: req.params.pageUrl,
-    pageTitle: req.body.pageTitle,
-    pageText: req.body.pageText,
-    pageDescription: req.body.pageDescription,
+    _id: pageUrl,
+    pageTitle: pageTitle,
+    pageText: pageText,
+    pageDescription: pageDescription,
     pageDomain: domain,
     dateCreated: Date.now(),
     archiveLink: null,

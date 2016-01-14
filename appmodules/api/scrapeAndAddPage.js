@@ -28,15 +28,22 @@ var addPage = require(path.join(__dirname, 'addPage'))
  *
  */
 /*****
- * Note some pages have <meta name="Description" content=""> - description with D as uppercase, so account for uppercase
- * maybe do document.querySelector('meta[name="description"], meta[name="Description"], meta[name="DESCRIPTION"]')
+ * Note some pages have <meta name="Description" content=""> - description with D as uppercase,
+ * so account for uppercase maybe do document.querySelector('meta[name="description"],
+ * meta[name="Description"], meta[name="DESCRIPTION"]')
  * also check the source on http://www.tor.com/ - no <title> and meta[] are prefixed
  * To get started: https://gist.github.com/d6e3a1d75ad936685a1d
+ */
+/****
+ * Dont need to collapse whitespace here as doing that in addPage.js
  */
 /****
  *  https://github.com/ageitgey/node-unfluff - this is new, have a look at it, havent tried it yet
  *  https://github.com/ageitgey/node-unfluff/blob/master/src/extractor.coffee - makes a good point about
  *  title is sometimes not the title element
+ *
+ *  https://github.com/ageitgey/node-unfluff/blob/master/src/extractor.coffee#L150 - this is interesting,
+ *  using stopwords to check against and find a good snippet of text
  */
 /*****
  * Also, when saving pageText either from scraping or from extension, put reminders (in both
@@ -48,6 +55,11 @@ var addPage = require(path.join(__dirname, 'addPage'))
  * Remember to collapse whitespace: https://github.com/jprichardson/string.js/blob/master/dist/string.js#L191
  * http://stringjs.com/#methods/collapsewhitespace - also do it for the title and description
  * Does this also get rid of \n?
+ */
+/****
+ * Check the resources here (down bottom) on innerText
+  * http://caniuse.com/#feat=innertext
+ * And also this post: http://perfectionkills.com/the-poor-misunderstood-innerText/
  */
 function scrapeAndAddPage(req, res, next) {
   debug('scrapeAndAddPage running')
@@ -75,7 +87,7 @@ function scrapeAndAddPage(req, res, next) {
    *   Remember to grab the page description as well as the title and innerText
    *   (in scrape remember to account for if there is no description meta element and
    *   also if there is no content attribute on that meta element), also if there is not title
-   *   element
+   *   element - have a look at the bookmarklet code too
    *
    */
   /***

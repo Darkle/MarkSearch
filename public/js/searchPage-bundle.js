@@ -36904,7 +36904,7 @@ function chunkResults(rawResults) {
    */
   var chunkAndShownData = {};
   if (rawResults && rawResults.length) {
-    var chunkedResults = _lodash2.default.chunk(rawResults, 20);
+    var chunkedResults = _lodash2.default.chunk(rawResults, 200);
     _lodash2.default.each(chunkedResults, function (resultChunk, index) {
       chunkAndShownData['chunk_' + index] = {
         chunkIndex: index,
@@ -36924,7 +36924,7 @@ exports.chunkResults = chunkResults;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.checkMatchMediaForResultsContainerMarginTop = exports.allFromToIsSet = exports.filterResults = exports.dateFilterResetAll = exports.dateFilterInit = undefined;
+exports.checkMatchMediaForResultsContainerMarginTop = exports.shortCutIsSet = exports.allFromToIsSet = exports.filterResults = exports.dateFilterResetAll = exports.dateFilterInit = undefined;
 
 var _removeResults = require('./removeResults');
 
@@ -37040,6 +37040,10 @@ function checkMatchMediaForResultsContainerMarginTop() {
     marginTop = 84;
   }
   return marginTop;
+}
+
+function shortCutIsSet() {
+  return selectShortcuts$.val() !== ph;
 }
 
 function allFromToIsSet() {
@@ -37251,6 +37255,7 @@ exports.dateFilterInit = dateFilterInit;
 exports.dateFilterResetAll = dateFilterResetAll;
 exports.filterResults = filterResults;
 exports.allFromToIsSet = allFromToIsSet;
+exports.shortCutIsSet = shortCutIsSet;
 exports.checkMatchMediaForResultsContainerMarginTop = checkMatchMediaForResultsContainerMarginTop;
 
 },{"./chunkResults":271,"./removeResults":280,"./renderResults":281,"./resultsObject":283,"./updateResultsCountDiv":289,"lodash":213,"moment":215,"velocity-animate":265}],273:[function(require,module,exports){
@@ -38324,7 +38329,9 @@ function searchPageInit(event) {
    * will grab the lastchange before submit/enter is pressed and get the
    * results anyway
    * For some reason searchForm$.on with lodash debounce doesn't detect
-   * submit event, so doing it here on its own
+   * submit event, so doing it here on its own - could be something to do
+   * with _.debounce only returning a debounced function and not actually
+   * executing the function itself - http://stackoverflow.com/a/24309963/3458681
    */
   searchForm$.on('submit', function (event) {
     event.preventDefault();
@@ -38353,9 +38360,15 @@ function searchPageInit(event) {
       (0, _queryServerAndRender.queryServerAndRender)(searchTerms).then(function () {
         /****
          * If they were searching when they have the date filter displayed
+         * and either the date filter 'From To' is set or the shortcuts
+         * is set, then filter the results by date
          */
         if (dateFilterContainer$.data('isShown') === 'true') {
-          (0, _dateFilter.filterResults)(!(0, _dateFilter.allFromToIsSet)());
+          var sCiSet = (0, _dateFilter.shortCutIsSet)();
+          var aFTiS = (0, _dateFilter.allFromToIsSet)();
+          if (sCiSet || aFTiS) {
+            (0, _dateFilter.filterResults)(sCiSet);
+          }
         }
       }).catch(_searchErrorsHandler.searchErrorHandler);
     }

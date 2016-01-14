@@ -74,6 +74,10 @@ function checkMatchMediaForResultsContainerMarginTop(){
   return marginTop
 }
 
+function shortCutIsSet(){
+  return selectShortcuts$.val() !== ph
+}
+
 function allFromToIsSet(){
   var fromToSelectsAsArr = [
     selectFromMonth$,
@@ -296,4 +300,4 @@ function dateFilterInit(){
 /****
  * Exports
  */
-export { dateFilterInit, dateFilterResetAll, filterResults, allFromToIsSet, checkMatchMediaForResultsContainerMarginTop }
+export { dateFilterInit, dateFilterResetAll, filterResults, allFromToIsSet, shortCutIsSet, checkMatchMediaForResultsContainerMarginTop }

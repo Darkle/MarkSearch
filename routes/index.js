@@ -68,14 +68,43 @@ router.get('/settingsPage', (req, res, next) => {
 })
 
 router.post('/settings/update', (req, res, next) => {
-  /****
-   * make sure this is using the CSRF token
-   * so with this we are changing the appDB.markSearchSettings
-   * remember to save appDB changes back to disk - do i need to do this? does nedb
-   * do this automatically? doubel check - AND also update the app.set('appSettings'
-   */
-  console.log("settings/update page")
 
+  console.log("settings/update page")
+  console.log(req.body)
+
+  var appDB = req.app.get('appDB')
+  var reqBody = req.body
+
+  //TODO - validation goes here
+
+  ;( (reqBody) => {
+    appDB.updateAsync(
+        {
+          _id: 'appSettingsDoc'
+        },
+        {
+          $set: {
+            [`markSearchSettings.${reqBody.settingKey}`] : reqBody.settingValue
+          }
+        }
+    )
+    .then( numberUpdated => appDB.findOneAsync({_id: 'appSettingsDoc'}))
+    .then( appSettingsDoc => {
+      appDB.persistence.compactDatafile()
+      req.app.set('appSettings', appSettingsDoc)
+      res.status(200).end()
+    })
+    .catch( err => {
+      console.error(err)
+      res.status(500).send(JSON.stringify(err.message))
+    })
+  })(reqBody)
+
+})
+
+router.post('/settings/changePagesDBlocation', (req, res, next) => {
+
+  //TODO - validation goes here
 
 })
 
@@ -96,7 +125,13 @@ router.post('/settings/generateJWTExtensionToken', (req, res, next) => {
 
 router.post('/settings/generateJWTBookmarkletToken', (req, res, next) => {
   console.log("settings/generateJWTBookmarkletToken")
-  //remember to add a random number to the sub, say {client: “bookmarklet_21312”}
+  var token = jwt.sign(
+      {
+        client: `bookmarklet_${parseInt((Math.random() * 100), 10)}`
+      },
+      req.app.get('JWTsecret')
+  )
+  res.json({token: token})
 })
 
 module.exports = router

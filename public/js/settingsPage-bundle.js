@@ -14451,7 +14451,21 @@ function extend() {
 },{}],256:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function generateBookmarkletJS(locationHostAndProtocol, token) {
+  return '\n      (function(){\n\n      var form = document.createElement(\'form\');\n      form.setAttribute(\'style\', \'display: none !important;\');\n      form.setAttribute(\'method\', \'POST\');\n      form.setAttribute(\'acceptCharset\', \'utf8\');\n      form.setAttribute(\'enctype\', \'multipart/form-data\');\n      //dynamically set by MarkSearch settings page\n      form.setAttribute(\'action\', \'' + locationHostAndProtocol + '/api/add/\'+encodeURIComponent(window.location));\n\n      var jwtInput = document.createElement(\'input\');\n      jwtInput.setAttribute(\'type\', \'text\');\n      jwtInput.setAttribute(\'name\', \'JWT\');\n      //dynamically set by MarkSearch settings page\n      jwtInput.value = ' + token + ';\n      form.appendChild(jwtInput);\n\n      var pageTitleInput = document.createElement(\'input\');\n      pageTitleInput.setAttribute(\'type\', \'text\');\n      pageTitleInput.setAttribute(\'name\', \'pageTitle\');\n      var titleElem = document.querySelector(\'head meta[property="og:title"], head title\');\n      pageTitleInput.value = \'\';\n      if(titleElem.hasAttribute(\'content\')){\n        pageTitleInput.value = titleElem.getAttribute(\'content\');\n      }\n      else{\n        pageTitleInput.value = titleElem.textContent;\n      }\n      form.appendChild(pageTitleInput);\n\n      var pageTextInput = document.createElement(\'input\');\n      pageTextInput.setAttribute(\'type\', \'text\');\n      pageTextInput.setAttribute(\'name\', \'pageText\');\n      pageTextInput.value = document.body.innerText;\n      form.appendChild(pageTextInput);\n\n      var pageDescriptionInput = document.createElement(\'input\');\n      pageDescriptionInput.setAttribute(\'type\', \'text\');\n      pageDescriptionInput.setAttribute(\'name\', \'pageDescription\');\n      pageDescriptionInput.value = pageTitleInput.value;\n      var descriptionSelectors = \'head meta[name="description"],\'+\n                                  \' head meta[name="Description"],\'+\n                                  \' head meta[name="DESCRIPTION"],\'+\n                                  \' head meta[property="og:description"]\';\n      var descriptionElement = document.querySelector(descriptionSelectors)\n      if(descriptionElement && descriptionElement.hasAttribute(\'content\')){\n        pageDescriptionInput.value = descriptionElement.getAttribute(\'content\');\n      }\n      form.appendChild(pageDescriptionInput);\n\n      document.body.appendChild(form);\n      form.submit();\n      document.body.removeChild(form);\n\n      //create notification div\n      var notificationDiv = document.createElement(\'div\')\n\n\n    })();\n  ';
+}
+
+exports.generateBookmarkletJS = generateBookmarkletJS;
+
+},{}],257:[function(require,module,exports){
+'use strict';
+
 require('babel-polyfill');
+
+var _bookmarkletTemplate = require('./bookmarkletTemplate');
 
 var _got = require('got');
 
@@ -14459,38 +14473,72 @@ var _got2 = _interopRequireDefault(_got);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-$(document).ready(settingsPageInit); //needs to be first
+//needs to be first
+
+var csrfToken;
+
+function saveAndSendSettings(settingKey, settingValue) {
+  markSearchSettings[settingKey] = settingValue;
+  _got2.default.post('/settings/update', {
+    headers: {
+      'X-CSRF-Token': csrfToken,
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify({
+      settingKey: settingKey,
+      settingValue: settingValue
+    })
+  }).catch(function (err) {
+    console.error(err);
+  });
+}
+
+$(document).ready(settingsPageInit);
 
 function settingsPageInit(event) {
   console.log("settingsPage.js ready!");
-  var csrfToken = $('#csrfInput').val();
-  var tokenButton$ = $('#tokenButton');
-  var tokenText$ = $('#tokenText');
-  var prebrowsingSettingContainer$ = $('.prebrowsingSettingContainer');
-
+  csrfToken = $('#csrfInput').val();
   formplate($('body'));
   buttonplate($('.button'));
-  new Clipboard('#clipBoardButton');
+  new Clipboard('.clipBoardButton');
+
+  var locationHostAndProtocol = window.location.protocol + '//' + window.location.host;
 
   /****
-   * formplate moves things around, so grab some elements after its
+   * formplate moves things around, so grab elements after its
    * done its thing
    */
+
   var prebrowsingCheckbox$ = $('#prebrowsingCheckbox');
+  var browserAddonTokenButton$ = $('#browserAddonTokenButton');
+  var browserAddonTokenText$ = $('#browserAddonTokenText');
+  var bookmarkletButton$ = $('#bookmarkletButton');
+  var bookmarkletText$ = $('#bookmarkletText');
 
-  var formplateCheckBoxes$ = $('.settings .formplate-checkbox');
+  /****
+   * If end up implementing searchLoose, remember to change the searchLoose
+   * variable (set_searchingLoose()) as well as the searchLoose value in the
+   * markSearchSettings global object - and also alter code serverSide
+   */
 
-  $('.settings input[type="checkbox"]').change(function (event) {
-    console.log('checkbox change');
-    //$(event.currentTarget).parent().toggleClass('checked')
-  });
-
+  /****
+   * Prebrowsing setting
+   */
+  prebrowsingCheckbox$.data('settingKeyName', 'prebrowsing');
   if (markSearchSettings.prebrowsing) {
     prebrowsingCheckbox$.prop('checked', true);
     prebrowsingCheckbox$.parent().addClass('checked');
   }
+  prebrowsingCheckbox$.change(function (event) {
+    var settingKey = prebrowsingCheckbox$.data('settingKeyName');
+    var settingValue = prebrowsingCheckbox$.prop('checked');
+    saveAndSendSettings(settingKey, settingValue);
+  });
 
-  tokenButton$.click(function (event) {
+  /****
+   * Generate browser addon token
+   */
+  browserAddonTokenButton$.click(function (event) {
     event.preventDefault();
     _got2.default.post('/settings/generateJWTExtensionToken', {
       headers: {
@@ -14498,14 +14546,40 @@ function settingsPageInit(event) {
       }
     }).then(function (response) {
       var responseData = JSON.parse(response.body);
-      tokenText$.val(responseData.token);
+      /****
+       * Include the url of MarkSearch so user doesn't have to copy & past that
+       * into the extension as well
+       */
+      browserAddonTokenText$.val(locationHostAndProtocol + ',' + responseData.token);
     }).catch(function (err) {
       console.error(err);
     });
   });
+
+  /****
+   * Generate bookmarklet
+   */
+  //bookmarkletButton$.click( event => {
+  //  event.preventDefault()
+  //  got.post('/settings/generateJWTBookmarkletToken',
+  //      {
+  //        headers: {
+  //          'X-CSRF-Token': csrfToken
+  //        }
+  //      }
+  //      )
+  //      .then( response => {
+  //        var responseData = JSON.parse(response.body)
+  //        var bookmarkletJS = generateBookmarkletJS(locationHostAndProtocol, responseData.token)
+  //        bookmarkletText$.val(`javascript:${encodeURIComponent(bookmarkletJS)}`)
+  //      })
+  //      .catch( err => {
+  //        console.error(err)
+  //      })
+  //})
 }
 
-},{"babel-polyfill":1,"got":202}]},{},[256])
+},{"./bookmarkletTemplate":256,"babel-polyfill":1,"got":202}]},{},[257])
 
 
 //# sourceMappingURL=settingsPage-bundle.js.map

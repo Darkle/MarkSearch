@@ -17,15 +17,28 @@ block content
           Prebrowsing can make bookmark links load faster when you click on
           them from the search page. (The first result will have "preconnect" applied, while the second
           result will have "dns-prefetch" applied. More info <a target="_blank" href='http://blog.cloudimage.io/2015/10/19/what-is-prebrowsing-and-how-it-can-drastically-improve-your-page-loading-time/'>here</a>)
-      .genTokenContainer
-        a#tokenButton.button.black.square(href="#") Generate Browser Token
-        .formplate
-          input#tokenText.square(type="text", name="tokenText")
-          a#clipBoardButton.button.square(data-clipboard-target="#tokenText")
-            img(src="images/clippy.svg", alt="Copy to clipboard")
-      .settingDetail.
-        This token is used in the MarkSearch browser extension.
+      .genTokenOuterContainer
+        .genTokenContainer
+          a#browserAddonTokenButton.button.black.square(href="#") Generate Browser Token
+          .formplate
+            input#browserAddonTokenText.square(type="text", name="browserAddonTokenText")
+            a.clipBoardButton.button.square(data-clipboard-target="#browserAddonTokenText")
+              img(src="images/clippy.svg", alt="Copy to clipboard")
+        .settingDetail.
+          This token is used in the MarkSearch browser extension. More info info
+          is available on the <a href="/help_about#browserAddon">Help & About Page</a>
+      .dbLocationContainer
+        .currentLocation
+          span Current Database Location
+          span c:/asd
+        .dragAndDrop
 
+        .settingDetail.
+          You can change where your MarkSearch database is stored. This is useful for
+          if you want to have your bookmarks automatically backed up (e.g. putting them in
+          a Dropbox folder). To change where the database is stored, drag the folder where
+          you want the database to reside onto the box above. Note: if you already have a
+          folder named "pages" it will overwrite that folder.
 
 
   #formPlateFontHack.formplate
@@ -40,3 +53,13 @@ block content
     var markSearchSettings = !{markSearchSettings}
   script(src='/js/settingsPage-bundle.js')
 
+//.bookmarkletContainer
+//  .genTokenContainer
+//    a#bookmarkletButton.button.black.square(href="#") Generate Bookmarklet
+//    .formplate
+//      input#bookmarkletText.square(type="text", name="bookmarkletText")
+//      a.clipBoardButton.button.square(data-clipboard-target="#bookmarkletText")
+//        img(src="images/clippy.svg", alt="Copy to clipboard")
+//  .settingDetail.
+//    This javascript is used in the MarkSearch bookmarklet. More info info
+//    is available on the <a href="/help_about#bookmarklet">Help & About Page</a>
