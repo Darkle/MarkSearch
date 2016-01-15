@@ -26,9 +26,11 @@ function initializeDBs(app){
         autoload: true
       }
   )
+  var appSettingsDoc
+  var pagesDB
   return appDB.findOneAsync({_id: 'appSettingsDoc'})
-      .then(appSettingsDoc => {
-        if(!appSettingsDoc){
+      .then(returnedDoc => {
+        if(!returnedDoc){
           console.log('first run')
           /***
            * On first run, save the location where the pages db will be stored.
@@ -40,7 +42,7 @@ function initializeDBs(app){
             _id: 'appSettingsDoc',
             JWTsecret: Crypto.randomBytes(128).toString('hex'),
             markSearchSettings: {
-              pagesDBFilePath: path.join('db', 'pages', 'pages'),
+              pagesDBFilePath: path.join(__dirname, '..', '..', 'db', 'pages', 'pages'),
               defaultToSearchLoose: true,
               prebrowsing: true
             }
@@ -49,10 +51,11 @@ function initializeDBs(app){
         }
         else{
           debug('not first run')
-          return appSettingsDoc
+          return returnedDoc
         }
       })
-      .tap(appSettingsDoc =>{
+      .then( appDoc => {
+        appSettingsDoc = appDoc
         /****
          * Make sure that the parent directory for the pages db exists, because if it doesn't
          * pouchdb wont create it and will fall back to in-memory (i think).
@@ -63,8 +66,8 @@ function initializeDBs(app){
          */
         return fsExtra.ensureDirAsync(path.dirname(appSettingsDoc.markSearchSettings.pagesDBFilePath))
       })
-      .then( appSettingsDoc =>{
-        var pagesDB = new PouchDB(appSettingsDoc.markSearchSettings.pagesDBFilePath)
+      .then(() =>{
+        pagesDB =  new PouchDB(appSettingsDoc.markSearchSettings.pagesDBFilePath)
         /****
          * In development, replicate to couchDB so can use couchDB interface to check database data
          */
@@ -73,23 +76,19 @@ function initializeDBs(app){
           //Using syc so can use couchdb web interface if need to alter database data
           PouchDB.sync(appSettingsDoc.markSearchSettings.pagesDBFilePath, 'http://localhost:5984/marksearch_pages')
         }
-        return [pagesDB, appSettingsDoc]
       })
-      .spread( (pagesDB, appSettingsDoc) =>
-      /****
-       * Build up the index for quick search
-       * https://github.com/nolanlawson/pouchdb-quick-search#building-the-index
-       */
-        [
+      .then(() =>
+        /****
+         * Build up a new quick-search index
+         * https://github.com/nolanlawson/pouchdb-quick-search#building-the-index
+         */
           pagesDB.search({
-            fields: ['pageTitle', 'pageText'],
+            fields: ['pageTitle', 'pageDescription', 'pageText'],
             build: true
-          }),
-          pagesDB,
-          appSettingsDoc
-        ]
+          })
       )
-      .spread((pouchdbFindIndex, pagesDB, appSettingsDoc) =>{
+      .then(() => {
+        debug('finished building index')
         /****
          * Return appSettingsDoc, appDB and pagesDB so can use app.set() in app.js
          * to make them available elsewhere.

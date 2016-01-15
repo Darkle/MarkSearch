@@ -164,27 +164,51 @@
   width: 19px;
 }
 
-//
-//.settingsPage .bookmarkletContainer #bookmarklet {
-//  text-decoration: none;
-//  color: #444;
-//  //font-size: 2.4rem;
-//  display: flex;
-//  //width: auto;
-//  align-items: center;
-//  width: 9rem;
-//  //outline: 1px solid green;
-//
-//}
-//
-//.settingsPage .bookmarkletContainer #bookmarklet .material-icons {
-//  font-size: 2.4rem;
-//}
-//
-//
-//.settingsPage .bookmarkletContainer .settingDetail {
-//  margin-top: 0.3rem;
-//}
+.settingsPage .dbLocationContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsPage .dbLocationContainer .currentLocation {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsPage .dbLocationContainer .currentLocation .locationText {
+  display: flex;
+  color: #92C8EF;
+  font-size: 0.9rem;
+  padding: 0 1rem;
+  justify-content: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.settingsPage .dbLocationContainer #dragAndDropContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.settingsPage .dbLocationContainer #dragAndDropContainer #dragAndDrop {
+  border: 10px dashed #ccc;
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 12rem;
+  height: 12rem;
+  color: #ccc;
+}
+
+
+.settingsPage .dbLocationContainer #dragAndDropContainer #dragAndDrop.dragHover {
+  border: 10px dashed #A3A3A3;
+  //border: 10px dashed red;
+  color: white;
+}
+
+
 
 
 .settingsPage #formPlateFontHack {

@@ -3,6 +3,7 @@
 import velocity from 'velocity-animate'
 import suspend from 'suspend'
 import got from 'got'
+import _ from 'lodash'
 
 import { csrfToken } from './searchPage'
 import { searchErrorHandler } from './searchErrorsHandler'
@@ -116,80 +117,90 @@ function addUrlsInit(){
   })
   addUrlsProgress$ = $('.addUrlsProgress')
   progressInfo$ = $('.progressInfo', addPageUrlsDiv$)
-  $('.urlSaveButton').click(event => {
-    /****
-     * Grab all the text in the textarea, then split them into an array
-     * and check that it's not an empty string
-     */
-    var textAreaText = addUrlsTextArea$.val()
-    var linesOfTextArray = textAreaText.split(/\r?\n/)
-    var trimmedUrlsArray = linesOfTextArray.filter(lineOfText => $.trim(lineOfText).length)
-    if(trimmedUrlsArray.length < 1) {
-      return
+  /****
+   * Throttle in case they accidentally double click/tap
+   */
+  $('.urlSaveButton').click(_.throttle(
+    () => {
+      /****
+       * Grab all the text in the textarea, then split them into an array
+       * and check that it's not an empty string
+       */
+      var textAreaText = addUrlsTextArea$.val()
+      var linesOfTextArray = textAreaText.split(/\r?\n/)
+      var trimmedUrlsArray = linesOfTextArray.filter(lineOfText => $.trim(lineOfText).length)
+      if(trimmedUrlsArray.length < 1) {
+        return
+      }
+      //addUrlsProgress$.height(addPageButtonsContainer$.height())
+      addUrlsTextArea$.toggleClass('hide')
+      addUrlsTextArea$.val('')
+      progressInfo$.height(textAreaHeight)
+      progressInfo$.toggleClass('hide')
+      addPageButtonsContainer$.toggleClass('hide')
+      addUrlsProgress$.toggleClass('hide')
+      progressBar$.removeClass('hide')
+      var progressBarContainerWidth = addUrlsProgress$.width()
+      var progressStepAmount = progressBarContainerWidth/trimmedUrlsArray.length
+      /****
+       * Add a little bit of progress (about a quarter of the first step)
+       * to show the user that it has started
+       * http://julian.com/research/velocity/#easing
+       * http://easings.net/
+       */
+      $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*0.25)}, 3000, 'easeOutExpo')
+      suspend(function*() {
+        var error
+        var urlsThatErrored = []
+        for(var i = 0; i < trimmedUrlsArray.length; i++) {
+          progressInfo$.text(`Saving ${trimmedUrlsArray[i]}`)
+          var encodedUrl = encodeURIComponent(trimmedUrlsArray[i])
+          try{
+            var result = yield got.post(`/indexPage_scrapeAndAdd/${encodedUrl}`, {headers: {'X-CSRF-Token': csrfToken}})
+          }
+          catch(err){
+            console.error(err)
+            error = err
+            urlsThatErrored.push(trimmedUrlsArray[i])
+          }
+          $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 1000, 'easeOutSine')
+        }
+        var readTime = 2500
+        if(error){
+          progressBar$.velocity("stop")
+          progressBar$.width(progressBarContainerWidth)
+          progressInfo$.text(``)
+          progressInfo$.css(`overflow-y`, `scroll`)
+          errorOKbutton$.width(progressBarContainerWidth)
+          errorOKbutton$.removeClass('hide')
+          progressBar$.addClass('hide')
+          readTime = 6000
+          var ul$ = $('<ul>')
+          var errorTextBeginning = ``
+          if(urlsThatErrored.length !== trimmedUrlsArray.length){
+            errorTextBeginning = `Most URLs Saved, However `
+          }
+          var il1$ = $(`<li>${errorTextBeginning}Errors Occured While Saving The Following URLs:</li>`).appendTo(ul$)
+          for(var errUrl of urlsThatErrored){
+            $(`<li>${errUrl}</li>`).appendTo(ul$)
+          }
+          progressInfo$.append(ul$)
+        }
+        else{
+          $.Velocity.animate(progressBar$[0], {width: progressBarContainerWidth}, 10, 'easeOutExpo')
+          progressInfo$.text(`All URLs Saved`)
+          window.setTimeout(ev => {
+            hideShowAddPageSubbar(true)
+          }, 2500)
+        }
+      })()
+    },
+    3000,
+    {
+      'leading': true,
+      'trailing': false
     }
-    //addUrlsProgress$.height(addPageButtonsContainer$.height())
-    addUrlsTextArea$.toggleClass('hide')
-    addUrlsTextArea$.val('')
-    progressInfo$.height(textAreaHeight)
-    progressInfo$.toggleClass('hide')
-    addPageButtonsContainer$.toggleClass('hide')
-    addUrlsProgress$.toggleClass('hide')
-    progressBar$.removeClass('hide')
-    var progressBarContainerWidth = addUrlsProgress$.width()
-    var progressStepAmount = progressBarContainerWidth/trimmedUrlsArray.length
-    /****
-     * Add a little bit of progress (about a quarter of the first step)
-     * to show the user that it has started
-     * http://julian.com/research/velocity/#easing
-     * http://easings.net/
-     */
-    $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*0.25)}, 3000, 'easeOutExpo')
-    suspend(function*() {
-      var error
-      var urlsThatErrored = []
-      for(var i = 0; i < trimmedUrlsArray.length; i++) {
-        progressInfo$.text(`Saving ${trimmedUrlsArray[i]}`)
-        var encodedUrl = encodeURIComponent(trimmedUrlsArray[i])
-        try{
-          var result = yield got.post(`/indexPage_scrapeAndAdd/${encodedUrl}`, {headers: {'X-CSRF-Token': csrfToken}})
-        }
-        catch(err){
-          console.error(err)
-          error = err
-          urlsThatErrored.push(trimmedUrlsArray[i])
-        }
-        $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 1000, 'easeOutSine')
-      }
-      var readTime = 2500
-      if(error){
-        progressBar$.velocity("stop")
-        progressBar$.width(progressBarContainerWidth)
-        progressInfo$.text(``)
-        progressInfo$.css(`overflow-y`, `scroll`)
-        errorOKbutton$.width(progressBarContainerWidth)
-        errorOKbutton$.removeClass('hide')
-        progressBar$.addClass('hide')
-        readTime = 6000
-        var ul$ = $('<ul>')
-        var errorTextBeginning = ``
-        if(urlsThatErrored.length !== trimmedUrlsArray.length){
-          errorTextBeginning = `Most URLs Saved, However `
-        }
-        var il1$ = $(`<li>${errorTextBeginning}Errors Occured While Saving The Following URLs:</li>`).appendTo(ul$)
-        for(var errUrl of urlsThatErrored){
-          $(`<li>${errUrl}</li>`).appendTo(ul$)
-        }
-        progressInfo$.append(ul$)
-      }
-      else{
-        $.Velocity.animate(progressBar$[0], {width: progressBarContainerWidth}, 10, 'easeOutExpo')
-        progressInfo$.text(`All URLs Saved`)
-        window.setTimeout(ev => {
-          hideShowAddPageSubbar(true)
-        }, 2500)
-      }
-    })()
-  })
+  ))
   errorOKbutton$.click(event => {
     hideShowAddPageSubbar(true)
   })

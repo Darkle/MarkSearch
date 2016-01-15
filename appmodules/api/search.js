@@ -66,9 +66,7 @@ function search(req, res, next){
    * [ 'jupiter' ],
    * [ 'saturn' ] ]
    */
-    stCombinations = combs(searchTermsArr).sort( (term1, term2) =>
-        term2.length - term1.length
-    )
+    stCombinations = _.sortBy(combs(searchTermsArr), term => -term.length)
   }
   debug('stCombinations ==========+++++++==========')
   debug(stCombinations)
@@ -85,10 +83,12 @@ function search(req, res, next){
         }).then( documents => {
           /****
            * filter to domain & sort them so most recent first
+           * Using lodash filter/sort here as its a bit faster than native filter/sort
            */
-          documents.rows = documents.rows
-              .filter(document => document.doc.pageDomain === domainToSearchFor)
-              .sort((d1, d2) => d2.doc.dateCreated - d1.doc.dateCreated)
+          documents.rows = _.filter(documents.rows, document =>
+              document.doc.pageDomain === domainToSearchFor
+          )
+          documents.rows = _.sortBy(documents.rows, document => -document.doc.dateCreated)
           return documents
         })
     )
@@ -111,9 +111,27 @@ function search(req, res, next){
        * If searching by domain when have search terms, add a filter to the search.
        */
       if(domainToSearchFor && stCombinations.length){
-        searchDetails.filter = (doc) => doc.pageDomain === domainToSearchFor
+        /****
+         * Do this with native methods when this is fixed: http://bit.ly/1PeGJAV
+         * So for the moment, filter it myself
+         * So if change it back to native,
+         * remember it looks like this: http://bit.ly/1PeH72p (no else statement)
+         */
+        //searchDetails.filter = (doc) => doc.pageDomain === domainToSearchFor
+        return db.search(searchDetails)
+            .then(documents => {
+              /****
+               * filter to domain
+               */
+              documents.rows = _.filter(documents.rows, document =>
+                  document.doc.pageDomain === domainToSearchFor
+              )
+              return documents
+            })
       }
-      return db.search(searchDetails)
+      else{
+        return db.search(searchDetails)
+      }
     })
   }
   /****

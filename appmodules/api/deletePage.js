@@ -18,15 +18,12 @@ function deletePage(req, res, next) {
         console.log("removed page from db")
         res.status(200).json({pageDeleted: result.id})
       })
-      .then( result => {
+      .then( result =>
         /****
-         * Re-build search index
+         * update the quick-search index
          */
-        return db.search({
-          fields: ['pageTitle', 'pageText', 'pageDomain'],
-          build: true
-        })
-      })
+        db.search({fields: ['pageTitle', 'pageDescription', 'pageText'], build: true})
+      )
       .then(() => {
         debug('Re-built search index afted page delete')
       })

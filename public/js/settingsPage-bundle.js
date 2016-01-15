@@ -14514,6 +14514,8 @@ function settingsPageInit(event) {
   var browserAddonTokenText$ = $('#browserAddonTokenText');
   var bookmarkletButton$ = $('#bookmarkletButton');
   var bookmarkletText$ = $('#bookmarkletText');
+  var dbLocationText$ = $('.dbLocationContainer .locationText');
+  var dragAndDropDiv$ = $('#dragAndDrop');
 
   /****
    * If end up implementing searchLoose, remember to change the searchLoose
@@ -14555,6 +14557,11 @@ function settingsPageInit(event) {
       console.error(err);
     });
   });
+
+  /****
+   * Current Database Location
+   */
+  dbLocationText$.text(markSearchSettings.pagesDBFilePath);
 
   /****
    * Generate bookmarklet

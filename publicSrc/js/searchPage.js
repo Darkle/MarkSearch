@@ -219,7 +219,7 @@ function searchPageInit(event){
   //gooseInit()
   addUrlsInit()
   dateFilterInit()
-  settingsSubbarInit()
+  //settingsSubbarInit()
 }
 /****
  * Exports

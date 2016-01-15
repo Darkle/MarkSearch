@@ -16,10 +16,9 @@ function getAllPages(req, res, next) {
   }).then( documents => {
     /****
      * sort them so most recent first
+     * Using lodash sort here as its a bit faster than native sort
      */
-    documents.rows.sort( (d1, d2) =>
-        d2.doc.dateCreated - d1.doc.dateCreated
-    )
+    documents.rows = _.sortBy(documents.rows, document => -document.doc.dateCreated)
     res.json(documents)
   }).catch( err => {
     console.error(err)

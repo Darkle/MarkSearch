@@ -36544,6 +36544,10 @@ var _got = require('got');
 
 var _got2 = _interopRequireDefault(_got);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _searchPage = require('./searchPage');
 
 var _searchErrorsHandler = require('./searchErrorsHandler');
@@ -36659,7 +36663,10 @@ function addUrlsInit() {
   });
   addUrlsProgress$ = $('.addUrlsProgress');
   progressInfo$ = $('.progressInfo', addPageUrlsDiv$);
-  $('.urlSaveButton').click(function (event) {
+  /****
+   * Throttle in case they accidentally double click/tap
+   */
+  $('.urlSaveButton').click(_lodash2.default.throttle(function () {
     /****
      * Grab all the text in the textarea, then split them into an array
      * and check that it's not an empty string
@@ -36817,7 +36824,10 @@ function addUrlsInit() {
         }
       }, _callee, this, [[5, 11], [37, 41, 45, 53], [46,, 48, 52]]);
     }))();
-  });
+  }, 3000, {
+    'leading': true,
+    'trailing': false
+  }));
   errorOKbutton$.click(function (event) {
     hideShowAddPageSubbar(true);
   });
@@ -36827,7 +36837,7 @@ function addUrlsInit() {
  */
 exports.addUrlsInit = addUrlsInit;
 
-},{"./dateFilter":272,"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"./searchPage":286,"got":203,"suspend":257,"velocity-animate":265}],269:[function(require,module,exports){
+},{"./dateFilter":272,"./queryServerAndRender":279,"./removeResults":280,"./searchErrorsHandler":285,"./searchPage":286,"got":203,"lodash":213,"suspend":257,"velocity-animate":265}],269:[function(require,module,exports){
 'use strict';
 /****
  * Hear me out Bro! We're not aiming for perfection here, just trying to have the search
@@ -37199,7 +37209,7 @@ function dateFilterInit() {
   /****
    * 2016 - year MarkSearch was released, so don't need any earlier
    */
-  var msReleaseDate = 2000;
+  var msReleaseDate = 2016;
   var numYearsToInclude = currentYear - msReleaseDate + 1;
 
   _lodash2.default.times(numYearsToInclude, function (index) {
@@ -38264,6 +38274,8 @@ $(document).ready(searchPageInit);
 function searchPageInit(event) {
   var searchInput$ = $('#searchInput');
   exports.
+  //settingsSubbarInit()
+
   /****
    * Exports
    */
@@ -38419,7 +38431,6 @@ function searchPageInit(event) {
   //gooseInit()
   (0, _addUrls.addUrlsInit)();
   (0, _dateFilter.dateFilterInit)();
-  (0, _settingsSubbar.settingsSubbarInit)();
 }exports.csrfToken = csrfToken;
 exports.resultsCountDiv$ = resultsCountDiv$;
 exports.resultsContainer$ = resultsContainer$;

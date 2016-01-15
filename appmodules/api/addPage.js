@@ -76,13 +76,13 @@ function addPage(req, res, next) {
          *****/
         res.status(pageDocAndHttpStatus.httpStatusCode).end()
         /****
-         * re-build index so it's available for search straight away.
-         * note: there will only ever be one user connecting, so there shouldn't be any
+         * update the quick-search index
+         * note: there will likely only ever be one user connecting, so there shouldn't be any
          * performance issues with re-building index straight away after each save
          */
         return [
           pageDocAndHttpStatus.returnedDoc,
-          db.search({fields: ['pageTitle', 'pageText', 'pageDomain'], build: true})
+          db.search({fields: ['pageTitle', 'pageDescription', 'pageText'], build: true})
         ]
       })
       /****
