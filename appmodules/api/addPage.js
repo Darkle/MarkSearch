@@ -62,7 +62,7 @@ function addPage(req, res, next) {
    * available to search straight away, as the archiveURL and the safeBrowsing
    * details rely on a request to a third party server and could end up taking a
    * while (e.g. could take up to 10 seconds for a server to respond), the extra
-   * stuff of the archive url and the safe browsing details is not as important
+   * stuff of the archive url and the safe browsing details are not as important
    * and can be added to the page details and resaved later in the second save to db
    */
   save2db(db, pageDoc)

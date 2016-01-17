@@ -61,6 +61,9 @@ var addPage = require(path.join(__dirname, 'addPage'))
   * http://caniuse.com/#feat=innertext
  * And also this post: http://perfectionkills.com/the-poor-misunderstood-innerText/
  */
+/****
+ * If need https://github.com/prettydiff/getNodesByType
+ */
 function scrapeAndAddPage(req, res, next) {
   debug('scrapeAndAddPage running')
   debug(req.params.pageUrl)

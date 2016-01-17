@@ -15,28 +15,8 @@ var authenticationCheck = require(path.join(__dirname, 'authenticationCheck'))
 var routes = require(path.join(__dirname, '..', 'routes', 'index'))
 var api = require(path.join(__dirname, '..', 'routes', 'api'))
 
-function expressInit(app, express, databasesAndAppSettings){
+function expressInit(app, express){
   app.use(compression())
-  /****
-   * Make the databases available to wherever app is available:
-   * http://expressjs.com/api.html#app.set
-   * http://expressjs.com/api.html#req.app
-   * Also add JWTsecret to app.set() for convenience (it's basically a constant and wont
-   * change).
-   */
-  /****
-   * app.set('pagesDB' is a reference to the leveldb pagesDB database
-   */
-  app.set('pagesDB', databasesAndAppSettings.pagesDB)
-  /****
-   * app.set('appDB' is a reference to the nedb appDB database
-   */
-  app.set('appDB', databasesAndAppSettings.appDB)
-  /****
-   * app.set('appSettings' is a reference to the app settings document in the appDB database
-   */
-  app.set('appSettings', databasesAndAppSettings.appSettings)
-  app.set('JWTsecret', databasesAndAppSettings.appSettings.JWTsecret)
   app.set('views', path.join(__dirname, '..', 'views'))
   app.set('view engine', 'jade')
   // uncomment after placing your favicon in /public

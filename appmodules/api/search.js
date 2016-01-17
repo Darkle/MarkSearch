@@ -6,17 +6,6 @@ var _ = require('lodash')
 var debug = require('debug')('MarkSearch:search')
 var combs = require('combs')
 
-
-/****
- * TODO: figure out how to only have this in dev - if ask on stack overflow,
- * note that yes it has been asked before, but that was with earlier versions of express,
- * before the express.Router() method became available
- * - one way to do this might be to add the dev env status to the app.locals, so something
- * like app.locals.dev = true
- * or i could attach it to the req. is there a req.locals?
- */
-var util = require('util')
-
 const STOPWORDS = require(path.join('..', 'lunrStopwordFilter.json'))
 
 function search(req, res, next){
@@ -141,7 +130,7 @@ function search(req, res, next){
    *
    * Promise.all returns an array (resultsObjectsArray) of results objects, each
    * results object in the resultsObjectsArray array contains an array of "database
-   * query results" - (resultsObjectsArray looks like this: http://git.io/vCs3K)
+   * query results" - (resultsObjectsArray looks like this: http://bit.ly/1Q6spO9)
    */
   Promise.all(dbSearchPromiseRequests)
       .then( resultsObjectsArray => {
@@ -169,7 +158,6 @@ function search(req, res, next){
            * Remove any duplicates.
            */
           finalResults = _.uniq(flattenedResultsArr, row => row.doc._id)
-          //finalResults = _.union(flattenedResultsArr)
         }
         /****
          * return the result to the express response as json

@@ -69,12 +69,19 @@ function initializeDBs(app){
       .then(() =>{
         pagesDB =  new PouchDB(appSettingsDoc.markSearchSettings.pagesDBFilePath)
         /****
-         * In development, replicate to couchDB so can use couchDB interface to check database data
+         * In development, replicate to couchDB so can use couchDB interface to check/alter database data
          */
         if(app.get('env') === 'development'){
           //PouchDB.replicate(appSettingsDoc.markSearchSettings.pagesDBFilePath, 'http://localhost:5984/marksearch_pages', {live: true})
           //Using syc so can use couchdb web interface if need to alter database data
-          PouchDB.sync(appSettingsDoc.markSearchSettings.pagesDBFilePath, 'http://localhost:5984/marksearch_pages')
+          PouchDB.sync(
+              appSettingsDoc.markSearchSettings.pagesDBFilePath,
+              'http://localhost:5984/marksearch_pages',
+              {
+                live: true,
+                retry: true
+              }
+          )
         }
       })
       .then(() =>
@@ -90,16 +97,23 @@ function initializeDBs(app){
       .then(() => {
         debug('finished building index')
         /****
-         * Return appSettingsDoc, appDB and pagesDB so can use app.set() in app.js
-         * to make them available elsewhere.
+         * Make the databases available to wherever app is available:
+         * http://expressjs.com/api.html#app.set
+         * http://expressjs.com/api.html#req.app
          */
-          return  {
-              appDB: appDB,
-              pagesDB: pagesDB,
-              appSettings: appSettingsDoc
-            }
-          }
-      )
+        /****
+         * app.set('pagesDB' is a reference to the leveldb pagesDB database
+         */
+        app.set('pagesDB', pagesDB)
+        /****
+         * app.set('appDB' is a reference to the nedb appDB database
+         */
+        app.set('appDB', appDB)
+        /****
+         * app.set('appSettings' is a reference to the app settings document in the appDB database
+         */
+        app.set('appSettings', appSettingsDoc)
+      })
 
 }
 

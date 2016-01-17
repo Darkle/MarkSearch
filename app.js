@@ -3,15 +3,14 @@
 var path = require('path')
 
 var express = require('express')
+var app = express()
 
 var initializeDBs = require(path.join(__dirname, 'appmodules', 'db', 'initializeDBs'))
 var expressInit = require(path.join(__dirname, 'appmodules', 'expressInit'))
 
-var app = express()
-
 initializeDBs(app)
-    .then( databasesAndAppSettings => {
-      expressInit(app, express, databasesAndAppSettings)
+    .then(() => {
+      expressInit(app, express)
     })
     .catch(err => {
       console.error(err);
