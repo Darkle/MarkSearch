@@ -24,7 +24,7 @@ function expressInit(app, express){
   //app.use(favicon(path.join(__dirname,'..', 'public', 'favicon.ico')))
   app.use(logger('dev'))
   /****
-   * The api gets sent the HTML text of the page, so in the off chance that it
+   * The api gets sent the text of the page, so in the off chance that it
    * encounters a page with a huge amount of text, increase the size limit that
    * can be sent via post body. (the limit is '100kb')
    * https://github.com/expressjs/body-parser#limit-3

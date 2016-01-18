@@ -21,9 +21,9 @@ function addPage(req, res, next) {
   /******
    *  When saving a page, we’re saving:
    *  URL (as _id) - String - e.g. 'http://popurls.com/'
-   *  pageTitle - String - e.g. 'PopUrls' - taken from document.title
+   *  pageTitle - String
    *  pageText - String
-   *  pageDescription - String - taken from <meta name="description" content="">
+   *  pageDescription - String
    *  dateCreated - Number - e.g. Date.now()
    *  Archive.is link (as archiveLink) - String - e.g. 'https://archive.is/pFvwT'
    *  SafeBrowsing details (as safeBrowsing) - Object - e.g. {safeBrowsing: {possiblyUnsafe: true, details: ‘malware'}}
@@ -77,7 +77,9 @@ function addPage(req, res, next) {
         res.status(pageDocAndHttpStatus.httpStatusCode).end()
         /****
          * update the quick-search index
-         * note: there will likely only ever be one user connecting, so there shouldn't be any
+         * We dont wait for the index to update as they are unlikely to search for text
+         * straight away from the page they just saved.
+         * Note: there will likely only ever be one user connecting, so there shouldn't be any
          * performance issues with re-building index straight away after each save
          */
         return [
