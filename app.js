@@ -17,9 +17,7 @@ var server = new Server(app, serverPort)
 
 server.start()
     .then(() => initializeDBs(app))
-    .then(() => {
-      expressInit(app, express)
-    })
+    .then(() => expressInit(app, express))
     .catch(err => {
       debug(err)
       console.error(err);
