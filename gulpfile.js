@@ -32,8 +32,8 @@ gulp.task('browser-sync', ['b', 'nodemon'], () =>{
   browserSync.init({
     proxy: "localhost:3000",
     files: [
-      'public/**/*.*',
-      'views/*.jade',
+      'frontend/static/**/*.*',
+      'appmodules/server/views/*.jade',
       'app.js',
       'routes/*.js',
       'appmodules/**/*.*'
@@ -59,28 +59,17 @@ gulp.task('nodemon', cb =>
     env: {
       'DEBUG': 'MarkSearch:*'
     },
-    ignore: ['public/**/*.*', 'publicSrc/**/*.*']
+    ignore: ['frontend/static/**/*.*', 'frontend/src/**/*.*']
   }).once('start', cb)
 )
 
 gulp.task('watch', () => {
-  //gulp.watch('publicSrc/css/corpus/*.scss', ['sass'])
-  gulp.watch('publicSrc/css/*.less', ['less'])
-  gulp.watch('publicSrc/js/*.js', ['b'])
+  gulp.watch('frontend/src/css/*.less', ['less'])
+  gulp.watch('frontend/src/js/*.js', ['b'])
 })
 
-//gulp.task('sass', () =>
-//  gulp.src('publicSrc/css/corpus/corpus.scss')
-//      .pipe(sourcemaps.init())
-//      .pipe(sass().on('error', sass.logError))
-//      .pipe(autoprefixer())
-//      .pipe(sourcemaps.write('./'))
-//      .pipe(gulp.dest('public/stylesheets/'))
-//      .pipe(browserSync.stream())
-//)
-
 gulp.task('less', () =>
-  gulp.src('publicSrc/css/styles.less')
+  gulp.src('frontend/src/css/styles.less')
       .pipe(sourcemaps.init())
       .pipe(less().on('error', function(err) {
         gutil.log(err)
@@ -88,7 +77,7 @@ gulp.task('less', () =>
       }))
       .pipe(autoprefixer())
       .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('public/stylesheets/'))
+      .pipe(gulp.dest('frontend/static/stylesheets/'))
       .pipe(browserSync.stream())
 )
 
@@ -98,9 +87,7 @@ gulp.task('less', () =>
  */
 gulp.task('b', () =>{
   var files = [
-    //'publicSrc/js/common.js',
-    'publicSrc/js/searchPage.js',
-    'publicSrc/js/settingsPage.js'
+    'frontend/src/js/searchPage.js'
   ]
   // map them to our stream function
   var tasks = files.map(function(entry){
@@ -129,7 +116,7 @@ gulp.task('b', () =>{
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('public/'))
+        .pipe(gulp.dest('frontend/static/'))
         //.pipe(browserSync.stream())
   })
   // create a merged stream

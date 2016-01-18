@@ -22,7 +22,7 @@ function initializeDBs(app){
    */
   var appDB = new NedbStore(
       {
-        filename: path.join('db', 'app', 'app.db'),
+        filename: path.join(__dirname, '..', '..', 'db', 'app', 'app.db'),
         autoload: true
       }
   )

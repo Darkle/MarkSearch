@@ -8,7 +8,7 @@ var debug = require('debug')('MarkSearch:app')
 var Server = require('hyperbole')
 
 var initializeDBs = require(path.join(__dirname, 'appmodules', 'db', 'initializeDBs'))
-var expressInit = require(path.join(__dirname, 'appmodules', 'expressInit'))
+var expressInit = require(path.join(__dirname, 'appmodules', 'server', 'expressInit'))
 
 var serverPort = '3000'
 app.set('port', serverPort)

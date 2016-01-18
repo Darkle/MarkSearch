@@ -13,12 +13,12 @@ var compression = require('compression')
 var authenticationCheck = require(path.join(__dirname, 'authenticationCheck'))
 var expressErrorMiddleware = require(path.join(__dirname, 'expressErrorMiddleware'))
 
-var routes = require(path.join(__dirname, '..', 'routes', 'index'))
-var api = require(path.join(__dirname, '..', 'routes', 'api'))
+var routes = require(path.join(__dirname, 'routes', 'index'))
+var api = require(path.join(__dirname, 'routes', 'api'))
 
 function expressInit(app, express){
   app.use(compression())
-  app.set('views', path.join(__dirname, '..', 'views'))
+  app.set('views', path.join(__dirname, 'views'))
   app.set('view engine', 'jade')
   // uncomment after placing your favicon in /public
   //app.use(favicon(path.join(__dirname,'..', 'public', 'favicon.ico')))
@@ -33,8 +33,8 @@ function expressInit(app, express){
   app.use(bodyParser.urlencoded({ limit: '1mb', extended: false }))
   app.use(expressValidator())
   app.use(cookieParser())
-  app.use(express.static(path.join(__dirname, '..', 'public')))
-  app.use('/bower_components',  express.static( path.join(__dirname, '..', 'bower_components')))
+  app.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'static')))
+  app.use('/bower_components',  express.static(path.join(__dirname, '..', '..', 'bower_components')))
   /****
    * Routes
    */

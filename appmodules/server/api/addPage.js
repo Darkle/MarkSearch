@@ -7,10 +7,10 @@ var _ = require('lodash')
 var domainParser = require('domain-parser')
 var Promise = require("bluebird")
 var debug = require('debug')('MarkSearch:addPage')
-var save2db = require(path.join('..', 'db', 'save2db'))
+var save2db = require(path.join('..', '..', 'db', 'save2db'))
 var archiveUrl = require(path.join('..', 'archive.is'))
 var safeBrowsingCheck = require(path.join('..', 'safeBrowsing'))
-var collapseWhiteSpace = require(path.join('..', 'collapseWhiteSpace'))
+var collapseWhiteSpace = require(path.join('..', '..', 'collapseWhiteSpace'))
 
 function addPage(req, res, next) {
   var pageUrl = req.params.pageUrl

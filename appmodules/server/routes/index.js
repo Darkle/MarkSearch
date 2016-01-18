@@ -8,7 +8,7 @@ var jwt = require('jsonwebtoken')
 var _ = require('lodash')
 
 var requireDir = require('require-dir')
-var apiModules = requireDir(path.join('..', 'appmodules', 'api'))
+var apiModules = requireDir(path.join('..', 'api'))
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
