@@ -55,7 +55,7 @@ gulp.task('browser-sync', ['b', 'nodemon'], () =>{
 
 gulp.task('nodemon', cb =>
   nodemon({
-    script: 'bin/www',
+    script: 'app.js',
     env: {
       'DEBUG': 'MarkSearch:*'
     },
