@@ -132,7 +132,8 @@ gulp.task('electron', () => {
   var electron = electronConnect.server.create({
     spawnOpt: {
       env: {
-        'DEBUG': 'MarkSearch:*'
+        'DEBUG': 'MarkSearch:*',
+        "NODE_ENV": "development"
       }
     }
   })

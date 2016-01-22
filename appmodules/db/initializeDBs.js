@@ -44,7 +44,7 @@ function initializeDBs(appDataPath, app){
           /***
            * On first run, save the location where the pages db will be stored.
            * Also generate a random secret to be used with the Jason Web Tokens for the
-           * browser extensions.
+           * browser extensions & bookmarklets.
            * http://stackoverflow.com/questions/8855687/ - make it url safe just in case
            */
           var doc = {

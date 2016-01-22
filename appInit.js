@@ -3,11 +3,14 @@
 var path = require('path')
 
 var electron = require('electron')
+var jadeify = require('electron-jade')
+var envs = require('envs')
+
 var app = electron.app
 var BrowserWindow = electron.BrowserWindow
-var jadeify = require('electron-jade')
 var jadeLocals = {
-  appPath: app.getAppPath()
+  appPath: app.getAppPath(),
+  NODE_ENV: JSON.stringify(envs('NODE_ENV'))
 }
 jadeify({pretty: true}, jadeLocals)
 //var mb = require('menubar')
