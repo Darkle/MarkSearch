@@ -150,6 +150,7 @@ function addUrlsInit(){
            * http://easings.net/
            */
           $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*0.25)}, 3000, 'easeOutExpo')
+
           suspend(function*() {
             var error
             var urlsThatErrored = []
@@ -195,6 +196,7 @@ function addUrlsInit(){
               }, 2500)
             }
           })()
+          
         },
         3000,
         {
