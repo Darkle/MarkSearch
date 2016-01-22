@@ -11,7 +11,10 @@ Promise.promisifyAll(NedbStore.prototype)
 var PouchDB = require('pouchdb')
 PouchDB.plugin(require('pouchdb-quick-search'))
 
-function initializeDBs(app){
+function initializeDBs(appDataPath, app){
+  if(!appDataPath || !app){
+    throw Error('appDataPath or app not passed to initializeDBs')
+  }
   /*****
    * Initialize Databases:
    * appDB stores the Marksearch settings as well as the location of the
@@ -20,15 +23,21 @@ function initializeDBs(app){
    *
    * pagesDB stores the bookmarks
    */
-  var appDB = new NedbStore(
-      {
-        filename: path.join(__dirname, '..', '..', 'db', 'app', 'app.db'),
-        autoload: true
-      }
-  )
+  var appDB
   var appSettingsDoc
   var pagesDB
-  return appDB.findOneAsync({_id: 'appSettingsDoc'})
+
+  var appDataDir = path.join(appDataPath, 'MarkSearch', 'db', 'app')
+  /****
+   * Make sure the "appData"/MarkSearch/db/app is there.
+   * http://bit.ly/1QoQm5w
+   */
+  return fsExtra.ensureDirAsync(appDataDir)
+      .then(() => {
+        appDB = new NedbStore({filename: path.join(appDataDir, 'app.db')})
+        return appDB.loadDatabaseAsync()
+      })
+      .then(() => appDB.findOneAsync({_id: 'appSettingsDoc'}))
       .then(returnedDoc => {
         if(!returnedDoc){
           console.log('first run')
@@ -42,7 +51,7 @@ function initializeDBs(app){
             _id: 'appSettingsDoc',
             JWTsecret: Crypto.randomBytes(128).toString('hex'),
             markSearchSettings: {
-              pagesDBFilePath: path.join(__dirname, '..', '..', 'db', 'pages', 'pages'),
+              pagesDBFilePath: path.join(appDataPath, 'MarkSearch', 'db', 'pages', 'pages'),
               defaultToSearchLoose: true,
               prebrowsing: true
             }
@@ -57,23 +66,18 @@ function initializeDBs(app){
       .then( appDoc => {
         appSettingsDoc = appDoc
         /****
-         * Make sure that the parent directory for the pages db exists, because if it doesn't
-         * pouchdb wont create it and will fall back to in-memory (i think).
-         * https://github.com/jprichardson/node-fs-extra#ensuredirdir-callback
-         * ensureDir() Ensures that the directory exists. If the directory structure does
-         * not exist, it is created.
-         * https://nodejs.org/api/path.html#path_path_dirname_p
+         * Make sure the "appData"/MarkSearch/pages/pages is there.
+         * http://bit.ly/1QoQm5w
          */
-        return fsExtra.ensureDirAsync(path.dirname(appSettingsDoc.markSearchSettings.pagesDBFilePath))
+        return fsExtra.ensureDirAsync(appSettingsDoc.markSearchSettings.pagesDBFilePath)
       })
       .then(() =>{
-        pagesDB =  new PouchDB(appSettingsDoc.markSearchSettings.pagesDBFilePath)
+        pagesDB = new PouchDB(appSettingsDoc.markSearchSettings.pagesDBFilePath)
         /****
-         * In development, replicate to couchDB so can use couchDB interface to check/alter database data
+         * In development, replicate to couchDB so can use couchDB interface
+         * to check/alter database data
          */
         if(app.get('env') === 'development'){
-          //PouchDB.replicate(appSettingsDoc.markSearchSettings.pagesDBFilePath, 'http://localhost:5984/marksearch_pages', {live: true})
-          //Using syc so can use couchdb web interface if need to alter database data
           PouchDB.sync(
               appSettingsDoc.markSearchSettings.pagesDBFilePath,
               'http://localhost:5984/marksearch_pages',

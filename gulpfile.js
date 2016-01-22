@@ -8,6 +8,7 @@
 */
 
 var gulp = require('gulp')
+var path = require('path')
 var browserSync = require('browser-sync').create()
 var nodemon = require('gulp-nodemon')
 var sass = require('gulp-sass')
@@ -23,6 +24,8 @@ var less = require('gulp-less')
 var watchify = require('watchify')
 var rename = require('gulp-rename')
 var eventStream = require('event-stream')
+var runElectron = require("gulp-run-electron")
+var electronConnect = require('electron-connect')
 
 
 gulp.task('default', ['browser-sync', 'watch'])
@@ -33,9 +36,8 @@ gulp.task('browser-sync', ['b', 'nodemon'], () =>{
     proxy: "localhost:3000",
     files: [
       'frontend/static/**/*.*',
-      'appmodules/server/views/*.jade',
-      'app.js',
-      'routes/*.js',
+      'appInit.js',
+      'serverInit.js',
       'appmodules/**/*.*'
     ],
     port: 3020,
@@ -54,22 +56,25 @@ gulp.task('browser-sync', ['b', 'nodemon'], () =>{
 })
 
 gulp.task('nodemon', cb =>
+    /***
+     * TODO - Remember I have nodemon set to run electron in nodemon.json
+     */
   nodemon({
-    script: 'app.js',
-    env: {
-      'DEBUG': 'MarkSearch:*'
-    },
-    ignore: ['frontend/static/**/*.*', 'frontend/src/**/*.*']
+    script: 'appInit.js',
+    ignore: [
+      path.join(__dirname, 'frontend', 'static', '**', '*.*'),
+      path.join(__dirname, 'frontend', 'src', '**', '*.*')
+    ]
   }).once('start', cb)
 )
 
 gulp.task('watch', () => {
-  gulp.watch('frontend/src/css/*.less', ['less'])
-  gulp.watch('frontend/src/js/*.js', ['b'])
+  gulp.watch(path.join(__dirname, 'frontend', 'src', 'css', '*.less'), ['less'])
+  gulp.watch(path.join(__dirname, 'frontend', 'src', 'js', '*.js'), ['b'])
 })
 
 gulp.task('less', () =>
-  gulp.src('frontend/src/css/styles.less')
+  gulp.src(path.join(__dirname, 'frontend', 'src', 'css', 'styles.less'))
       .pipe(sourcemaps.init())
       .pipe(less().on('error', function(err) {
         gutil.log(err)
@@ -77,7 +82,7 @@ gulp.task('less', () =>
       }))
       .pipe(autoprefixer())
       .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('frontend/static/stylesheets/'))
+      .pipe(gulp.dest(path.join(__dirname, 'frontend', 'static', 'stylesheets')))
       .pipe(browserSync.stream())
 )
 
@@ -87,7 +92,7 @@ gulp.task('less', () =>
  */
 gulp.task('b', () =>{
   var files = [
-    'frontend/src/js/searchPage.js'
+    path.join(__dirname, 'frontend', 'src', 'js', 'searchPage.js')
   ]
   // map them to our stream function
   var tasks = files.map(function(entry){
@@ -116,12 +121,55 @@ gulp.task('b', () =>{
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('frontend/static/'))
+        .pipe(gulp.dest(path.join(__dirname, 'frontend', 'static')))
         //.pipe(browserSync.stream())
   })
   // create a merged stream
   return eventStream.merge.apply(null, tasks)
 })
+
+gulp.task('electron', () => {
+  var electron = electronConnect.server.create({
+    spawnOpt: {
+      env: {
+        'DEBUG': 'MarkSearch:*'
+      }
+    }
+  })
+  electron.start(() => {
+    /****
+     * Restart browser process
+     */
+    gulp.watch('appInit.js', electron.restart)
+    gulp.watch('serverInit.js', electron.restart)
+    /****
+     * _Reload_ _renderer_ process
+     */
+    gulp.watch(path.join(__dirname, 'appmodules', 'electron', '**', '*.*'), electron.reload)
+  })
+
+})
+
+//gulp.task('electron', () =>{
+//  browserSync.init({
+//    files: [
+//      'appmodules/**/*.*'
+//    ],
+//    server: {
+//      baseDir: "./"
+//    },
+//    port: 3020,
+//    open: false, // Stop the browser from automatically opening
+//    notify: false,
+//    online: false,  //
+//    ghostMode: false  //dont want to mirror clicks, scrolls, forms on all devices
+//  }, (err, bs) => {
+//    gulp.src("./").pipe(runElectron())
+//    gulp.watch("appInit.js", runElectron.rerun)
+//    gulp.watch("initServer.js", runElectron.rerun)
+//  })
+//
+//})
 
 //var scripts = [
 //    'app.js',
