@@ -29,7 +29,7 @@ function initializeDBs(appDataPath, app){
 
   var appDataDir = path.join(appDataPath, 'MarkSearch', 'db', 'app')
   /****
-   * Make sure the "appData"/MarkSearch/db/app folder is there.
+   * Make sure the <appData>/MarkSearch/db/app folder is there.
    * http://bit.ly/1QoQm5w
    */
   return fsExtra.ensureDirAsync(appDataDir)
@@ -66,7 +66,7 @@ function initializeDBs(appDataPath, app){
       .then( appDoc => {
         appSettingsDoc = appDoc
         /****
-         * Make sure the "appData"/MarkSearch/pages/pages folder is there.
+         * Make sure the <appData>/MarkSearch/pages/pages folder is there.
          * http://bit.ly/1QoQm5w
          */
         return fsExtra.ensureDirAsync(appSettingsDoc.markSearchSettings.pagesDBFilePath)
