@@ -11,9 +11,9 @@ Promise.promisifyAll(NedbStore.prototype)
 var PouchDB = require('pouchdb')
 PouchDB.plugin(require('pouchdb-quick-search'))
 
-function initializeDBs(appDataPath, app){
-  if(!appDataPath || !app){
-    throw new Error('appDataPath or app not passed to initializeDBs')
+function initializeDBs(appDataPath, expressApp){
+  if(!appDataPath || !expressApp){
+    throw new Error('appDataPath or expressApp not passed to initializeDBs')
   }
   /*****
    * Initialize Databases:
@@ -77,7 +77,7 @@ function initializeDBs(appDataPath, app){
          * In development, replicate to couchDB so can use couchDB interface
          * to check/alter database data
          */
-        if(app.get('env') === 'development'){
+        if(expressApp.get('env') === 'development'){
           PouchDB.sync(
               appSettingsDoc.markSearchSettings.pagesDBFilePath,
               'http://localhost:5984/marksearch_pages',
@@ -106,17 +106,17 @@ function initializeDBs(appDataPath, app){
          * http://expressjs.com/api.html#req.app
          */
         /****
-         * app.set('pagesDB' is a reference to the leveldb pagesDB database
+         * expressApp.set('pagesDB' is a reference to the leveldb pagesDB database
          */
-        app.set('pagesDB', pagesDB)
+        expressApp.set('pagesDB', pagesDB)
         /****
-         * app.set('appDB' is a reference to the nedb appDB database
+         * expressApp.set('appDB' is a reference to the nedb appDB database
          */
-        app.set('appDB', appDB)
+        expressApp.set('appDB', appDB)
         /****
-         * app.set('appSettings' is a reference to the app settings document in the appDB database
+         * expressApp.set('appSettings' is a reference to the app settings document in the appDB database
          */
-        app.set('appSettings', appSettingsDoc)
+        expressApp.set('appSettings', appSettingsDoc)
       })
 
 }

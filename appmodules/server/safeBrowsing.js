@@ -48,13 +48,13 @@ var safeBrowsingDetails = {
   }
 }
 
-function safeBrowsingCheck(doc){
+function safeBrowsingCheck(electronApp, doc){
   return new Promise((resolve, reject) =>{
     var safeBrowsingUrl = 'https://sb-ssl.google.com/safebrowsing/api/lookup?' +
-        'client=MarkSearch' +
+        'client=' + electronApp.getName() +
         '&key=' + APIKEYS.safeBrowsing +
             //TODO: grab the app version from electron or appDB (wherever ended up storing it)
-        '&appver=' + '0.0.1' +
+        '&appver=' + electronApp.getVersion() +
         '&pver=3.1' +
         '&url=' + encodeURIComponent(doc._id)
 

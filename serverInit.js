@@ -3,23 +3,23 @@
 var path = require('path')
 
 var express = require('express')
-var app = express()
-var debug = require('debug')('MarkSearch:app')
+var expressApp = express()
+var debug = require('debug')('MarkSearch:serverInit')
 var Server = require('hyperbole')
 
 var initializeDBs = require(path.join(__dirname, 'appmodules', 'db', 'initializeDBs'))
 var expressInit = require(path.join(__dirname, 'appmodules', 'server', 'expressInit'))
 
-function serverInit(appDataPath){
-
+function serverInit(electronApp){
   var serverPort = '3000'
-  app.set('port', serverPort)
+  expressApp.set('port', serverPort)
+  expressApp.set('electronApp', electronApp)
 
-  var server = new Server(app, serverPort)
+  var server = new Server(expressApp, serverPort)
 
   server.start()
-      .then(() => initializeDBs(appDataPath, app))
-      .then(() => expressInit(app, express))
+      .then(() => initializeDBs(electronApp.getPath('appData'), expressApp))
+      .then(() => expressInit(expressApp, express))
       .catch(err =>{
         debug(err)
         console.error(err);

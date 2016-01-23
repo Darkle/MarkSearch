@@ -124,7 +124,7 @@ function addUrlsInit(){
       _.throttle(
         () => {
           /****
-           * Grab all the text in the textarea, then split them into an array
+           * Grab all the text in the textarea, then split it into an array
            * and check that it's not an empty string
            */
           var textAreaText = addUrlsTextArea$.val()
@@ -191,12 +191,10 @@ function addUrlsInit(){
             else{
               $.Velocity.animate(progressBar$[0], {width: progressBarContainerWidth}, 10, 'easeOutExpo')
               progressInfo$.text(`All URLs Saved`)
-              window.setTimeout(ev => {
-                hideShowAddPageSubbar(true)
-              }, 2500)
+              window.setTimeout(ev => { hideShowAddPageSubbar(true) }, readTime)
             }
           })()
-          
+
         },
         3000,
         {

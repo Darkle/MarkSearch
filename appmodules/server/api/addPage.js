@@ -57,6 +57,7 @@ function addPage(req, res, next) {
   debug('pageDoc')
   debug(pageDoc)
   var db = req.app.get('pagesDB')
+  var electronApp = req.app.get('electronApp')
   /****
    * We're doing two save's rather than one so that the basic page details are
    * available to search straight away, as the archiveURL and the safeBrowsing
@@ -92,7 +93,7 @@ function addPage(req, res, next) {
        * so dont have to wait for archiveUrl to finish before starting safeBrowsingCheck
        */
       .spread( (returnedDoc, searchBuild) => {
-        return [archiveUrl(returnedDoc), safeBrowsingCheck(returnedDoc)]
+        return [archiveUrl(returnedDoc), safeBrowsingCheck(electronApp, returnedDoc)]
       })
       .spread( (archiveReturnedDoc, safeBrowsingReturnedDoc) => {
         archiveReturnedDoc.safeBrowsing = safeBrowsingReturnedDoc.safeBrowsing
