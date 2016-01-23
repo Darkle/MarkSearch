@@ -10,7 +10,7 @@ var debug = require('debug')('MarkSearch:appInit')
 var electronApp = electron.app
 var BrowserWindow = electron.BrowserWindow
 var jadeLocals = {
-  appPath: electronApp.getAppPath(),
+  appPath: JSON.stringify(electronApp.getAppPath()),
   NODE_ENV: JSON.stringify(envs('NODE_ENV'))
 }
 jadeify({pretty: true}, jadeLocals)
