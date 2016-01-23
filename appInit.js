@@ -26,19 +26,19 @@ var settingsWindow = null
 var helpWindow = null
 var aboutWindow = null
 
-electronApp.on('window-all-closes', () =>{
+electronApp.on('window-all-closes', () => {
   if(process.platform !== 'darwin'){
     electronApp.quit()
   }
 })
 
-electronApp.on('ready', () =>{
+electronApp.on('ready', () => {
   settingsWindow = new BrowserWindow({width: 1024, height: 768})
   settingsWindow.loadURL(`file:///${path.join(__dirname, 'appmodules', 'electron', 'views', 'settings.jade')}`)
   //settingsWindow.loadURL(`http://localhost:3020`)
   settingsWindow.openDevTools()
 
-  settingsWindow.on('closed', () =>{
+  settingsWindow.on('closed', () => {
     settingsWindow = null
   })
   initServer(electronApp)
