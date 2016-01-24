@@ -172,7 +172,7 @@ function addUrlsInit() {
     $.Velocity.animate(progressBar$[0], { width: progressStepAmount * 0.25 }, 3000, 'easeOutExpo');
 
     (0, _suspend2.default)(regeneratorRuntime.mark(function _callee() {
-      var error, urlsThatErrored, i, encodedUrl, result, readTime, ul$, errorTextBeginning, il1$, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, errUrl;
+      var error, urlsThatErrored, i, encodedUrl, result, ul$, errorTextBeginning, il1$, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, errUrl;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
@@ -215,10 +215,8 @@ function addUrlsInit() {
               break;
 
             case 20:
-              readTime = 2500;
-
               if (!error) {
-                _context.next = 56;
+                _context.next = 54;
                 break;
               }
 
@@ -229,7 +227,6 @@ function addUrlsInit() {
               errorOKbutton$.width(progressBarContainerWidth);
               errorOKbutton$.removeClass('hide');
               progressBar$.addClass('hide');
-              readTime = 6000;
               ul$ = $('<ul>');
               errorTextBeginning = '';
 
@@ -240,65 +237,65 @@ function addUrlsInit() {
               _iteratorNormalCompletion = true;
               _didIteratorError = false;
               _iteratorError = undefined;
-              _context.prev = 37;
+              _context.prev = 35;
 
               for (_iterator = urlsThatErrored[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 errUrl = _step.value;
 
                 $('<li>' + errUrl + '</li>').appendTo(ul$);
               }
-              _context.next = 45;
+              _context.next = 43;
               break;
 
-            case 41:
-              _context.prev = 41;
-              _context.t1 = _context['catch'](37);
+            case 39:
+              _context.prev = 39;
+              _context.t1 = _context['catch'](35);
               _didIteratorError = true;
               _iteratorError = _context.t1;
 
-            case 45:
-              _context.prev = 45;
-              _context.prev = 46;
+            case 43:
+              _context.prev = 43;
+              _context.prev = 44;
 
               if (!_iteratorNormalCompletion && _iterator.return) {
                 _iterator.return();
               }
 
-            case 48:
-              _context.prev = 48;
+            case 46:
+              _context.prev = 46;
 
               if (!_didIteratorError) {
-                _context.next = 51;
+                _context.next = 49;
                 break;
               }
 
               throw _iteratorError;
 
+            case 49:
+              return _context.finish(46);
+
+            case 50:
+              return _context.finish(43);
+
             case 51:
-              return _context.finish(48);
-
-            case 52:
-              return _context.finish(45);
-
-            case 53:
               progressInfo$.append(ul$);
-              _context.next = 60;
+              _context.next = 58;
               break;
 
-            case 56:
+            case 54:
               progressBar$.velocity("stop");
               $.Velocity.animate(progressBar$[0], { width: progressBarContainerWidth }, 10, 'easeOutExpo');
               progressInfo$.text('All URLs Saved');
               window.setTimeout(function (ev) {
                 hideShowAddPageSubbar(true);
-              }, readTime);
+              }, 2500);
 
-            case 60:
+            case 58:
             case 'end':
               return _context.stop();
           }
         }
-      }, _callee, this, [[5, 11], [37, 41, 45, 53], [46,, 48, 52]]);
+      }, _callee, this, [[5, 11], [35, 39, 43, 51], [44,, 46, 50]]);
     }))();
   }, 3000, {
     'leading': true,

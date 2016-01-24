@@ -57,7 +57,7 @@ function safeBrowsingCheck(appName, appVersion,  doc){
         '&appver=' + appVersion +
         '&pver=3.1' +
         '&url=' + encodeURIComponent(doc._id)
-    
+
     request(safeBrowsingUrl, (error, response, responseBody) =>{
       debug('***************************************safeBrowsingUrl response ================')
       debug(response.statusCode)

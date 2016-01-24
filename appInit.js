@@ -9,7 +9,7 @@ var Server = require('hyperbole')
 
 var initializeDBs = require(path.join(__dirname, 'appmodules', 'db', 'initializeDBs'))
 var expressInit = require(path.join(__dirname, 'appmodules', 'server', 'expressInit'))
-var electronInit = require(path.join(__dirname, 'electronInit'))
+var electronInit = require(path.join(__dirname, 'appmodules', 'electron', 'electronInit'))
 
 var expressApp = express()
 var electronApp = electron.app
