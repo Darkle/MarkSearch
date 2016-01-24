@@ -27,7 +27,7 @@ function initializeDBs(appDataPath, expressApp){
   var appSettingsDoc
   var pagesDB
 
-  var appDataDir = path.join(appDataPath, 'MarkSearch', 'db', 'app')
+  var appDataDir = path.join(appDataPath, 'marksearchdb', 'app')
   /****
    * Make sure the <appData>/MarkSearch/db/app folder is there.
    * http://bit.ly/1QoQm5w
@@ -51,7 +51,7 @@ function initializeDBs(appDataPath, expressApp){
             _id: 'appSettingsDoc',
             JWTsecret: Crypto.randomBytes(128).toString('hex'),
             markSearchSettings: {
-              pagesDBFilePath: path.join(appDataPath, 'MarkSearch', 'db', 'pages', 'pages'),
+              pagesDBFilePath: path.join(appDataPath, 'marksearchdb', 'pages', 'pages'),
               defaultToSearchLoose: true,
               prebrowsing: true
             }

@@ -10,7 +10,7 @@ var debug = require('debug')('MarkSearch:addPage')
 var save2db = require(path.join('..', '..', 'db', 'save2db'))
 var archiveUrl = require(path.join('..', 'archive.is'))
 var safeBrowsingCheck = require(path.join('..', 'safeBrowsing'))
-var collapseWhiteSpace = require(path.join('..', '..', 'collapseWhiteSpace'))
+var collapseWhiteSpace = require(path.join('..', '..', 'utils', 'collapseWhiteSpace'))
 
 function addPage(req, res, next) {
   var pageUrl = req.params.pageUrl
@@ -57,7 +57,8 @@ function addPage(req, res, next) {
   debug('pageDoc')
   debug(pageDoc)
   var db = req.app.get('pagesDB')
-  var electronApp = req.app.get('electronApp')
+  var appName = req.app.get('marksearchAppName')
+  var appVersion = req.app.get('marksearchVersion')
   /****
    * We're doing two save's rather than one so that the basic page details are
    * available to search straight away, as the archiveURL and the safeBrowsing
@@ -93,7 +94,7 @@ function addPage(req, res, next) {
        * so dont have to wait for archiveUrl to finish before starting safeBrowsingCheck
        */
       .spread( (returnedDoc, searchBuild) => {
-        return [archiveUrl(returnedDoc), safeBrowsingCheck(electronApp, returnedDoc)]
+        return [archiveUrl(returnedDoc), safeBrowsingCheck(appName, appVersion, returnedDoc)]
       })
       .spread( (archiveReturnedDoc, safeBrowsingReturnedDoc) => {
         archiveReturnedDoc.safeBrowsing = safeBrowsingReturnedDoc.safeBrowsing

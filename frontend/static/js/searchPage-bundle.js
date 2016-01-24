@@ -142,7 +142,7 @@ function addUrlsInit() {
    */
   $('.urlSaveButton').click(_lodash2.default.throttle(function () {
     /****
-     * Grab all the text in the textarea, then split them into an array
+     * Grab all the text in the textarea, then split it into an array
      * and check that it's not an empty string
      */
     var textAreaText = addUrlsTextArea$.val();
@@ -170,6 +170,7 @@ function addUrlsInit() {
      * http://easings.net/
      */
     $.Velocity.animate(progressBar$[0], { width: progressStepAmount * 0.25 }, 3000, 'easeOutExpo');
+
     (0, _suspend2.default)(regeneratorRuntime.mark(function _callee() {
       var error, urlsThatErrored, i, encodedUrl, result, readTime, ul$, errorTextBeginning, il1$, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, errUrl;
 
@@ -281,17 +282,18 @@ function addUrlsInit() {
 
             case 53:
               progressInfo$.append(ul$);
-              _context.next = 59;
+              _context.next = 60;
               break;
 
             case 56:
+              progressBar$.velocity("stop");
               $.Velocity.animate(progressBar$[0], { width: progressBarContainerWidth }, 10, 'easeOutExpo');
               progressInfo$.text('All URLs Saved');
               window.setTimeout(function (ev) {
                 hideShowAddPageSubbar(true);
-              }, 2500);
+              }, readTime);
 
-            case 59:
+            case 60:
             case 'end':
               return _context.stop();
           }

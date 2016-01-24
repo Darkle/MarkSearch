@@ -128,14 +128,15 @@ gulp.task('b', () =>{
   return eventStream.merge.apply(null, tasks)
 })
 
-gulp.task('electron', () => {
+gulp.task('electron', ['b','electron-browser-sync'], () => {
+  /****
+   * Doing env this way otherwise 'appdirectory' module doesnt work
+   */
+  var env = process.env
+  env.DEBUG = 'MarkSearch:*'
+  env.NODE_ENV = 'development'
   var electron = electronConnect.server.create({
-    spawnOpt: {
-      env: {
-        'DEBUG': 'MarkSearch:*',
-        "NODE_ENV": "development"
-      }
-    }
+    spawnOpt: { env }
   })
   electron.start(() => {
     /****
@@ -149,6 +150,30 @@ gulp.task('electron', () => {
     gulp.watch(path.join(__dirname, 'appmodules', 'electron', '**', '*.*'), electron.reload)
   })
 
+})
+
+gulp.task('electron-browser-sync', () =>{
+  browserSync.init({
+    proxy: "localhost:3000",
+    files: [
+      'frontend/static/**/*.*',
+      'appInit.js',
+      'serverInit.js',
+      'appmodules/**/*.*'
+    ],
+    port: 3020,
+    open: false, // Stop the browser from automatically opening
+    notify: false,
+    reloadDelay: 3000,
+    reloadDebounce: 3000,
+    /****
+     * online: false makes it load MUCH faster
+     * http://www.browsersync.io/docs/options/#option-online
+     * note: This is needed for some features, so disable this if anything breaks
+     */
+    online: false,  //
+    ghostMode: false  //dont want to mirror clicks, scrolls, forms on all devices
+  })
 })
 
 //gulp.task('electron', () =>{

@@ -167,7 +167,6 @@ function addUrlsInit(){
               }
               $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 1000, 'easeOutSine')
             }
-            var readTime = 2500
             if(error){
               progressBar$.velocity("stop")
               progressBar$.width(progressBarContainerWidth)
@@ -176,7 +175,6 @@ function addUrlsInit(){
               errorOKbutton$.width(progressBarContainerWidth)
               errorOKbutton$.removeClass('hide')
               progressBar$.addClass('hide')
-              readTime = 6000
               var ul$ = $('<ul>')
               var errorTextBeginning = ``
               if(urlsThatErrored.length !== trimmedUrlsArray.length){
@@ -189,9 +187,10 @@ function addUrlsInit(){
               progressInfo$.append(ul$)
             }
             else{
+              progressBar$.velocity("stop")
               $.Velocity.animate(progressBar$[0], {width: progressBarContainerWidth}, 10, 'easeOutExpo')
               progressInfo$.text(`All URLs Saved`)
-              window.setTimeout(ev => { hideShowAddPageSubbar(true) }, readTime)
+              window.setTimeout(ev => { hideShowAddPageSubbar(true) }, 2500)
             }
           })()
 

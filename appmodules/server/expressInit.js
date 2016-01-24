@@ -16,7 +16,10 @@ var expressErrorMiddleware = require(path.join(__dirname, 'expressErrorMiddlewar
 var routes = require(path.join(__dirname, 'routes', 'index'))
 var api = require(path.join(__dirname, 'routes', 'api'))
 
-function expressInit(expressApp, express){
+function expressInit(expressApp, express, serverPort, electronApp){
+  expressApp.set('port', serverPort)
+  expressApp.set('marksearchVersion', electronApp.getVersion())
+  expressApp.set('marksearchAppName', electronApp.getName())
   expressApp.use(compression())
   expressApp.set('views', path.join(__dirname, 'views'))
   expressApp.set('view engine', 'jade')
@@ -49,6 +52,7 @@ function expressInit(expressApp, express){
      */
     expressApp.locals.pretty = true
   }
+  return expressApp
 }
 
 module.exports = expressInit

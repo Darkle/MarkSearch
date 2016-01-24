@@ -48,16 +48,16 @@ var safeBrowsingDetails = {
   }
 }
 
-function safeBrowsingCheck(electronApp, doc){
+function safeBrowsingCheck(appName, appVersion,  doc){
   return new Promise((resolve, reject) =>{
     var safeBrowsingUrl = 'https://sb-ssl.google.com/safebrowsing/api/lookup?' +
-        'client=' + electronApp.getName() +
+        'client=' + appName +
         '&key=' + APIKEYS.safeBrowsing +
             //TODO: grab the app version from electron or appDB (wherever ended up storing it)
-        '&appver=' + electronApp.getVersion() +
+        '&appver=' + appVersion +
         '&pver=3.1' +
         '&url=' + encodeURIComponent(doc._id)
-
+    
     request(safeBrowsingUrl, (error, response, responseBody) =>{
       debug('***************************************safeBrowsingUrl response ================')
       debug(response.statusCode)
