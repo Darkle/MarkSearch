@@ -1,50 +1,39 @@
 'use strict';
 
+var path = require('path')
+
 var debug = require('debug')('MarkSearch:electronInit')
+var electron = require('electron')
 
-function electronInit(electron, electronApp){
-  return new Promise((resolve, reject) =>{
-    var BrowserWindow = electron.BrowserWindow
-    var settingsWindow = null
-    var helpWindow = null
-    var aboutWindow = null
+var trayMenu = require(path.join(__dirname, 'trayMenu'))
 
-    electron.crashReporter.start()
+var electronApp = electron.app
+
+function electronInit(){
+  return new Promise((resolve, reject) => {
+    electron.crashReporter.start({
+      productName: 'MarkSearch',
+      companyName: 'CoopCoding',
+      submitURL: 'http://localhost:3020/api/crashreport',
+      autoSubmit: true
+    })
 
     if(electronApp.makeSingleInstance(() => true)){
       debug('Marksearch Is Already Running')
       electronApp.quit()
-      reject()
     }
 
-    electronApp.on('window-all-closes', () =>{
-      if(process.platform !== 'darwin'){
-        electronApp.quit()
-      }
+    electronApp.on('ready', () => {
+      trayMenu()
+      resolve()
     })
 
-    electronApp.on('ready', () =>{
-      settingsWindow = new BrowserWindow(
-          {
-            width: 1024,
-            height: 768,
-            title: 'MarkSearch Settings Page'
-          }
-      )
-      //TODO - get address dynamically
-      //TODO - remove settimeout
-      setTimeout(event =>{
-        settingsWindow.loadURL(`http://localhost:3020/settingsPage`)
-        settingsWindow.openDevTools()
-      }, 2000)
-      //settingsWindow.loadURL(`http://google.com`)
-
-
-      settingsWindow.on('closed', () =>{
-        settingsWindow = null
-      })
-      resolve(true)
-    })
+    /****
+     * Electron seems to quit if 'window-all-closed' has no
+     * event handler and you close all the windows (at least it
+     * does on OSX)
+     */
+    electronApp.on('window-all-closed', () => {})
   })
 }
 

@@ -5,6 +5,13 @@ import "babel-polyfill" //needs to be first
 import { generateBookmarkletJS } from './bookmarkletTemplate'
 
 import got from 'got'
+/****
+ * For some reason jquery is undefined when load it with a script tag
+ * when loading settings page with electron (even though the
+ * page is served up by express). Import with browserify seems
+ * to work ok though.
+ */
+import $ from 'jquery'
 
 var csrfToken
 
@@ -51,7 +58,9 @@ function settingsPageInit(event){
   var bookmarkletButton$ = $('#bookmarkletButton')
   var bookmarkletText$ = $('#bookmarkletText')
   var dbLocationText$ = $('.dbLocationContainer .locationText')
-  var dragAndDropDiv$ = $('#dragAndDrop')
+  //var dragAndDropDiv$ = $('#dragAndDrop')
+  var changeDBLocInput$ = $('#changeDBLocationInput')
+  var changeDBLocButton$ = $('#changeDBLocationButton')
 
   /****
    * If end up implementing searchLoose, remember to change the searchLoose
@@ -102,6 +111,17 @@ function settingsPageInit(event){
    * Current Database Location
    */
   dbLocationText$.text(markSearchSettings.pagesDBFilePath)
+  changeDBLocButton$.click(event => {
+    event.preventDefault()
+    changeDBLocInput$.click()
+  })
+  changeDBLocInput$.change(event => {
+    var files = changeDBLocInput$[0].files
+    if(files.length > 0){
+      console.log(files[0].path)
+    }
+  })
+
 
   /****
    * Generate bookmarklet
@@ -124,4 +144,5 @@ function settingsPageInit(event){
   //        console.error(err)
   //      })
   //})
+
 }

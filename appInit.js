@@ -2,8 +2,8 @@
 
 var path = require('path')
 
-var express = require('express')
 var electron = require('electron')
+var express = require('express')
 var debug = require('debug')('MarkSearch:appInit')
 var Server = require('hyperbole')
 
@@ -12,19 +12,36 @@ var expressInit = require(path.join(__dirname, 'appmodules', 'server', 'expressI
 var electronInit = require(path.join(__dirname, 'appmodules', 'electron', 'electronInit'))
 
 var expressApp = express()
-var electronApp = electron.app
-var appDataPath = path.join(electronApp.getPath('appData'), 'MarkSearch')
 
 //TODO port/domain selection
 var serverPort = '3000'
 
-electronInit(electron, electronApp)
-    .then(() => initializeDBs(appDataPath, expressApp))
+electronInit()
+    .then(() => initializeDBs(expressApp))
     .then(() => {
       var server = new Server(expressApp, serverPort)
       return server.start()
     })
-    .then(() => expressInit(expressApp, express, serverPort, electronApp))
+    .then(() => expressInit(express, expressApp, serverPort))
+    //TODO - remove after got working
+    .then(() => {
+      var settingsWindowDev = new electron.BrowserWindow(
+          {
+            width: 1400,
+            height: 1100,
+            title: 'MarkSearch Settings'
+          }
+      )
+      //TODO - get address dynamically
+      //TODO - remove settimeout
+      //TODO - remove dev tools
+      settingsWindowDev.loadURL(`http://localhost:3020/settingsPage`)
+      settingsWindowDev.openDevTools()
+
+      settingsWindowDev.on('closed', () =>{
+        settingsWindowDev = null
+      })
+    })
     .catch(err => {
       debug(err)
       console.error(err)

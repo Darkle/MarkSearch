@@ -2,7 +2,14 @@ header.navHeader
   nav(role='banner')
     .brandLogo
       a(href='/', title="MarkSearch Home Page")
-        h1.brandLogoLarge MarkSearch
+        if bodyClass === 'settingsPage'
+          h1.brandLogoLarge MarkSearch Settings
+        else if bodyClass === 'helpPage'
+          h1.brandLogoLarge MarkSearch Help
+        else if bodyClass === 'aboutPage'
+          h1.brandLogoLarge About MarkSearch
+        else
+          h1.brandLogoLarge MarkSearch
         h1.brandLogoSmall MS
     .searchContainer
       form#searchForm

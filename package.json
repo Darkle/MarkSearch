@@ -2,7 +2,9 @@
   "name": "marksearch",
   "productName": "MarkSearch",
   "version": "0.0.1",
+  "homepage": "https://github.com/Darkle/MarkSearch",
   "private": true,
+  "license" : "MIT",
   "main": "appInit.js",
   "scripts": {
     "start": "electron appInit.js",
@@ -25,6 +27,7 @@
     "hyperbole": "^1.0.0",
     "ineed": "^1.0.4",
     "jade": "~1.11.0",
+    "jquery": "^2.2.0",
     "jsonwebtoken": "^5.4.1",
     "leveldown": "^1.4.1",
     "levelhud": "^0.1.3",

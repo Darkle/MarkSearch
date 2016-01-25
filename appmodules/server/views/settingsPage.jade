@@ -26,33 +26,31 @@ block content
               img(src="images/clippy.svg", alt="Copy to clipboard")
         .settingDetail.
           This token is used in the MarkSearch browser extension. More info info
-          is available on the <a href="/help_about#browserAddon">Help & About Page</a>
+          is available on the <a href="/help#browserAddon">HelpPage</a>
       .dbLocationContainer
         .currentLocation
-          span Current Database Location
+          span Current Database Location:
           span.locationText
-        #dragAndDropContainer
-          #dragAndDrop Drag Folder Here
-
+        //#dragAndDropContainer
+        //  #dragAndDrop Drag Folder Here
+        .changeDBLocationButtonContainer
+          input#changeDBLocationInput(type="file" webkitdirectory directory)
+          a#changeDBLocationButton.button.black.square(href="#") Change Directory
         .settingDetail.
           You can change where your MarkSearch database is stored. This is useful for
           if you want to have your bookmarks automatically backed up (e.g. putting them in
-          a Dropbox folder). To change where the database is stored, drag the folder where
-          you want the database to reside onto the box above. Note: if you already have a
-          folder named "pages" in that directory, it will overwrite that pages folder.
+          a Dropbox folder). <strong>Note: if you already have a
+          folder named "marksearchdb" in that directory, it will overwrite that folder.</strong>
 
 
   #formPlateFontHack.formplate
     .formplate-checkbox.checked
 
-  script(src='/bower_components/jquery/dist/jquery.js')
-  script(src='/bower_components/modernizer/modernizr.js')
   script(src='/bower_components/Formplate/js/formplate.js')
   script(src='/bower_components/buttonplate/js/buttonplate.js')
   script(src='/bower_components/clipboard/dist/clipboard.min.js')
   script(type='text/javascript').
     var markSearchSettings = !{markSearchSettings}
-    var NODE_ENV = !{NODE_ENV}
   script(src='/js/settingsPage-bundle.js')
 
 //.bookmarkletContainer

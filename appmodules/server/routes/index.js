@@ -44,9 +44,9 @@ router.get('/about', (req, res, next) => {
 })
 
 /* GET help page. */
-router.get('/help_about', (req, res, next) => {
+router.get('/help', (req, res, next) => {
   console.log("help_about page")
-  res.render('help_about',
+  res.render('help',
       {
         title: 'MarkSearch Help'
       }
@@ -119,7 +119,7 @@ router.post('/settings/generateJWTExtensionToken', (req, res, next) => {
       {
         client: `browserExtension_${parseInt((Math.random() * 100), 10)}`
       },
-      req.app.get('JWTsecret')
+      req.app.get('appSettings').JWTsecret
   )
   res.json({token: token})
 })
@@ -130,7 +130,7 @@ router.post('/settings/generateJWTBookmarkletToken', (req, res, next) => {
       {
         client: `bookmarklet_${parseInt((Math.random() * 100), 10)}`
       },
-      req.app.get('JWTsecret')
+      req.app.get('appSettings').JWTsecret
   )
   res.json({token: token})
 })

@@ -3,6 +3,7 @@
 var path = require('path')
 var Crypto = require('crypto')
 
+var electron = require('electron')
 var Promise = require("bluebird")
 var fsExtra = Promise.promisifyAll(require('fs-extra'))
 var debug = require('debug')('MarkSearch:initializeDBs')
@@ -11,9 +12,9 @@ Promise.promisifyAll(NedbStore.prototype)
 var PouchDB = require('pouchdb')
 PouchDB.plugin(require('pouchdb-quick-search'))
 
-function initializeDBs(appDataPath, expressApp){
-  if(!appDataPath || !expressApp){
-    throw new Error('appDataPath or expressApp not passed to initializeDBs')
+function initializeDBs(expressApp){
+  if(!expressApp){
+    throw new Error('expressApp not passed to initializeDBs')
   }
   /*****
    * Initialize Databases:
@@ -27,9 +28,10 @@ function initializeDBs(appDataPath, expressApp){
   var appSettingsDoc
   var pagesDB
 
+  var appDataPath = path.join(electron.app.getPath('appData'), 'MarkSearch')
   var appDataDir = path.join(appDataPath, 'marksearchdb', 'app')
   /****
-   * Make sure the <appData>/MarkSearch/db/app folder is there.
+   * Make sure the <appData>/MarkSearch/marksearchdb/app folder is there.
    * http://bit.ly/1QoQm5w
    */
   return fsExtra.ensureDirAsync(appDataDir)
@@ -66,7 +68,8 @@ function initializeDBs(appDataPath, expressApp){
       .then( appDoc => {
         appSettingsDoc = appDoc
         /****
-         * Make sure the <appData>/MarkSearch/pages/pages folder is there.
+         * Make sure the <appData>/MarkSearch/marksearchdb/pages/pages folder (or
+         * whichever folder the user has moved it to) is there.
          * http://bit.ly/1QoQm5w
          */
         return fsExtra.ensureDirAsync(appSettingsDoc.markSearchSettings.pagesDBFilePath)

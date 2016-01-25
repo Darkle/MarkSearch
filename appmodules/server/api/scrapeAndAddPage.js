@@ -52,14 +52,33 @@ var addPage = require(path.join(__dirname, 'addPage'))
  * that is more than one character in length to a single character space
  */
 /******
+ * For the webview, should I check for a crash in the webview (aw snap)
+ * https://github.com/hokein/electron-sample-apps/tree/master/webview/browser
+ */
+/******
  * Remember to collapse whitespace: https://github.com/jprichardson/string.js/blob/master/dist/string.js#L191
  * http://stringjs.com/#methods/collapsewhitespace - also do it for the title and description
  * Does this also get rid of \n?
  */
 /****
+ * Not sure if this is helpful http://electron.atom.io/docs/v0.36.4/api/ipc-renderer/#ipcrenderer-sendtohost-channel-arg1-arg2
+ */
+/****
  * Check the resources here (down bottom) on innerText
   * http://caniuse.com/#feat=innertext
  * And also this post: http://perfectionkills.com/the-poor-misunderstood-innerText/
+ */
+/****
+ * Perhaps should clear both of these before close just in case:
+ * http://electron.atom.io/docs/v0.36.4/api/session/#ses-clearcache-callback
+ * http://electron.atom.io/docs/v0.36.4/api/session/#ses-clearstoragedata-options-callback
+ */
+/****
+ * https://samsaffron.com/archive/2012/06/07/testing-3-million-hyperlinks-lessons-learned
+ */
+/****
+ * When loading a page, what should I do for non 200 status codes?
+ * e.g. should I throw an error on a 404 or 500?
  */
 /****
  * If need https://github.com/prettydiff/getNodesByType

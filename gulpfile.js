@@ -31,7 +31,7 @@ var electronConnect = require('electron-connect')
 gulp.task('default', ['browser-sync', 'watch'])
 
 //http://www.browsersync.io/docs/options/
-gulp.task('browser-sync', ['b', 'nodemon'], () =>{
+gulp.task('browser-sync', ['browserify', 'nodemon'], () =>{
   browserSync.init({
     proxy: "localhost:3000",
     files: [
@@ -70,7 +70,7 @@ gulp.task('nodemon', cb =>
 
 gulp.task('watch', () => {
   gulp.watch(path.join(__dirname, 'frontend', 'src', 'css', '*.less'), ['less'])
-  gulp.watch(path.join(__dirname, 'frontend', 'src', 'js', '*.js'), ['b'])
+  gulp.watch(path.join(__dirname, 'frontend', 'src', 'js', '*.js'), ['browserify'])
 })
 
 gulp.task('less', () =>
@@ -90,9 +90,10 @@ gulp.task('less', () =>
  * Multiple bundles
  * http://fettblog.eu/gulp-browserify-multiple-bundles/
  */
-gulp.task('b', () =>{
+gulp.task('browserify', () =>{
   var files = [
-    path.join(__dirname, 'frontend', 'src', 'js', 'searchPage.js')
+    path.join(__dirname, 'frontend', 'src', 'js', 'searchPage.js'),
+    path.join(__dirname, 'frontend', 'src', 'js', 'settingsPage.js')
   ]
   // map them to our stream function
   var tasks = files.map(function(entry){
@@ -128,7 +129,9 @@ gulp.task('b', () =>{
   return eventStream.merge.apply(null, tasks)
 })
 
-gulp.task('electron', ['b','electron-browser-sync'], () => {
+gulp.task('electron', ['electronstart', 'browserify', 'electron-browser-sync', 'watch'])
+
+gulp.task('electronstart', () => {
   /****
    * Doing env this way otherwise 'appdirectory' module doesnt work
    */
@@ -143,11 +146,11 @@ gulp.task('electron', ['b','electron-browser-sync'], () => {
      * Restart browser process
      */
     gulp.watch('appInit.js', electron.restart)
-    gulp.watch('serverInit.js', electron.restart)
+    gulp.watch(path.join(__dirname, 'appmodules', 'electron', '*.*'), electron.restart)
     /****
      * _Reload_ _renderer_ process
      */
-    gulp.watch(path.join(__dirname, 'appmodules', 'electron', '**', '*.*'), electron.reload)
+    //gulp.watch(path.join(__dirname, 'appmodules', 'electron', '**', '*.*'), electron.reload)
   })
 
 })
@@ -164,8 +167,6 @@ gulp.task('electron-browser-sync', () =>{
     port: 3020,
     open: false, // Stop the browser from automatically opening
     notify: false,
-    reloadDelay: 3000,
-    reloadDebounce: 3000,
     /****
      * online: false makes it load MUCH faster
      * http://www.browsersync.io/docs/options/#option-online

@@ -2,6 +2,7 @@
 
 var path = require('path')
 
+var electron = require('electron')
 var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
@@ -12,11 +13,12 @@ var compression = require('compression')
 
 var authenticationCheck = require(path.join(__dirname, 'authenticationCheck'))
 var expressErrorMiddleware = require(path.join(__dirname, 'expressErrorMiddleware'))
-
 var routes = require(path.join(__dirname, 'routes', 'index'))
 var api = require(path.join(__dirname, 'routes', 'api'))
 
-function expressInit(expressApp, express, serverPort, electronApp){
+var electronApp = electron.app
+
+function expressInit(express, expressApp, serverPort){
   expressApp.set('port', serverPort)
   expressApp.set('marksearchVersion', electronApp.getVersion())
   expressApp.set('marksearchAppName', electronApp.getName())
