@@ -5,14 +5,12 @@ var runSequence = require('run-sequence')
 var path = require('path')
 var browserSync = require('browser-sync').create()
 var nodemon = require('gulp-nodemon')
-var sass = require('gulp-sass')
 var sourcemaps = require('gulp-sourcemaps')
 var browserify = require('browserify')
 var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
 var babelify = require('babelify')
 var gutil = require('gulp-util')
-var jsinspect = require('gulp-jsinspect')
 var autoprefixer = require('gulp-autoprefixer')
 var less = require('gulp-less')
 var rename = require('gulp-rename')
@@ -51,7 +49,7 @@ gulp.task('browser-sync', () =>
   })
 )
 
-gulp.task('nodemon', cb =>{
+gulp.task('nodemon', cb => {
   var env = process.env
   env.DEBUG = 'MarkSearch:*'
   env.NODE_ENV = 'development'
@@ -107,7 +105,7 @@ gulp.task('less', () =>
  * Multiple bundles
  * http://fettblog.eu/gulp-browserify-multiple-bundles/
  */
-gulp.task('browserify', () =>{
+gulp.task('browserify', () => {
   var files = [
     path.join(__dirname, 'frontend', 'src', 'js', 'searchPage.js'),
     path.join(__dirname, 'frontend', 'src', 'js', 'settingsPage.js'),
