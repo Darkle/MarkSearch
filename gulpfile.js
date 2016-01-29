@@ -52,9 +52,6 @@ gulp.task('browser-sync', () =>
 )
 
 gulp.task('nodemon', cb =>{
-  /***
-   * Remember I have nodemon set to run electron in nodemon.json
-   */
   var env = process.env
   env.DEBUG = 'MarkSearch:*'
   env.NODE_ENV = 'development'
