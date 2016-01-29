@@ -1,9 +1,0 @@
-{
-  "execMap": {
-    "js": "node_modules/.bin/electron"
-  },
-  "env": {
-    "DEBUG": "MarkSearch:*",
-    "NODE_ENV": "development"
-  }
-}

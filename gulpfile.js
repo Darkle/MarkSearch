@@ -66,6 +66,9 @@ gulp.task('nodemon', cb =>{
       'appmodules/**/*.*'
     ],
     env: env,
+    execMap: {
+      js: "node_modules/.bin/electron"
+    },
     ignore: [
       path.join(__dirname, 'frontend', 'static', '**', '*.*'),
       path.join(__dirname, 'frontend', 'src', '**', '*.*')
