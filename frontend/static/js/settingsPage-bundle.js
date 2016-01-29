@@ -67,7 +67,6 @@ function settingsPageInit(event) {
    * formplate moves things around, so grab elements after its
    * done its thing
    */
-
   var prebrowsingCheckbox$ = (0, _jquery2.default)('#prebrowsingCheckbox');
   var browserAddonTokenButton$ = (0, _jquery2.default)('#browserAddonTokenButton');
   var browserAddonTokenText$ = (0, _jquery2.default)('#browserAddonTokenText');

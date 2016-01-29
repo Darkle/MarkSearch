@@ -1,6 +1,6 @@
 {
   "execMap": {
-    "js": "{{pwd}}/node_modules/electron-prebuilt/dist/Electron.app/Contents/MacOS/Electron"
+    "js": "node_modules/.bin/electron"
   },
   "env": {
     "DEBUG": "MarkSearch:*",

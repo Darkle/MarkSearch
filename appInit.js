@@ -10,6 +10,7 @@ var Server = require('hyperbole')
 var initializeDBs = require(path.join(__dirname, 'appmodules', 'db', 'initializeDBs'))
 var expressInit = require(path.join(__dirname, 'appmodules', 'server', 'expressInit'))
 var electronInit = require(path.join(__dirname, 'appmodules', 'electron', 'electronInit'))
+var initElectronTrayMenu = require(path.join(__dirname, 'appmodules', 'electron',  'initTrayMenu'))
 
 var expressApp = express()
 
@@ -22,7 +23,8 @@ electronInit()
       var server = new Server(expressApp, serverPort)
       return server.start()
     })
-    .then(() => expressInit(express, expressApp, serverPort))
+    .then(() => expressInit(expressApp, serverPort))
+    .then(() => initElectronTrayMenu())
     //TODO - remove after got working
     .then(() => {
       var settingsWindowDev = new electron.BrowserWindow(
@@ -33,8 +35,6 @@ electronInit()
           }
       )
       //TODO - get address dynamically
-      //TODO - remove settimeout
-      //TODO - remove dev tools
       settingsWindowDev.loadURL(`http://localhost:3020/settingsPage`)
       settingsWindowDev.openDevTools()
 

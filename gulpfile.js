@@ -8,6 +8,7 @@
 */
 
 var gulp = require('gulp')
+var runSequence = require('run-sequence')
 var path = require('path')
 var browserSync = require('browser-sync').create()
 var nodemon = require('gulp-nodemon')
@@ -21,30 +22,32 @@ var gutil = require('gulp-util')
 var jsinspect = require('gulp-jsinspect')
 var autoprefixer = require('gulp-autoprefixer')
 var less = require('gulp-less')
-var watchify = require('watchify')
 var rename = require('gulp-rename')
 var eventStream = require('event-stream')
-var runElectron = require("gulp-run-electron")
-var electronConnect = require('electron-connect')
 
 
-gulp.task('default', ['browser-sync', 'watch'])
+gulp.task('default', function(callback) {
+  runSequence('browserify',
+      'nodemon',
+      'browser-sync',
+      'watch-less',
+      'watch-js',
+      callback
+  )
+})
 
 //http://www.browsersync.io/docs/options/
-gulp.task('browser-sync', ['browserify', 'nodemon'], () =>{
+gulp.task('browser-sync', () =>
   browserSync.init({
     proxy: "localhost:3000",
     files: [
-      'frontend/static/**/*.*',
-      'appInit.js',
-      'serverInit.js',
       'appmodules/**/*.*'
     ],
     port: 3020,
     open: false, // Stop the browser from automatically opening
     notify: false,
-    reloadDelay: 3000,
-    reloadDebounce: 3000,
+    //reloadDelay: 3000,
+    //reloadDebounce: 3000,
     /****
      * online: false makes it load MUCH faster
      * http://www.browsersync.io/docs/options/#option-online
@@ -53,24 +56,45 @@ gulp.task('browser-sync', ['browserify', 'nodemon'], () =>{
     online: false,  //
     ghostMode: false  //dont want to mirror clicks, scrolls, forms on all devices
   })
-})
+)
 
-gulp.task('nodemon', cb =>
-    /***
-     * TODO - Remember I have nodemon set to run electron in nodemon.json
-     */
-  nodemon({
+gulp.task('nodemon', cb =>{
+  /***
+   * Remember I have nodemon set to run electron in nodemon.json
+   */
+  var env = process.env
+  env.DEBUG = 'MarkSearch:*'
+  env.NODE_ENV = 'development'
+
+  return nodemon({
     script: 'appInit.js',
+    watch: [
+      'appInit.js',
+      'appmodules/**/*.*'
+    ],
+    env: env,
     ignore: [
       path.join(__dirname, 'frontend', 'static', '**', '*.*'),
       path.join(__dirname, 'frontend', 'src', '**', '*.*')
     ]
   }).once('start', cb)
+})
+
+gulp.task('watch-less', () =>
+    gulp.watch(path.join(__dirname, 'frontend', 'src', 'css', '*.less'), ['less'])
 )
 
-gulp.task('watch', () => {
-  gulp.watch(path.join(__dirname, 'frontend', 'src', 'css', '*.less'), ['less'])
-  gulp.watch(path.join(__dirname, 'frontend', 'src', 'js', '*.js'), ['browserify'])
+gulp.task('watch-js', () =>
+  /****
+   * Doing it this way because of the map issue in browser-sync task below
+   */
+  gulp.watch(path.join(__dirname, 'frontend', 'src', 'js', '*.js'), () => {
+    runSequence('browserify', 'browsersync-reload')
+  })
+)
+
+gulp.task('browsersync-reload', () => {
+  browserSync.reload()
 })
 
 gulp.task('less', () =>
@@ -93,7 +117,9 @@ gulp.task('less', () =>
 gulp.task('browserify', () =>{
   var files = [
     path.join(__dirname, 'frontend', 'src', 'js', 'searchPage.js'),
-    path.join(__dirname, 'frontend', 'src', 'js', 'settingsPage.js')
+    path.join(__dirname, 'frontend', 'src', 'js', 'settingsPage.js'),
+    path.join(__dirname, 'frontend', 'src', 'js', 'helpPage.js'),
+    path.join(__dirname, 'frontend', 'src', 'js', 'aboutPage.js')
   ]
   // map them to our stream function
   var tasks = files.map(function(entry){
@@ -123,92 +149,15 @@ gulp.task('browserify', () =>{
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.join(__dirname, 'frontend', 'static')))
+        /****
+         * browserSync.stream messes up here - I think it's becuase we're mapping, so we're
+         * calling it 4 times instead of once. Could individually get around it by using
+         * {match:}, but its easier to just call reload from the 'watch-js' task
+         * after the whole 'browserify' task has finished.
+         */
+        //.pipe(browserSync.stream({match: '**/settingsPage-bundle.js'}))
         //.pipe(browserSync.stream())
   })
   // create a merged stream
   return eventStream.merge.apply(null, tasks)
 })
-
-gulp.task('electron', ['electronstart', 'browserify', 'electron-browser-sync', 'watch'])
-
-gulp.task('electronstart', () => {
-  /****
-   * Doing env this way otherwise 'appdirectory' module doesnt work
-   */
-  var env = process.env
-  env.DEBUG = 'MarkSearch:*'
-  env.NODE_ENV = 'development'
-  var electron = electronConnect.server.create({
-    spawnOpt: { env }
-  })
-  electron.start(() => {
-    /****
-     * Restart browser process
-     */
-    gulp.watch('appInit.js', electron.restart)
-    gulp.watch(path.join(__dirname, 'appmodules', 'electron', '*.*'), electron.restart)
-    /****
-     * _Reload_ _renderer_ process
-     */
-    //gulp.watch(path.join(__dirname, 'appmodules', 'electron', '**', '*.*'), electron.reload)
-  })
-
-})
-
-gulp.task('electron-browser-sync', () =>{
-  browserSync.init({
-    proxy: "localhost:3000",
-    files: [
-      'frontend/static/**/*.*',
-      'appInit.js',
-      'serverInit.js',
-      'appmodules/**/*.*'
-    ],
-    port: 3020,
-    open: false, // Stop the browser from automatically opening
-    notify: false,
-    /****
-     * online: false makes it load MUCH faster
-     * http://www.browsersync.io/docs/options/#option-online
-     * note: This is needed for some features, so disable this if anything breaks
-     */
-    online: false,  //
-    ghostMode: false  //dont want to mirror clicks, scrolls, forms on all devices
-  })
-})
-
-//gulp.task('electron', () =>{
-//  browserSync.init({
-//    files: [
-//      'appmodules/**/*.*'
-//    ],
-//    server: {
-//      baseDir: "./"
-//    },
-//    port: 3020,
-//    open: false, // Stop the browser from automatically opening
-//    notify: false,
-//    online: false,  //
-//    ghostMode: false  //dont want to mirror clicks, scrolls, forms on all devices
-//  }, (err, bs) => {
-//    gulp.src("./").pipe(runElectron())
-//    gulp.watch("appInit.js", runElectron.rerun)
-//    gulp.watch("initServer.js", runElectron.rerun)
-//  })
-//
-//})
-
-//var scripts = [
-//    'app.js',
-//    '/public/javascript/bundle.js',
-//    '/appmodules/**/*.js'
-//]
-
-//gulp.task('jsinspect', () =>
-//  gulp.src(scripts)
-//    .pipe(jsinspect({
-//      'threshold':   10,
-//      'identifiers': true,
-//      'suppress':    0
-//    }))
-//)

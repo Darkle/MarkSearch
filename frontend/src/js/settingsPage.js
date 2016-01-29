@@ -51,7 +51,6 @@ function settingsPageInit(event){
    * formplate moves things around, so grab elements after its
    * done its thing
    */
-
   var prebrowsingCheckbox$ = $('#prebrowsingCheckbox')
   var browserAddonTokenButton$ = $('#browserAddonTokenButton')
   var browserAddonTokenText$ = $('#browserAddonTokenText')

@@ -3,7 +3,7 @@
 var path = require('path')
 
 //var request = require('request')
-var ineed = require('ineed')
+//var ineed = require('ineed')
 var debug = require('debug')('MarkSearch:scrapeAndAddPage')
 
 
@@ -122,56 +122,56 @@ function scrapeAndAddPage(req, res, next) {
    * Also, make it in to sequential, rather than parallel calls. i.e. one after the
    * other, rather than all at once.
    */
-  ineed.collect.title.texts.from(
-      {
-        url: urlToScrape,
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
-        },
-        followRedirect: true
-      },
-      function (err, response, result) {
-        if(err){
-          console.error(`there was an error scraping ${urlToScrape}`, err)
-          /****
-           * I'm gonna go with a 502 here: http://httpstatus.es/502
-           */
-          res.status(502).end()
-        }
-        else{
-          console.log('got the page scrape')
-          /****
-           * adding page title and page text to req.body, so now have req.body.pageTitle
-           * & req.body.pageText
-           */
-          console.log('result.title')
-          console.log(result.title)
-          //console.log('result.texts')
-          //console.log(result.texts)
-          //console.log('result.texts.join(" ")')
-          //console.log(result.texts.join(" "))
-          req.body.pageTitle = result.title
-          req.body.pageText = result.texts.join(" ")
-          /****
-           * just temporary unitll switch to better scraper
-           */
-          req.body.pageDescription = 'page description'
-          /****
-           * IMPORTANT TODO remember that when send it off to addPage, addPage uses stuff
-           * like req.params.pageUrl and req.body.pageTitle, so make sure that's all fine,
-           * so how would I do it when scrapeAndAddPage receives an array of pages to scrape? Would
-           * I send the same request object through to addPage - perhaps its better to do all the stuff
-           * addPage does but do it here
-           * Yeah perhaps do that, because addPage is going to want to return a response code after the
-           * first save
-           * I could maybe rename addPage to addSinglePage and then put the safeBrowsing request and the
-           * archive request into its own module called postPageSave
-           */
-          addPage(req, res, next)
-          debug('ineed - It worked!!!')
-        }
-      })
+  //ineed.collect.title.texts.from(
+  //    {
+  //      url: urlToScrape,
+  //      headers: {
+  //        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
+  //        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+  //      },
+  //      followRedirect: true
+  //    },
+  //    function (err, response, result) {
+  //      if(err){
+  //        console.error(`there was an error scraping ${urlToScrape}`, err)
+  //        /****
+  //         * I'm gonna go with a 502 here: http://httpstatus.es/502
+  //         */
+  //        res.status(502).end()
+  //      }
+  //      else{
+  //        console.log('got the page scrape')
+  //        /****
+  //         * adding page title and page text to req.body, so now have req.body.pageTitle
+  //         * & req.body.pageText
+  //         */
+  //        console.log('result.title')
+  //        console.log(result.title)
+  //        //console.log('result.texts')
+  //        //console.log(result.texts)
+  //        //console.log('result.texts.join(" ")')
+  //        //console.log(result.texts.join(" "))
+  //        req.body.pageTitle = result.title
+  //        req.body.pageText = result.texts.join(" ")
+  //        /****
+  //         * just temporary unitll switch to better scraper
+  //         */
+  //        req.body.pageDescription = 'page description'
+  //        /****
+  //         * IMPORTANT TODO remember that when send it off to addPage, addPage uses stuff
+  //         * like req.params.pageUrl and req.body.pageTitle, so make sure that's all fine,
+  //         * so how would I do it when scrapeAndAddPage receives an array of pages to scrape? Would
+  //         * I send the same request object through to addPage - perhaps its better to do all the stuff
+  //         * addPage does but do it here
+  //         * Yeah perhaps do that, because addPage is going to want to return a response code after the
+  //         * first save
+  //         * I could maybe rename addPage to addSinglePage and then put the safeBrowsing request and the
+  //         * archive request into its own module called postPageSave
+  //         */
+  //        addPage(req, res, next)
+  //        debug('ineed - It worked!!!')
+  //      }
+  //    })
 
 
 //https://github.com/segmentio/nightmare/issues/287

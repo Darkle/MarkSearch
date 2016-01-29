@@ -3,6 +3,7 @@
 var path = require('path')
 
 var electron = require('electron')
+var express = require('express')
 var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
@@ -18,7 +19,7 @@ var api = require(path.join(__dirname, 'routes', 'api'))
 
 var electronApp = electron.app
 
-function expressInit(express, expressApp, serverPort){
+function expressInit(expressApp, serverPort){
   expressApp.set('port', serverPort)
   expressApp.set('marksearchVersion', electronApp.getVersion())
   expressApp.set('marksearchAppName', electronApp.getName())
