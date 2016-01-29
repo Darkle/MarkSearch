@@ -1,12 +1,5 @@
 'use strict';
 
-/****
- *  Some examples (browsersync, express & nodemon):
- *  https://gist.github.com/sogko/b53d33d4f3b40d3b4b2e
- *  https://gist.github.com/alkrauss48/a3581391f120ec1c3e03
- *  https://github.com/sogko/gulp-recipes/blob/master/browser-sync-nodemon-expressjs/gulpfile.js
-*/
-
 var gulp = require('gulp')
 var runSequence = require('run-sequence')
 var path = require('path')
