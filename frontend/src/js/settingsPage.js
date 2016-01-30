@@ -5,13 +5,6 @@ import "babel-polyfill" //needs to be first
 import { generateBookmarkletJS } from './bookmarkletTemplate'
 
 import got from 'got'
-/****
- * For some reason jquery is undefined when load it with a script tag
- * when loading settings page with electron (even though the
- * page is served up by express). Import with browserify seems
- * to work ok though.
- */
-import $ from 'jquery'
 
 var csrfToken
 

@@ -27,6 +27,7 @@ function initializeDBs(expressApp){
   var appDB
   var appSettingsDoc
   var pagesDB
+  var firstRun = false
 
   var appDataPath = path.join(electron.app.getPath('appData'), 'MarkSearch')
   var appDataDir = path.join(appDataPath, 'marksearchdb', 'app')
@@ -43,6 +44,7 @@ function initializeDBs(expressApp){
       .then(returnedDoc => {
         if(!returnedDoc){
           console.log('first run')
+          firstRun = true
           /***
            * On first run, save the location where the pages db will be stored.
            * Also generate a random secret to be used with the Jason Web Tokens for the
@@ -121,6 +123,7 @@ function initializeDBs(expressApp){
          */
         expressApp.set('appSettings', appSettingsDoc)
       })
+      .then(() => firstRun)
 
 }
 

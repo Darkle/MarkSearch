@@ -2,10 +2,12 @@
 
 var path = require('path')
 
+//var request = require('request')
+//var ineed = require('ineed')
 var debug = require('debug')('MarkSearch:scrapeAndAddPage')
 
-var addPage = require(path.join(__dirname, 'addPage'))
 
+var addPage = require(path.join(__dirname, 'addPage'))
 
 //var Nightmare = require('nightmare')
 //var vo = require('vo')
@@ -81,7 +83,10 @@ var addPage = require(path.join(__dirname, 'addPage'))
 /****
  * If need https://github.com/prettydiff/getNodesByType
  */
-
+function scrapeAndAddPage(req, res, next) {
+  debug('scrapeAndAddPage running')
+  debug(req.params.pageUrl)
+  var urlToScrape = req.params.pageUrl
   /****
    * Once I have gotten up to the nw.js/electron bits, consider using that for the scraping
    * just open a hidden window (remembering to hide the dock icon in osx and
@@ -300,12 +305,7 @@ var addPage = require(path.join(__dirname, 'addPage'))
    *
    *   Remember I will have to filter out elements dont want text for
    */
-  function scrapeAndAddPage(req, res, next) {
-    //user co, vo or suspend
-    //remmber to send back a server error message if something messes up
-    debug('scrapeAndAddPage running')
-    debug(req.params.pageUrl)
-    var urlToScrape = req.params.pageUrl
+
 
 }
 

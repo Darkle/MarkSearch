@@ -26,14 +26,6 @@ router.get('/search/:searchingLoose/:searchTerms', apiModules.search)
  */
 router.post('/add/:pageUrl', apiModules.addPage)
 
-/****
- * POST - api - scrape page.
- * apiModules.scrapeAndAddPage is used by the MarkSearch rendered html page
- * to add links to be scraped and saved to MarkSearch database
- * I guess dont need this in api.js as its only called in index.js by MarkSearch page
- */
-//router.post('/scrapeAndAdd/', apiModules.scrapeAndAddPage)
-
 /* DELETE - api - remove/delete a page. */
 router.delete('/remove/:pageUrl', apiModules.deletePage)
 

@@ -18,7 +18,7 @@ var appTrayMenu = null
 function trayMenu(){
   var BrowserWindow = electron.BrowserWindow
 
-  appTrayMenu = new Tray(path.join(__dirname, 'trayIconTest.png'))
+  appTrayMenu = new Tray(path.join(__dirname, 'icons', 'MS-iconTemplate.png'))
 
   var contextMenu = Menu.buildFromTemplate([
     {
@@ -34,7 +34,10 @@ function trayMenu(){
               {
                 width: windowSize.width,
                 height: windowSize.height,
-                title: 'MarkSearch Settings'
+                title: 'MarkSearch Settings',
+                webPreferences: {
+                  nodeIntegration: false
+                }
               }
           )
           //TODO - get address dynamically
@@ -62,7 +65,10 @@ function trayMenu(){
               {
                 width: windowSize.width,
                 height: windowSize.height,
-                title: 'MarkSearch Help'
+                title: 'MarkSearch Help',
+                webPreferences: {
+                  nodeIntegration: false
+                }
               }
           )
 
@@ -90,7 +96,10 @@ function trayMenu(){
               {
                 width: windowSize.width,
                 height: windowSize.height,
-                title: 'MarkSearch About'
+                title: 'MarkSearch About',
+                webPreferences: {
+                  nodeIntegration: false
+                }
               }
           )
           aboutWindow.loadURL(`http://localhost:3020/about`)
