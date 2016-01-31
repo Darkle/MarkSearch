@@ -18,7 +18,8 @@ var eventStream = require('event-stream')
 
 
 gulp.task('default', function(callback) {
-  runSequence('browserify',
+  runSequence(
+      //'browserify',
       'nodemon',
       'browser-sync',
       'watch-less',

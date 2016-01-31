@@ -9,6 +9,7 @@ var _ = require('lodash')
 
 var requireDir = require('require-dir')
 var apiModules = requireDir(path.join('..', 'api'))
+var scrapeAndAddPage = require(path.join('..', 'api', 'scrape', 'scrapeAndAddPage'))
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -30,7 +31,7 @@ router.get('/', (req, res, next) => {
  */
 router.post('/indexPage_getall/', apiModules.getAllPages)
 router.post('/indexPage_search/:searchingLoose/:searchTerms', apiModules.search)
-router.post('/indexPage_scrapeAndAdd/:pageUrl', apiModules.scrapeAndAddPage)
+router.post('/indexPage_scrapeAndAdd/:pageUrl', scrapeAndAddPage)
 router.delete('/indexPage_remove/:pageUrl', apiModules.deletePage)
 
 /* GET about page. */

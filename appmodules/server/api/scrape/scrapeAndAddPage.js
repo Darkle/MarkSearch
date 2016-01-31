@@ -1,11 +1,18 @@
 'use strict';
 
 var path = require('path')
+var fs = require('fs')
 
 var debug = require('debug')('MarkSearch:scrapeAndAddPage')
+var electron = require('electron')
+var BrowserWindow = electron.BrowserWindow
+var ipcMain = electron.ipcMain
+//var Nightmare = require('nightmare')
+//var suspend = require('suspend')
 
-var addPage = require(path.join(__dirname, 'addPage'))
-
+var collapseWhitespace = require(path.join(__dirname, '..', '..', '..', 'utils', 'collapseWhitespace')) //TODO remove this
+var addPage = require(path.join(__dirname, '..', 'addPage'))
+//var jsToInject = require(path.join(__dirname, 'insertedScrapeJS'))
 
 //var Nightmare = require('nightmare')
 //var vo = require('vo')
@@ -275,38 +282,179 @@ var addPage = require(path.join(__dirname, 'addPage'))
   //})
 
 
+function scrapeAndAddPage(req, res, next) {
+//var scrapeAndAddPage = suspend(function*(req, res, next) {
+//  debug('scrapeAndAddPage running')
+//  var pageFailedToLoad = false
+//  var pageCrashed = false
+//  try{
+//    var urlToScrape = req.params.pageUrl
+//    /****
+//     * in Nightmare, nodeIntegration is false by default and audio is muted by default
+//     * https://github.com/segmentio/nightmare/blob/master/lib/runner.js#L69
+//     * https://github.com/segmentio/nightmare/blob/master/lib/runner.js#L88
+//     */
+//    var nightmare = Nightmare(
+//        {
+//          show: true,
+//          electronPath: require('electron-prebuilt')
+//        }
+//    )
+//
+//    var docDetails = yield nightmare
+//        .on('did-fail-load', event => {
+//          debug('nightmare scrape did-fail-load')
+//          pageFailedToLoad = true
+//        })
+//        .on('crashed', event => {
+//          debug('nightmare scrape crashed')
+//          pageCrashed = true
+//          nightmare.end()
+//          //throw new Error('nightmare scrape crashed')
+//        })
+//        .goto(urlToScrape)
+//        .evaluate(function(){
+//          var description = ''
+//          var descriptionElem = document.querySelector('meta[name="description"], meta[name="Description"], meta[name="DESCRIPTION"], meta[property="og:description"]')
+//          var keywordsElem = document.querySelector('meta[name="keywords"], meta[name="Keywords"], meta[name="KEYWORDS"], meta[property="og:keywords"]')
+//          if(descriptionElem && descriptionElem.hasAttribute('content')){
+//            description = descriptionElem.getAttribute('content')
+//          }
+//          /****
+//           * If there's no description for the page, fall back to using the
+//           * keywords if available
+//           */
+//          else if(keywordsElem && keywordsElem.hasAttribute('content')){
+//            description = keywordsElem.getAttribute('content')
+//          }
+//          /****
+//           * Using innerText for documentText cause it excludes script and
+//           * style tags: http://mzl.la/1RSTO9T
+//           */
+//          return {
+//            documentTitle: document.title,
+//            documentText: document.body.innerText,
+//            documentDescription: description
+//          }
+//        })
+//    yield nightmare.end()
+//    debug(docDetails)
+//    req.body.pageTitle = collapseWhitespace(docDetails.documentTitle)
+//    req.body.pageText = collapseWhitespace(docDetails.documentText)
+//    req.body.pageDescription = collapseWhitespace(docDetails.documentDescription)
+//  }
+//  catch(err){
+//    debug(err)
+//    console.err(err)
+//    return res.status(500).json({errorMessage: JSON.stringify(err.message)})
+//  }
+//  if(pageFailedToLoad || pageCrashed){
+//    debug(`pageFailedToLoad: ${pageFailedToLoad}`)
+//    debug(`pageCrashed: ${pageCrashed}`)
+//    return res.status(500).json({
+//      errorMessage: `pageFailedToLoad: ${pageFailedToLoad}
+//                    pageCrashed: ${pageCrashed}`,
+//      pageFailedToLoad: pageFailedToLoad,
+//      pageCrashed: pageCrashed
+//    })
+//  }
+//  addPage(req, res, next)
 
-  /***
-   * for phantom.electron document.documentElement.innerText
-   *
-   *  So we would only want to call res.status().end() if there was an error getting the page,
-   *  otherwise, we call addPAge
+  //if(!jsToInject){
+  //  jsToInject = fs.readFileSync(path.join(__dirname, 'insertedScrapeJS.js'), { encoding: 'utf-8' })
+  //}
 
-   *  got supports redirects
-   *
-   *   Is there a title and description? maybe merge the two (convert toLowerCase()
-   *   before checking
-   *   - double check that cheerio doesnt care about case when selecting by
-   *   attribute and value e.g. meta[name="Description"] vs. meta[name="description"]
-   *   also check against all uppercase e.g. meta[name="DESCRIPTION"] - make sure
-   *   cheerio doesnt select twice if it is case insesitive, although i guess that would
-   *   mean doesnt matter to check
-   *   - also remember to check if the trim() ,length is 0, then its just empty text
-   *   also remember to add a space between the two texts when combining the title and
-   *   description
-   *   --- actually no, i think i will just prepend the description to the body text
-   *   - i think also append the keywords to the end of the body text (also checking for
-   *   case sensitivity if needed)
-   *
-   *   Remember I will have to filter out elements dont want text for
-   */
-  function scrapeAndAddPage(req, res, next) {
-    //user co, vo or suspend
-    //remmber to send back a server error message if something messes up
-    debug('scrapeAndAddPage running')
-    debug(req.params.pageUrl)
+  (function(req, res, next){
+
     var urlToScrape = req.params.pageUrl
+    var browserWindow
+    var webContents
 
+    browserWindow = new BrowserWindow(
+        {
+          show: true,
+          preload: path.join(__dirname, 'scrapePreload.js'),
+          webPreferences: {
+            nodeIntegration: false
+          }
+        }
+    )
+    browserWindow.on('closed', () => {
+      debug('browserWindow: closed')
+      browserWindow = null
+      webContents = null
+    })
+    browserWindow.on('unresponsive', () => {
+      debug('BrowserWindow: unresponsive')
+      res.status(500).json({errorMessage: 'BrowserWindow: unresponsive'})
+      browserWindow.destroy()
+    })
+
+    webContents = browserWindow.webContents
+    webContents.setAudioMuted(true)
+
+    /****
+     * 'did-finish-load' fires when the onload event was dispatched
+     */
+    webContents.on('did-finish-load', event => {
+      debug('webContents: did-finish-load')
+      webContents.send('sendDocDetails', '')
+    })
+    webContents.on('did-start-loading', event => {
+      debug('webContents: did-start-loading')
+    })
+    webContents.on('dom-ready', event => {
+      debug('webContents: dom-ready')
+    })
+    webContents.on('did-stop-loading', event => {
+      debug('webContents: did-stop-loading')
+    })
+    webContents.on('did-fail-load', event => {
+      debug('webContents: did-fail-load')
+      res.status(500).json({errorMessage: 'webContents: did-fail-load'})
+      browserWindow.destroy()
+    })
+    webContents.on('crashed', event => {
+      debug('webContents: crashed')
+      res.status(500).json({errorMessage: 'webContents: crashed'})
+      browserWindow.destroy()
+    })
+    webContents.on('plugin-crashed', event => {
+      debug('webContents: plugin-crashed')
+      res.status(500).json({errorMessage: 'webContents: plugin-crashed'})
+      browserWindow.destroy()
+    })
+    //webContents.on('destroyed', event => {
+    //  debug('webContents: destroyed')
+    //  res.status(500).json({errorMessage: 'webContents: destroyed'})
+    //  browserWindow.destroy()
+    //})
+
+    browserWindow.loadURL(urlToScrape)
+
+    ipcMain.on('returnDocDetails', function(event, arg) {
+      ipcMain.removeAllListeners('returnDocDetails')
+      debug('returnDocDetails!')
+      //debug(arg)
+      var docDetails = JSON.parse(arg)
+      debug(docDetails.documentTitle)
+      req.body.pageTitle = collapseWhitespace(docDetails.documentTitle)
+      req.body.pageText = collapseWhitespace(docDetails.documentText)
+      req.body.pageDescription = collapseWhitespace(docDetails.documentDescription)
+      browserWindow.destroy()
+      addPage(req, res, next)
+    })
+
+    ipcMain.on('returnDocDetailsError', function(event, arg) {
+      ipcMain.removeAllListeners('returnDocDetailsError')
+      debug('returnDocDetailsError')
+      res.status(500).json({errorMessage: JSON.stringify(arg)})
+      browserWindow.destroy()
+    })
+
+  })(req, res, next)
+
+//})
 }
 
 module.exports = scrapeAndAddPage

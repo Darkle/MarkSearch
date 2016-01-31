@@ -4,7 +4,6 @@ var path = require('path')
 
 var electron = require('electron')
 var express = require('express')
-var Nightmare = require('nightmare')
 var debug = require('debug')('MarkSearch:appInit')
 var Server = require('hyperbole')
 
@@ -37,7 +36,7 @@ electronInit()
       }
     })
     //TODO - remove after got working
-    .then(() => {
+    //.then(() => {
       //var settingsWindowDev = new electron.BrowserWindow(
       //    {
       //      width: 1400,
@@ -72,9 +71,12 @@ electronInit()
       //  scrapeWindow.webContents.executeJavaScript(`console.log('execuing js')`)
       //})
   //     scrapeWindow.openDevTools()
-  //    var nightmare = Nightmare({
-  //      electronPath: require('electron-prebuilt')
-  //    })
-  //    nightmare.goto('http://popurls.com')
-    })
+      /****
+       * in nightmare, nodeIntegration is false by default
+       * and audio is muted by default
+       * https://github.com/segmentio/nightmare/blob/master/lib/runner.js#L69
+       * https://github.com/segmentio/nightmare/blob/master/lib/runner.js#L88
+       */
+
+    //})
     .catch(appErrorHandler)
