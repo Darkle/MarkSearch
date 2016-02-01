@@ -281,8 +281,8 @@ var addPage = require(path.join(__dirname, '..', 'addPage'))
 
 /****
  * A generator on the front end is calling scrapeAndAddPage, so
- * shouldn't have any issues with req, res, next being overwritten
- * by subsequent calls
+ * shouldn't have any issues with req, res, next etc. being overwritten
+ * by subsequent calls while event listeners are still running
  */
 function scrapeAndAddPage(req, res, next) {
   debug('scrapeAndAddPage running')
@@ -320,6 +320,8 @@ function scrapeAndAddPage(req, res, next) {
 
   /****
    * 'did-finish-load' fires when the onload event was dispatched
+   * note: 'did-finish-load' fires at the end of all 'did-get-redirect-request'
+   * events
    */
   webContents.on('did-finish-load', event => {
     debug('webContents: did-finish-load')
@@ -331,6 +333,10 @@ function scrapeAndAddPage(req, res, next) {
   /****
    * note: did-fail-load seems to get called after certificate-error,
    * so just let did-fail-load handle certificate-error if it occurs.
+   * Also, 'did-fail-load' will emit on any resource on the page not loading
+   * as well, so only send back error and destroy window when its the BrowserWindow
+   * url that failed to load. This might mess up if a resource has the
+   * same url that the BrowserWindow is going to.
    */
   webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
     debug(`
@@ -338,32 +344,52 @@ function scrapeAndAddPage(req, res, next) {
       errorCode: ${errorCode}
       errorDescription: ${errorDescription}
       validatedURL: ${validatedURL}
+      req.params.pageUrl: ${req.params.pageUrl}
     `)
-    res.status(500).json({errorMessage: 'webContents: did-fail-load'})
-    browserWindow.destroy()
+    /****
+     *  validatedURL seems to put a trailing slash on the end if its just the domain,
+     *  e.g. http://foo.com would be http://foo.com/
+     */
+    if(validatedURL === req.params.pageUrl || validatedURL === `${req.params.pageUrl}/`){
+      console.log('validatedURL === req.params.pageUrl')
+      res.status(500).json({errorMessage: 'webContents: did-fail-load'})
+      browserWindow.destroy()
+    }
   })
   webContents.on('crashed', event => {
     debug('webContents: crashed')
     res.status(500).json({errorMessage: 'webContents: crashed'})
     browserWindow.destroy()
   })
+  /****
+   * 'did-get-redirect-request' will fire on any resource on the page that
+   * is redirected, so only update the req.params.pageUrl when its the
+   * BrowserWindow url that's being redirected. This might mess up
+   * if a resource has the same url that the BrowserWindow is going to.
+   */
   webContents.on('did-get-redirect-request', (event, oldURL, newURL) => {
     debug(`
       webContents: did-get-redirect-request
       oldURL: ${oldURL}
       newURL: ${newURL}
     `)
-    /****
-     * Update the req.params.pageUrl to the new location redirected to
-     */
-    req.params.pageUrl = newURL
+    if(oldURL === req.params.pageUrl){
+      /****
+       * Update the req.params.pageUrl to the new location redirected to
+       */
+      req.params.pageUrl = newURL
+    }
   })
 
   browserWindow.loadURL(urlToScrape)
 
+  /****
+   * Here we receive the document text, title etc. that scrapePreload.js
+   * messaged us.
+   */
   ipcMain.on('returnDocDetails', function(event, arg) {
     debug('returnDocDetails')
-    //debug(arg)
+    debug(arg)
     var docDetails = JSON.parse(arg)
     debug(docDetails.documentTitle)
     req.body.pageTitle = collapseWhitespace(docDetails.documentTitle)
