@@ -13,7 +13,17 @@ var safeBrowsingCheck = require(path.join('..', 'safeBrowsing'))
 var collapseWhiteSpace = require(path.join('..', '..', 'utils', 'collapseWhiteSpace'))
 
 function addPage(req, res, next) {
-  var pageUrl = req.params.pageUrl
+  /****
+   * Parsing the url to get the href from url.parse as that will
+   * add a trailing slash to the end of the href if it's just a url
+   * without a path. Doing this so that we dont save the same url
+   * twice - e.g. if they saved http://foo.com, and then later
+   * saved http://foo.com/, that would be a seperate site, which
+   * is not what we want, so use url.parse to automatically add
+   * the trailing slash.
+   */
+  var parsedUrl = url.parse(req.params.pageUrl)
+  var pageUrl = parsedUrl.href
   var pageTitle = collapseWhiteSpace(req.body.pageTitle)
   var pageText = collapseWhiteSpace(req.body.pageText)
   var pageDescription = collapseWhiteSpace(req.body.pageDescription)
@@ -34,11 +44,9 @@ function addPage(req, res, next) {
   //debug(req.body)
   debug('url domain')
   /****
-   * Parse the pageUrl string into a url and then get the domain from that url
-   * and remove any subdomains
+   * Get the domain from the parsedUrl.hostname and remove any subdomains
    */
-  var pageUrlHostname = url.parse(pageUrl).hostname
-  var domain = domainParser(pageUrlHostname).domainName
+  var domain = domainParser(parsedUrl.hostname).domainName
   debug('tld.getDomain')
   debug(domain)
   var pageDoc = {

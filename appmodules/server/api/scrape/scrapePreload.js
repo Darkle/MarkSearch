@@ -24,7 +24,7 @@
        * http://bit.ly/1KkKA3N
        *
        *
-       * 
+       *
        * Switching to textContent to get display:none or visibility: hidden
        * text as well - just gonna remove the script and style elements
        * before grab document.body.textContent
