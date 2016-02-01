@@ -7,8 +7,6 @@ var debug = require('debug')('MarkSearch:scrapeAndAddPage')
 var electron = require('electron')
 var BrowserWindow = electron.BrowserWindow
 var ipcMain = electron.ipcMain
-//var Nightmare = require('nightmare')
-//var suspend = require('suspend')
 
 var collapseWhitespace = require(path.join(__dirname, '..', '..', '..', 'utils', 'collapseWhitespace')) //TODO remove this
 var addPage = require(path.join(__dirname, '..', 'addPage'))
@@ -281,13 +279,6 @@ var addPage = require(path.join(__dirname, '..', 'addPage'))
   //    }
   //})
 
-//function destroyAndNull(browserWindow, webContents){
-//  if(browserWindow){
-//    browserWindow.destroy()
-//    browserWindow = null
-//  }
-//  webContents = null
-//}
 /****
  * A generator on the front end is calling scrapeAndAddPage, so
  * shouldn't have any issues with req, res, next being overwritten
@@ -298,10 +289,8 @@ function scrapeAndAddPage(req, res, next) {
 
   var urlToScrape = req.params.pageUrl
   var devMode = req.app.get('env') === 'development'
-  var browserWindow
-  var webContents
 
-  browserWindow = new BrowserWindow(
+  var browserWindow = new BrowserWindow(
       {
         show: devMode,
         preload: path.join(__dirname, 'scrapePreload.js'),
@@ -323,7 +312,7 @@ function scrapeAndAddPage(req, res, next) {
     browserWindow.destroy()
   })
 
-  webContents = browserWindow.webContents
+  var webContents = browserWindow.webContents
   webContents.setAudioMuted(true)
   if(devMode){
     webContents.openDevTools()
@@ -343,8 +332,13 @@ function scrapeAndAddPage(req, res, next) {
    * note: did-fail-load seems to get called after certificate-error,
    * so just let did-fail-load handle certificate-error if it occurs.
    */
-  webContents.on('did-fail-load', event => {
-    debug('webContents: did-fail-load')
+  webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+    debug(`
+      webContents: did-fail-load
+      errorCode: ${errorCode}
+      errorDescription: ${errorDescription}
+      validatedURL: ${validatedURL}
+    `)
     res.status(500).json({errorMessage: 'webContents: did-fail-load'})
     browserWindow.destroy()
   })
@@ -352,6 +346,17 @@ function scrapeAndAddPage(req, res, next) {
     debug('webContents: crashed')
     res.status(500).json({errorMessage: 'webContents: crashed'})
     browserWindow.destroy()
+  })
+  webContents.on('did-get-redirect-request', (event, oldURL, newURL) => {
+    debug(`
+      webContents: did-get-redirect-request
+      oldURL: ${oldURL}
+      newURL: ${newURL}
+    `)
+    /****
+     * Update the req.params.pageUrl to the new location redirected to
+     */
+    req.params.pageUrl = newURL
   })
 
   browserWindow.loadURL(urlToScrape)
@@ -373,7 +378,6 @@ function scrapeAndAddPage(req, res, next) {
     res.status(500).json({errorMessage: JSON.stringify(arg)})
     browserWindow.destroy()
   })
-
 }
 
 module.exports = scrapeAndAddPage
