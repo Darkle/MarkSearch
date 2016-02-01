@@ -19,10 +19,23 @@
       /****
        * Using innerText for documentText cause it excludes script and
        * style tags: http://mzl.la/1RSTO9T
+       * I think I'm ok with not getting the text in elements that have
+       * display:none or visibility: hidden
+       * http://bit.ly/1KkKA3N
+       *
+       *
+       * 
+       * Switching to textContent to get display:none or visibility: hidden
+       * text as well - just gonna remove the script and style elements
+       * before grab document.body.textContent
        */
+      var scriptAndStyleElems = document.querySelectorAll('body script, body style')
+      for(var i = 0; i < scriptAndStyleElems.length; i++) {
+        scriptAndStyleElems[i].remove()
+      }
       var docDetails = {
         documentTitle: document.title,
-        documentText: document.body.innerText,
+        documentText: document.body.textContent,
         documentDescription: description
       }
       ipcRenderer.send('returnDocDetails', JSON.stringify(docDetails))
