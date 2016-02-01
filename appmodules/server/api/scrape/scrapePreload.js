@@ -1,10 +1,6 @@
-'use strict';
 
-(function(){
+;(function(){
   var ipcRenderer = require('electron').ipcRenderer
-  //window.addEventListener('load', event => {
-  //  ipcRenderer.send('asynchronous-message', 'ping')
-  //}, false)
   ipcRenderer.on('sendDocDetails', function(event, arg) {
     try{
       var description = ''

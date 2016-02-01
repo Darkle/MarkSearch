@@ -281,180 +281,99 @@ var addPage = require(path.join(__dirname, '..', 'addPage'))
   //    }
   //})
 
-
+//function destroyAndNull(browserWindow, webContents){
+//  if(browserWindow){
+//    browserWindow.destroy()
+//    browserWindow = null
+//  }
+//  webContents = null
+//}
+/****
+ * A generator on the front end is calling scrapeAndAddPage, so
+ * shouldn't have any issues with req, res, next being overwritten
+ * by subsequent calls
+ */
 function scrapeAndAddPage(req, res, next) {
-//var scrapeAndAddPage = suspend(function*(req, res, next) {
-//  debug('scrapeAndAddPage running')
-//  var pageFailedToLoad = false
-//  var pageCrashed = false
-//  try{
-//    var urlToScrape = req.params.pageUrl
-//    /****
-//     * in Nightmare, nodeIntegration is false by default and audio is muted by default
-//     * https://github.com/segmentio/nightmare/blob/master/lib/runner.js#L69
-//     * https://github.com/segmentio/nightmare/blob/master/lib/runner.js#L88
-//     */
-//    var nightmare = Nightmare(
-//        {
-//          show: true,
-//          electronPath: require('electron-prebuilt')
-//        }
-//    )
-//
-//    var docDetails = yield nightmare
-//        .on('did-fail-load', event => {
-//          debug('nightmare scrape did-fail-load')
-//          pageFailedToLoad = true
-//        })
-//        .on('crashed', event => {
-//          debug('nightmare scrape crashed')
-//          pageCrashed = true
-//          nightmare.end()
-//          //throw new Error('nightmare scrape crashed')
-//        })
-//        .goto(urlToScrape)
-//        .evaluate(function(){
-//          var description = ''
-//          var descriptionElem = document.querySelector('meta[name="description"], meta[name="Description"], meta[name="DESCRIPTION"], meta[property="og:description"]')
-//          var keywordsElem = document.querySelector('meta[name="keywords"], meta[name="Keywords"], meta[name="KEYWORDS"], meta[property="og:keywords"]')
-//          if(descriptionElem && descriptionElem.hasAttribute('content')){
-//            description = descriptionElem.getAttribute('content')
-//          }
-//          /****
-//           * If there's no description for the page, fall back to using the
-//           * keywords if available
-//           */
-//          else if(keywordsElem && keywordsElem.hasAttribute('content')){
-//            description = keywordsElem.getAttribute('content')
-//          }
-//          /****
-//           * Using innerText for documentText cause it excludes script and
-//           * style tags: http://mzl.la/1RSTO9T
-//           */
-//          return {
-//            documentTitle: document.title,
-//            documentText: document.body.innerText,
-//            documentDescription: description
-//          }
-//        })
-//    yield nightmare.end()
-//    debug(docDetails)
-//    req.body.pageTitle = collapseWhitespace(docDetails.documentTitle)
-//    req.body.pageText = collapseWhitespace(docDetails.documentText)
-//    req.body.pageDescription = collapseWhitespace(docDetails.documentDescription)
-//  }
-//  catch(err){
-//    debug(err)
-//    console.err(err)
-//    return res.status(500).json({errorMessage: JSON.stringify(err.message)})
-//  }
-//  if(pageFailedToLoad || pageCrashed){
-//    debug(`pageFailedToLoad: ${pageFailedToLoad}`)
-//    debug(`pageCrashed: ${pageCrashed}`)
-//    return res.status(500).json({
-//      errorMessage: `pageFailedToLoad: ${pageFailedToLoad}
-//                    pageCrashed: ${pageCrashed}`,
-//      pageFailedToLoad: pageFailedToLoad,
-//      pageCrashed: pageCrashed
-//    })
-//  }
-//  addPage(req, res, next)
+  debug('scrapeAndAddPage running')
 
-  //if(!jsToInject){
-  //  jsToInject = fs.readFileSync(path.join(__dirname, 'insertedScrapeJS.js'), { encoding: 'utf-8' })
-  //}
+  var urlToScrape = req.params.pageUrl
+  var devMode = req.app.get('env') === 'development'
+  var browserWindow
+  var webContents
 
-  (function(req, res, next){
-
-    var urlToScrape = req.params.pageUrl
-    var browserWindow
-    var webContents
-
-    browserWindow = new BrowserWindow(
-        {
-          show: true,
-          preload: path.join(__dirname, 'scrapePreload.js'),
-          webPreferences: {
-            nodeIntegration: false
-          }
+  browserWindow = new BrowserWindow(
+      {
+        show: devMode,
+        preload: path.join(__dirname, 'scrapePreload.js'),
+        webPreferences: {
+          nodeIntegration: false
         }
-    )
-    browserWindow.on('closed', () => {
-      debug('browserWindow: closed')
-      browserWindow = null
-      webContents = null
-    })
-    browserWindow.on('unresponsive', () => {
-      debug('BrowserWindow: unresponsive')
-      res.status(500).json({errorMessage: 'BrowserWindow: unresponsive'})
-      browserWindow.destroy()
-    })
+      }
+  )
+  browserWindow.on('closed', () => {
+    debug('browserWindow: closed')
+    browserWindow = null
+    webContents = null
+    ipcMain.removeAllListeners('returnDocDetails')
+    ipcMain.removeAllListeners('returnDocDetailsError')
+  })
+  browserWindow.on('unresponsive', () => {
+    debug('BrowserWindow: unresponsive')
+    res.status(500).json({errorMessage: 'BrowserWindow: unresponsive'})
+    browserWindow.destroy()
+  })
 
-    webContents = browserWindow.webContents
-    webContents.setAudioMuted(true)
+  webContents = browserWindow.webContents
+  webContents.setAudioMuted(true)
+  if(devMode){
+    webContents.openDevTools()
+  }
 
+  /****
+   * 'did-finish-load' fires when the onload event was dispatched
+   */
+  webContents.on('did-finish-load', event => {
+    debug('webContents: did-finish-load')
     /****
-     * 'did-finish-load' fires when the onload event was dispatched
+     * Ask scrapePreload.js to send back the docDetails
      */
-    webContents.on('did-finish-load', event => {
-      debug('webContents: did-finish-load')
-      webContents.send('sendDocDetails', '')
-    })
-    webContents.on('did-start-loading', event => {
-      debug('webContents: did-start-loading')
-    })
-    webContents.on('dom-ready', event => {
-      debug('webContents: dom-ready')
-    })
-    webContents.on('did-stop-loading', event => {
-      debug('webContents: did-stop-loading')
-    })
-    webContents.on('did-fail-load', event => {
-      debug('webContents: did-fail-load')
-      res.status(500).json({errorMessage: 'webContents: did-fail-load'})
-      browserWindow.destroy()
-    })
-    webContents.on('crashed', event => {
-      debug('webContents: crashed')
-      res.status(500).json({errorMessage: 'webContents: crashed'})
-      browserWindow.destroy()
-    })
-    webContents.on('plugin-crashed', event => {
-      debug('webContents: plugin-crashed')
-      res.status(500).json({errorMessage: 'webContents: plugin-crashed'})
-      browserWindow.destroy()
-    })
-    //webContents.on('destroyed', event => {
-    //  debug('webContents: destroyed')
-    //  res.status(500).json({errorMessage: 'webContents: destroyed'})
-    //  browserWindow.destroy()
-    //})
+    webContents.send('sendDocDetails', '')
+  })
+  /****
+   * note: did-fail-load seems to get called after certificate-error,
+   * so just let did-fail-load handle certificate-error if it occurs.
+   */
+  webContents.on('did-fail-load', event => {
+    debug('webContents: did-fail-load')
+    res.status(500).json({errorMessage: 'webContents: did-fail-load'})
+    browserWindow.destroy()
+  })
+  webContents.on('crashed', event => {
+    debug('webContents: crashed')
+    res.status(500).json({errorMessage: 'webContents: crashed'})
+    browserWindow.destroy()
+  })
 
-    browserWindow.loadURL(urlToScrape)
+  browserWindow.loadURL(urlToScrape)
 
-    ipcMain.on('returnDocDetails', function(event, arg) {
-      ipcMain.removeAllListeners('returnDocDetails')
-      debug('returnDocDetails!')
-      //debug(arg)
-      var docDetails = JSON.parse(arg)
-      debug(docDetails.documentTitle)
-      req.body.pageTitle = collapseWhitespace(docDetails.documentTitle)
-      req.body.pageText = collapseWhitespace(docDetails.documentText)
-      req.body.pageDescription = collapseWhitespace(docDetails.documentDescription)
-      browserWindow.destroy()
-      addPage(req, res, next)
-    })
+  ipcMain.on('returnDocDetails', function(event, arg) {
+    debug('returnDocDetails')
+    //debug(arg)
+    var docDetails = JSON.parse(arg)
+    debug(docDetails.documentTitle)
+    req.body.pageTitle = collapseWhitespace(docDetails.documentTitle)
+    req.body.pageText = collapseWhitespace(docDetails.documentText)
+    req.body.pageDescription = collapseWhitespace(docDetails.documentDescription)
+    browserWindow.destroy()
+    addPage(req, res, next)
+  })
 
-    ipcMain.on('returnDocDetailsError', function(event, arg) {
-      ipcMain.removeAllListeners('returnDocDetailsError')
-      debug('returnDocDetailsError')
-      res.status(500).json({errorMessage: JSON.stringify(arg)})
-      browserWindow.destroy()
-    })
+  ipcMain.on('returnDocDetailsError', function(event, arg) {
+    debug('returnDocDetailsError')
+    res.status(500).json({errorMessage: JSON.stringify(arg)})
+    browserWindow.destroy()
+  })
 
-  })(req, res, next)
-
-//})
 }
 
 module.exports = scrapeAndAddPage

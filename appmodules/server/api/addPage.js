@@ -31,7 +31,7 @@ function addPage(req, res, next) {
     //do some validation on this
     //console.log('hello colors test'.red);
   debug(pageUrl)
-  debug(req.body)
+  //debug(req.body)
   debug('url domain')
   /****
    * Parse the pageUrl string into a url and then get the domain from that url
@@ -54,8 +54,8 @@ function addPage(req, res, next) {
       details: null
     }
   }
-  debug('pageDoc')
-  debug(pageDoc)
+  //debug('pageDoc')
+  //debug(pageDoc)
   var db = req.app.get('pagesDB')
   var appName = req.app.get('marksearchAppName')
   var appVersion = req.app.get('marksearchVersion')
