@@ -27,7 +27,7 @@
        *
        * New Way: Switching to textContent to get display:none or visibility: hidden
        * text as well - just gonna remove the script and style elements
-       * before grab document.body.textContent so dont include the text from those
+       * before grab document.body.textContent so not including the text from those
        * script & style tags
        */
       var scriptAndStyleElems = document.querySelectorAll('body script, body style')
