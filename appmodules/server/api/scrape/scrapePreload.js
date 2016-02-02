@@ -17,7 +17,7 @@
         description = keywordsElem.getAttribute('content')
       }
       /****
-       * Using innerText for documentText cause it excludes script and
+       * Old way: Using innerText for documentText cause it excludes script and
        * style tags: http://mzl.la/1RSTO9T
        * I think I'm ok with not getting the text in elements that have
        * display:none or visibility: hidden
@@ -25,7 +25,7 @@
        *
        *
        *
-       * Switching to textContent to get display:none or visibility: hidden
+       * New Way: Switching to textContent to get display:none or visibility: hidden
        * text as well - just gonna remove the script and style elements
        * before grab document.body.textContent so dont include the text from those
        * script & style tags
