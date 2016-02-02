@@ -8,7 +8,6 @@ var electron = require('electron')
 var BrowserWindow = electron.BrowserWindow
 var ipcMain = electron.ipcMain
 
-var collapseWhitespace = require(path.join(__dirname, '..', '..', '..', 'utils', 'collapseWhitespace')) //TODO remove this
 var addPage = require(path.join(__dirname, '..', 'addPage'))
 
 
