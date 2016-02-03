@@ -17,26 +17,30 @@
         description = keywordsElem.getAttribute('content')
       }
       /****
-       * Old way: Using innerText for documentText cause it excludes script and
-       * style tags: http://mzl.la/1RSTO9T
-       * I think I'm ok with not getting the text in elements that have
-       * display:none or visibility: hidden
+       * Alternate Way - use textContent and remove script and style tags first.
+       *
+       * var scriptAndStyleElems = document.querySelectorAll('body script, body style')
+       * for(var i = 0; i < scriptAndStyleElems.length; i++) {
+       *  scriptAndStyleElems[i].remove()
+       * }
+       *
+       *
+       * Choosing to use innerText for documentText because it excludes script and style tags
+       * & respects new lines created by <br> and block level elements:
+       * http://mzl.la/1RSTO9T
        * http://bit.ly/1KkKA3N
        *
+       * An example: <div>space</div>test1<div>test2</div> - with textContent, the returned
+       * text would be "spacetest1test2", but with innerText it's "space\ntest1\ntest2" -
+       * and we collapse the whitespace later on (in addPage.js) which turns the \n into a space.
        *
-       *
-       * New Way: Switching to textContent to get display:none or visibility: hidden
-       * text as well - just gonna remove the script and style elements
-       * before grab document.body.textContent so not including the text from those
-       * script & style tags
+       * I think I'm ok with not getting the text in elements that have
+       * display:none or visibility: hidden
        */
-      var scriptAndStyleElems = document.querySelectorAll('body script, body style')
-      for(var i = 0; i < scriptAndStyleElems.length; i++) {
-        scriptAndStyleElems[i].remove()
-      }
+
       var docDetails = {
         documentTitle: document.title,
-        documentText: document.body.textContent,
+        documentText: document.body.innerText,
         documentDescription: description
       }
       ipcRenderer.send('returnDocDetails', JSON.stringify(docDetails))
