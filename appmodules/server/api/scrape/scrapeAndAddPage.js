@@ -2,6 +2,7 @@
 
 var path = require('path')
 var fs = require('fs')
+var url = require('url')
 
 var debug = require('debug')('MarkSearch:scrapeAndAddPage')
 var electron = require('electron')
@@ -10,29 +11,41 @@ var ipcMain = electron.ipcMain
 
 var addPage = require(path.join(__dirname, '..', 'addPage'))
 
-
-/****
- * Check the resources here (down bottom) on innerText
-  * http://caniuse.com/#feat=innertext
- * And also this post: http://perfectionkills.com/the-poor-misunderstood-innerText/
- */
-
-/****
- * https://samsaffron.com/archive/2012/06/07/testing-3-million-hyperlinks-lessons-learned
- */
-
-
-
 /****
  * A generator on the front end is calling scrapeAndAddPage, so
  * shouldn't have any issues with req, res, next etc. being overwritten
  * by subsequent calls while event listeners are still running
+ *
+ * TODO: Maybe refactor this a bit, bit of duplicate code
  */
 function scrapeAndAddPage(req, res, next) {
   debug('scrapeAndAddPage running')
 
-  var urlToScrape = req.params.pageUrl
+  var urlToScrape
   var devMode = req.app.get('env') === 'development'
+  var numTimesRedirected = 0
+  try{
+    /****
+     * Doing this so that we create a somwhat valid url out of what is sent.
+     * e.g. if req.params.pageUrl is say http://nonsense:port/yay,
+     * the browser will not be able to load that - but it doesn't fire a
+     * did-fail-load event though, it just seems to sit there. However
+     * if we parse it, url.parse converts it to http://nonsense/:port/yay,
+     * which works properly in that it properly fails to load and about:blank
+     * is loaded instead.
+     * (haven't tested this extensively)
+     * http://bit.ly/1X2gwM2
+     */
+    urlToScrape = url.parse(req.params.pageUrl).href
+  }
+  catch(err){
+    debug(
+        `Error Parsing URL
+        ${err.message}
+        ${err.stack}`
+    )
+    res.status(500).json({errorMessage: 'Error Parsing URL'})
+  }
 
   var browserWindow = new BrowserWindow(
       {
@@ -93,10 +106,12 @@ function scrapeAndAddPage(req, res, next) {
       req.params.pageUrl: ${req.params.pageUrl}
     `)
     /****
-     *  validatedURL seems to put a trailing slash on the end if its just the domain,
-     *  e.g. http://foo.com would be http://foo.com/
+     *  note: validatedURL seems to put a trailing slash on the end if its a url with no
+     *  path - e.g. http://foo.com would be http://foo.com/
+     *  Should be ok as we are using url.parse().href which adds a trailing slash
+     *  at the start of scrapeAndAddPage and on did-get-redirect-request
      */
-    if(validatedURL === req.params.pageUrl || validatedURL === `${req.params.pageUrl}/`){
+    if(validatedURL === urlToScrape){
       debug('validatedURL === req.params.pageUrl')
       res.status(500).json({errorMessage: 'webContents: did-fail-load'})
       browserWindow.destroy()
@@ -120,14 +135,26 @@ function scrapeAndAddPage(req, res, next) {
       newURL: ${newURL}
     `)
     if(oldURL === req.params.pageUrl){
+      numTimesRedirected = numTimesRedirected + 1
       /****
-       * Update the req.params.pageUrl to the new location redirected to
+       * So we dont get into an infinite redirect loop
        */
-      req.params.pageUrl = newURL
+      if(numTimesRedirected < 6){
+        /****
+         * Update the req.params.pageUrl to the new location redirected to so
+         * it's the url it redirected to when we send req through to addPage.
+         * Using url.parse to add a trailing slash if its a url with no path
+         */
+        urlToScrape = url.parse(newURL).href
+        req.params.pageUrl = urlToScrape
+      }
+      else{
+        debug('webContents: infinite redirect loop ')
+        res.status(500).json({errorMessage: 'webContents: infinite redirect loop'})
+        browserWindow.destroy()
+      }
     }
   })
-
-  browserWindow.loadURL(urlToScrape)
 
   /****
    * Here we receive the document text, title etc. that scrapePreload.js
@@ -135,7 +162,7 @@ function scrapeAndAddPage(req, res, next) {
    */
   ipcMain.on('returnDocDetails', function(event, arg) {
     debug('returnDocDetails')
-    debug(arg)
+    //debug(arg)
     var docDetails = JSON.parse(arg)
     debug(docDetails.documentTitle)
     /****
@@ -150,9 +177,12 @@ function scrapeAndAddPage(req, res, next) {
 
   ipcMain.on('returnDocDetailsError', function(event, arg) {
     debug('returnDocDetailsError')
+    debug(arg)
     res.status(500).json({errorMessage: JSON.stringify(arg)})
     browserWindow.destroy()
   })
+
+  webContents.loadURL(urlToScrape, {"extraHeaders" : "pragma: no-cache\n"})
 }
 
 module.exports = scrapeAndAddPage

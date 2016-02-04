@@ -55,7 +55,7 @@ function search(req, res, next){
    * [ 'jupiter' ],
    * [ 'saturn' ] ]
    */
-    stCombinations = _.sortBy(combs(searchTermsArr), term => -term.length)
+    stCombinations = _.sortBy(combs(searchTermsArr), terms => -terms.length)
   }
   debug('stCombinations ==========+++++++==========')
   debug(stCombinations)

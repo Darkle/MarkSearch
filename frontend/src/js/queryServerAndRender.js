@@ -13,7 +13,7 @@ function queryServerAndRender(searchTerms){
          * Check if there are any results
          */
         if(resultsObject.currentResults.chunk_0){
-          renderResults(resultsObject.currentResults.chunk_0, searchTerms)
+          return renderResults(resultsObject.currentResults.chunk_0, searchTerms)
         }
       })
 }

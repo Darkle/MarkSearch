@@ -1,5 +1,8 @@
 'use strict';
 
+import combs from 'combs'
+import _ from 'lodash'
+
 import { lunrStopwordList } from './lunrStopwordFilter'
 
 /****
@@ -15,30 +18,142 @@ import { lunrStopwordList } from './lunrStopwordFilter'
  */
 function generateSearchClipAndHighlight(doc, searchTerms){
   /****
-   * %20 cause the text is encoded with encodeURIComponent
+   * searchTerms text is trimmed on searchPage.js
    */
-  var arrayOfSearchTerms = searchTerms.split('%20')
+  //check if enough before found words to slice, if not, add more to end so the end result text is
+  //as long as the other results text
 
-  //debugger
-      //for the moment assume we have more than one search term
-  var regexStringBehind = ''
-  var regexStringTermsForward = ''
-
-  for(var i = 0; i < arrayOfSearchTerms.length; i++) {
-    regexStringBehind += `!\\b\\w*${arrayOfSearchTerms[i]}\\w*\\b.{30}|`
-    regexStringTermsForward += `\\b\\w*${arrayOfSearchTerms[i]}\\w*\\b.{1,60}`
-    if(i === arrayOfSearchTerms.length - 1){
-      regexStringBehind += '(.{60})?'
-      regexStringTermsForward += '.{60}'
+  var foundTerms = {
+    pageDescription: {
+      highestNumTermsMatched: 0,
+      highlightedText: null
+    },
+    pageText: {
+      highestNumTermsMatched: 0,
+      highlightedText: null
     }
   }
 
+  var searchTermsArr = searchTerms.split('%20').filter(searchTerm =>{
+    var useSearchTerm = searchTerm.length > 1
+    if(lunrStopwordList[searchTerm]){
+      useSearchTerm = false
+    }
+    return useSearchTerm
+  })
 
-  var regex = new RegExp(regexStringBehind + regexStringTermsForward, 'gi')
-  console.log(regexStringBehind + regexStringTermsForward)
-  var result = regex.exec(doc.pageText)
-  console.log(result)
-  debugger
+  var stCombinations = _.sortBy(combs(searchTermsArr), terms => -terms.length)
+  console.log(JSON.stringify(stCombinations))
+
+  _.each(stCombinations, arrOfSearchTermCombination => {
+
+    var combinationRegex = new RegExp('(' + arrOfSearchTermCombination.join(' ') + '[a-z]*)', 'gi')
+    var replacement = '<span class="searchHighlight">$1</span>'
+//debugger
+    var regexIndexPageDesc = doc.pageDescription.search(combinationRegex)
+    //debugger
+    if(regexIndexPageDesc > -1 && (arrOfSearchTermCombination.length > foundTerms.pageDescription.highestNumTermsMatched) ){
+      foundTerms.pageDescription.highestNumTermsMatched = arrOfSearchTermCombination.length
+      /***
+       * The pageDescription is usually a little less than a paragraph, so just include all of it
+       */
+      var pdHighlightedText = doc.pageDescription
+      //debugger
+      /****
+       * for the replace, do it for each term in case there is a term pre/post match in the slice
+       */
+      _.each(searchTermsArr, term => {
+        var searchTermRegexPd = new RegExp('(' + term + '[a-z]*)', 'gi')
+        pdHighlightedText = pdHighlightedText.replace(searchTermRegexPd, replacement)
+      })
+      foundTerms.pageDescription.highlightedText = pdHighlightedText
+      //debugger
+    }
+    //debugger
+    var regexIndexPageText = doc.pageText.search(combinationRegex)
+    //debugger
+    if(regexIndexPageText > -1 && (arrOfSearchTermCombination.length > foundTerms.pageText.highestNumTermsMatched)){
+      foundTerms.pageText.highestNumTermsMatched = arrOfSearchTermCombination.length
+      /***
+       * Grab some text before the match and after the match and account for if near
+       * start/end of the text
+       */
+      var ptSliceStart = regexIndexPageText - 150
+      var ptSliceEnd = regexIndexPageText + 150
+      var ptHighlightedText
+      if(regexIndexPageText < 150){
+        ptSliceStart = regexIndexPageText
+        ptSliceEnd = ptSliceEnd + (150 - regexIndexPageText)
+      }
+      if( (doc.pageText.length - regexIndexPageText) < 150){
+        ptSliceStart = ptSliceStart - (doc.pageText.length - regexIndexPageText)
+      }
+      ptHighlightedText = doc.pageText.slice(ptSliceStart, ptSliceEnd)
+      /****
+       * Re-slice & try to start on a word and end on a word with the slice.
+       * Gonna cheat a little and remove the first & last word if its not a search term.
+       */
+      var secondSliceStart = 0
+      var secondSliceEnd = ptHighlightedText.length
+      var startsWithSearchTerm = _.any(searchTermsArr, sTerm => ptHighlightedText.startsWith(sTerm) )
+      var endsWithSearchTerm = _.any(searchTermsArr, sTerm => ptHighlightedText.endsWith(sTerm) )
+      var lastCharacter = ptHighlightedText.charAt(ptHighlightedText.length - 1)
+      if(!startsWithSearchTerm){
+        secondSliceStart = ptHighlightedText.indexOf(' ') + 1
+      }
+      if(!endsWithSearchTerm && lastCharacter !== ' ' && lastCharacter !== '.'){
+        secondSliceEnd = ptHighlightedText.lastIndexOf(' ')
+      }
+      ptHighlightedText = ptHighlightedText.slice(secondSliceStart, secondSliceEnd)
+      _.each(searchTermsArr, term => {
+        var searchTermRegexPt = new RegExp('(' + term + '[a-z]*)', 'gi')
+        ptHighlightedText = ptHighlightedText.replace(searchTermRegexPt, replacement)
+      })
+      foundTerms.pageText.highlightedText = ptHighlightedText
+    }
+    //debugger
+  })
+
+  var returnedHighlight = null
+  if(foundTerms.pageText.highestNumTermsMatched > 0){
+    returnedHighlight = foundTerms.pageText.highlightedText
+  }
+  /****
+   * Favour returning the page description
+   */
+  if(foundTerms.pageDescription.highestNumTermsMatched > 0){
+    returnedHighlight = foundTerms.pageDescription.highlightedText
+  }
+  //debugger
+  return returnedHighlight
+
+  //doc.pageDescription
+
+  /****
+   * %20 cause the text is encoded with encodeURIComponent
+   */
+  //var arrayOfSearchTerms = searchTerms.split('%20')
+  //
+  ////debugger
+  //    //for the moment assume we have more than one search term
+  //var regexStringBehind = ''
+  //var regexStringTermsForward = ''
+  //
+  //for(var i = 0; i < arrayOfSearchTerms.length; i++) {
+  //  regexStringBehind += `!\\b\\w*${arrayOfSearchTerms[i]}\\w*\\b.{30}|`
+  //  regexStringTermsForward += `\\b\\w*${arrayOfSearchTerms[i]}\\w*\\b.{1,60}`
+  //  if(i === arrayOfSearchTerms.length - 1){
+  //    regexStringBehind += '(.{60})?'
+  //    regexStringTermsForward += '.{60}'
+  //  }
+  //}
+  //
+  //
+  //var regex = new RegExp(regexStringBehind + regexStringTermsForward, 'gi')
+  //console.log(regexStringBehind + regexStringTermsForward)
+  //var result = regex.exec(doc.pageText)
+  //console.log(result)
+  //debugger
 }
 /****
  * Exports

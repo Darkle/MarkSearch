@@ -1,4 +1,3 @@
-
 ;(function(){
   var ipcRenderer = require('electron').ipcRenderer
   ipcRenderer.on('sendDocDetails', function(event, arg) {
@@ -17,35 +16,32 @@
         description = keywordsElem.getAttribute('content')
       }
       /****
-       * For getting the text of the page:
-       * Using textContent means the text from style and script tags are included
-       * (could remove them though - e.g.: http://bit.ly/207Rds3). Also textContent
-       * does not respect new lines created by <br> & block level elements
-       * - e.g. <div>space</div>test1<div>test2</div>  - with textContent, the
-       * returned text would be "spacetest1test2" - innerText is better in
-       * that it returns "space\ntest1\ntest2", however innerText also is not that
-       * great in general because it doesn't include text from elements that have
-       * visibility:hidden or display:none styles.
+       * Old Way: use textContent and remove script and style tags first.
        *
+       * var scriptAndStyleElems = document.querySelectorAll('body script, body style')
+       * for(var i = 0; i < scriptAndStyleElems.length; i++) {
+       *  scriptAndStyleElems[i].remove()
+       * }
+       *
+       *
+       * Choosing to use innerText for documentText because it excludes script and style tags
+       * & respects new lines created by <br> and block level elements:
+       * An example: <div>space</div>test1<div>test2</div> - with textContent, the returned
+       * text would be "spacetest1test2", but with innerText it's "space\ntest1\ntest2" -
+       * (note: we collapse the whitespace later on (in addPage.js) which turns the \n into a space).
        * http://mzl.la/1RSTO9T
        * http://bit.ly/1KkKA3N
        *
-       *
-       * So gonna go with a bit of a hack of using window.getSelection(). Idea
-       * from: http://bit.ly/207Qqaw
-       *
-       * The perf isn't that great but I dont think it will be noticably slow:
-       * http://jsperf.com/innertext-vs-selection-tostring/5
-       *
-       * note: we collapse the whitespace later on (in addPage.js) which turns
-       * \n into a space.
+       * I think I'm ok with innerText not getting the text in elements that have
+       * display:none or visibility: hidden if it means we get space in between block level elements.
+       * Since searching the text is key, there's probably likely to be more issues with
+       * block level element's text being concatinated with no space between them than with missing
+       * text that is supposed to be hidden.
        */
-      var selObj = window.getSelection()
-      selObj.selectAllChildren(document.body)
 
       var docDetails = {
         documentTitle: document.title,
-        documentText: selObj.toString(),
+        documentText: document.body.innerText,
         documentDescription: description
       }
       ipcRenderer.send('returnDocDetails', JSON.stringify(docDetails))
@@ -55,4 +51,3 @@
     }
   })
 })()
-

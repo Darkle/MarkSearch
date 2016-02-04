@@ -44,15 +44,15 @@ function renderResults(resultsChunk, searchTerms){
       else{
         addRemoveDiv = document.getElementById('addRemoveDiv')
       }
-      resultsChunk.resultRows.forEach(result => {
+      _.each(resultsChunk.resultRows, result => {
         var doc = result.doc
         /****
-         * TODO: If we're searching for something, generate search result text clip
-         * with the search term words in them and then add highlighting.
+         * generate search result text clip with the search term words in
+         * them and then add highlighting.
          */
-        //if(searchTerms){
-        //  generateSearchClipAndHighlight(doc, searchTerms)
-        //}
+        if(searchTerms){
+          doc.searchHighlight = generateSearchClipAndHighlight(doc, searchTerms)
+        }
         resultID++
 
         /****
@@ -109,6 +109,11 @@ function renderResults(resultsChunk, searchTerms){
         //var resultDateCreated = document.createElement('div')
         //resultDateCreated.textContent = moment(doc.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
         //mainDetails.appendChild(resultDateCreated)
+        if(result.score){
+          var resultSearchScore = document.createElement('div')
+          resultSearchScore.textContent = result.score
+          mainDetails.appendChild(resultSearchScore)
+        }
 
         /*****
          * SafeBrowsing
@@ -171,8 +176,11 @@ function renderResults(resultsChunk, searchTerms){
         }
         var description = document.createElement('p')
         description.className = 'description'
-        if(doc.pageDescription){
-          description.textContent = _.trim(doc.pageDescription)
+        if(doc.searchHighlight){
+          description.innerHTML = doc.searchHighlight
+        }
+        else if(doc.pageDescription){
+          description.innerHTML = _.trim(doc.pageDescription)
         }
         mainDetails.appendChild(description)
 

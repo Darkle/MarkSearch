@@ -158,12 +158,22 @@ function addUrlsInit(){
               progressInfo$.text(`Saving ${trimmedUrlsArray[i]}`)
               var encodedUrl = encodeURIComponent(trimmedUrlsArray[i])
               try{
-                var result = yield got.post(`/indexPage_scrapeAndAdd/${encodedUrl}`, {headers: {'X-CSRF-Token': csrfToken}})
+                yield got.post(`/indexPage_scrapeAndAdd/${encodedUrl}`, {headers: {'X-CSRF-Token': csrfToken}})
               }
               catch(err){
                 console.error(err)
                 error = err
-                urlsThatErrored.push(trimmedUrlsArray[i])
+                var errMessage = _.get(error, 'response.body')
+                if(errMessage){
+                  errMessage = JSON.parse(errMessage).errorMessage
+                }
+                else{
+                  errMessage = ''
+                }
+                urlsThatErrored.push({
+                  url: trimmedUrlsArray[i],
+                  errMessage: errMessage
+                })
               }
               $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 1000, 'easeOutSine')
             }
@@ -182,7 +192,7 @@ function addUrlsInit(){
               }
               var il1$ = $(`<li>${errorTextBeginning}Errors Occured While Saving The Following URLs:</li>`).appendTo(ul$)
               for(var errUrl of urlsThatErrored){
-                $(`<li>${errUrl}</li>`).appendTo(ul$)
+                $(`<li>${errUrl.url} - reason: ${errUrl.errMessage}</li>`).appendTo(ul$)
               }
               progressInfo$.append(ul$)
             }
