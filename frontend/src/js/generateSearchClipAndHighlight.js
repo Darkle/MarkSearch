@@ -78,6 +78,7 @@ function generateSearchClipAndHighlight(doc, searchTerms){
        * Grab some text before the match and after the match and account for if near
        * start/end of the text
        */
+          maybe do a regex from the index backwards to find a word boundary and also do same forwards
       var ptSliceStart = regexIndexPageText - 150
       var ptSliceEnd = regexIndexPageText + 150
       var ptHighlightedText

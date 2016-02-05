@@ -8,6 +8,7 @@
   "main": "appInit.js",
   "scripts": {
     "start": "electron appInit.js",
+    "ban": "ban", //ban-sensitive-files
     "dev": "DEBUG='MarkSearch:*' electron appInit.js"
   },
   "dependencies": {
@@ -55,6 +56,7 @@
     "babel-polyfill": "^6.3.14",
     "babel-preset-es2015": "^6.1.4",
     "babelify": "^7.2.0",
+    "ban-sensitive-files": "^1.8.2",
     "browser-sync": "^2.11.1",
     "browserify": "^12.0.1",
     "electron-prebuilt": "^0.36.6",

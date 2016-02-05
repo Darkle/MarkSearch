@@ -33,7 +33,7 @@ gulp.task('browser-sync', () =>
   browserSync.init({
     proxy: "localhost:3000",
     files: [
-      'appmodules/**/*.*'
+      path.join('appmodules', '**', '*.*')
     ],
     port: 3020,
     open: false, // Stop the browser from automatically opening
@@ -59,11 +59,11 @@ gulp.task('nodemon', cb => {
     script: 'appInit.js',
     watch: [
       'appInit.js',
-      'appmodules/**/*.*'
+      path.join('appmodules', '**', '*.*')
     ],
     env: env,
     execMap: {
-      js: "node_modules/.bin/electron"
+      js: path.join('node_modules', '.bin', 'electron')
     },
     ignore: [
       path.join(__dirname, 'frontend', 'static', '**', '*.*'),
