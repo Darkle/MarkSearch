@@ -28,20 +28,6 @@ gulp.task('default', function(callback) {
   )
 })
 
-gulp.task('browser-sync', () =>
-  browserSync.init({
-    proxy: "localhost:3000",
-    files: [
-      path.join('appmodules', '**', '*.*')
-    ],
-    port: 3020,
-    open: false, // Stop the browser from automatically opening
-    notify: false,
-    online: false,  //online: false makes it load MUCH faster
-    ghostMode: false  //dont want to mirror clicks, scrolls, forms on all devices
-  })
-)
-
 gulp.task('nodemon', cb => {
   var env = process.env
   env.DEBUG = 'MarkSearch:*'
@@ -63,6 +49,20 @@ gulp.task('nodemon', cb => {
     ]
   }).once('start', cb)
 })
+
+gulp.task('browser-sync', () =>
+  browserSync.init({
+    proxy: "localhost:3000",
+    files: [
+      path.join('appmodules', '**', '*.*')
+    ],
+    port: 3020,
+    open: false, // Stop the browser from automatically opening
+    notify: false,
+    online: false,  //online: false makes it load MUCH faster
+    ghostMode: false  //dont want to mirror clicks, scrolls, forms on all devices
+  })
+)
 
 gulp.task('watch-less', () =>
     gulp.watch(path.join(__dirname, 'frontend', 'src', 'css', '*.less'), ['less'])

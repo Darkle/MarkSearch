@@ -816,7 +816,7 @@ function generateSearchClipAndHighlight(doc, searchTerms) {
 
     var combinationRegex = new RegExp('(' + arrOfSearchTermCombination.join(' ') + '[a-z]*)', 'gi');
     var replacement = '<span class="searchHighlight">$1</span>';
-    //debugger
+    debugger;
     var regexIndexPageDesc = doc.pageDescription.search(combinationRegex);
     //debugger
     if (regexIndexPageDesc > -1 && arrOfSearchTermCombination.length > foundTerms.pageDescription.highestNumTermsMatched) {
@@ -830,7 +830,7 @@ function generateSearchClipAndHighlight(doc, searchTerms) {
        * for the replace, do it for each term in case there is a term pre/post match in the slice
        */
       _lodash2.default.each(searchTermsArr, function (term) {
-        var searchTermRegexPd = new RegExp('(' + term + '[a-z]*)', 'gi');
+        var searchTermRegexPd = new RegExp('(' + term + ')', 'gi');
         pdHighlightedText = pdHighlightedText.replace(searchTermRegexPd, replacement);
       });
       foundTerms.pageDescription.highlightedText = pdHighlightedText;
@@ -859,6 +859,7 @@ function generateSearchClipAndHighlight(doc, searchTerms) {
       /****
        * Re-slice & try to start on a word and end on a word with the slice.
        * Gonna cheat a little and remove the first & last word if its not a search term.
+       * (should probably replace this with regex at some point.)
        */
       var secondSliceStart = 0;
       var secondSliceEnd = ptHighlightedText.length;
@@ -877,7 +878,7 @@ function generateSearchClipAndHighlight(doc, searchTerms) {
       }
       ptHighlightedText = ptHighlightedText.slice(secondSliceStart, secondSliceEnd);
       _lodash2.default.each(searchTermsArr, function (term) {
-        var searchTermRegexPt = new RegExp('(' + term + '[a-z]*)', 'gi');
+        var searchTermRegexPt = new RegExp('(' + term + ')', 'gi');
         ptHighlightedText = ptHighlightedText.replace(searchTermRegexPt, replacement);
       });
       foundTerms.pageText.highlightedText = ptHighlightedText;

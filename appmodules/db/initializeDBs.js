@@ -12,6 +12,8 @@ Promise.promisifyAll(NedbStore.prototype)
 var PouchDB = require('pouchdb')
 PouchDB.plugin(require('pouchdb-quick-search'))
 
+var buildIndex = require(path.join(__dirname, 'buildIndex'))
+
 function initializeDBs(expressApp){
   if(!expressApp){
     throw new Error('expressApp not passed to initializeDBs')
@@ -93,18 +95,12 @@ function initializeDBs(expressApp){
           )
         }
       })
-      .then(() =>
-        /****
-         * Build up a new quick-search index
-         * https://github.com/nolanlawson/pouchdb-quick-search#building-the-index
-         */
-          pagesDB.search({
-            fields: ['pageTitle', 'pageDescription', 'pageText'],
-            build: true
-          })
-      )
+      /****
+       * (Re)build quick-search index
+       * https://github.com/nolanlawson/pouchdb-quick-search#building-the-index
+       */
+      .then(() => buildIndex(pagesDB, 'startup'))
       .then(() => {
-        debug('finished building index')
         /****
          * Make the databases available to wherever app is available:
          * http://expressjs.com/api.html#app.set

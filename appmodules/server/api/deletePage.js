@@ -4,6 +4,8 @@ var path = require('path')
 
 var debug = require('debug')('MarkSearch:deletePage')
 
+var buildIndex = require(path.join('..', '..', 'db', 'buildIndex'))
+
 function deletePage(req, res, next) {
   debug('deletePage running')
   debug(req.params.pageUrl)
@@ -18,18 +20,15 @@ function deletePage(req, res, next) {
         console.log("removed page from db")
         res.status(200).json({pageDeleted: result.id})
       })
-      .then( result =>
-        /****
-         * update the quick-search index
-         */
-        db.search({fields: ['pageTitle', 'pageDescription', 'pageText'], build: true})
-      )
-      .then(() => {
-        debug('Re-built search index afted page delete')
-      })
+      /****
+       * (Re)build the quick-search index
+       */
+      .then( result => buildIndex(db, 'deletePage'))
       .catch( err => {
         console.error(err)
-        res.status(503).end()
+        if(res){
+          res.status(503).end()
+        }
       })
 }
 

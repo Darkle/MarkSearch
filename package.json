@@ -8,7 +8,7 @@
   "main": "appInit.js",
   "scripts": {
     "start": "electron appInit.js",
-    "ban": "ban", //ban-sensitive-files
+    "ban": "ban",
     "dev": "DEBUG='MarkSearch:*' electron appInit.js"
   },
   "dependencies": {
@@ -36,6 +36,7 @@
     "levelhud": "^0.1.3",
     "levelup": "^1.2.1",
     "lodash": "^3.10.1",
+    "lunr": "^0.6.0",
     "mailgun-js": "^0.7.2",
     "menubar": "^3.0.0",
     "moment": "^2.10.6",

@@ -2,12 +2,14 @@
 
 var path = require('path')
 var url = require('url')
-var _ = require('lodash')
 
+var _ = require('lodash')
 var domainParser = require('domain-parser')
 var Promise = require("bluebird")
 var debug = require('debug')('MarkSearch:addPage')
+
 var save2db = require(path.join('..', '..', 'db', 'save2db'))
+var buildIndex = require(path.join('..', '..', 'db', 'buildIndex'))
 var archiveUrl = require(path.join('..', 'archive.is'))
 var safeBrowsingCheck = require(path.join('..', 'safeBrowsing'))
 var collapseWhiteSpace = require(path.join('..', '..', 'utils', 'collapseWhiteSpace'))
@@ -86,24 +88,22 @@ function addPage(req, res, next) {
          *****/
         res.status(pageDocAndHttpStatus.httpStatusCode).end()
         /****
-         * update the quick-search index
-         * We dont wait for the index to update as they are unlikely to search for text
-         * straight away from the page they just saved.
-         * Note: there will likely only ever be one user connecting, so there shouldn't be any
-         * performance issues with re-building index straight away after each save
+         * (Re)build the quick-search index.
+         * (dont wait for it to rebuild).
          */
-        return [
-          pageDocAndHttpStatus.returnedDoc,
-          db.search({fields: ['pageTitle', 'pageDescription', 'pageText'], build: true})
-        ]
+        buildIndex(db, 'addPage')
+        return pageDocAndHttpStatus.returnedDoc
       })
       /****
        * Get archiveUrl & safeBrowsingCheck running in parallel, rather than in sequence,
        * so dont have to wait for archiveUrl to finish before starting safeBrowsingCheck
        */
-      .spread( (returnedDoc, searchBuild) => {
-        return [archiveUrl(returnedDoc), safeBrowsingCheck(appName, appVersion, returnedDoc)]
-      })
+      .then( returnedDoc =>
+         [
+          archiveUrl(returnedDoc),
+          safeBrowsingCheck(appName, appVersion, returnedDoc)
+        ]
+      )
       .spread( (archiveReturnedDoc, safeBrowsingReturnedDoc) => {
         archiveReturnedDoc.safeBrowsing = safeBrowsingReturnedDoc.safeBrowsing
         return save2db(db, archiveReturnedDoc)
