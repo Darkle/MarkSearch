@@ -23,6 +23,15 @@ function addPage(req, res, next) {
    * saved http://foo.com/, that would be intepreted as a seperate
    * site, which is not what we want, so use url.parse to
    * automatically add the trailing slash.
+   *
+   * When saving a page, we’re saving:
+   * URL (as _id) - String - e.g. 'http://popurls.com/'
+   * pageTitle - String
+   * pageText - String
+   * pageDescription - String
+   * dateCreated - Number - e.g. Date.now()
+   * Archive.is link (as archiveLink) - String - e.g. 'https://archive.is/pFvwT'
+   * SafeBrowsing details (as safeBrowsing) - Object - e.g. {safeBrowsing: {possiblyUnsafe: true, details: ‘malware'}}
    */
   var parsedUrl = url.parse(req.params.pageUrl)
   var pageUrl = parsedUrl.href
@@ -30,16 +39,6 @@ function addPage(req, res, next) {
   var pageText = collapseWhiteSpace(req.body.pageText)
   var pageDescription = collapseWhiteSpace(req.body.pageDescription)
   debug('addPage running')
-  /******
-   *  When saving a page, we’re saving:
-   *  URL (as _id) - String - e.g. 'http://popurls.com/'
-   *  pageTitle - String
-   *  pageText - String
-   *  pageDescription - String
-   *  dateCreated - Number - e.g. Date.now()
-   *  Archive.is link (as archiveLink) - String - e.g. 'https://archive.is/pFvwT'
-   *  SafeBrowsing details (as safeBrowsing) - Object - e.g. {safeBrowsing: {possiblyUnsafe: true, details: ‘malware'}}
-   ******/
     //do some validation on this
     //console.log('hello colors test'.red);
   debug(pageUrl)

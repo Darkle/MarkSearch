@@ -14,6 +14,8 @@ PouchDB.plugin(require('pouchdb-quick-search'))
 
 var buildIndex = require(path.join(__dirname, 'buildIndex'))
 
+remember to make sure the sqlite folder is there first
+
 function initializeDBs(expressApp){
   if(!expressApp){
     throw new Error('expressApp not passed to initializeDBs')
