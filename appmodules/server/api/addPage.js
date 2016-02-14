@@ -5,7 +5,6 @@ var url = require('url')
 
 var _ = require('lodash')
 var domainParser = require('domain-parser')
-var Promise = require("bluebird")
 var debug = require('debug')('MarkSearch:addPage')
 
 var save2db = require(path.join('..', '..', 'db', 'save2db'))

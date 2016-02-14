@@ -1,5 +1,15 @@
 'use strict';
 
+
+
+will also need to create the index for the getAllPages for getting all rows sorted by dateCreated - double
+check (ask on wp) if creating index for order is a good idea, because in some places the book says
+its good for when using order by, read through the index page again: https://www.safaribooksonline.com/library/view/sql-in-24/9780134305905/ch16.html#ch16
+
+maybe call the db file marksearchpages.sqlite3db
+
+
+
 var path = require('path')
 var Crypto = require('crypto')
 
@@ -14,7 +24,7 @@ PouchDB.plugin(require('pouchdb-quick-search'))
 
 var buildIndex = require(path.join(__dirname, 'buildIndex'))
 
-remember to make sure the sqlite folder is there first
+
 
 function initializeDBs(expressApp){
   if(!expressApp){
@@ -111,6 +121,11 @@ function initializeDBs(expressApp){
         /****
          * expressApp.set('pagesDB' is a reference to the leveldb pagesDB database
          */
+        //TODO maybe put all this in a module, then import the module when need appDB or settings
+        //TODO then when need to update, use a function in that module to update and change the
+        //TODO reference? DOuble check that the reference changes
+        //TODO maybe call the module appDB and have it init the db and also export a reference to the
+        //TODO app settings, and also have a function to update the settings
         expressApp.set('pagesDB', pagesDB)
         /****
          * expressApp.set('appDB' is a reference to the nedb appDB database

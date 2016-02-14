@@ -15,6 +15,7 @@ var autoprefixer = require('gulp-autoprefixer')
 var less = require('gulp-less')
 var rename = require('gulp-rename')
 var eventStream = require('event-stream')
+var shell = require('gulp-shell')
 
 
 gulp.task('default', function(callback) {
@@ -145,3 +146,10 @@ gulp.task('browserify', () => {
   // create a merged stream
   return eventStream.merge.apply(null, tasks)
 })
+
+gulp.task('build_sqlite3_osx',
+    shell.task(
+        `npm install sqlite3 --save --build-from-source --sqlite=${path.join(__dirname, 'sqliteBinaries', 'osx', '3.10.2')}`,
+        {verbose: true}
+    )
+)
