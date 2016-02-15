@@ -32,7 +32,8 @@ function addPage(req, res, next) {
    * Archive.is link (as archiveLink) - String - e.g. 'https://archive.is/pFvwT'
    * SafeBrowsing details (as safeBrowsing) - Object - e.g. {safeBrowsing: {possiblyUnsafe: true, details: ‘malware'}}
    */
-  var parsedUrl = url.parse(req.params.pageUrl)
+
+  var parsedUrl = url.parse(req.params.pageUrl.toLowerCase())
   var pageUrl = parsedUrl.href
   var pageTitle = collapseWhiteSpace(req.body.pageTitle)
   var pageText = collapseWhiteSpace(req.body.pageText)
@@ -75,6 +76,12 @@ function addPage(req, res, next) {
    * stuff of the archive url and the safe browsing details are not as important
    * and can be added to the page details and resaved later in the second save to db
    */
+  would like to have a catch for each, so maybe there's a bind method for bluebird where I could bind an
+      outside variable and if res.status().end() has already been called, then subsequent catches
+  dont call it - maybe ask for advice online on ow to track if we arleady sent back a response - maybe
+  express has a feature for that, or maybe i could enclose it in a closure
+  Maybe see if there are any bluebird books out on safari/manning/leanpub, also check google for new
+      blog posts with date filter, also check reddit/hn
   save2db(db, pageDoc)
       .then(pageDocAndHttpStatus =>{
         /*****

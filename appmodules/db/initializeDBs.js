@@ -6,9 +6,13 @@ will also need to create the index for the getAllPages for getting all rows sort
 check (ask on wp) if creating index for order is a good idea, because in some places the book says
 its good for when using order by, read through the index page again: https://www.safaribooksonline.com/library/view/sql-in-24/9780134305905/ch16.html#ch16
 
-maybe call the db file marksearchpages.sqlite3db
+maybe call the db file marksearchpages.db
 
+for the pagesDB module, maybe have an init function export
 
+maybe change the app.db filename to app.json
+
+create index index_name on table_name (columns)
 
 var path = require('path')
 var Crypto = require('crypto')

@@ -83,24 +83,25 @@ var expressApp = express()
 
 var sqlite3 = require('sqlite3').verbose()
 
-var appDataPath = path.join(electron.app.getPath('appData'), 'MarkSearch')
-var sqliteDBpath = path.join(appDataPath, 'marksearchdb', 'sqlite', 'db.sqlite')
-console.log(sqliteDBpath)
+//var appDataPath = path.join(electron.app.getPath('appData'), 'MarkSearch')
+//var sqliteDBpath = path.join(appDataPath, 'marksearchdb', 'sqlite', 'db.sqlite')
+//console.log(sqliteDBpath)
 
-var db = new sqlite3.Database(sqliteDBpath);
+var db = new sqlite3.Database(':memory:');
 
 db.serialize(function() {
-  db.run("CREATE TABLE lorem (info TEXT)");
+  db.run("CREATE VIRTUAL TABLE quotes USING fts5(content, tokenize='porter unicode61');");
+  //db.run("CREATE TABLE lorem (info TEXT)");
 
-  var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
-  for (var i = 0; i < 10; i++) {
-    stmt.run("Ipsum " + i);
-  }
-  stmt.finalize();
-
-  db.each("SELECT rowid AS id, info FROM lorem", function(err, row) {
-    console.log(row.id + ": " + row.info);
-  });
+  //var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
+  //for (var i = 0; i < 10; i++) {
+  //  stmt.run("Ipsum " + i);
+  //}
+  //stmt.finalize();
+  //
+  //db.each("SELECT rowid AS id, info FROM lorem", function(err, row) {
+  //  console.log(row.id + ": " + row.info);
+  //});
 });
 
 db.close();

@@ -147,9 +147,9 @@ gulp.task('browserify', () => {
   return eventStream.merge.apply(null, tasks)
 })
 
-gulp.task('build_sqlite3_osx',
+gulp.task('build_sqlite3_osx_x86_64',
     shell.task(
-        `npm install sqlite3 --save --build-from-source --sqlite=${path.join(__dirname, 'sqliteBinaries', 'osx', '3.10.2')}`,
+        `npm install sqlite3 --save --build-from-source --sqlite=${path.join(__dirname, 'sqliteBinaries', 'osx_x86_64', '3.10.2')}`,
         {verbose: true}
     )
 )
