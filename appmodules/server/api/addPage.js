@@ -100,6 +100,16 @@ function addPage(req, res, next) {
     http://stackoverflow.com/questions/13990127/get-pdf-of-the-current-page-in-a-google-chrome-extension
     - no dont send the page capture on saving a page as that will add megabytes to the transfer
       maybe just stick with archive.is
+    Actually it might be ok cause its over LAN
+      if i did do it this way, it could be easy to do
+      so when get to addPage, if it's called from the scrapeAndAddPage, then it
+      will have req.body.pageArchive = {type: 'pdf', data: data}
+      and if it's called from an extension, it
+    will have req.body.pageArchive = {type: 'mht', data: data} and for that, just have
+      a function at the end that converts it to a pdf and saves it to the db
+      then if its called from the bookmarklet, we have a module that just does scrapeAndSavePdf
+      remember to change the pages db if do this
+
 
 
   save2db(db, pageDoc)

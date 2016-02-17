@@ -1,7 +1,5 @@
 'use strict';
 
-var path = require('path')
-
 var debug = require('debug')('MarkSearch:pagesdb')
 var envs = require('envs')
 
@@ -14,8 +12,8 @@ pagesdb.init = (pagesDBFilePath) => {
   knexConfig.connection.filename = pagesDBFilePath
   //knexConfig.connection.filename = ':memory:'
   pagesdb.db = require('knex')(knexConfig)
-  pagesdb.db.schema.createTableIfNotExists('pages', function(table) {
-    debug('createTableIfNotExists')
+  pagesdb.db.schema.createTableIfNotExists('pages', table => {
+    debug('creating "pages" table')
     table.text('pageURL').primary().notNullable()
     table.integer('dateCreated').notNullable()
     table.text('pageTitle').nullable()

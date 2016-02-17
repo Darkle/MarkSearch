@@ -17,10 +17,6 @@ function initializeDBs(){
    */
   return fsExtra.ensureDirAsync(appDataPath)
       .return(appSettings.init(appDataPath))
-      .then(() => {
-         appSettings.updateSingleSetting('markSearchSettings.prebrowsing', 22)
-        return appSettings.updateSingleSetting('markSearchSettings.prebrowsing', 42)
-      })
       //.tap(pagesdb.init)
 }
 
