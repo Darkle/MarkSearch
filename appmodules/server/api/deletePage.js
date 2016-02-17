@@ -4,7 +4,7 @@ var path = require('path')
 
 var debug = require('debug')('MarkSearch:deletePage')
 
-var buildIndex = require(path.join('..', '..', 'db', 'buildIndex'))
+var buildIndex = require('/../../db/buildIndex')
 
 function deletePage(req, res, next) {
   debug('deletePage running')

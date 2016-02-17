@@ -1,9 +1,12 @@
 'use strict';
 
+var path = require('path')
+
 var jwt = require('jsonwebtoken')
 
+var JWTsecret = require('../db/appSettings').settings.JWTsecret
+
 function authenticationCheck(req, res, next){
-  var JWTsecret = req.app.get('appSettings').JWTsecret
   var token = req.get('Authorization') || req.body.JWT
   if(!token){
     console.log('Request missing Authorization Header or JWT post body data.')

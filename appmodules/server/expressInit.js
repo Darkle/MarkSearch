@@ -12,10 +12,10 @@ var csurf = require('csurf')
 var expressValidator = require('express-validator')
 var compression = require('compression')
 
-var authenticationCheck = require(path.join(__dirname, 'authenticationCheck'))
-var expressErrorMiddleware = require(path.join(__dirname, 'expressErrorMiddleware'))
-var routes = require(path.join(__dirname, 'routes', 'index'))
-var api = require(path.join(__dirname, 'routes', 'api'))
+var authenticationCheck = require('./authenticationCheck')
+var expressErrorMiddleware = require('./expressErrorMiddleware')
+var routes = require('./routes/index')
+var api = require('./routes/api')
 
 var electronApp = electron.app
 
@@ -24,10 +24,10 @@ function expressInit(expressApp, serverPort){
   expressApp.set('marksearchVersion', electronApp.getVersion())
   expressApp.set('marksearchAppName', electronApp.getName())
   expressApp.use(compression())
-  expressApp.set('views', path.join(__dirname, 'views'))
+  expressApp.set('views', './views')
   expressApp.set('view engine', 'jade')
   // uncomment after placing your favicon in /public
-  //expressApp.use(favicon(path.join(__dirname,'..', 'public', 'favicon.ico')))
+  //expressApp.use(favicon('../public/favicon.ico'))
   expressApp.use(logger('dev'))
   /****
    * The api gets sent the text of the page, so in the off chance that it
@@ -39,8 +39,8 @@ function expressInit(expressApp, serverPort){
   expressApp.use(bodyParser.urlencoded({ limit: '1mb', extended: false }))
   expressApp.use(expressValidator())
   expressApp.use(cookieParser())
-  expressApp.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'static')))
-  expressApp.use('/bower_components',  express.static(path.join(__dirname, '..', '..', 'bower_components')))
+  expressApp.use(express.static('../../frontend/static'))
+  expressApp.use('/bower_components',  express.static('../../bower_components'))
   /****
    * Routes
    */
@@ -55,7 +55,6 @@ function expressInit(expressApp, serverPort){
      */
     expressApp.locals.pretty = true
   }
-  return expressApp
 }
 
 module.exports = expressInit

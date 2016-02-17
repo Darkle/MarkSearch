@@ -5,7 +5,7 @@ var path = require('path')
 var request = require('request')
 var debug = require('debug')('MarkSearch:safebrowsing')
 
-const APIKEYS = require(path.join('..', '..', 'config', 'apikeys.json'))
+const APIKEYS = require('../../config/apikeys.json')
 
 /***
  * Using https://developers.google.com/safe-browsing/lookup_guide

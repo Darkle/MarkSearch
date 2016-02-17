@@ -6,7 +6,7 @@ var express = require('express')
 var router = express.Router()
 
 var requireDir = require('require-dir')
-var apiModules = requireDir(path.join('..', 'api'))
+var apiModules = requireDir('../api')
 
 /* GET - api - get a single page. */
 router.get('/get/:pageUrl', function validation(){
@@ -17,7 +17,7 @@ router.get('/get/:pageUrl', function validation(){
 router.get('/getall/', apiModules.getAllPages)
 
 /* GET - api - search. */
-router.get('/search/:searchingLoose/:searchTerms', apiModules.search)
+router.get('/search/:searchTerms', apiModules.search)
 
 /****
  * POST - api - add a page.

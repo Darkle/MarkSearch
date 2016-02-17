@@ -5,7 +5,7 @@ var path = require('path')
 var electron = require('electron')
 var envs = require('envs')
 
-var checkScreenSize = require(path.join(__dirname, 'checkScreenSize'))
+var checkScreenSize = require('./checkScreenSize')
 
 var electronApp = electron.app
 var Menu = electron.Menu
@@ -18,7 +18,7 @@ var appTrayMenu = null
 function trayMenu(){
   var BrowserWindow = electron.BrowserWindow
 
-  appTrayMenu = new Tray(path.join(__dirname, 'icons', 'MS-iconTemplate.png'))
+  appTrayMenu = new Tray('./icons/MS-iconTemplate.png')
 
   var contextMenu = Menu.buildFromTemplate([
     {

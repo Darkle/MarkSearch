@@ -6,7 +6,7 @@ var _ = require('lodash')
 var debug = require('debug')('MarkSearch:search')
 var combs = require('combs')
 
-const STOPWORDS = require(path.join('..', 'lunrStopwordFilter.json'))
+const STOPWORDS = require('../lunrStopwordFilter.json')
 
 function search(req, res, next){
   debug('search running')

@@ -15,7 +15,6 @@ function errorMiddleware(app){
   /****
    * error handlers
    */
-  app.locals.pretty = true
   app.use((err, req, res, next) =>{
     /****
      * errObjectToShow = {} - no stacktraces leaked to user if in production

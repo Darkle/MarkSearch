@@ -5,6 +5,7 @@ import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEven
 import { generateSearchClipAndHighlight } from './generateSearchClipAndHighlight'
 
 import _ from 'lodash'
+import xss as xssSanitize from 'xss'
 //import moment from 'moment'
 
 /****
@@ -161,7 +162,7 @@ function renderResults(resultsChunk, searchTerms){
 
             var safeBrowsingExplination = document.createElement('div')
             safeBrowsingExplination.className = 'safeBrowsingExplination'
-            safeBrowsingExplination.innerHTML = sbDetails.explanation
+            safeBrowsingExplination.innerHTML = xssSanitize(sbDetails.explanation, {whiteList: {a: ['href']}})
             safeBrowsingType.appendChild(safeBrowsingExplination)
 
             safeBrowsingType = null
@@ -177,10 +178,10 @@ function renderResults(resultsChunk, searchTerms){
         var description = document.createElement('p')
         description.className = 'description'
         if(doc.searchHighlight){
-          description.innerHTML = doc.searchHighlight
+          description.innerHTML = xssSanitize(doc.searchHighlight, {whiteList: {span: ['class']}})
         }
         else if(doc.pageDescription){
-          description.innerHTML = _.trim(doc.pageDescription)
+          description.textContent = _.trim(doc.pageDescription)
         }
         mainDetails.appendChild(description)
 

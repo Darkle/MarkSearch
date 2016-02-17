@@ -9,7 +9,7 @@ var electron = require('electron')
 var BrowserWindow = electron.BrowserWindow
 var ipcMain = electron.ipcMain
 
-var addPage = require(path.join(__dirname, '..', 'addPage'))
+var addPage = require('../addPage')
 
 /****
  * A generator on the front end is calling scrapeAndAddPage, so
@@ -50,7 +50,7 @@ function scrapeAndAddPage(req, res, next) {
   var browserWindow = new BrowserWindow(
       {
         show: devMode,
-        preload: path.join(__dirname, 'scrapePreload.js'),
+        preload: './scrapePreload.js',
         webPreferences: {
           nodeIntegration: false,
           allowDisplayingInsecureContent: true,

@@ -5,7 +5,7 @@ var path = require('path')
 var Mailgun = require('mailgun-js')
 var debug = require('debug')('MarkSearch:mailgun')
 
-const APIKEYS = require(path.join('..', '..', 'config', 'apikeys.json'))
+const APIKEYS = require('../../config/apikeys.json')
 
 function sendEmail(emailDetails, callback){
   //TODO change the localhost to global, so marksearch.local

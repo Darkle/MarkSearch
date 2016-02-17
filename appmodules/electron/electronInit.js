@@ -5,7 +5,8 @@ var path = require('path')
 var debug = require('debug')('MarkSearch:electronInit')
 var electron = require('electron')
 
-var appErrorHandler = require(path.join(__dirname, '..', 'appErrorHandler'))
+var appErrorHandler = require('../appErrorHandler')
+var pagesdb = require('../db/pagesdb')
 
 var electronApp = electron.app
 
@@ -35,6 +36,13 @@ function electronInit(){
        * does on OSX)
        */
       electronApp.on('window-all-closed', () => {})
+
+      electronApp.on('will-quit', () => {
+        /****
+         * Disconnect knex sqlite connection
+         */
+        pagesdb.db.destroy()
+      })
 
       electronApp.on('ready', () => {
         resolve()

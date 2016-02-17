@@ -7,11 +7,11 @@ var _ = require('lodash')
 var domainParser = require('domain-parser')
 var debug = require('debug')('MarkSearch:addPage')
 
-var save2db = require(path.join('..', '..', 'db', 'save2db'))
-var buildIndex = require(path.join('..', '..', 'db', 'buildIndex'))
-var archiveUrl = require(path.join('..', 'archive.is'))
-var safeBrowsingCheck = require(path.join('..', 'safeBrowsing'))
-var collapseWhiteSpace = require(path.join('..', '..', 'utils', 'collapseWhiteSpace'))
+var save2db = require('../../db/save2db')
+var buildIndex = require('../../db/buildIndex')
+var archiveUrl = require('../archive.is')
+var safeBrowsingCheck = require('../safeBrowsing')
+var collapseWhiteSpace = require('../../utils/collapseWhiteSpace')
 
 function addPage(req, res, next) {
   /****
@@ -82,6 +82,26 @@ function addPage(req, res, next) {
   express has a feature for that, or maybe i could enclose it in a closure
   Maybe see if there are any bluebird books out on safari/manning/leanpub, also check google for new
       blog posts with date filter, also check reddit/hn
+
+  when saving the safebrowsing and archive.is data, dont need to hold on to the doc details any more, cause we
+  are just using the update sql feature and just updating those feilds
+
+  Should I switch archive.is to saving a pdf backup of the page? I mean its super simple in scraper, and maybe relying
+      on archive.is for backups of every page is not a good idea - double check how large the pdfs are
+      so then could prolly get rid of the res.status(503).end() in the last catch as dont really need it if just
+    safeBrowsing fails - if dont use archive.is, rememebr need to change db and render and addPage - to a search
+      for archive in code
+      Would need to generate pdfs for bookmarklets and extensions, so at the end of addPage, would need to
+      call scrape again ( or maybe a diff scrape just for non-scraping pdfs and save that to db) - prolly
+      easier to just keep using archive.is, but then again, a pdf does make a bit of sense
+
+      For the browser extensions, it may actually be possible to create a pdf of the page and send
+      it to marksearch to save as part of the addPage
+    http://stackoverflow.com/questions/13990127/get-pdf-of-the-current-page-in-a-google-chrome-extension
+    - no dont send the page capture on saving a page as that will add megabytes to the transfer
+      maybe just stick with archive.is
+
+
   save2db(db, pageDoc)
       .then(pageDocAndHttpStatus =>{
         /*****
