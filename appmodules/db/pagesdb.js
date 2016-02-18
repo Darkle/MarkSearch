@@ -1,9 +1,8 @@
 'use strict';
 
 var debug = require('debug')('MarkSearch:pagesdb')
-var envs = require('envs')
 
-var knexConfig = require('./knexConfig')[envs('NODE_ENV')]
+var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 
 var pagesdb = {}
 
@@ -13,7 +12,12 @@ pagesdb.init = (pagesDBFilePath) => {
   //knexConfig.connection.filename = ':memory:'
   pagesdb.db = require('knex')(knexConfig)
   pagesdb.db.schema.createTableIfNotExists('pages', table => {
-    debug('creating "pages" table')
+    /****
+     * This callback gets called even if the table exits - but it
+     * still only creates the table if it doesnt exist:
+     * https://github.com/tgriesser/knex/issues/729
+     */
+    debug('may be creating "pages" table')
     table.text('pageURL').primary().notNullable()
     table.integer('dateCreated').notNullable()
     table.text('pageTitle').nullable()
@@ -34,5 +38,14 @@ pagesdb.init = (pagesDBFilePath) => {
       pagesdb.db.raw('create index if not exists "pagesSortedDesc" on pages (dateCreated desc)')
   )
 }
+
+//pagesdb.update = (keyValObj) =>
+//    appSettings.db('appSettings')
+//        .where('id', 'appSettings')
+//        .update(keyValObj)
+//        .return(appSettings.db('appSettings').where('id', 'appSettings'))
+//        .then( rows => {
+//          appSettings.settings = rows[0]
+//        })
 
 module.exports = pagesdb

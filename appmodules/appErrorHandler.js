@@ -1,6 +1,5 @@
 'use strict';
 
-var path = require('path')
 var child = require('child_process').exec
 
 var electron = require('electron')

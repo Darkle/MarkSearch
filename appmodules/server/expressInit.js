@@ -24,7 +24,7 @@ function expressInit(expressApp, serverPort){
   expressApp.set('marksearchVersion', electronApp.getVersion())
   expressApp.set('marksearchAppName', electronApp.getName())
   expressApp.use(compression())
-  expressApp.set('views', './views')
+  expressApp.set('views', path.join(__dirname, 'views'))
   expressApp.set('view engine', 'jade')
   // uncomment after placing your favicon in /public
   //expressApp.use(favicon('../public/favicon.ico'))
@@ -39,13 +39,14 @@ function expressInit(expressApp, serverPort){
   expressApp.use(bodyParser.urlencoded({ limit: '1mb', extended: false }))
   expressApp.use(expressValidator())
   expressApp.use(cookieParser())
-  expressApp.use(express.static('../../frontend/static'))
-  expressApp.use('/bower_components',  express.static('../../bower_components'))
+  expressApp.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'static')))
+  expressApp.use('/bower_components',  express.static(path.join(__dirname, '..', '..', 'bower_components')))
   /****
    * Routes
    */
   expressApp.use('/api', authenticationCheck, api)
-  expressApp.use('/', csurf({ cookie: true, httpOnly: true }), routes)
+  expressApp.use('/', routes)
+  //expressApp.use('/', csurf({ cookie: true, httpOnly: true }), routes)
 
   expressErrorMiddleware(expressApp)
 

@@ -1,6 +1,5 @@
 'use strict';
 
-var path = require('path')
 var fs = require('fs')
 var url = require('url')
 
@@ -21,31 +20,17 @@ var addPage = require('../addPage')
 function scrapeAndAddPage(req, res, next) {
   debug('scrapeAndAddPage running')
 
-  var urlToScrape
+  /****
+   * Using url.parse to put a trailing slash on the end of urls
+   * that have no path. This is to remain consistent, so dont end
+   * up saving http://foo.com and http://foo.com/ as different
+   * pages - we are also doing it in addPage for the times when
+   * we are not scraping (e.g. when addPage gets page data
+   * from a browser extension)
+   */
+  var urlToScrape = url.parse(req.params.pageUrl).href
   var devMode = req.app.get('env') === 'development'
   var numTimesRedirected = 0
-  try{
-    /****
-     * Doing this so that we create a somwhat valid url out of what is sent.
-     * e.g. if req.params.pageUrl is say http://nonsense:port/yay,
-     * the browser will not be able to load that - but it doesn't fire a
-     * did-fail-load event though, it just seems to sit there. However
-     * if we parse it, url.parse converts it to http://nonsense/:port/yay,
-     * which works properly in that it properly fails to load and about:blank
-     * is loaded instead.
-     * (haven't tested this extensively)
-     * http://bit.ly/1X2gwM2
-     */
-    urlToScrape = url.parse(req.params.pageUrl).href
-  }
-  catch(err){
-    debug(
-        `Error Parsing URL
-        ${err.message}
-        ${err.stack}`
-    )
-    res.status(500).json({errorMessage: 'Error Parsing URL'})
-  }
 
   var browserWindow = new BrowserWindow(
       {

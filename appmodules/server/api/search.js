@@ -1,7 +1,5 @@
 'use strict';
 
-var path = require('path')
-
 var _ = require('lodash')
 var debug = require('debug')('MarkSearch:search')
 var combs = require('combs')

@@ -3,7 +3,6 @@
 var path = require('path')
 
 var electron = require('electron')
-var envs = require('envs')
 
 var checkScreenSize = require('./checkScreenSize')
 
@@ -18,7 +17,7 @@ var appTrayMenu = null
 function trayMenu(){
   var BrowserWindow = electron.BrowserWindow
 
-  appTrayMenu = new Tray('./icons/MS-iconTemplate.png')
+  appTrayMenu = new Tray(path.join(__dirname, 'icons', 'MS-iconTemplate.png'))
 
   var contextMenu = Menu.buildFromTemplate([
     {
@@ -42,7 +41,7 @@ function trayMenu(){
           )
           //TODO - get address dynamically
           settingsWindow.loadURL(`http://localhost:3020/settingsPage`)
-          if(envs('NODE_ENV') === 'development'){
+          if(process.env.NODE_ENV === 'development'){
             settingsWindow.openDevTools()
           }
 
@@ -73,7 +72,7 @@ function trayMenu(){
           )
 
           helpWindow.loadURL(`http://localhost:3020/help`)
-          if(envs('NODE_ENV') === 'development'){
+          if(process.env.NODE_ENV === 'development'){
             helpWindow.openDevTools()
           }
 
@@ -103,7 +102,7 @@ function trayMenu(){
               }
           )
           aboutWindow.loadURL(`http://localhost:3020/about`)
-          if(envs('NODE_ENV') === 'development'){
+          if(process.env.NODE_ENV === 'development'){
             aboutWindow.openDevTools()
           }
 

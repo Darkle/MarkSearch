@@ -1,7 +1,5 @@
 'use strict';
 
-var path = require('path')
-
 var request = require('request')
 var debug = require('debug')('MarkSearch:safebrowsing')
 

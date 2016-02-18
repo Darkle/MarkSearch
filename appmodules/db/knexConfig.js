@@ -1,14 +1,13 @@
 'use strict';
 
-var envs = require('envs')
-
 module.exports = {
   development: {
     client: 'sqlite3',
     connection: {
       //filename: ':memory:'
+      //dont put the filename here, we need to dynamically set it in appSettings.js and pagesdb.js
     },
-    debug: (envs('NODE_ENV') === 'development'),
+    //debug: (process.env.NODE_ENV === 'development'),
     /****
      * https://github.com/tgriesser/knex/pull/1043
      */
@@ -18,8 +17,9 @@ module.exports = {
     client: 'sqlite3',
     connection: {
       //filename: ':memory:'
+      //dont put the filename here, we need to dynamically set it in appSettings.js and pagesdb.js
     },
-    debug: (envs('NODE_ENV') === 'development'),
+    //debug: (process.env.NODE_ENV === 'development'),
     useNullAsDefault: false
   },
   testing: {

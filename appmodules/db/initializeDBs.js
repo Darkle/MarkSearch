@@ -17,7 +17,7 @@ function initializeDBs(){
    */
   return fsExtra.ensureDirAsync(appDataPath)
       .return(appSettings.init(appDataPath))
-      //.tap(pagesdb.init)
+      .tap(pagesdb.init)
 }
 
 module.exports = initializeDBs

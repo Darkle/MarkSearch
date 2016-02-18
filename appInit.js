@@ -8,11 +8,11 @@ var debug = require('debug')('MarkSearch:appInit')
 var Server = require('hyperbole')
 var existent = require('existent')
 
-var appErrorHandler = require(path.join(__dirname, 'appmodules', 'appErrorHandler'))
-var initializeDBs = require(path.join(__dirname, 'appmodules', 'db', 'initializeDBs'))
-//var expressInit = require(path.join(__dirname, 'appmodules', 'server', 'expressInit'))
-var electronInit = require(path.join(__dirname, 'appmodules', 'electron', 'electronInit'))
-var initElectronTrayMenu = require(path.join(__dirname, 'appmodules', 'electron',  'initTrayMenu'))
+var appErrorHandler = require('./appmodules/appErrorHandler')
+var initializeDBs = require('./appmodules/db/initializeDBs')
+var expressInit = require('./appmodules/server/expressInit')
+var electronInit = require('./appmodules/electron/electronInit')
+var initElectronTrayMenu = require('./appmodules/electron/initTrayMenu')
 
 var expressApp = express()
 ////TODO port/domain selection
@@ -21,19 +21,19 @@ var firstRun = !existent.sync(path.join(electron.app.getPath('appData'), 'MarkSe
 
 electronInit()
     .then(initializeDBs)
-    //.then(() => {
-    //  var server = new Server(expressApp, serverPort)
-    //  return server.start()
-    //})
-    //.then(() => expressInit(expressApp, serverPort))
-    //.then(initElectronTrayMenu)
-    //.then(() => {
-    //  if(firstRun){
-    //      debug('first run')
-    //    electron.shell.openExternal(`http://localhost:3020/`)
-    //  }
-    //})
-    //.catch(appErrorHandler)
+    .then(() => {
+      var server = new Server(expressApp, serverPort)
+      return server.start()
+    })
+    .then(() => expressInit(expressApp, serverPort))
+    .then(initElectronTrayMenu)
+    .then(() => {
+      if(firstRun){
+        debug('first run')
+        electron.shell.openExternal(`http://localhost:3020/`)
+      }
+    })
+    .catch(appErrorHandler)
 
 
 

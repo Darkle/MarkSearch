@@ -1,7 +1,5 @@
 'use strict';
 
-var path = require('path')
-
 var Mailgun = require('mailgun-js')
 var debug = require('debug')('MarkSearch:mailgun')
 

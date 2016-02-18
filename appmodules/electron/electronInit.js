@@ -1,7 +1,5 @@
 'use strict';
 
-var path = require('path')
-
 var debug = require('debug')('MarkSearch:electronInit')
 var electron = require('electron')
 

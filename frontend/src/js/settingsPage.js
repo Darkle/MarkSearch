@@ -83,7 +83,8 @@ function settingsPageInit(event){
         {
           headers: {
             'X-CSRF-Token': csrfToken
-          }
+          },
+          tokenType : 'Extension'
         }
     )
     .then( response => {
@@ -124,7 +125,8 @@ function settingsPageInit(event){
   //      {
   //        headers: {
   //          'X-CSRF-Token': csrfToken
-  //        }
+  //        },
+  //          tokenType : 'Bookmarklet'
   //      }
   //      )
   //      .then( response => {

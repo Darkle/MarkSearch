@@ -1,34 +1,30 @@
 'use strict';
 
-var path = require('path')
-
 var debug = require('debug')('MarkSearch:deletePage')
 
-var buildIndex = require('/../../db/buildIndex')
+var pagesdb = require('../../db/pagesdb')
 
 function deletePage(req, res, next) {
   debug('deletePage running')
   debug(req.params.pageUrl)
-  var db = req.app.get('pagesDB')
-  db.get(req.params.pageUrl)
-      .then( doc => db.remove(doc) )
-      .then( result => {
-        /*****
-         * return a 200
-         * http://stackoverflow.com/questions/2342579/
-         */
-        console.log("removed page from db")
-        res.status(200).json({pageDeleted: result.id})
+  //TODO - validation on req.params.pageUrl
+  pagesdb.db('pages')
+      .where('pageURL', req.params.pageUrl)
+      .del(numRowsAffected => {
+        if(numRowsAffected > 1){
+          throw new Error('Somehow we deleted more than one row from the pages db!')
+        }
+        else{
+          /*****
+           * return a 200
+           * http://stackoverflow.com/questions/2342579/
+           */
+          res.status(200).end()
+        }
       })
-      /****
-       * (Re)build the quick-search index
-       */
-      .then( result => buildIndex(db, 'deletePage'))
       .catch( err => {
         console.error(err)
-        if(res){
-          res.status(503).end()
-        }
+        res.status(503).end()
       })
 }
 

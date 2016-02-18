@@ -1,10 +1,7 @@
 'use strict';
 
-var path = require('path')
-
 var express = require('express')
 var router = express.Router()
-var _ = require('lodash')
 var debug = require('debug')('MarkSearch:routes index')
 
 var requireDir = require('require-dir')
@@ -15,12 +12,15 @@ var appSettings = require('../../db/appSettings')
 /* GET home page. */
 router.get('/', (req, res, next) => {
   debug("searchPage page")
-  var marsearchSettingsObjCopy = _.pick(appSettings.settings, 'markSearchSettings')
   res.render('searchPage',
       {
         title: 'MarkSearch',
         csrfToken: req.csrfToken(),
-        markSearchSettings: JSON.stringify(marsearchSettingsObjCopy.markSearchSettings)
+        markSearchSettings: JSON.stringify(
+            {
+              prebrowsing: appSettings.settings.prebrowsing
+            }
+        )
       }
   )
 })
@@ -37,7 +37,7 @@ router.get('/about', (req, res, next) => {
 
 /* GET help page. */
 router.get('/help', (req, res, next) => {
-  debug("help_about page")
+  debug("help page")
   res.render('help',
       {
         title: 'MarkSearch Help'
@@ -48,13 +48,15 @@ router.get('/help', (req, res, next) => {
 /* GET settings page. */
 router.get('/settingsPage', (req, res, next) => {
   debug("settings page")
-  var marsearchSettingsObjCopy = _.pick(appSettings.settings, 'markSearchSettings')
   res.render('settingsPage',
       {
         title: 'MarkSearch Settings',
         csrfToken: req.csrfToken(),
-        markSearchSettings: JSON.stringify(marsearchSettingsObjCopy.markSearchSettings),
-        //NODE_ENV: req.app.get('env')
+        markSearchSettings: JSON.stringify(
+            {
+              prebrowsing: appSettings.settings.prebrowsing
+            }
+        )
       }
   )
 })

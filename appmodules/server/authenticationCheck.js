@@ -1,10 +1,8 @@
 'use strict';
 
-var path = require('path')
-
 var jwt = require('jsonwebtoken')
 
-var JWTsecret = require('../db/appSettings').settings.JWTsecret
+var appSettings = require('../db/appSettings')
 
 function authenticationCheck(req, res, next){
   var token = req.get('Authorization') || req.body.JWT
@@ -15,7 +13,7 @@ function authenticationCheck(req, res, next){
   if(token.startsWith('Bearer ')){
     token = token.replace('Bearer ', '')
   }
-  jwt.verify(token, JWTsecret, (err, decoded) => {
+  jwt.verify(token, appSettings.settings.JWTsecret, (err, decoded) => {
     if(err) {
       console.log('Failed to authenticate token.')
       console.error(err)
