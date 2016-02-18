@@ -62,8 +62,6 @@ function addPage(req, res, next) {
   //debug('pageDoc')
   //debug(pageDoc)
   var db = req.app.get('pagesDB')
-  var appName = req.app.get('marksearchAppName')
-  var appVersion = req.app.get('marksearchVersion')
   /****
    * We're doing two save's rather than one so that the basic page details are
    * available to search straight away, as the archiveURL and the safeBrowsing
@@ -134,7 +132,7 @@ function addPage(req, res, next) {
       .then( returnedDoc =>
          [
           archiveUrl(returnedDoc),
-          safeBrowsingCheck(appName, appVersion, returnedDoc)
+          safeBrowsingCheck(returnedDoc)
         ]
       )
       .spread( (archiveReturnedDoc, safeBrowsingReturnedDoc) => {

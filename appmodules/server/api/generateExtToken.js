@@ -2,6 +2,7 @@
 
 var jwt = require('jsonwebtoken')
 var debug = require('debug')('MarkSearch:generateExtToken')
+var _ = require('lodash')
 
 var appSettings = require('../../db/appSettings')
 
@@ -15,7 +16,7 @@ function generateExtToken(req, res, next){
       //TODO - validation of req.body.tokenType
   var token = jwt.sign(
       {
-        client: `${req.body.tokenType}_${parseInt((Math.random() * 100), 10)}`
+        client: `${req.body.tokenType}_${_.random(0, 100)}`
       },
       appSettings.settings.JWTsecret
   )

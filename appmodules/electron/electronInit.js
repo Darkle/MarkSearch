@@ -5,6 +5,7 @@ var electron = require('electron')
 
 var appErrorHandler = require('../appErrorHandler')
 var pagesdb = require('../db/pagesdb')
+var appSettings = require('../db/appSettings')
 
 var electronApp = electron.app
 
@@ -40,6 +41,7 @@ function electronInit(){
          * Disconnect knex sqlite connection
          */
         pagesdb.db.destroy()
+        appSettings.db.destroy()
       })
 
       electronApp.on('ready', () => {

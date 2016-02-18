@@ -2,8 +2,11 @@
 
 var request = require('request')
 var debug = require('debug')('MarkSearch:safebrowsing')
+var electron = require('electron')
 
-const APIKEYS = require('../../config/apikeys.json')
+var APIKEYS = require('../../config/apikeys.json')
+
+var electronApp = electron.app
 
 /***
  * Using https://developers.google.com/safe-browsing/lookup_guide
@@ -46,13 +49,13 @@ var safeBrowsingDetails = {
   }
 }
 
-function safeBrowsingCheck(appName, appVersion,  doc){
+function safeBrowsingCheck(doc){
   return new Promise((resolve, reject) =>{
     var safeBrowsingUrl = 'https://sb-ssl.google.com/safebrowsing/api/lookup?' +
-        'client=' + appName +
+        'client=' + electronApp.getName() +
         '&key=' + APIKEYS.safeBrowsing +
             //TODO: grab the app version from electron or appDB (wherever ended up storing it)
-        '&appver=' + appVersion +
+        '&appver=' + electronApp.getVersion() +
         '&pver=3.1' +
         '&url=' + encodeURIComponent(doc._id)
 

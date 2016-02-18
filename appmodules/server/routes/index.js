@@ -1,13 +1,14 @@
 'use strict';
 
 var express = require('express')
-var router = express.Router()
 var debug = require('debug')('MarkSearch:routes index')
-
 var requireDir = require('require-dir')
+
 var apiModules = requireDir('../api')
 var scrapeAndAddPage = require('../api/scrape/scrapeAndAddPage')
 var appSettings = require('../../db/appSettings')
+
+var router = express.Router()
 
 /* GET home page. */
 router.get('/', (req, res, next) => {

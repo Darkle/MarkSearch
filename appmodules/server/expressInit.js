@@ -2,7 +2,6 @@
 
 var path = require('path')
 
-var electron = require('electron')
 var express = require('express')
 var favicon = require('serve-favicon')
 var logger = require('morgan')
@@ -17,7 +16,7 @@ var expressErrorMiddleware = require('./expressErrorMiddleware')
 var routes = require('./routes/index')
 var api = require('./routes/api')
 
-var electronApp = electron.app
+
 
 function expressInit(expressApp, serverPort){
   expressApp.set('port', serverPort)

@@ -13,7 +13,7 @@ function appErrorHandler(err){
   console.error(err.stack)
   console.error(err)
   /****
-   * If electron errors, then  it's possible showMessageBox may not be available
+   * If electron errors, it's possible showMessageBox may not be available
    */
   try{
     var dialog = electron.dialog
