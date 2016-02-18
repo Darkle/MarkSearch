@@ -6,25 +6,14 @@ var router = express.Router()
 var requireDir = require('require-dir')
 var apiModules = requireDir('../api')
 
-/* GET - api - get a single page. */
-router.get('/get/:pageUrl', function validation(){
-  //do something and error or call next()
-}, apiModules.getSinglePage)
-
-/* GET - api - get all pages. */
+router.get('/get/:pageUrl', apiModules.getSinglePage)
 router.get('/getall/', apiModules.getAllPages)
-
-/* GET - api - search. */
 router.get('/search/:searchTerms', apiModules.search)
-
 /****
- * POST - api - add a page.
- * apiModules.addPage is used by the extensions as they send all the page data
- * and dont need Marksearch backend to scrape
+ * /add/:pageUrl is used by the extensions as they send all the page data
+ * and dont need to use scrapeAndAddPage
  */
 router.post('/add/:pageUrl', apiModules.addPage)
-
-/* DELETE - api - remove/delete a page. */
 router.delete('/remove/:pageUrl', apiModules.deletePage)
 
 module.exports = router

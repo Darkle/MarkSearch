@@ -105,6 +105,8 @@ function addPage(req, res, next) {
   //    a function at the end that converts it to a pdf and saves it to the db
   //    then if its called from the bookmarklet, we have a module that just does scrapeAndSavePdf
   //    remember to change the pages db if do this
+  //if do this, remember to increase the express body parser limit
+
 
 
 

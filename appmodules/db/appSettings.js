@@ -28,7 +28,7 @@ appSettings.init = (appDataPath) => {
   .return(
       appSettings.db('appSettings').where('id', 'appSettings')
   )
-  .tap( rows => {
+  .then( rows => {
     if(!rows.length){
       /***
        * On first run, save the location where the pages db will be stored.
@@ -45,6 +45,9 @@ appSettings.init = (appDataPath) => {
                 prebrowsing: false
               }
           )
+    }
+    else{
+      return rows
     }
   })
   .then( rows => {
