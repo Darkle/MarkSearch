@@ -13,8 +13,8 @@ pagesdb.init = (pagesDBFilePath) => {
   pagesdb.db = require('knex')(knexConfig)
   return pagesdb.db.schema.hasTable('pages').then( exists => {
     if (!exists) {
+      debug('creating "pages" table')
       return pagesdb.db.schema.createTable('pages', table => {
-        debug('creating "pages" table')
         table.text('pageURL').primary().notNullable()
         table.integer('dateCreated').notNullable()
         table.text('pageTitle').nullable()

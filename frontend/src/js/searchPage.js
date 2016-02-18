@@ -41,6 +41,8 @@ function set_haveShownResultsTooltips(val){
   haveShownResultsTooltips = val
 }
 
+https://github.com/alvinteh/url-params-helper might be good
+
 $(document).ready(searchPageInit)
 
 function searchPageInit(event){

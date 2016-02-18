@@ -29,7 +29,7 @@ appSettings.init = (appDataPath) => {
       appSettings.db('appSettings').where('id', 'appSettings')
   )
   .tap( rows => {
-    if(!rows.length){
+    if(!rows[0]){
       /***
        * On first run, save the location where the pages db will be stored.
        * Also generate a random secret to be used with the Jason Web Tokens for the
@@ -48,7 +48,7 @@ appSettings.init = (appDataPath) => {
     }
   })
   .then( rows => {
-    if(!rows.length){
+    if(!rows[0]){
       return appSettings.db('appSettings').where('id', 'appSettings')
     }
     else{
@@ -61,7 +61,7 @@ appSettings.init = (appDataPath) => {
     }
     /****
      * Gonna cache the settings to make them slightly easier to access
-     * (as a js object) and slight faster (e.g. for settings router.get('/')
+     * (as a js object) and slightly faster (e.g. for settings router.get('/')
      * uses et.al.)
      */
     appSettings.settings = rows[0]
