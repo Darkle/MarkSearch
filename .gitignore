@@ -1,16 +1,4 @@
 /config
 /db
 logs/
-# Don't want to ignore bootstrap less files or dist files as we're modifying bootstrap less files and using the dist files in jade html. 
-# http://stackoverflow.com/questions/987142/
-#bower_components/*
-#!bower_components/bootstrap
-#bower_components/bootstrap/node_modules
-
-
-# Don't want to ignore materialize less files. 
-# http://stackoverflow.com/questions/987142/
-#bower_components/*
-#publicSrc/Materialize/*
-#!publicSrc/Materialize/sass
 
