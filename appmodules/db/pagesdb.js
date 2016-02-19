@@ -21,6 +21,9 @@ var upsertRowValidation = {
       gt: 0,
       error: 'dateCreated must be a valid integer and larger than 0'
     },
+    pageDomain: {
+      type: ['string']
+    },
     pageTitle: {
       type: ['string', 'null']
     },
@@ -73,6 +76,7 @@ pagesdb.init = (pagesDBFilePath) => {
           '(' +
           '"pageUrl" text not null unique on conflict replace, ' +
           '"dateCreated" integer not null, ' +
+          '"pageDomain" text not null, ' +
           '"pageTitle" text null, ' +
           '"pageText" text null, ' +
           '"pageDescription" text null, ' +
@@ -84,8 +88,7 @@ pagesdb.init = (pagesDBFilePath) => {
   })
 }
 
-pagesdb.updateColumn = (columnDataObj) =>{
-  var pageUrlPrimaryKey = _.toLower(columnDataObj.pageUrl)
+pagesdb.updateColumn = (columnDataObj, pageUrlPrimaryKey) =>{
   var columnData = _.omit(columnDataObj, 'pageUrl')
   var validatedColumnDataObj = inspector.validate(updateColumnValidation, columnData)
   if(!validatedColumnDataObj.valid){

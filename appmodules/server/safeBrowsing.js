@@ -49,15 +49,16 @@ var safeBrowsingDetails = {
   }
 }
 
-function safeBrowsingCheck(doc){
-  return new Promise((resolve, reject) =>{
+function safeBrowsingCheck(pageUrl){
+  return new Promise((resolve, reject) => {
+    var returnedData = null
     var safeBrowsingUrl = 'https://sb-ssl.google.com/safebrowsing/api/lookup?' +
         'client=' + electronApp.getName() +
         '&key=' + APIKEYS.safeBrowsing +
             //TODO: grab the app version from electron or appDB (wherever ended up storing it)
         '&appver=' + electronApp.getVersion() +
         '&pver=3.1' +
-        '&url=' + encodeURIComponent(doc._id)
+        '&url=' + encodeURIComponent(pageUrl)
 
     request(safeBrowsingUrl, (error, response, responseBody) =>{
       debug('safeBrowsingCheck')
@@ -88,13 +89,16 @@ function safeBrowsingCheck(doc){
             }
           })
           debug(JSON.stringify(safeBrowsingPossibilitiesReturned))
-          doc.safeBrowsing = {
-            possiblyUnsafe: true,
-            details: safeBrowsingPossibilitiesReturned
+          returnedData = {
+            safeBrowsingData: {
+              possiblyUnsafe: true,
+              details: safeBrowsingPossibilitiesReturned
+            },
+            pageUrl: pageUrl
           }
         }
       }
-      resolve(doc)
+      resolve(safeBrowsingData)
     })
   })
 }

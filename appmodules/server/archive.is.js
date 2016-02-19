@@ -2,16 +2,19 @@
 
 var request = require('request')
 var debug = require('debug')('MarkSearch:archive.is')
+var _ = require('lodash')
 
-function generateArchiveOfPage(doc){
+function generateArchiveOfPage(pageUrl){
   debug('generateArchiveOfPage running')
-  return new Promise((resolve, reject) =>{
+  return new Promise((resolve, reject) => {
+    var returnedData = null
     request.post({
           url: 'https://archive.is/submit/',
-          form: {url: doc._id}
+          form: {url: pageUrl}
         },
-        (err, httpResponse, body) =>{
-          if(err || !httpResponse.headers || !httpResponse.headers.location){
+        (err, httpResponse, body) => {
+          var locationHeader = _.get(httpResponse, 'headers.location')
+          if(err || !locationHeader){
             console.error("Couldn't get an archive.is backup:", err)
             /****
              * We're not doing a reject here as we want to continue on to the
@@ -24,9 +27,12 @@ function generateArchiveOfPage(doc){
           else{
             debug('httpResponse:', httpResponse.headers)
             debug('archive.is backup successfull ', body)
-            doc.archiveLink = httpResponse.headers.location
+            returnedData = {
+              archiveLink: httpResponse.headers.location,
+              pageUrl: pageUrl
+            }
           }
-          resolve(doc)
+          resolve(returnedData)
         }
     )
   })

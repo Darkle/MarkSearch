@@ -5,12 +5,23 @@ var url = require('url')
 var domainParser = require('domain-parser')
 var debug = require('debug')('MarkSearch:addPage')
 
+var pagesdb = require('../../db/pagesdb')
 var archiveUrl = require('../archive.is')
 var safeBrowsingCheck = require('../safeBrowsing')
 var collapseWhiteSpace = require('../../utils/collapseWhiteSpace')
 
 function addPage(req, res, next) {
   /****
+   * When saving a page, we’re saving:
+   *  pageUrl - String - e.g. 'http://foo.com'
+   *  dateCreated - Integer (unix timestamp)
+   *  pageDomain - String- e.g. 'foo.com'
+   *  pageTitle - String
+   *  pageText - String
+   *  pageDescription - String
+   *  archiveLink - String - e.g. 'https://archive.is/pFvwT'
+   *  safeBrowsing - String (JSON stringified) - e.g. {safeBrowsing: {possiblyUnsafe: true, details: ‘malware'}}
+   *
    * Parsing the url to get the href from url.parse as that will
    * add a trailing slash to the end of the href if it's just a url
    * without a path. Doing this so that we dont save the same url
@@ -18,15 +29,6 @@ function addPage(req, res, next) {
    * saved http://foo.com/, that would be intepreted as a seperate
    * site, which is not what we want, so use url.parse to
    * automatically add the trailing slash.
-   *
-   * When saving a page, we’re saving:
-   * URL (as _id) - String - e.g. 'http://popurls.com/'
-   * pageTitle - String
-   * pageText - String
-   * pageDescription - String
-   * dateCreated - Number - e.g. Date.now()
-   * Archive.is link (as archiveLink) - String - e.g. 'https://archive.is/pFvwT'
-   * SafeBrowsing details (as safeBrowsing) - Object - e.g. {safeBrowsing: {possiblyUnsafe: true, details: ‘malware'}}
    */
 
   var parsedUrl = url.parse(req.params.pageUrl.toLowerCase())
@@ -34,123 +36,92 @@ function addPage(req, res, next) {
   var pageTitle = collapseWhiteSpace(req.body.pageTitle)
   var pageText = collapseWhiteSpace(req.body.pageText)
   var pageDescription = collapseWhiteSpace(req.body.pageDescription)
+
   debug('addPage running')
     //do some validation on this
-    //console.log('hello colors test'.red);
   debug(pageUrl)
   //debug(req.body)
   debug('url domain')
   /****
    * Get the domain from the parsedUrl.hostname and remove any subdomains
    */
-  var domain = domainParser(parsedUrl.hostname).domainName
+  var pageDomain = domainParser(parsedUrl.hostname).domainName
   debug('tld.getDomain')
-  debug(domain)
-  var pageDoc = {
-    _id: pageUrl,
+  debug(pageDomain)
+
+  var pageData = {
+    pageUrl: pageUrl,
+    dateCreated: Date.now(),
+    pageDomain: pageDomain,
     pageTitle: pageTitle,
     pageText: pageText,
     pageDescription: pageDescription,
-    pageDomain: domain,
-    dateCreated: Date.now(),
     archiveLink: null,
-    safeBrowsing: {
-      possiblyUnsafe: false,
-      details: null
-    }
+    safeBrowsing: null
   }
-  //debug('pageDoc')
-  //debug(pageDoc)
-  var db = req.app.get('pagesDB')
+
   /****
-   * We're doing two save's rather than one so that the basic page details are
+   * We're doing three save's rather than one so that the basic page details are
    * available to search straight away, as the archiveURL and the safeBrowsing
    * details rely on a request to a third party server and could end up taking a
    * while (e.g. could take up to 10 seconds for a server to respond), the extra
    * stuff of the archive url and the safe browsing details are not as important
-   * and can be added to the page details and resaved later in the second save to db
+   * and can be added to the page details and resaved later in the second save to db.
+   *
+   * Binding here in case addPage gets called again and pagesdb.upsertRow
+   * hasn't finished yet - don't want safeBrowsing or archive.is to use overwritten
+   * pageData from the new addPage call.
+   * Note: when using this.pageData, must use a regular function, as an arrow function
+   * seems to mess up the 'this' context for bluebird.
    */
-  //Make sure to do a test to see how big the pdf/mhtml/(whatever the other option is) before proceed
-    // would like to have a catch for each, so maybe there's a bind method for bluebird where I could bind an
-  //    outside variable and if res.status().end() has already been called, then subsequent catches
-  //dont call it - maybe ask for advice online on ow to track if we arleady sent back a response - maybe
-  //express has a feature for that, or maybe i could enclose it in a closure
-  //Maybe see if there are any bluebird books out on safari/manning/leanpub, also check google for new
-  //    blog posts with date filter, also check reddit/hn
-  //
-  //when saving the safebrowsing and archive.is data, dont need to hold on to the doc details any more, cause we
-  //are just using the update sql feature and just updating those feilds
-  //
-  //Should I switch archive.is to saving a pdf backup of the page? I mean its super simple in scraper, and maybe relying
-  //    on archive.is for backups of every page is not a good idea - double check how large the pdfs are
-  //    so then could prolly get rid of the res.status(503).end() in the last catch as dont really need it if just
-  //  safeBrowsing fails - if dont use archive.is, rememebr need to change db and render and addPage - to a search
-  //    for archive in code
-  //    Would need to generate pdfs for bookmarklets and extensions, so at the end of addPage, would need to
-  //    call scrape again ( or maybe a diff scrape just for non-scraping pdfs and save that to db) - prolly
-  //    easier to just keep using archive.is, but then again, a pdf does make a bit of sense
-  //
-  //    For the browser extensions, it may actually be possible to create a pdf of the page and send
-  //    it to marksearch to save as part of the addPage
-  //  http://stackoverflow.com/questions/13990127/get-pdf-of-the-current-page-in-a-google-chrome-extension
-  //  - no dont send the page capture on saving a page as that will add megabytes to the transfer
-  //    maybe just stick with archive.is
-  //  Actually it might be ok cause its over LAN
-  //    if i did do it this way, it could be easy to do
-  //    so when get to addPage, if it's called from the scrapeAndAddPage, then it
-  //    will have req.body.pageArchive = {type: 'pdf', data: data}
-  //    and if it's called from an extension, it
-  //  will have req.body.pageArchive = {type: 'mht', data: data} and for that, just have
-  //    a function at the end that converts it to a pdf and saves it to the db
-  //    then if its called from the bookmarklet, we have a module that just does scrapeAndSavePdf
-  //    remember to change the pages db if do this
-  //if do this, remember to increase the express body parser limit
-  //if do it this way, remember to change the table in pagesdb and also the validation schema - so delete the archive.is
-  //column fromt the table Ive already created (just this once, not programiatically i mean)
-
-
-
-
-  save2db(db, pageDoc)
-      .then(pageDocAndHttpStatus =>{
-        /*****
-         * if it wasn't already there, we added it, if it was already there, we updated it.
-         * Send appropriate status code for either
-         * http://httpstatus.es/201
-         * http://httpstatus.es/204
-         * http://stackoverflow.com/questions/2342579/
-         *****/
-        res.status(pageDocAndHttpStatus.httpStatusCode).end()
+  pagesdb.upsertRow(pageData).bind({pageUrl: pageData.pageUrl})
+      .then(function() {
+        res.status(200).end()
+        return this.pageUrl
+      })
+      .catch(err => {
+        console.log(`There was an error saving the page to the database`)
+        console.error(err)
+        res.status(503).end()
         /****
-         * (Re)build the quick-search index.
-         * (dont wait for it to rebuild).
+         * Rethrow the error to make it skip archiveUrl and safeBrowsing. No
+         * point doing them if the row hasn't made it into the database.
          */
-        buildIndex(db, 'addPage')
-        return pageDocAndHttpStatus.returnedDoc
+        throw new Error(err)
       })
       /****
        * Get archiveUrl & safeBrowsingCheck running in parallel, rather than in sequence,
        * so dont have to wait for archiveUrl to finish before starting safeBrowsingCheck
        */
-      .then( returnedDoc =>
-         [
-          archiveUrl(returnedDoc),
-          safeBrowsingCheck(returnedDoc)
-        ]
-      )
-      .spread( (archiveReturnedDoc, safeBrowsingReturnedDoc) => {
-        archiveReturnedDoc.safeBrowsing = safeBrowsingReturnedDoc.safeBrowsing
-        return save2db(db, archiveReturnedDoc)
+      .then( pageUrl => [archiveUrl(pageUrl), safeBrowsingCheck(pageUrl)])
+      .spread( (archiveIsUrl, safeBrowsingData) => {
+        var returnArr = [safeBrowsingData]
+        if(archiveIsUrl){
+          returnArr.push(
+              pagesdb.updateColumn(
+                {
+                  archiveLink: archiveIsUrl.archiveLink
+                },
+                archiveIsUrl.pageUrl
+              )
+          )
+        }
+        return returnArr
+      })
+      .spread( safeBrowsingData => {
+        if(safeBrowsingData){
+          return pagesdb.updateColumn(
+              {
+                safeBrowsing: safeBrowsingData.safeBrowsingData
+              },
+              safeBrowsingData.pageUrl
+          )
+        }
       })
       .catch(err => {
-        /****
-         * There was an error with the database, send back an appropriate
-         * http error code
-         */
-        console.log(`There was an error with the database`)
         console.error(err)
-        res.status(503).end()
       })
+
 }
 
 module.exports = addPage
