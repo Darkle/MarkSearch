@@ -176,7 +176,7 @@ function search(req, res, next){
         }
         else {
           console.error(err)
-          res.status(503).end()
+          res.status(500).end()
         }
       })
 }

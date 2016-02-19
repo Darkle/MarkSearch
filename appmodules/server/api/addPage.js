@@ -74,7 +74,7 @@ function addPage(req, res, next) {
       .catch(err => {
         console.log(`There was an error saving the page to the database`)
         console.error(err)
-        res.status(503).end()
+        res.status(500).end()
         /****
          * Rethrow the error to make it skip archiveUrl and safeBrowsing. No
          * point doing them if the row hasn't made it into the database.

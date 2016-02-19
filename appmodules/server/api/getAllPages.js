@@ -10,7 +10,7 @@ function getAllPages(req, res, next) {
       })
       .catch( err => {
         console.error(err)
-        res.status(503).end()
+        res.status(500).end()
       })
 
 }

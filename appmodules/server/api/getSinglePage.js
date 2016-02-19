@@ -9,7 +9,6 @@ function getSinglePage(req, res, next) {
       .where('pageUrl', req.params.pageUrl)
       .then( rows => {
         if(!rows[0]){
-          console.log("document not found sending back a 404")
           res.status(404).end()
         }
         else{
@@ -17,12 +16,8 @@ function getSinglePage(req, res, next) {
         }
       })
       .catch( err => {
-        /***
-         * send a 503 http error if there was an error with the database
-         * (http://goo.gl/TASz7p)
-         */
         console.error(err)
-        res.status(503).end()
+        res.status(500).end()
       })
 
 }

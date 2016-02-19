@@ -9,8 +9,7 @@ var appSettings = require('../../db/appSettings')
 function generateExtToken(req, res, next){
   /****
    * tokenType is either browserExtension or bookmarklet.
-   * Give it a somewhat unique id - could be helpful for debugging, so
-   * can see which client is accessing the api.
+   * Give it a somewhat unique id - could be helpful for debugging.
    */
       //TODO - validation of req.body.tokenType
   var token = jwt.sign(
