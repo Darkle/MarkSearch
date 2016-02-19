@@ -7,6 +7,7 @@ import { updateResultsCountDiv } from './updateResultsCountDiv'
 
 import got from 'got'
 import _ from 'lodash'
+require('lodash-migrate')
 import notie from 'notie'
 
 /****

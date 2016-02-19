@@ -16,6 +16,7 @@ import { dateFilterInit, filterResults, allFromToIsSet, shortCutIsSet } from './
 import { settingsSubbarInit } from './settingsSubbar'
 
 import _ from 'lodash'
+require('lodash-migrate')
 /****
  * for some reason import * as stringUtils from 'string' isn't
  * working, so using require

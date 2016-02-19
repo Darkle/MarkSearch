@@ -4,6 +4,7 @@ import { resultsContainer$, resultsCountDiv$ } from './searchPage'
 import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEventHandlers'
 
 import _ from 'lodash'
+require('lodash-migrate')
 
 function removeResults(){
   /****

@@ -9,7 +9,7 @@ function deletePage(req, res, next) {
   debug(req.params.pageUrl)
   //TODO - validation on req.params.pageUrl
   pagesdb.db('pages')
-      .where('pageURL', req.params.pageUrl)
+      .where('pageUrl', req.params.pageUrl)
       .del(numRowsAffected => {
         debug(`delete - numRowsAffected: ${numRowsAffected}`)
         /*****

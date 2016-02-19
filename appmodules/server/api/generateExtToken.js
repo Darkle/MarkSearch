@@ -3,6 +3,7 @@
 var jwt = require('jsonwebtoken')
 var debug = require('debug')('MarkSearch:generateExtToken')
 var _ = require('lodash')
+require('lodash-migrate')
 
 var appSettings = require('../../db/appSettings')
 

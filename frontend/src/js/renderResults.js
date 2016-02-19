@@ -5,6 +5,7 @@ import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEven
 import { generateSearchClipAndHighlight } from './generateSearchClipAndHighlight'
 
 import _ from 'lodash'
+require('lodash-migrate')
 import DOMPurify from 'dompurify'
 //import moment from 'moment'
 

@@ -6,6 +6,7 @@ import { chunkResults } from './chunkResults'
 import { updateResultsCountDiv } from './updateResultsCountDiv'
 
 import _ from 'lodash'
+require('lodash-migrate')
 import got from 'got'
 
 /****

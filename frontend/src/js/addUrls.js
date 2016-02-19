@@ -4,6 +4,7 @@ import velocity from 'velocity-animate'
 import suspend from 'suspend'
 import got from 'got'
 import _ from 'lodash'
+require('lodash-migrate')
 
 import { csrfToken } from './searchPage'
 import { searchErrorHandler } from './searchErrorsHandler'

@@ -1,6 +1,7 @@
 'use strict';
 
 import _ from 'lodash'
+require('lodash-migrate')
 
 function chunkResults(rawResults){
   /****

@@ -4,9 +4,27 @@ var path = require('path')
 var Crypto = require('crypto')
 
 var debug = require('debug')('MarkSearch:appSettings')
+var inspector = require('schema-inspector')
 
 var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 
+/****
+ * Validation Schema
+ */
+var appSettingsValidation = {
+  type: 'object',
+  strict: true,
+  properties: {
+    pagesDBFilePath: {
+      type: 'string',
+      optional: true
+    },
+    prebrowsing: {
+      type: 'boolean',
+      optional: true
+    }
+  }
+}
 var appSettings = {}
 
 appSettings.init = (appDataPath) => {
@@ -69,14 +87,24 @@ appSettings.init = (appDataPath) => {
   })
 }
 
-appSettings.update = (keyValObj) =>
-  appSettings.db('appSettings')
-      .where('id', 'appSettings')
-      .update(keyValObj)
-      .return(appSettings.db('appSettings').where('id', 'appSettings'))
-      .then( rows => {
-        appSettings.settings = rows[0]
-      })
+appSettings.update = (settingsKeyValObj) => {
+  var validatedSettingsKeyValObj = inspector.validate(appSettingsValidation, settingsKeyValObj)
+  if(!validatedSettingsKeyValObj.valid){
+    var errMessage = `Error, passed in app settings did not pass validation.
+                      Error(s): ${validatedSettingsKeyValObj.format()}`
+    debug(errMessage)
+    return Promise.reject(errMessage)
+  }
+  else{
+    return appSettings.db('appSettings')
+        .where('id', 'appSettings')
+        .update(settingsKeyValObj)
+        .return(appSettings.db('appSettings').where('id', 'appSettings'))
+        .then( rows => {
+          appSettings.settings = rows[0]
+        })
+  }
+}
 
 
 

@@ -70,7 +70,8 @@ function addPage(req, res, next) {
    * stuff of the archive url and the safe browsing details are not as important
    * and can be added to the page details and resaved later in the second save to db
    */
-  //would like to have a catch for each, so maybe there's a bind method for bluebird where I could bind an
+  //Make sure to do a test to see how big the pdf/mhtml/(whatever the other option is) before proceed
+    // would like to have a catch for each, so maybe there's a bind method for bluebird where I could bind an
   //    outside variable and if res.status().end() has already been called, then subsequent catches
   //dont call it - maybe ask for advice online on ow to track if we arleady sent back a response - maybe
   //express has a feature for that, or maybe i could enclose it in a closure
@@ -104,6 +105,8 @@ function addPage(req, res, next) {
   //    then if its called from the bookmarklet, we have a module that just does scrapeAndSavePdf
   //    remember to change the pages db if do this
   //if do this, remember to increase the express body parser limit
+  //if do it this way, remember to change the table in pagesdb and also the validation schema - so delete the archive.is
+  //column fromt the table Ive already created (just this once, not programiatically i mean)
 
 
 

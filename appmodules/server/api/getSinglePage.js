@@ -10,7 +10,7 @@ function getSinglePage(req, res, next) {
   //TODO - validate req.params.pageUrl
 
   pagesdb.db('pages')
-      .where('pageURL', req.params.pageUrl)
+      .where('pageUrl', req.params.pageUrl)
       .then( rows => {
         if(!rows[0]){
           debug("document not found sending back a 404")

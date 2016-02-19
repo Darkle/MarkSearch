@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash')
+require('lodash-migrate')
 var debug = require('debug')('MarkSearch:search')
 var combs = require('combs')
 

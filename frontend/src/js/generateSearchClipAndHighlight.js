@@ -2,6 +2,7 @@
 
 import combs from 'combs'
 import _ from 'lodash'
+require('lodash-migrate')
 
 import { lunrStopwordList } from './lunrStopwordFilter'
 

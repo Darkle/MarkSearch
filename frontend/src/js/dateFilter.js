@@ -9,6 +9,7 @@ import { updateResultsCountDiv } from './updateResultsCountDiv'
 import velocity from 'velocity-animate'
 import moment from 'moment'
 import _ from 'lodash'
+require('lodash-migrate')
 
 var resultsOuterContainer$
 var dateFilterContainer$

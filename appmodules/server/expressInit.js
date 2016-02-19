@@ -17,11 +17,8 @@ var routes = require('./routes/index')
 var api = require('./routes/api')
 
 
-
 function expressInit(expressApp, serverPort){
   expressApp.set('port', serverPort)
-  expressApp.set('marksearchVersion', electronApp.getVersion())
-  expressApp.set('marksearchAppName', electronApp.getName())
   expressApp.use(compression())
   expressApp.set('views', path.join(__dirname, 'views'))
   expressApp.set('view engine', 'jade')

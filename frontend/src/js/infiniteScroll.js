@@ -5,6 +5,7 @@ import { scrollHeightCheck } from './scrollHeightCheck'
 import { resultsObject } from './resultsObject'
 
 import _ from 'lodash'
+require('lodash-migrate')
 
 var padding = 1000
 var delayTime = 300
