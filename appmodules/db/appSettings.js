@@ -9,7 +9,7 @@ var inspector = require('schema-inspector')
 var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 
 /****
- * Validation Schema
+ * App Settings Validation Schema
  */
 var appSettingsValidation = {
   type: 'object',
@@ -60,7 +60,7 @@ appSettings.init = (appDataPath) => {
                 id: 'appSettings',
                 JWTsecret: Crypto.randomBytes(128).toString('hex'),
                 pagesDBFilePath: path.join(appDataPath, 'MarkSearchPages.db'),
-                prebrowsing: false
+                prebrowsing: true
               }
           )
     }

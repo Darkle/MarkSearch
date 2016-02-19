@@ -2,7 +2,6 @@
 
 var debug = require('debug')('MarkSearch:updateMarkSearchSettings')
 var _ = require('lodash')
-require('lodash-migrate')
 
 var appSettings = require('../../db/appSettings')
 
@@ -22,7 +21,6 @@ function updateMarkSearchSettings(req, res, next){
     }
     return val
   })
-  console.log(settingsObj)
   appSettings.update(settingsObj)
       .then( () => {
         res.status(200).end()

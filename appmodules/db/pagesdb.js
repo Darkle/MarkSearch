@@ -7,7 +7,7 @@ var _ = require('lodash')
 var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 
 /****
- * Validation Schemas
+ * Pages DB Validation Schemas
  */
 var upsertRowValidation = {
   type: 'object',
