@@ -7,10 +7,6 @@ function deletePage(req, res, next) {
   pagesdb.db('pages')
       .where('pageUrl', req.params.pageUrl)
       .del(numRowsAffected => {
-        /*****
-         * return a 200
-         * http://stackoverflow.com/questions/2342579/
-         */
         res.status(200).end()
       })
       .catch( err => {
