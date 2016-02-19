@@ -1,7 +1,6 @@
 'use strict';
 
 var express = require('express')
-var debug = require('debug')('MarkSearch:routes index')
 var requireDir = require('require-dir')
 
 var apiModules = requireDir('../api')
@@ -12,7 +11,6 @@ var router = express.Router()
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  debug("searchPage page")
   res.render('searchPage',
       {
         title: 'MarkSearch',
@@ -28,7 +26,6 @@ router.get('/', (req, res, next) => {
 
 /* GET about page. */
 router.get('/about', (req, res, next) => {
-  debug("about page")
   res.render('about',
       {
         title: 'MarkSearch About'
@@ -38,7 +35,6 @@ router.get('/about', (req, res, next) => {
 
 /* GET help page. */
 router.get('/help', (req, res, next) => {
-  debug("help page")
   res.render('help',
       {
         title: 'MarkSearch Help'
@@ -48,7 +44,6 @@ router.get('/help', (req, res, next) => {
 
 /* GET settings page. */
 router.get('/settingsPage', (req, res, next) => {
-  debug("settings page")
   res.render('settingsPage',
       {
         title: 'MarkSearch Settings',

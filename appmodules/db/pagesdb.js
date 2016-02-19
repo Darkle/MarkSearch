@@ -1,6 +1,5 @@
 'use strict';
 
-var debug = require('debug')('MarkSearch:pagesdb')
 var inspector = require('schema-inspector')
 var _ = require('lodash')
 
@@ -60,17 +59,16 @@ var updateColumnValidation = {
 var pagesdb = {}
 
 pagesdb.init = (pagesDBFilePath) => {
-  debug(`pagesDBFilePath: ${pagesDBFilePath}`)
   knexConfig.connection.filename = pagesDBFilePath
   //knexConfig.connection.filename = ':memory:'
   pagesdb.db = require('knex')(knexConfig)
   return pagesdb.db.schema.hasTable('pages').then( exists => {
     if (!exists) {
-      debug('creating "pages" table')
+      console.log('creating "pages" table')
       /****
        *  Using 'unique on conflict replace' so can do upserts by
        *  just doing a regular insert. Using the validation schema
-       *  to make sure that have all necessary fields when updating.
+       *  to make sure that have all necessary fields when upserting.
        */
       return  pagesdb.db.raw('create table "pages" ' +
           '(' +
@@ -88,13 +86,12 @@ pagesdb.init = (pagesDBFilePath) => {
   })
 }
 
-pagesdb.updateColumn = (columnDataObj, pageUrlPrimaryKey) =>{
-  var columnData = _.omit(columnDataObj, 'pageUrl')
-  var validatedColumnDataObj = inspector.validate(updateColumnValidation, columnData)
+pagesdb.updateColumn = (columnDataObj, pageUrlPrimaryKey) => {
+  var validatedColumnDataObj = inspector.validate(updateColumnValidation, columnDataObj)
   if(!validatedColumnDataObj.valid){
     var errMessage = `Error, passed in column data did not pass validation.
                       Error(s): ${validatedColumnDataObj.format()}`
-    debug(errMessage)
+    console.error(errMessage)
     return Promise.reject(errMessage)
   }
   else{
@@ -122,7 +119,7 @@ pagesdb.upsertRow = (pageDataObj) => {
   if(!validatedPageDataObj.valid){
     var errMessage = `Error, passed in page data did not pass validation.
                       Error(s): ${validatedPageDataObj.format()}`
-    debug(errMessage)
+    console.error(errMessage)
     return Promise.reject(errMessage)
   }
   else{

@@ -3,7 +3,6 @@
 var path = require('path')
 var Crypto = require('crypto')
 
-var debug = require('debug')('MarkSearch:appSettings')
 var inspector = require('schema-inspector')
 
 var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
@@ -14,6 +13,7 @@ var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 var appSettingsValidation = {
   type: 'object',
   strict: true,
+  someKeys: ['pagesDBFilePath', 'prebrowsing'],
   properties: {
     pagesDBFilePath: {
       type: 'string',
@@ -28,13 +28,12 @@ var appSettingsValidation = {
 var appSettings = {}
 
 appSettings.init = (appDataPath) => {
-  debug(`appDataPath: ${appDataPath}`)
   knexConfig.connection.filename = path.join(appDataPath, 'MarkSearchAppSettings.db')
   //knexConfig.connection.filename = ':memory:'
   appSettings.db = require('knex')(knexConfig)
   return appSettings.db.schema.hasTable('appSettings').then( exists => {
     if (!exists) {
-      debug('creating "appSettings" table')
+      console.log('creating "appSettings" table')
       return appSettings.db.schema.createTable('appSettings', table => {
         table.text('id').primary().notNullable()
         table.text('JWTsecret').notNullable()
@@ -49,10 +48,7 @@ appSettings.init = (appDataPath) => {
   .tap( rows => {
     if(!rows[0]){
       /***
-       * On first run, save the location where the pages db will be stored.
-       * Also generate a random secret to be used with the Jason Web Tokens for the
-       * browser extensions & bookmarklets.
-       * http://stackoverflow.com/questions/8855687/ - make it url safe just in case
+       * .toString('hex') for the Jason Web Token to make it url safe (just in case)
        */
       return appSettings.db('appSettings')
           .insert(
@@ -92,7 +88,7 @@ appSettings.update = (settingsKeyValObj) => {
   if(!validatedSettingsKeyValObj.valid){
     var errMessage = `Error, passed in app settings did not pass validation.
                       Error(s): ${validatedSettingsKeyValObj.format()}`
-    debug(errMessage)
+    console.error(errMessage)
     return Promise.reject(errMessage)
   }
   else{

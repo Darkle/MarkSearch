@@ -1,7 +1,6 @@
 'use strict';
 
 var Mailgun = require('mailgun-js')
-var debug = require('debug')('MarkSearch:mailgun')
 
 const APIKEYS = require('../../config/apikeys.json')
 
@@ -29,8 +28,6 @@ function sendEmail(emailDetails, callback){
     }
     else {
       //Send back success message in json
-      debug('sent email')
-      debug(body)
       callback()
     }
   })

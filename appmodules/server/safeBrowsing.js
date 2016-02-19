@@ -1,7 +1,6 @@
 'use strict';
 
 var request = require('request')
-var debug = require('debug')('MarkSearch:safebrowsing')
 var electron = require('electron')
 
 var APIKEYS = require('../../config/apikeys.json')
@@ -61,7 +60,6 @@ function safeBrowsingCheck(pageUrl){
         '&url=' + encodeURIComponent(pageUrl)
 
     request(safeBrowsingUrl, (error, response, responseBody) =>{
-      debug('safeBrowsingCheck')
       /****
        * We're not doing a reject here as we want to continue on to the
        * next promise. It's not the end of the world if
@@ -73,7 +71,6 @@ function safeBrowsingCheck(pageUrl){
         console.error("Couldn't get safebrowsing details :", error)
       }
       else{
-        debug(response.statusCode)
         /****
          * https://developers.google.com/safe-browsing/lookup_guide
          * 200: The queried URL is either phishing,
@@ -88,7 +85,6 @@ function safeBrowsingCheck(pageUrl){
               safeBrowsingPossibilitiesReturned[malP] = safeBrowsingDetails[malP]
             }
           })
-          debug(JSON.stringify(safeBrowsingPossibilitiesReturned))
           returnedData = {
             safeBrowsingData: {
               possiblyUnsafe: true,

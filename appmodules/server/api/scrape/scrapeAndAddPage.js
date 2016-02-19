@@ -3,7 +3,6 @@
 var fs = require('fs')
 var url = require('url')
 
-var debug = require('debug')('MarkSearch:scrapeAndAddPage')
 var electron = require('electron')
 var BrowserWindow = electron.BrowserWindow
 var ipcMain = electron.ipcMain
@@ -18,7 +17,6 @@ var addPage = require('../addPage')
  * TODO: Maybe refactor this a bit, bit of duplicate code
  */
 function scrapeAndAddPage(req, res, next) {
-  debug('scrapeAndAddPage running')
 
   /****
    * Using url.parse to put a trailing slash on the end of urls
@@ -44,14 +42,12 @@ function scrapeAndAddPage(req, res, next) {
       }
   )
   browserWindow.on('closed', () => {
-    debug('browserWindow: closed')
     browserWindow = null
     webContents = null
     ipcMain.removeAllListeners('returnDocDetails')
     ipcMain.removeAllListeners('returnDocDetailsError')
   })
   browserWindow.on('unresponsive', () => {
-    debug('BrowserWindow: unresponsive')
     res.status(500).json({errorMessage: 'BrowserWindow: unresponsive'})
     browserWindow.destroy()
   })
@@ -68,7 +64,6 @@ function scrapeAndAddPage(req, res, next) {
    * events
    */
   webContents.on('did-finish-load', event => {
-    debug('webContents: did-finish-load')
     /****
      * Ask scrapePreload.js to send back the docDetails
      */
@@ -83,7 +78,7 @@ function scrapeAndAddPage(req, res, next) {
    * same url that the BrowserWindow is going to.
    */
   webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
-    debug(`
+    console.error(`
       webContents: did-fail-load
       errorCode: ${errorCode}
       errorDescription: ${errorDescription}
@@ -97,13 +92,11 @@ function scrapeAndAddPage(req, res, next) {
      *  at the start of scrapeAndAddPage and on did-get-redirect-request
      */
     if(validatedURL === urlToScrape){
-      debug('validatedURL === req.params.pageUrl')
       res.status(500).json({errorMessage: 'webContents: did-fail-load'})
       browserWindow.destroy()
     }
   })
   webContents.on('crashed', event => {
-    debug('webContents: crashed')
     res.status(500).json({errorMessage: 'webContents: crashed'})
     browserWindow.destroy()
   })
@@ -114,11 +107,6 @@ function scrapeAndAddPage(req, res, next) {
    * if a resource has the same url that the BrowserWindow is going to.
    */
   webContents.on('did-get-redirect-request', (event, oldURL, newURL) => {
-    debug(`
-      webContents: did-get-redirect-request
-      oldURL: ${oldURL}
-      newURL: ${newURL}
-    `)
     if(oldURL === req.params.pageUrl){
       numTimesRedirected = numTimesRedirected + 1
       /****
@@ -134,7 +122,7 @@ function scrapeAndAddPage(req, res, next) {
         req.params.pageUrl = urlToScrape
       }
       else{
-        debug('webContents: infinite redirect loop ')
+        console.log('webContents: infinite redirect loop ')
         res.status(500).json({errorMessage: 'webContents: infinite redirect loop'})
         browserWindow.destroy()
       }
@@ -146,10 +134,7 @@ function scrapeAndAddPage(req, res, next) {
    * messaged us.
    */
   ipcMain.on('returnDocDetails', function(event, arg) {
-    debug('returnDocDetails')
-    //debug(arg)
     var docDetails = JSON.parse(arg)
-    debug(docDetails.documentTitle)
     /****
      * Dont need to collapse whitespace here as doing that in addPage.js
      */
@@ -161,8 +146,7 @@ function scrapeAndAddPage(req, res, next) {
   })
 
   ipcMain.on('returnDocDetailsError', function(event, arg) {
-    debug('returnDocDetailsError')
-    debug(arg)
+    console.error('returnDocDetailsError')
     res.status(500).json({errorMessage: JSON.stringify(arg)})
     browserWindow.destroy()
   })

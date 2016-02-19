@@ -2,16 +2,15 @@
 
 var _ = require('lodash')
 require('lodash-migrate')
-var debug = require('debug')('MarkSearch:search')
 var combs = require('combs')
 
 const STOPWORDS = require('../lunrStopwordFilter.json')
 
 function search(req, res, next){
-  debug('search running')
+  console.log('search running')
   var lcaseSearchTerms = req.params.searchTerms.toLowerCase()
   var searchIsLoose = (req.params.searchingLoose === 'true')
-  debug('lcaseSearchTerms : ', lcaseSearchTerms)
+  console.log('lcaseSearchTerms : ', lcaseSearchTerms)
   var domainToSearchFor = null
   /****
    *   Filter out single characters.
@@ -31,7 +30,7 @@ function search(req, res, next){
     }
     return useSearchTerm
   })
-  debug('Are we searching by domain?', !domainToSearchFor?' NO' : ` YES: ${domainToSearchFor}`)
+  console.log('Are we searching by domain?', !domainToSearchFor?' NO' : ` YES: ${domainToSearchFor}`)
   var stCombinations = []
   if(!searchIsLoose){
     /****
@@ -56,8 +55,8 @@ function search(req, res, next){
    */
     stCombinations = _.sortBy(combs(searchTermsArr), terms => -terms.length)
   }
-  debug('stCombinations ==========+++++++==========')
-  debug(stCombinations)
+  console.log('stCombinations ==========+++++++==========')
+  console.log(stCombinations)
   var db = req.app.get('pagesDB')
   var dbSearchPromiseRequests = []
   /****
@@ -172,7 +171,7 @@ function search(req, res, next){
        * Send a 404 status code if not found in db
        */
         if(err.status === 404){
-          debug("no match found for search")
+          console.log("no match found for search")
           res.status(404).end()
         }
         else {

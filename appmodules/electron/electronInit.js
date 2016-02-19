@@ -1,6 +1,5 @@
 'use strict';
 
-var debug = require('debug')('MarkSearch:electronInit')
 var electron = require('electron')
 
 var appErrorHandler = require('../appErrorHandler')
@@ -22,7 +21,7 @@ function electronInit(){
       //process.once('loaded', function() {})
 
       if(electronApp.makeSingleInstance(() => true)){
-        debug('Marksearch Is Already Running')
+        console.log('Marksearch Is Already Running')
         electronApp.quit()
         /****
          * Don't think I need this, but here it is

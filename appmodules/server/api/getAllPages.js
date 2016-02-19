@@ -1,11 +1,8 @@
 'use strict';
 
-var debug = require('debug')('MarkSearch:getAllPages')
-
 var pagesdb = require('../../db/pagesdb')
 
 function getAllPages(req, res, next) {
-  debug('getAllPages running')
   pagesdb.db('pages')
       .orderBy('dateCreated', 'desc')
       .then( rows => {

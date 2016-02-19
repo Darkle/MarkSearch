@@ -3,12 +3,8 @@
 var child = require('child_process').exec
 
 var electron = require('electron')
-var debug = require('debug')('MarkSearch:appErrorHandler')
 
 function appErrorHandler(err){
-  debug(err.message)
-  debug(err.stack)
-  debug(err)
   console.error(err.message)
   console.error(err.stack)
   console.error(err)

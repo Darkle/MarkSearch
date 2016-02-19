@@ -1,19 +1,15 @@
 'use strict';
 
-var debug = require('debug')('MarkSearch:getSinglePage')
-
 var pagesdb = require('../../db/pagesdb')
 
 function getSinglePage(req, res, next) {
-  debug('getSinglePage running')
-  debug(req.params.pageUrl)
   //TODO - validate req.params.pageUrl
 
   pagesdb.db('pages')
       .where('pageUrl', req.params.pageUrl)
       .then( rows => {
         if(!rows[0]){
-          debug("document not found sending back a 404")
+          console.log("document not found sending back a 404")
           res.status(404).end()
         }
         else{

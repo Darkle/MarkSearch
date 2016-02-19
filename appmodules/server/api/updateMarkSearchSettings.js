@@ -1,13 +1,11 @@
 'use strict';
 
-var debug = require('debug')('MarkSearch:updateMarkSearchSettings')
 var _ = require('lodash')
 
 var appSettings = require('../../db/appSettings')
 
 function updateMarkSearchSettings(req, res, next){
 
-  debug("updateMarkSearchSettings")
   //console.log(req.body)
 
   //TODO - validate req.body

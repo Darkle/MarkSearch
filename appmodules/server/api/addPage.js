@@ -3,7 +3,6 @@
 var url = require('url')
 
 var domainParser = require('domain-parser')
-var debug = require('debug')('MarkSearch:addPage')
 
 var pagesdb = require('../../db/pagesdb')
 var archiveUrl = require('../archive.is')
@@ -37,17 +36,10 @@ function addPage(req, res, next) {
   var pageText = collapseWhiteSpace(req.body.pageText)
   var pageDescription = collapseWhiteSpace(req.body.pageDescription)
 
-  debug('addPage running')
-    //do some validation on this
-  debug(pageUrl)
-  //debug(req.body)
-  debug('url domain')
   /****
    * Get the domain from the parsedUrl.hostname and remove any subdomains
    */
   var pageDomain = domainParser(parsedUrl.hostname).domainName
-  debug('tld.getDomain')
-  debug(pageDomain)
 
   var pageData = {
     pageUrl: pageUrl,

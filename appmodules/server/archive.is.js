@@ -1,11 +1,9 @@
 'use strict';
 
 var request = require('request')
-var debug = require('debug')('MarkSearch:archive.is')
 var _ = require('lodash')
 
 function generateArchiveOfPage(pageUrl){
-  debug('generateArchiveOfPage running')
   return new Promise((resolve, reject) => {
     var returnedData = null
     request.post({
@@ -25,8 +23,6 @@ function generateArchiveOfPage(pageUrl){
              */
           }
           else{
-            debug('httpResponse:', httpResponse.headers)
-            debug('archive.is backup successfull ', body)
             returnedData = {
               archiveLink: httpResponse.headers.location,
               pageUrl: pageUrl

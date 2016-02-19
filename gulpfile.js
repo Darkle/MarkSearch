@@ -31,7 +31,7 @@ gulp.task('default', function(callback) {
 
 gulp.task('nodemon', cb => {
   var env = process.env
-  env.DEBUG = 'MarkSearch:*'
+  //env.DEBUG = 'MarkSearch:*'
   env.NODE_ENV = 'development'
 
   return nodemon({
