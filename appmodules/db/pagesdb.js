@@ -2,6 +2,7 @@
 
 var debug = require('debug')('MarkSearch:pagesdb')
 var inspector = require('schema-inspector')
+var _ = require('lodash')
 
 var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 
@@ -13,12 +14,12 @@ var upsertRowValidation = {
   strict: true,
   properties: {
     pageUrl: {
-      type: 'string',
-      pattern: 'lowerString'
+      type: 'string'
     },
     dateCreated: {
       type: 'integer',
-      gt: 0
+      gt: 0,
+      error: 'dateCreated must be a valid integer and larger than 0'
     },
     pageTitle: {
       type: ['string', 'null']
@@ -79,21 +80,14 @@ pagesdb.init = (pagesDBFilePath) => {
           '"safeBrowsing" text null, ' +
           'primary key ("pageUrl")' +
           ');')
-      //return pagesdb.db.schema.createTable('pages', table => {
-      //  table.text('pageUrl').primary().notNullable()
-      //  table.integer('dateCreated').notNullable()
-      //  table.text('pageTitle').nullable()
-      //  table.text('pageText').nullable()
-      //  table.text('pageDescription').nullable()
-      //  table.text('archiveLink').nullable()
-      //  table.text('safeBrowsing').nullable()
-      //})
     }
   })
 }
 
-pagesdb.updateColumn = (columnDataObj, primaryKey) =>{
-  var validatedColumnDataObj = inspector.validate(updateColumnValidation, columnDataObj)
+pagesdb.updateColumn = (columnDataObj) =>{
+  var pageUrlPrimaryKey = _.toLower(columnDataObj.pageUrl)
+  var columnData = _.omit(columnDataObj, 'pageUrl')
+  var validatedColumnDataObj = inspector.validate(updateColumnValidation, columnData)
   if(!validatedColumnDataObj.valid){
     var errMessage = `Error, passed in column data did not pass validation.
                       Error(s): ${validatedColumnDataObj.format()}`
@@ -101,12 +95,26 @@ pagesdb.updateColumn = (columnDataObj, primaryKey) =>{
     return Promise.reject(errMessage)
   }
   else{
-    return pagesdb.db('pages').where('pageUrl', primaryKey).update(columnDataObj)
+    /****
+     * Doing a catch here as the knex statment doesn't seem to be run unless there
+     * is a .next or .catch following it. Putting catch here in case I forget to put
+     * a catch wherever i use pagesdb.updateColumn or pagesdb.upsertRow. And re-throwing
+     * the error so things work as expected down the line.
+     */
+    return pagesdb.db('pages')
+        .where('pageUrl', pageUrlPrimaryKey)
+        .update(columnDataObj)
+        .catch(err => {
+          console.log('an error occured with the update')
+          console.error(err)
+          throw new Error(err)
+        })
   }
-
 }
 
 pagesdb.upsertRow = (pageDataObj) => {
+  pageDataObj.pageUrl = _.toLower(pageDataObj.pageUrl)
+  pageDataObj.dateCreated = _.toInteger(pageDataObj.dateCreated)
   var validatedPageDataObj = inspector.validate(upsertRowValidation, pageDataObj)
   if(!validatedPageDataObj.valid){
     var errMessage = `Error, passed in page data did not pass validation.
@@ -115,7 +123,13 @@ pagesdb.upsertRow = (pageDataObj) => {
     return Promise.reject(errMessage)
   }
   else{
-    return pagesdb.db('pages').insert(pageDataObj)
+    return pagesdb.db('pages')
+        .insert(pageDataObj)
+        .catch(err => {
+          console.log('an error occured with the insert')
+          console.error(err)
+          throw new Error(err)
+        })
   }
 }
 

@@ -2,6 +2,7 @@
 
 var express = require('express')
 var requireDir = require('require-dir')
+var _ = require('lodash')
 
 var router = express.Router()
 var apiModules = requireDir('../api')
@@ -15,5 +16,17 @@ router.get('/search/:searchTerms', apiModules.search)
  */
 router.post('/add/:pageUrl', apiModules.addPage)
 router.delete('/remove/:pageUrl', apiModules.deletePage)
+
+
+/*****
+ * Temp, delete
+ */
+//var pagesdb = require('../../db/pagesdb')
+//router.post('/tempo/updateColumn', function(req, res, next){
+//  pagesdb.updateColumn(req.body)
+//})
+//router.post('/tempo/upsertRow', function(req, res, next){
+//  pagesdb.upsertRow(req.body)
+//})
 
 module.exports = router
