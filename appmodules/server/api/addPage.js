@@ -3,6 +3,7 @@
 var url = require('url')
 
 var domainParser = require('domain-parser')
+var _ = require('lodash')
 
 var pagesdb = require('../../db/pagesdb')
 var archiveUrl = require('../archive.is')
@@ -53,7 +54,7 @@ function addPage(req, res, next) {
   }
 
   /****
-   * We're doing three save's rather than one so that the basic page details are
+   * We're doing two save's rather than one so that the basic page details are
    * available to search straight away, as the archiveURL and the safeBrowsing
    * details rely on a request to a third party server and could end up taking a
    * while (e.g. could take up to 10 seconds for a server to respond). The archive
@@ -87,28 +88,13 @@ function addPage(req, res, next) {
        */
       .then( pageUrl => [archiveUrl(pageUrl), safeBrowsingCheck(pageUrl)])
       .spread( (archiveIsUrl, safeBrowsingData) => {
-        var returnArr = [safeBrowsingData]
-        if(archiveIsUrl){
-          returnArr.push(
-              pagesdb.updateColumn(
-                {
-                  archiveLink: archiveIsUrl.archiveLink
-                },
-                archiveIsUrl.pageUrl
-              )
-          )
-        }
-        return returnArr
-      })
-      .spread( safeBrowsingData => {
-        if(safeBrowsingData){
-          return pagesdb.updateColumn(
-              {
-                safeBrowsing: safeBrowsingData.safeBrowsingData
-              },
-              safeBrowsingData.pageUrl
-          )
-        }
+        /****
+         * _.merge will remove any null values
+         */
+        var updateData = _.merge(archiveIsUrl, safeBrowsingData)
+        var pageUrlKey = updateData.pageUrl
+        updateData = _.omit(updateData, 'pageUrl')
+        pagesdb.updateColumn(updateData, pageUrlKey)
       })
       .catch(err => {
         console.error(err)
