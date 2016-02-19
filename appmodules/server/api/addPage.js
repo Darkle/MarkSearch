@@ -64,13 +64,13 @@ function addPage(req, res, next) {
    * We're doing three save's rather than one so that the basic page details are
    * available to search straight away, as the archiveURL and the safeBrowsing
    * details rely on a request to a third party server and could end up taking a
-   * while (e.g. could take up to 10 seconds for a server to respond), the extra
-   * stuff of the archive url and the safe browsing details are not as important
-   * and can be added to the page details and resaved later in the second save to db.
+   * while (e.g. could take up to 10 seconds for a server to respond). The archive
+   * url and the safe browsing details are not as important and can be saved to the
+   * db later.
    *
-   * Binding here in case addPage gets called again and pagesdb.upsertRow
+   * Binding pageUrl here in case addPage gets called again and pagesdb.upsertRow
    * hasn't finished yet - don't want safeBrowsing or archive.is to use overwritten
-   * pageData from the new addPage call.
+   * pageData.pageUrl from the new addPage call.
    * Note: when using this.pageData, must use a regular function, as an arrow function
    * seems to mess up the 'this' context for bluebird.
    */
