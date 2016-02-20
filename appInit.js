@@ -4,7 +4,6 @@ var path = require('path')
 
 var electron = require('electron')
 var express = require('express')
-var debug = require('debug')('MarkSearch:appInit')
 var Server = require('hyperbole')
 var existent = require('existent')
 
@@ -29,7 +28,7 @@ electronInit()
     .then(initElectronTrayMenu)
     .then(() => {
       if(firstRun){
-        debug('first run')
+        console.log('first run')
         electron.shell.openExternal(`http://localhost:3020/`)
       }
     })

@@ -61,10 +61,10 @@ function addPage(req, res, next) {
    * url and the safe browsing details are not as important and can be saved to the
    * db later.
    *
-   * Binding pageUrl here in case addPage gets called again and pagesdb.upsertRow
-   * hasn't finished yet - don't want safeBrowsing or archive.is to use overwritten
-   * pageData.pageUrl from the new addPage call.
-   * Note: when using this.pageData, must use a regular function, as an arrow function
+   * Binding pageUrl here in case addPage gets called again and pagesdb.upsertRow or
+   * archiveUrl/safeBrowsingData hasn't finished yet - don't want safeBrowsing or
+   * archive.is to use overwritten pageData.pageUrl from the new addPage call.
+   * Note: when using this.pageUrl, must use a regular function, as an arrow function
    * seems to mess up the 'this' context for bluebird.
    */
   pagesdb.upsertRow(pageData).bind({pageUrl: pageData.pageUrl})
@@ -83,19 +83,38 @@ function addPage(req, res, next) {
         throw new Error(err)
       })
       /****
-       * Get archiveUrl & safeBrowsingCheck running in parallel, rather than in sequence,
-       * so dont have to wait for archiveUrl to finish before starting safeBrowsingCheck
+       * Get archiveUrl & safeBrowsingCheck running in parallel
        */
       .then( pageUrl => [archiveUrl(pageUrl), safeBrowsingCheck(pageUrl)])
-      .spread( (archiveIsUrl, safeBrowsingData) => {
+      .spread(function(archiveIsUrl, safeBrowsingData){
+        console.log('this.pageUrl')
+        console.log(this.pageUrl)
+        console.log('archiveIsUrl')
+        console.log(archiveIsUrl)
+        console.log('safeBrowsingData')
+        console.log(safeBrowsingData)
+      })
+      .spread(function(archiveIsUrl, safeBrowsingData) {
         /****
          * _.merge will remove any null values
          */
         var updateData = _.merge(archiveIsUrl, safeBrowsingData)
-        var pageUrlKey = updateData.pageUrl
-        updateData = _.omit(updateData, 'pageUrl')
-        pagesdb.updateColumn(updateData, pageUrlKey)
+        if(!_.isEmpty(updateData)){
+          pagesdb.updateColumn(updateData, this.pageUrl)
+        }
       })
+      //.spread( (archiveIsUrl, safeBrowsingData) => {
+      //  /****
+      //   * _.merge will remove any null values
+      //   */
+      //  var updateData = _.merge(archiveIsUrl, safeBrowsingData)
+      //  if(_.isEmpty(updateData)){
+      //    return
+      //  }
+      //  var pageUrlKey = updateData.pageUrl
+      //  updateData = _.omit(updateData, 'pageUrl')
+      //  pagesdb.updateColumn(updateData, pageUrlKey)
+      //})
       .catch(err => {
         console.error(err)
       })

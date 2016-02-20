@@ -5,7 +5,7 @@ var _ = require('lodash')
 
 function generateArchiveOfPage(pageUrl){
   return new Promise((resolve, reject) => {
-    var returnedData = null
+    var archiveLink = null
     request.post({
           url: 'https://archive.is/submit/',
           form: {url: pageUrl}
@@ -23,12 +23,10 @@ function generateArchiveOfPage(pageUrl){
              */
           }
           else{
-            returnedData = {
-              archiveLink: httpResponse.headers.location,
-              pageUrl: pageUrl
-            }
+            archiveLink = {
+              archiveLink: httpResponse.headers.location}
           }
-          resolve(returnedData)
+          resolve(archiveLink)
         }
     )
   })

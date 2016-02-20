@@ -50,7 +50,7 @@ var safeBrowsingDetails = {
 
 function safeBrowsingCheck(pageUrl){
   return new Promise((resolve, reject) => {
-    var returnedData = null
+    var safeBrowsingData = null
     var safeBrowsingUrl = 'https://sb-ssl.google.com/safebrowsing/api/lookup?' +
         'client=' + electronApp.getName() +
         '&key=' + APIKEYS.safeBrowsing +
@@ -85,12 +85,9 @@ function safeBrowsingCheck(pageUrl){
               safeBrowsingPossibilitiesReturned[malP] = safeBrowsingDetails[malP]
             }
           })
-          returnedData = {
-            safeBrowsingData: {
-              possiblyUnsafe: true,
-              details: safeBrowsingPossibilitiesReturned
-            },
-            pageUrl: pageUrl
+          safeBrowsingData = {
+            possiblyUnsafe: true,
+            details: safeBrowsingPossibilitiesReturned
           }
         }
       }
