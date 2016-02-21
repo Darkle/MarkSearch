@@ -2,6 +2,7 @@
 
 var fs = require('fs')
 var url = require('url')
+var path = require('path')
 
 var electron = require('electron')
 var BrowserWindow = electron.BrowserWindow
@@ -33,7 +34,7 @@ function scrapeAndAddPage(req, res, next) {
   var browserWindow = new BrowserWindow(
       {
         show: devMode,
-        preload: './scrapePreload.js',
+        preload: path.join(__dirname, 'scrapePreload.js'),
         webPreferences: {
           nodeIntegration: false,
           allowDisplayingInsecureContent: true,
@@ -97,6 +98,7 @@ function scrapeAndAddPage(req, res, next) {
     }
   })
   webContents.on('crashed', event => {
+    console.log('crashed')
     res.status(500).json({errorMessage: 'webContents: crashed'})
     browserWindow.destroy()
   })
@@ -146,7 +148,7 @@ function scrapeAndAddPage(req, res, next) {
   })
 
   ipcMain.on('returnDocDetailsError', function(event, arg) {
-    console.error('returnDocDetailsError')
+    console.error(`returnDocDetailsError: ${JSON.stringify(arg)}`)
     res.status(500).json({errorMessage: JSON.stringify(arg)})
     browserWindow.destroy()
   })

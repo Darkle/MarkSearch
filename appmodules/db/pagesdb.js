@@ -87,6 +87,9 @@ pagesdb.init = (pagesDBFilePath) => {
 }
 
 pagesdb.updateColumn = (columnDataObj, pageUrlPrimaryKey) => {
+  if(_.isObject(columnDataObj.safeBrowsing)){
+    columnDataObj.safeBrowsing = JSON.stringify(columnDataObj.safeBrowsing)
+  }
   var validatedColumnDataObj = inspector.validate(updateColumnValidation, columnDataObj)
   if(!validatedColumnDataObj.valid){
     var errMessage = `Error, passed in column data did not pass validation.
@@ -115,6 +118,9 @@ pagesdb.updateColumn = (columnDataObj, pageUrlPrimaryKey) => {
 pagesdb.upsertRow = (pageDataObj) => {
   pageDataObj.pageUrl = _.toLower(pageDataObj.pageUrl)
   pageDataObj.dateCreated = _.toInteger(pageDataObj.dateCreated)
+  if(_.isObject(pageDataObj.safeBrowsing)){
+    pageDataObj.safeBrowsing = JSON.stringify(pageDataObj.safeBrowsing)
+  }
   var validatedPageDataObj = inspector.validate(upsertRowValidation, pageDataObj)
   if(!validatedPageDataObj.valid){
     var errMessage = `Error, passed in page data did not pass validation.

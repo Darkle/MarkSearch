@@ -20,7 +20,7 @@ function addPage(req, res, next) {
    *  pageText - String
    *  pageDescription - String
    *  archiveLink - String - e.g. 'https://archive.is/pFvwT'
-   *  safeBrowsing - String (JSON stringified) - e.g. {safeBrowsing: {possiblyUnsafe: true, details: ‘malware'}}
+   *  safeBrowsing - String (JSON stringified) - e.g. {safeBrowsing: {possiblyUnsafe: true, details:  malware: { bold: `text`, explanation: `text`}}}
    *
    * Parsing the url to get the href from url.parse as that will
    * add a trailing slash to the end of the href if it's just a url
@@ -30,7 +30,6 @@ function addPage(req, res, next) {
    * site, which is not what we want, so use url.parse to
    * automatically add the trailing slash.
    */
-
   var parsedUrl = url.parse(req.params.pageUrl.toLowerCase())
   var pageUrl = parsedUrl.href
   var pageTitle = collapseWhiteSpace(req.body.pageTitle)
@@ -67,8 +66,8 @@ function addPage(req, res, next) {
    * Note: when using this.pageUrl, must use a regular function, as an arrow function
    * seems to mess up the 'this' context for bluebird.
    */
-  pagesdb.upsertRow(pageData).bind({pageUrl: pageData.pageUrl})
-      .then(function() {
+  return pagesdb.upsertRow(pageData).bind({pageUrl: pageData.pageUrl})
+      .then(function(){
         res.status(200).end()
         return this.pageUrl
       })
@@ -86,35 +85,15 @@ function addPage(req, res, next) {
        * Get archiveUrl & safeBrowsingCheck running in parallel
        */
       .then( pageUrl => [archiveUrl(pageUrl), safeBrowsingCheck(pageUrl)])
-      .spread(function(archiveIsUrl, safeBrowsingData){
-        console.log('this.pageUrl')
-        console.log(this.pageUrl)
-        console.log('archiveIsUrl')
-        console.log(archiveIsUrl)
-        console.log('safeBrowsingData')
-        console.log(safeBrowsingData)
-      })
       .spread(function(archiveIsUrl, safeBrowsingData) {
         /****
          * _.merge will remove any null values
          */
         var updateData = _.merge(archiveIsUrl, safeBrowsingData)
         if(!_.isEmpty(updateData)){
-          pagesdb.updateColumn(updateData, this.pageUrl)
+          return pagesdb.updateColumn(updateData, this.pageUrl)
         }
       })
-      //.spread( (archiveIsUrl, safeBrowsingData) => {
-      //  /****
-      //   * _.merge will remove any null values
-      //   */
-      //  var updateData = _.merge(archiveIsUrl, safeBrowsingData)
-      //  if(_.isEmpty(updateData)){
-      //    return
-      //  }
-      //  var pageUrlKey = updateData.pageUrl
-      //  updateData = _.omit(updateData, 'pageUrl')
-      //  pagesdb.updateColumn(updateData, pageUrlKey)
-      //})
       .catch(err => {
         console.error(err)
       })

@@ -86,8 +86,10 @@ function safeBrowsingCheck(pageUrl){
             }
           })
           safeBrowsingData = {
-            possiblyUnsafe: true,
-            details: safeBrowsingPossibilitiesReturned
+            safeBrowsing: {
+              possiblyUnsafe: true,
+              details: safeBrowsingPossibilitiesReturned
+            }
           }
         }
       }
