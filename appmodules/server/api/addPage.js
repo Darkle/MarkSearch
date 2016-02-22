@@ -30,7 +30,7 @@ function addPage(req, res, next) {
    * site, which is not what we want, so use url.parse to
    * automatically add the trailing slash.
    */
-  var parsedUrl = url.parse(req.params.pageUrl.toLowerCase())
+  var parsedUrl = url.parse(req.params.pageUrl)
   var pageUrl = parsedUrl.href
   var pageTitle = collapseWhiteSpace(req.body.pageTitle)
   var pageText = collapseWhiteSpace(req.body.pageText)
@@ -60,21 +60,21 @@ function addPage(req, res, next) {
    * url and the safe browsing details are not as important and can be saved to the
    * db later.
    *
-   * Binding pageUrl here in case addPage gets called again and pagesdb.upsertRow or
+   * Binding pageUrl & res here in case addPage gets called again and pagesdb.upsertRow or
    * archiveUrl/safeBrowsingData hasn't finished yet - don't want safeBrowsing or
-   * archive.is to use overwritten pageData.pageUrl from the new addPage call.
-   * Note: when using this.pageUrl, must use a regular function, as an arrow function
-   * seems to mess up the 'this' context for bluebird.
+   * archive.is to use overwritten pageData.pageUrl or res from the new addPage call.
+   * Note: when using this.pageUrl or this.res, must use a regular function, as an arrow
+   * function seems to mess up the 'this' context for bluebird.
    */
-  return pagesdb.upsertRow(pageData).bind({pageUrl: pageData.pageUrl})
+  return pagesdb.upsertRow(pageData).bind({pageUrl: pageData.pageUrl, res: res})
       .then(function(){
-        res.status(200).end()
+        this.res.status(200).end()
         return this.pageUrl
       })
-      .catch(err => {
+      .catch(function(err){
         console.log(`There was an error saving the page to the database`)
         console.error(err)
-        res.status(500).end()
+        this.res.status(500).end()
         /****
          * Rethrow the error to make it skip archiveUrl and safeBrowsing. No
          * point doing them if the row hasn't made it into the database.

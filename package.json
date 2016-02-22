@@ -20,7 +20,7 @@
     "csurf": "^1.8.3",
     "domain-parser": "0.0.5",
     "dompurify": "^0.7.4",
-    "electron-prebuilt": "^0.36.7",
+    "electron-prebuilt": "^0.36.8",
     "existent": "^1.0.1",
     "express": "^4.13.4",
     "express-validator": "^2.17.1",
@@ -61,10 +61,10 @@
     "gulp-less": "^3.0.5",
     "gulp-nodemon": "^2.0.4",
     "gulp-rename": "^1.2.2",
-    "gulp-shell": "^0.5.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",
     "run-sequence": "^1.1.5",
+    "shelljs": "^0.6.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }

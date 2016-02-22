@@ -13,6 +13,7 @@ var compression = require('compression')
 
 var authenticationCheck = require('./authenticationCheck')
 var expressErrorMiddleware = require('./expressErrorMiddleware')
+var paramsPageUrlToLowercase = require('./paramsPageUrlToLowerCase')
 var routes = require('./routes/index')
 var api = require('./routes/api')
 
@@ -37,13 +38,14 @@ function expressInit(expressApp, serverPort){
   expressApp.use(cookieParser())
   expressApp.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'static')))
   expressApp.use('/bower_components',  express.static(path.join(__dirname, '..', '..', 'bower_components')))
+  expressApp.use(paramsPageUrlToLowercase)
   /****
    * Routes
    */
-  expressApp.use('/api', api)
   //expressApp.use('/api', authenticationCheck, api)
-  expressApp.use('/', routes)
+  expressApp.use('/api', api)
   //expressApp.use('/', csurf({ cookie: true, httpOnly: true }), routes)
+  expressApp.use('/', routes)
 
   expressErrorMiddleware(expressApp)
 
