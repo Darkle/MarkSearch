@@ -1,5 +1,5 @@
 ;(function(){
-  var ipcRenderer = require('electron').ipcRenderer
+  var ipc = require('ipc')
   ipcRenderer.on('sendDocDetails', function(event, arg) {
     try{
       var description = ''
