@@ -1,6 +1,6 @@
 ;(function(){
   var ipc = require('ipc')
-  ipcRenderer.on('sendDocDetails', function(event, arg) {
+  ipc.on('sendPageData', function(event, arg) {
     try{
       var description = ''
       var descriptionElem = document.querySelector('meta[name="description"], meta[name="Description"], meta[name="DESCRIPTION"], meta[property="og:description"]')
@@ -44,10 +44,10 @@
         documentText: document.body.innerText,
         documentDescription: description
       }
-      ipcRenderer.send('returnDocDetails', JSON.stringify(docDetails))
+      ipc.sendToHost('returnDocDetails', docDetails)
     }
     catch(err){
-      ipcRenderer.send('returnDocDetailsError', JSON.stringify(err.message))
+      ipc.sendToHost('returnDocDetailsError', err.message)
     }
   })
 })()
