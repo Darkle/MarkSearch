@@ -96,7 +96,8 @@ module.exports = function () {
            * Update the urlToScrape to the new redirected location so we can
            * re-check it against oldURL in next redirect (if it happens). We
            * need to do this check as resources on page can also emit a redirect event.
-           * We just want to make sure we dont get into an infinite redirect loop.
+           * We just want to make sure we dont get into an infinite redirect loop for url
+           * webview is loading.
            * Using url.parse to add a trailing slash just in case.
            */
           urlToScrape = url.parse(newURL).href
