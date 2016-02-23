@@ -120,7 +120,7 @@ function renderResults(resultsChunk, searchTerms){
         /*****
          * SafeBrowsing
          */
-        if(doc.safeBrowsing){
+        if(doc.safeBrowsing.possiblyUnsafe){
           mainResultLink.className += ' warning'
           mainResultA.className += ' warning'
 
@@ -213,10 +213,10 @@ function renderResults(resultsChunk, searchTerms){
         metaIconDelete.setAttribute('data-pt-title', 'Delete Bookmark From MarkSearch')
         //metaIconDelete.setAttribute('data-pt-gravity', 'bottom 0 3')
         /****
-         * If Unsafe, give the user a visual reminder that they can
+         * If possiblyUnsafe, give the user a visual reminder that they can
          * delete this page from MarkSearch
          */
-        if(doc.safeBrowsing){
+        if(doc.safeBrowsing.possiblyUnsafe){
           metaIconDelete.className = 'material-icons protip warning trashDelete'
         }
         else{

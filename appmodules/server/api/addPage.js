@@ -20,7 +20,7 @@ function addPage(req, res, next) {
    *  pageText - String
    *  pageDescription - String
    *  archiveLink - String - e.g. 'https://archive.is/pFvwT'
-   *  safeBrowsing - String (JSON stringified)
+   *  safeBrowsing - String (JSON stringified) - e.g. {safeBrowsing: {possiblyUnsafe: true, details:  malware: { bold: `text`, explanation: `text`}}}
    *
    * Parsing the url to get the href from url.parse as that will
    * add a trailing slash to the end of the href if it's just a url
