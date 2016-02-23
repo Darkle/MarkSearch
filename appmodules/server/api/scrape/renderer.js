@@ -93,9 +93,11 @@ module.exports = function () {
          */
         if(numTimesRedirected < 6){
           /****
-           * Update the urlToScrape to the new location redirected to so it's
-           * the url it redirected to when we send urlToScrape through to addPage.
-           * Using url.parse to add a trailing slash if its a url with no path
+           * Update the urlToScrape to the new redirected location so we can
+           * re-check it against oldURL in next redirect (if it happens). We
+           * need to do this check as resources on page can emit a redirect event.
+           * We just want to make sure we dont get into an infinite redirect loop.
+           * Using url.parse to add a trailing slash just in case.
            */
           urlToScrape = url.parse(newURL).href
         }
