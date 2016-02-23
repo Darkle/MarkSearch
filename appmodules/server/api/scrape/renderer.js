@@ -5,9 +5,8 @@ var url = require('url')
 
 var ipcRenderer = electron.ipcRenderer
 
-function destroyWebview(webViewElem){
+function removeWebview(webViewElem){
   document.body.removeChild(webViewElem)
-  webViewElem = null
 }
 
 function sendErrorToMainProcess(data){
@@ -32,7 +31,8 @@ module.exports = function () {
 
     var oldwebview = document.querySelector('webview')
     if(oldwebview){
-      destroyWebview(oldwebview)
+      removeWebview(oldwebview)
+      oldwebview = null
     }
 
     /****
@@ -70,13 +70,13 @@ module.exports = function () {
           validatedURL: ${validatedURL}
           urlToScrape: ${urlToScrape}
         `)
-        destroyWebview(webview)
+        removeWebview(webview)
         webview = null
       }
     })
     webview.addEventListener('crashed', () => {
       sendErrorToMainProcess('webContents: crashed')
-      destroyWebview(webview)
+      removeWebview(webview)
       webview = null
     })
     /****
@@ -101,7 +101,7 @@ module.exports = function () {
         }
         else{
           sendErrorToMainProcess('webContents: infinite redirect loop')
-          destroyWebview(webview)
+          removeWebview(webview)
           webview = null
         }
       }
@@ -113,7 +113,7 @@ module.exports = function () {
       else if(event.channel === 'returnDocDetailsError'){
         sendErrorToMainProcess(`webviewPreload error: ${JSON.stringify(event.args)}`)
       }
-      destroyWebview(webview)
+      removeWebview(webview)
       webview = null
     })
     document.body.appendChild(webview)
