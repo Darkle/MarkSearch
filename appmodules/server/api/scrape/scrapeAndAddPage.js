@@ -41,13 +41,7 @@ function scrapeAndAddPage(req, res, next) {
   browserWindow = new BrowserWindow({show: devMode})
   browserWindow.loadURL(path.join('file://', __dirname, 'webviewContainerWindow.html'))
 
-  //TODO remember to do browserWindow.on('closed' and also destroy on error
-  // also see what else from below should use
-  // make sure i remove all ipcMain listeners http://bit.ly/218oSrx
-
-
   browserWindow.on('closed', () => {
-    console.log('browserWindow closed')
     browserWindow = null
     webContents = null
     ipcMain.removeAllListeners('returnDocDetails')
@@ -66,7 +60,6 @@ function scrapeAndAddPage(req, res, next) {
   }
 
   webContents.once('did-finish-load', event => {
-    console.log('browserWindow webContents did-finish-load')
     /****
      * Tell renderer to start loading urlToScrape
      */
@@ -95,12 +88,13 @@ function scrapeAndAddPage(req, res, next) {
   )
 
   ipcMain.once('returnDocDetails', (event, message) => {
-    console.log('returnDocDetails')
-    //console.log(message)
     var docDetails = JSON.parse(message)
     /****
      * Dont need to collapse whitespace here as doing that in addPage.js
+     * Put pageUrl to lowercase here just in case, as the new pageUrl wont go through
+     * the paramsPageUrlToLowerCase middleware from here.
      */
+    req.params.pageUrl = docDetails.pageUrl.toLowerCase()
     req.body.pageTitle = docDetails.documentTitle
     req.body.pageText = docDetails.documentText
     req.body.pageDescription = docDetails.documentDescription
@@ -112,7 +106,7 @@ function scrapeAndAddPage(req, res, next) {
 }
 
 function logErrorDestroyBrowserAndRespond(errorMessage, res){
-  console.error(errorMessage)
+  console.error(`An Error Occurred: ${errorMessage}`)
   res.status(500).json({errorMessage: errorMessage})
   browserWindow.destroy()
 }

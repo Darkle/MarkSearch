@@ -32,10 +32,14 @@ function addPage(req, res, next) {
    */
   var parsedUrl = url.parse(req.params.pageUrl)
   var pageUrl = parsedUrl.href
-  var pageTitle = collapseWhiteSpace(req.body.pageTitle)
-  var pageText = collapseWhiteSpace(req.body.pageText)
-  var pageDescription = collapseWhiteSpace(req.body.pageDescription)
 
+  var pageTitleCollapsed = collapseWhiteSpace(req.body.pageTitle)
+  var pageTextCollapsed = collapseWhiteSpace(req.body.pageText)
+  var pageDescriptionCollapsed = collapseWhiteSpace(req.body.pageDescription)
+
+  var pageTitle = pageTitleCollapsed.length ? pageTitleCollapsed : null
+  var pageText = pageTextCollapsed.length ? pageTitleCollapsed : null
+  var pageDescription = pageDescriptionCollapsed.length ? pageTitleCollapsed : null
   /****
    * Get the domain from the parsedUrl.hostname and remove any subdomains
    */

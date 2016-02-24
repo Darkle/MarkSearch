@@ -54,7 +54,6 @@ function safeBrowsingCheck(pageUrl){
     var safeBrowsingUrl = 'https://sb-ssl.google.com/safebrowsing/api/lookup?' +
         'client=' + electronApp.getName() +
         '&key=' + APIKEYS.safeBrowsing +
-            //TODO: grab the app version from electron or appDB (wherever ended up storing it)
         '&appver=' + electronApp.getVersion() +
         '&pver=3.1' +
         '&url=' + encodeURIComponent(pageUrl)

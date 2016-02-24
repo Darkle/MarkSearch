@@ -20,8 +20,6 @@ function sendLogToMainProcess(data){
 module.exports = function () {
 
   ipcRenderer.on('createAndLoadWebview', (event, urlToScrape) => {
-    sendLogToMainProcess(`createAndLoadWebview`)
-    sendLogToMainProcess(urlToScrape)
 
     var numTimesRedirected = 0
 
@@ -47,63 +45,49 @@ module.exports = function () {
      * events
      */
     webview.addEventListener('did-finish-load', event => {
-      sendLogToMainProcess('did-finish-load')
       /****
        * Ask webviewPreload.js to send back the page data
        */
       webview.send('sendPageData')
     })
-    /****
-     * note: did-fail-load seems to get called after certificate-error,
-     * so just let did-fail-load handle certificate-error if it occurs.
-     * Also, 'did-fail-load' will emit on any resource on the page not loading
-     * as well, so only send back error and destroy window when its the webview
-     * url that failed to load. note: this might mess up if a resource has
-     * the same url that the BrowserWindow is going to.
-     */
-    webview.addEventListener('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
-      if(validatedURL === urlToScrape){
+
+    webview.addEventListener('did-fail-load', event => {
+      if(event.validatedURL === urlToScrape){
         sendErrorToMainProcess(`
-          webContents: did-fail-load
-          errorCode: ${errorCode}
-          errorDescription: ${errorDescription}
-          validatedURL: ${validatedURL}
+          webview: did-fail-load
+          errorCode: ${event.errorCode}
+          errorDescription: ${event.errorDescription}
+          validatedURL: ${event.validatedURL}
           urlToScrape: ${urlToScrape}
         `)
         removeWebview(webview)
         webview = null
       }
     })
-    webview.addEventListener('crashed', () => {
-      sendErrorToMainProcess('webContents: crashed')
+    webview.addEventListener('crashed', event => {
+      sendErrorToMainProcess(`webview: crashed on url ${event.srcElement.src}`)
       removeWebview(webview)
       webview = null
     })
     /****
      * 'did-get-redirect-request' will fire on any resource on the page that
-     * is redirected, so only update the urlToScrape when its the
-     * BrowserWindow url that's being redirected. note: this might mess up
-     * if a resource has the same url that the BrowserWindow is going to.
+     * is redirected, so only update the urlToScrape when its the the webview url
+     * being redirected.
      */
-    webview.addEventListener('did-get-redirect-request', (event, oldURL, newURL) => {
-      if(oldURL === urlToScrape){
-        numTimesRedirected = numTimesRedirected + 1
+    webview.addEventListener('did-get-redirect-request', event => {
+      if(event.isMainFrame){
         /****
-         * So we dont get into an infinite redirect loop
+         * Update the urlToScrape to the new redirected location so we can
+         * save the url it ends on.
+         * (Using url.parse to add a trailing slash just in case).
          */
-        if(numTimesRedirected < 6){
-          /****
-           * Update the urlToScrape to the new redirected location so we can
-           * re-check it against oldURL in next redirect (if it happens). We
-           * need to do this check as resources on page can also emit a redirect event.
-           * We just want to make sure we dont get into an infinite redirect loop for url
-           * webview is loading.
-           * Using url.parse to add a trailing slash just in case.
-           */
-          urlToScrape = url.parse(newURL).href
-        }
-        else{
-          sendErrorToMainProcess('webContents: infinite redirect loop')
+        urlToScrape = url.parse(event.newURL).href
+        /****
+         * So we dont get into an infinite redirect loop.
+         */
+        numTimesRedirected = numTimesRedirected + 1
+        if(numTimesRedirected > 5){
+          sendErrorToMainProcess('webview: infinite redirect loop')
           removeWebview(webview)
           webview = null
         }
@@ -111,6 +95,10 @@ module.exports = function () {
     })
     webview.addEventListener('ipc-message', event => {
       if(event.channel === 'returnDocDetails'){
+        /****
+         * Send back the updated urlToScrape in the case of it being redirected
+         */
+        event.args[0].pageUrl = urlToScrape
         ipcRenderer.send('returnDocDetails', JSON.stringify(event.args[0]))
       }
       else if(event.channel === 'returnDocDetailsError'){
