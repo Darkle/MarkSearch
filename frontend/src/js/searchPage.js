@@ -28,11 +28,6 @@ var resultsCountDiv$
 var resultsContainer$
 var haveShownSomeResults
 var haveShownResultsTooltips
-var searchingLoose
-
-function set_searchingLoose(val){
-  searchingLoose = val
-}
 
 function set_haveShownSomeResults(val){
   haveShownSomeResults = val
@@ -58,11 +53,7 @@ function searchPageInit(event){
     searchInput$.focus()
   }
   initSearchPlaceholder(searchInput$)
-  /****
-   * Set the searchLoose value to the user's preference in the markSearchSettings in appDB.
-   * User can temporarily enable/disable loose search by clicking on the goose
-   */
-  searchingLoose = markSearchSettings.defaultToSearchLoose
+
   haveShownSomeResults = _.get(window.localStorage, 'haveShownSomeResults')
   haveShownResultsTooltips = _.get(window.localStorage, 'haveShownResultsTooltips')
   /****
@@ -203,23 +194,6 @@ function searchPageInit(event){
       }
   )
 
-  $('#looseSearchButton').hover(
-      (event) => {
-        $(event.currentTarget.firstElementChild).addClass('gooseHover')
-      },
-      (event) => {
-        $(event.currentTarget.firstElementChild).removeClass('gooseHover')
-      }
-  ).on('touchend',
-      (event) => {
-        $(event.currentTarget.firstElementChild).removeClass('gooseHover')
-      }
-  )
-
-  /****
-   * Loose goose search button (highway to the danger zone)
-   */
-  //gooseInit()
   addUrlsInit()
   dateFilterInit()
   //settingsSubbarInit()
@@ -234,7 +208,5 @@ export {
     haveShownSomeResults,
     set_haveShownSomeResults,
     haveShownResultsTooltips,
-    set_haveShownResultsTooltips,
-    searchingLoose,
-    set_searchingLoose
+    set_haveShownResultsTooltips
 }

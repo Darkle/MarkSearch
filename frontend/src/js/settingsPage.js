@@ -55,12 +55,6 @@ function settingsPageInit(event){
   var changeDBLocButton$ = $('#changeDBLocationButton')
 
   /****
-   * If end up implementing searchLoose, remember to change the searchLoose
-   * variable (set_searchingLoose()) as well as the searchLoose value in the
-   * markSearchSettings global object - and also alter code serverSide
-   */
-
-  /****
    * Prebrowsing setting
    */
   prebrowsingCheckbox$.data('settingKeyName', 'prebrowsing')

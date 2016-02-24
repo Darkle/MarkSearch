@@ -293,45 +293,6 @@ body {
   width: 100%;
   text-decoration: none;
 }
-.navHeader .looseSearch {
-  -webkit-box-flex: 0;
-  -webkit-flex: 0 1 4rem;
-      -ms-flex: 0 1 4rem;
-          flex: 0 1 4rem;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  display: none;
-}
-.navHeader .looseSearch a {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-.navHeader .looseSearch a i {
-  background-image: url("/images/goose.svg");
-  background-repeat: no-repeat;
-  background-position: center center;
-}
 .navHeader .addPage {
   -webkit-box-flex: 0;
   -webkit-flex: 0 1 4rem;
