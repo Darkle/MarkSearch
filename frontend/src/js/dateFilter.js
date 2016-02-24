@@ -189,7 +189,7 @@ function filterResults(isShortcut){
      * For date end, we want to include all of the end date month, not just the start
      * of that month, but include all the days of that month up to 23:59 of the last
      * day in that month.
-     *
+     * 
      * note: When using .add(n, 'months'), if you had a moment that was
      * "Friday, January 1st 2016, 12:00:00 am", then using .add(12, 'months')
      * would equate to "Sunday, January 1st 2017, 12:00:00 am", because it's
