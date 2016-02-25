@@ -17,7 +17,8 @@ router.get('/', (req, res, next) => {
         csrfToken: req.csrfToken(),
         markSearchSettings: JSON.stringify(
             {
-              prebrowsing: Boolean(appSettings.settings.prebrowsing)
+              prebrowsing: Boolean(appSettings.settings.prebrowsing),
+              alwaysDisableTooltips: Boolean(appSettings.settings.alwaysDisableTooltips)
             }
         )
       }
@@ -50,7 +51,8 @@ router.get('/settingsPage', (req, res, next) => {
         csrfToken: req.csrfToken(),
         markSearchSettings: JSON.stringify(
             {
-              prebrowsing: Boolean(appSettings.settings.prebrowsing)
+              prebrowsing: Boolean(appSettings.settings.prebrowsing),
+              alwaysDisableTooltips: Boolean(appSettings.settings.alwaysDisableTooltips)
             }
         )
       }

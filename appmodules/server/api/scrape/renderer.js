@@ -53,21 +53,17 @@ module.exports = function () {
 
     webview.addEventListener('did-fail-load', event => {
       if(event.validatedURL === urlToScrape){
-        sendErrorToMainProcess(`
-          webview: did-fail-load
-          errorCode: ${event.errorCode}
-          errorDescription: ${event.errorDescription}
-          validatedURL: ${event.validatedURL}
-          urlToScrape: ${urlToScrape}
-        `)
+        //sendErrorToMainProcess(`
+        //  webview: did-fail-load
+        //  errorCode: ${event.errorCode}
+        //  errorDescription: ${event.errorDescription}
+        //  validatedURL: ${event.validatedURL}
+        //  urlToScrape: ${urlToScrape}
+        //`)
+        sendErrorToMainProcess(`webview: did-fail-load on url ${event.srcElement.src}`)
         removeWebview(webview)
         webview = null
       }
-    })
-    webview.addEventListener('crashed', event => {
-      sendErrorToMainProcess(`webview: crashed on url ${event.srcElement.src}`)
-      removeWebview(webview)
-      webview = null
     })
     /****
      * 'did-get-redirect-request' will fire on any resource on the page that
@@ -93,6 +89,19 @@ module.exports = function () {
         }
       }
     })
+
+    webview.addEventListener('crashed', event => {
+      sendErrorToMainProcess(`webview: crashed on url ${event.srcElement.src}`)
+      removeWebview(webview)
+      webview = null
+    })
+
+    webview.addEventListener('gpu-crashed', event => {
+      sendErrorToMainProcess(`webview: crashed on url ${event.srcElement.src}`)
+      removeWebview(webview)
+      webview = null
+    })
+
     webview.addEventListener('ipc-message', event => {
       if(event.channel === 'returnDocDetails'){
         /****
@@ -102,7 +111,7 @@ module.exports = function () {
         ipcRenderer.send('returnDocDetails', JSON.stringify(event.args[0]))
       }
       else if(event.channel === 'returnDocDetailsError'){
-        sendErrorToMainProcess(`webviewPreload error: ${JSON.stringify(event.args)}`)
+        sendErrorToMainProcess(`webviewPreload error: ${event.args}`)
       }
       removeWebview(webview)
       webview = null

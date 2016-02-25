@@ -8,7 +8,7 @@ function checkIfiOS7(window){
   /****
    * New way based on http://stackoverflow.com/a/9039885/3458681
    * More specific to iOS 7 as that is what we should be testing
-   * Lets just hope Apple doesn't remove window.indexedDB from
+   * Lets just hope Apple doesn't remove indexedDB from
    * future iOS'
    */
   return /iPad|iPhone|iPod/.test(navigator.platform) && !window.indexedDB

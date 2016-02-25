@@ -1,7 +1,6 @@
 'use strict';
 
 import _ from 'lodash'
-require('lodash-migrate')
 
 function searchErrorHandler(error){
   console.error(error)

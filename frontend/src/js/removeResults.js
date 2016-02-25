@@ -4,7 +4,6 @@ import { resultsContainer$, resultsCountDiv$ } from './searchPage'
 import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEventHandlers'
 
 import _ from 'lodash'
-require('lodash-migrate')
 
 function removeResults(){
   /****
@@ -24,7 +23,7 @@ function removeResults(){
     resultsContainer$[0].removeChild(addRemoveDiv)
   }
   /****
-   * Also remove the prebrowsing links we made in the head
+   * Also remove any prebrowsing links we made in the head
    */
   var head = document.head
   var preBrowsingLinks = head.querySelectorAll('.prebrowsing')
@@ -36,8 +35,8 @@ function removeResults(){
    * - if there were 0 results last time, the user may think there are 0 results
    * this time too because the 0 from last time is still showing, so hide it.
    */
-  resultsCountDiv$.addClass('hide')
-  $(window).scrollTop(0)
+  resultsCountDiv$.addClass('visibilityHidden')
+  //$(window).scrollTop(0)
 }
 /****
  * Exports

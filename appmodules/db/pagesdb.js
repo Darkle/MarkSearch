@@ -132,7 +132,7 @@ pagesdb.upsertRow = (pageDataObj) => {
     return pagesdb.db('pages')
         .insert(pageDataObj)
         .catch(err => {
-          console.log('an error occured with the insert')
+          console.log('an error occured with the upsert')
           console.error(err)
           throw new Error(err)
         })

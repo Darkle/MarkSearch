@@ -5,48 +5,26 @@ import "babel-polyfill"
 import { initInfiniteScroll } from './infiniteScroll'
 import { checkIfiOS7 } from './checkIfiOS7'
 import { queryServerAndRender } from './queryServerAndRender'
-import { removeResults } from './removeResults'
-import { gooseInit } from './gooseIsDeadMan'
 import { addUrlsInit } from './addUrls'
-import { searchErrorHandler } from './searchErrorsHandler'
 import { checkIfTouchDevice } from './checkIfTouchDevice'
 import { initSearchPlaceholder } from './initSearchPlaceholder'
 import { tooltips } from './tooltips'
-import { dateFilterInit, filterResults, allFromToIsSet, shortCutIsSet } from './dateFilter'
-import { settingsSubbarInit } from './settingsSubbar'
+import { dateFilterInit } from './dateFilter'
 
 import _ from 'lodash'
-require('lodash-migrate')
-/****
- * for some reason import * as stringUtils from 'string' isn't
- * working, so using require
- */
-var stringUtils = require('string')
 
 var csrfToken
 var resultsCountDiv$
 var resultsContainer$
-var haveShownSomeResults
-var haveShownResultsTooltips
-
-function set_haveShownSomeResults(val){
-  haveShownSomeResults = val
-}
-
-function set_haveShownResultsTooltips(val){
-  haveShownResultsTooltips = val
-}
-
-https://github.com/alvinteh/url-params-helper might be good
+var searchInput$
 
 $(document).ready(searchPageInit)
 
 function searchPageInit(event){
-  var searchInput$ = $('#searchInput')
+  searchInput$ = $('#searchInput')
   csrfToken = $('#csrfInput').val()
   resultsCountDiv$ = $('#resultsCount')
   resultsContainer$ = $('#resultsContainer')
-  var dateFilterContainer$ = $('.dateFilterSettings')
   var isIOS7 = checkIfiOS7(window)
   var body$ = $('body')
   if(!checkIfTouchDevice(window)){
@@ -54,20 +32,26 @@ function searchPageInit(event){
   }
   initSearchPlaceholder(searchInput$)
 
-  haveShownSomeResults = _.get(window.localStorage, 'haveShownSomeResults')
-  haveShownResultsTooltips = _.get(window.localStorage, 'haveShownResultsTooltips')
+  /****
+   * Initializing dateFilter here as queryServerAndRender() relies on some stuff in
+   * the dateFilter module. Should be ok initializing up here as it does not import
+   * anything from searchPage.js
+   */
+  dateFilterInit()
+
   /****
    * Display all bookmarks stored in MarkSearch on page load
    */
   queryServerAndRender()
-      .then(() =>{
+      .then(() => {
         tooltips()
         /****
          * Adding touchmove too cause of this: http://bit.ly/21GgA7M
          */
         $(window).on('scroll touchmove', initInfiniteScroll)
       })
-      .then(() =>{
+      .then(() => {
+        //TODO - need to fix this with the hash stuff
         /****
          * For when the user has loaded the MarkSearch search page
          * via clicking on the results "more" link/button in the
@@ -91,7 +75,7 @@ function searchPageInit(event){
           }
         }
       })
-      .catch(searchErrorHandler)
+      .catch(err => {console.error(err)})
   /****
    * Search
    */
@@ -108,7 +92,7 @@ function searchPageInit(event){
    * with _.debounce only returning a debounced function and not actually
    * executing the function itself - http://stackoverflow.com/a/24309963/3458681
    */
-  searchForm$.on('submit', event =>{
+  searchForm$.on('submit', event => {
     event.preventDefault()
     searchInput$.blur()
   })
@@ -126,31 +110,7 @@ function searchPageInit(event){
             var searchInputValue = _.trim(searchInput$.val())
             if(searchInputValue !== inputOldValue){
               inputOldValue = searchInputValue
-              removeResults()
-              /****
-               * If they have deleted all text, we have no search terms (null), so show all pages in db again
-               * Also get get rid of any excess (>1) whitespace in between words (.collapseWhitespace())
-               */
-              var searchTerms = null
-              if(searchInputValue.length){
-                searchTerms = encodeURIComponent(stringUtils(searchInputValue).collapseWhitespace().s)
-              }
-              queryServerAndRender(searchTerms)
-                  .then(() => {
-                    /****
-                     * If they were searching when they have the date filter displayed
-                     * and either the date filter 'From To' is set or the shortcuts
-                     * is set, then filter the results by date
-                     */
-                    if(dateFilterContainer$.data('isShown') === 'true'){
-                      var sCiSet = shortCutIsSet()
-                      var aFTiS = allFromToIsSet()
-                      if(sCiSet || aFTiS){
-                        filterResults(sCiSet)
-                      }
-                    }
-                  })
-                  .catch(searchErrorHandler)
+              queryServerAndRender()
             }
           },
           debounceTime,
@@ -195,7 +155,6 @@ function searchPageInit(event){
   )
 
   addUrlsInit()
-  dateFilterInit()
   //settingsSubbarInit()
 }
 /****
@@ -205,8 +164,5 @@ export {
     csrfToken,
     resultsCountDiv$,
     resultsContainer$,
-    haveShownSomeResults,
-    set_haveShownSomeResults,
-    haveShownResultsTooltips,
-    set_haveShownResultsTooltips
+    searchInput$
 }

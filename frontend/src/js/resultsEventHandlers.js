@@ -1,13 +1,10 @@
 'use strict';
 
 import { csrfToken } from './searchPage'
-import { resultsObject, replaceResults } from './resultsObject'
-import { chunkResults } from './chunkResults'
-import { updateResultsCountDiv } from './updateResultsCountDiv'
+import { queryServerAndRender } from './queryServerAndRender'
 
 import got from 'got'
 import _ from 'lodash'
-require('lodash-migrate')
 import notie from 'notie'
 
 /****
@@ -30,32 +27,29 @@ function deletePageFromMarksearch(event){
   notie.confirm('Delete Bookmark From MarkSearch?', 'Yes', 'Cancel', function() {
     deleteButton[0].removeEventListener('click', deletePageFromMarksearch)
     var resultDiv = deleteButton.parent().parent().parent()
-    var safeBrowsingToggle = resultDiv[0].querySelector('.safeBrowsingToggleLink')
-    if(safeBrowsingToggle){
-      safeBrowsingToggle.removeEventListener('click', showSafeBrowsingDetails)
+    /****
+     * If the link displayed also has safebrowsing details (which have a dropdown with an
+     * event attached), then remove those events before removing the container element.
+     */
+    var safeBrowsingToggles = resultDiv[0].querySelectorAll('.safeBrowsingToggleLink')
+    if(safeBrowsingToggles.length){
+      _.each(safeBrowsingToggles, elem => {
+        elem.removeEventListener('click', showSafeBrowsingDetails)
+      })
     }
     resultDiv.animate({height: "toggle"}, 500, () => resultDiv.remove())
-    got.delete(`/indexPage_remove/${pageUrl}`,
+    got.delete(`/frontendapi/remove/${pageUrl}`,
         {
           headers:
           {
             'X-CSRF-Token': csrfToken
           }
         })
-        .then( response => {
-          var fullResultsCacheArrayCopy = resultsObject.fullResultsCacheArray.slice()
-          var jsonResponse
-          try{
-            jsonResponse = JSON.parse(response.body)
-          }
-          catch(e){
-            throw Error(e)
-          }
-          _.remove(fullResultsCacheArrayCopy, document => document.id === jsonResponse.pageDeleted)
-          var chunkedResultsObject = chunkResults(fullResultsCacheArrayCopy)
-          updateResultsCountDiv(fullResultsCacheArrayCopy.length)
-          replaceResults(fullResultsCacheArrayCopy, chunkedResultsObject)
-        })
+        /****
+         * dont simplify this to .then(queryServerAndRender) as that
+         * will send through the response as searchTerms.
+         */
+        .then( response => queryServerAndRender())
         .catch(err => console.error(err))
   })
 }

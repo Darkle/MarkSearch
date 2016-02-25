@@ -5,7 +5,6 @@ import { scrollHeightCheck } from './scrollHeightCheck'
 import { resultsObject } from './resultsObject'
 
 import _ from 'lodash'
-require('lodash-migrate')
 
 var padding = 1000
 var delayTime = 300
@@ -30,7 +29,7 @@ function initInfiniteScroll(event){
       /****
        * Only run if we find a chunk of results that hasn't been shown yet
        */
-      var nextResults = _.find(resultsObject.currentResults, 'shownYet', false)
+      var nextResults = _.find(resultsObject.results, 'shownYet', false)
       if(nextResults){
         renderResults(nextResults)
       }

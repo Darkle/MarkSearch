@@ -1,7 +1,6 @@
 'use strict';
 
 import _ from 'lodash'
-require('lodash-migrate')
 
 function chunkResults(rawResults){
   /****
@@ -11,7 +10,7 @@ function chunkResults(rawResults){
    * displaying the results.
    */
   var chunkAndShownData = {}
-  if(rawResults && rawResults.length){
+  if(rawResults.length){
     var chunkedResults = _.chunk(rawResults, 200)
     _.each(chunkedResults, (resultChunk, index) => {
       chunkAndShownData[`chunk_${index}`] = {

@@ -2,7 +2,6 @@
 
 import combs from 'combs'
 import _ from 'lodash'
-require('lodash-migrate')
 
 import { lunrStopwordList } from './lunrStopwordFilter'
 
@@ -10,14 +9,13 @@ import { lunrStopwordList } from './lunrStopwordFilter'
  * Generate search result text clip with the search term words in them and
  * then add highlighting. We're giving prefernce to search matches that
  * have higher number of search terms in them.
- * Doing this client side rather than serverside in pouchdb-quick-search
- * (http://bit.ly/1NweopX), so no performance hit.
+ * Doing this client side rather than serverside so no performance hit.
  * If we start doing this server side with document fields of 5000+ characters
  * for each document in the database it'll make searching pretty slow.
  * It shouldn't affect client side because we are chunking the results to groups
  * of 200.
  */
-function generateSearchClipAndHighlight(doc, searchTerms){
+function generateSearchClipAndHighlight(row, searchTerms){
   /****
    * searchTerms text is trimmed on searchPage.js
    */
@@ -51,14 +49,14 @@ function generateSearchClipAndHighlight(doc, searchTerms){
     var combinationRegex = new RegExp('(' + arrOfSearchTermCombination.join(' ') + '[a-z]*)', 'gi')
     var replacement = '<span class="searchHighlight">$1</span>'
 debugger
-    var regexIndexPageDesc = doc.pageDescription.search(combinationRegex)
+    var regexIndexPageDesc = row.pageDescription.search(combinationRegex)
     //debugger
     if(regexIndexPageDesc > -1 && (arrOfSearchTermCombination.length > foundTerms.pageDescription.highestNumTermsMatched) ){
       foundTerms.pageDescription.highestNumTermsMatched = arrOfSearchTermCombination.length
       /***
        * The pageDescription is usually a little less than a paragraph, so just include all of it
        */
-      var pdHighlightedText = doc.pageDescription
+      var pdHighlightedText = row.pageDescription
       //debugger
       /****
        * for the replace, do it for each term in case there is a term pre/post match in the slice
@@ -71,7 +69,7 @@ debugger
       //debugger
     }
     //debugger
-    var regexIndexPageText = doc.pageText.search(combinationRegex)
+    var regexIndexPageText = row.pageText.search(combinationRegex)
     //debugger
     if(regexIndexPageText > -1 && (arrOfSearchTermCombination.length > foundTerms.pageText.highestNumTermsMatched)){
       foundTerms.pageText.highestNumTermsMatched = arrOfSearchTermCombination.length
@@ -86,10 +84,10 @@ debugger
         ptSliceStart = regexIndexPageText
         ptSliceEnd = ptSliceEnd + (150 - regexIndexPageText)
       }
-      if( (doc.pageText.length - regexIndexPageText) < 150){
-        ptSliceStart = ptSliceStart - (doc.pageText.length - regexIndexPageText)
+      if( (row.pageText.length - regexIndexPageText) < 150){
+        ptSliceStart = ptSliceStart - (row.pageText.length - regexIndexPageText)
       }
-      ptHighlightedText = doc.pageText.slice(ptSliceStart, ptSliceEnd)
+      ptHighlightedText = row.pageText.slice(ptSliceStart, ptSliceEnd)
       /****
        * Re-slice & try to start on a word and end on a word with the slice.
        * Gonna cheat a little and remove the first & last word if its not a search term.
@@ -129,7 +127,7 @@ debugger
   //debugger
   return returnedHighlight
 
-  //doc.pageDescription
+  //row.pageDescription
 
   /****
    * %20 cause the text is encoded with encodeURIComponent
@@ -153,7 +151,7 @@ debugger
   //
   //var regex = new RegExp(regexStringBehind + regexStringTermsForward, 'gi')
   //console.log(regexStringBehind + regexStringTermsForward)
-  //var result = regex.exec(doc.pageText)
+  //var result = regex.exec(row.pageText)
   //console.log(result)
   //debugger
 }

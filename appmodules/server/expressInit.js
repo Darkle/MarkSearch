@@ -43,7 +43,9 @@ function expressInit(expressApp, serverPort){
    * Routes
    */
   expressApp.use('/api', authenticationCheck, api)
+  //expressApp.use('/api', api)
   expressApp.use('/', csurf({ cookie: true, httpOnly: true }), routes)
+  //expressApp.use('/', routes)
 
   expressErrorMiddleware(expressApp)
 

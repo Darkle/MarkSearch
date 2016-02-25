@@ -1,73 +1,36 @@
 'use strict';
 
-import { haveShownSomeResults, set_haveShownSomeResults, haveShownResultsTooltips, set_haveShownResultsTooltips } from './searchPage'
 import { checkIfTouchDevice } from './checkIfTouchDevice'
 
 /****
- * Show the tooltips for the first three times the page is loaded.
- * Also show the tooltips again when there are results, to help to
- * show the user what the archive/delete buttons are.
+ * Show the tooltips and keep showing them until results have been shown
+ * for the first time.
+ * Here we are actually only checking how many times the tooltips have been shown
+ * when there was also results displayed.
  */
-
-var generalToolTipsShown = window.localStorage.generalToolTipsShown
-var generalToolTipsShownNumber = Number(generalToolTipsShown)
-var resultsToolTipsShown = window.localStorage.resultsToolTipsShown
-var resultsToolTipsShownAsNumber = Number(resultsToolTipsShown)
-
-function resultsToolTipsHaveBeenShown(){
-  set_haveShownResultsTooltips(true)
-  window.localStorage.haveShownResultsTooltips = 'true'
-  if(!resultsToolTipsShown){
-    resultsToolTipsShownAsNumber = 0
-  }
-  resultsToolTipsShownAsNumber++
-  if(resultsToolTipsShownAsNumber < 3){
-    window.localStorage.resultsToolTipsShown = `${resultsToolTipsShownAsNumber}`
-  }
-}
 
 function tooltips(){
-  if(checkIfTouchDevice(window)){
+
+  var tooltipsHaveBeenShownWithResults = Boolean(window.localStorage.tooltipsHaveBeenShownWithResults)
+
+  if(markSearchSettings.alwaysDisableTooltips || tooltipsHaveBeenShownWithResults || checkIfTouchDevice(window)){
     return
   }
-  if(!generalToolTipsShown){
-    window.localStorage.generalToolTipsShown = '1'
-    $.protip({
-      defaults: {
-        position: 'bottom'
-      }
-    })
-    if(haveShownSomeResults){
-      resultsToolTipsHaveBeenShown()
+
+  var resultsShown = $('#addRemoveDiv>div').length
+
+  if(resultsShown){
+    if(!tooltipsHaveBeenShownWithResults){
+      window.localStorage.tooltipsHaveBeenShownWithResults = true
     }
   }
-  else{
-    generalToolTipsShownNumber++
-    if(generalToolTipsShownNumber < 4){
-      window.localStorage.generalToolTipsShown = `${generalToolTipsShownNumber}`
-      $.protip({
-        defaults: {
-          position: 'bottom'
-        }
-      })
-      if(haveShownSomeResults){
-        resultsToolTipsHaveBeenShown()
-      }
+
+  $.protip({
+    defaults: {
+      position: 'bottom'
     }
-    else if(!haveShownResultsTooltips && haveShownSomeResults || resultsToolTipsShownAsNumber < 3){
-      resultsToolTipsHaveBeenShown()
-      if(resultsToolTipsShownAsNumber < 3){
-        window.localStorage.resultsToolTipsShown = `${resultsToolTipsShownAsNumber}`
-        $.protip({
-          defaults: {
-            position: 'bottom'
-          }
-        })
-      }
-    }
-  }
+  })
+
 }
-/****
- * Exports
- */
+
 export { tooltips }

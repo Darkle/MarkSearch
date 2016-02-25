@@ -1,15 +1,10 @@
 'use strict';
 
-import { removeResults } from './removeResults'
-import { resultsObject, replaceResults } from './resultsObject'
-import { chunkResults } from './chunkResults'
-import { renderResults } from './renderResults'
-import { updateResultsCountDiv } from './updateResultsCountDiv'
+import { queryServerAndRender } from './queryServerAndRender'
 
 import velocity from 'velocity-animate'
 import moment from 'moment'
 import _ from 'lodash'
-require('lodash-migrate')
 
 var resultsOuterContainer$
 var dateFilterContainer$
@@ -22,6 +17,7 @@ var selectFromMonth$
 var selectFromYear$
 var selectToMonth$
 var selectToYear$
+var searchInput$
 var shortCutValues = {
   "Past 3 days": {
     dateStart: () => moment().subtract(3, 'days')
@@ -67,12 +63,20 @@ var selectElemRelatedElements = {
 }
 var ph = 'placeholder'
 
+/****
+ * This is for in case they resize the browser while the
+ * datefilter is shown.
+ */
 function checkMatchMediaForResultsContainerMarginTop(){
   var marginTop = 140
   if(window.matchMedia("(max-width: 54.5em)").matches){
     marginTop = 84
   }
   return marginTop
+}
+
+function dateFilterIsSet(){
+  return (shortCutIsSet() || allFromToIsSet())
 }
 
 function shortCutIsSet(){
@@ -108,7 +112,7 @@ function selectFromToHandler(event){
   else if(allFromToIsSet()){
     shortCutsContainer$.addClass('lightBlue')
     selectShortcuts$.val(ph)
-    filterResults(false)
+    queryServerAndRender()
   }
 }
 
@@ -120,15 +124,7 @@ function dateFilterResetAll(dateFilterSubbarStillOpen){
     shortCutsContainer$.removeClass('lightBlue')
   }
   selectShortcuts$.val(ph)
-  removeResults()
-  updateResultsCountDiv(resultsObject.fullResultsCacheArray.length)
-  /****
-   * chunkResults returns an empty object if resultsObject.fullResultsCacheArray is empty
-   */
-  replaceResults(null, chunkResults(resultsObject.fullResultsCacheArray))
-  if(resultsObject.fullResultsCacheArray.length > 0){
-    renderResults(resultsObject.currentResults.chunk_0, null)
-  }
+  queryServerAndRender()
 }
 
 function resetFromTo(){
@@ -172,11 +168,10 @@ function hideShowDateFilterSubbar(){
   }
 }
 
-function filterResults(isShortcut){
-  removeResults()
+function getDateFilterParameters(){
   var dateStartInMilliseconds
   var dateEndInMilliseconds
-  if(isShortcut){
+  if(shortCutIsSet()){
     dateStartInMilliseconds = shortCutValues[selectShortcuts$.val()].dateStart().valueOf()
     dateEndInMilliseconds = moment().valueOf()
   }
@@ -186,20 +181,20 @@ function filterResults(isShortcut){
      */
     dateStartInMilliseconds = moment(`${selectFromYear$.val()} ${selectFromMonth$.val()}`, `YYYY MM`).valueOf()
     /****
-     * For date end, we want to include all of the end date month, not just the start
+     * For date end, we want to include all of the end date month, i.e. not just the start
      * of that month, but include all the days of that month up to 23:59 of the last
      * day in that month.
-     * 
+     *
      * note: When using .add(n, 'months'), if you had a moment that was
      * "Friday, January 1st 2016, 12:00:00 am", then using .add(12, 'months')
      * would equate to "Sunday, January 1st 2017, 12:00:00 am", because it's
      * already in January - remember that you're adding aditional months on to
-     * what is already there, so 12 months after January is January in the next year
-     * - in other words, think of it as zero-based
+     * what is already there, so 12 months after January is January in the next year.
      *
      * So selectToMonthAsNum ends up being a month ahead of what the user selected, then
      * we take away a second, which leaves us with the whole month the user slelected,
-     * including all the days of that month
+     * including all the days of that month up to 23:59 of the last
+     * day in that month
      */
     var selectToMonthAsNum = Number(selectToMonth$.val())
     dateEndInMilliseconds = moment(`${selectToYear$.val()}`, `YYYY`)
@@ -207,22 +202,9 @@ function filterResults(isShortcut){
         .subtract(1, 'second')
         .valueOf()
   }
-  /****
-   * Check in case they mistakenly put the end date before the start date
-   */
-  if(dateEndInMilliseconds > dateStartInMilliseconds){
-    var fullResultsCacheArrayCopy = resultsObject.fullResultsCacheArray.slice()
-    var dateFilteredResults = _.filter(fullResultsCacheArrayCopy, arrayItem => {
-      return (arrayItem.doc.dateCreated >= dateStartInMilliseconds && arrayItem.doc.dateCreated <= dateEndInMilliseconds)
-    })
-    updateResultsCountDiv(dateFilteredResults.length)
-    replaceResults(null, chunkResults(dateFilteredResults))
-    if(dateFilteredResults.length > 0){
-      renderResults(resultsObject.currentResults.chunk_0, null)
-    }
-  }
-  else{
-    updateResultsCountDiv(0)
+  return {
+    dateFilterStartDate: dateStartInMilliseconds,
+    dateFilterEndDate: dateEndInMilliseconds
   }
 }
 
@@ -238,6 +220,7 @@ function dateFilterInit(){
   dateFilterContainer$ = $('.dateFilterSettings')
   fromContainer$ = $('.fromContainer')
   toContainer$ = $('.toContainer')
+  searchInput$ = $('#searchInput')
   selectFromMonth$ = $('.selectFromMonth', fromContainer$)
   selectFromYear$ = $('.selectFromYear', fromContainer$)
   selectToMonth$ = $('.selectToMonth', toContainer$)
@@ -263,7 +246,7 @@ function dateFilterInit(){
     else{
       resetFromTo()
       shortCutsContainer$.removeClass('lightBlue')
-      filterResults(true)
+      queryServerAndRender()
     }
   })
 
@@ -301,4 +284,10 @@ function dateFilterInit(){
 /****
  * Exports
  */
-export { dateFilterInit, dateFilterResetAll, filterResults, allFromToIsSet, shortCutIsSet, checkMatchMediaForResultsContainerMarginTop }
+export {
+    dateFilterInit,
+    dateFilterResetAll,
+    getDateFilterParameters,
+    dateFilterIsSet,
+    checkMatchMediaForResultsContainerMarginTop
+}

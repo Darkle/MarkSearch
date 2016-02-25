@@ -13,13 +13,17 @@ var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 var appSettingsValidation = {
   type: 'object',
   strict: true,
-  someKeys: ['pagesDBFilePath', 'prebrowsing'],
+  someKeys: ['pagesDBFilePath', 'prebrowsing', 'alwaysDisableTooltips'],
   properties: {
     pagesDBFilePath: {
       type: 'string',
       optional: true
     },
     prebrowsing: {
+      type: 'boolean',
+      optional: true
+    },
+    alwaysDisableTooltips: {
       type: 'boolean',
       optional: true
     }
@@ -39,6 +43,7 @@ appSettings.init = (appDataPath) => {
         table.text('JWTsecret').notNullable()
         table.text('pagesDBFilePath').notNullable()
         table.boolean('prebrowsing').notNullable()
+        table.boolean('alwaysDisableTooltips').notNullable()
       })
     }
   })
@@ -56,7 +61,8 @@ appSettings.init = (appDataPath) => {
                 id: 'appSettings',
                 JWTsecret: Crypto.randomBytes(128).toString('hex'),
                 pagesDBFilePath: path.join(appDataPath, 'MarkSearchPages.db'),
-                prebrowsing: true
+                prebrowsing: true,
+                alwaysDisableTooltips: false
               }
           )
     }

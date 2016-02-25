@@ -86,6 +86,9 @@ body {
 .hide-not-i {
   display: none;
 }
+.visibilityHidden {
+  visibility: hidden !important;
+}
 .showFlex {
   display: -webkit-box !important;
   display: -webkit-flex !important;

@@ -3,20 +3,25 @@
 import { resultsObject } from './resultsObject'
 import { queryServer } from './queryServer'
 import { renderResults } from './renderResults'
+import { removeResults } from './removeResults'
+import { getSearchTextAndDateFilterParams } from './getSearchTextAndDateFilterParams'
+import { updateResultsCountDiv } from './updateResultsCountDiv'
 
-import _ from 'lodash'
-require('lodash-migrate')
-
-function queryServerAndRender(searchTerms){
-  return queryServer(searchTerms)
-      .then(() => {
+function queryServerAndRender(){
+  removeResults()
+  var {searchTerms, dateFilter} = getSearchTextAndDateFilterParams()
+  return queryServer(searchTerms, dateFilter)
+      .then(rows => {
+        var rowsLength = rows.length
+        updateResultsCountDiv(rowsLength)
         /****
          * Check if there are any results
          */
-        if(resultsObject.currentResults.chunk_0){
-          return renderResults(resultsObject.currentResults.chunk_0, searchTerms)
+        if(rowsLength){
+          return renderResults(resultsObject.results.chunk_0, searchTerms)
         }
       })
+      .catch(err => {console.error(err)})
 }
 /****
  * Exports

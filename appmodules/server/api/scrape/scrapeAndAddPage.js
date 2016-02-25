@@ -77,9 +77,9 @@ function scrapeAndAddPage(req, res, next) {
     logErrorDestroyBrowserAndRespond(errMessage, res)
   })
 
-  webContents.once('crashed', event =>
+  webContents.once('crashed', event => {
     logErrorDestroyBrowserAndRespond('BrowserWindow webContents: crashed', res)
-  )
+  })
 
   ipcMain.on('webview-log', (event, logMessage) => console.log(logMessage))
 

@@ -4,12 +4,9 @@ import velocity from 'velocity-animate'
 import suspend from 'suspend'
 import got from 'got'
 import _ from 'lodash'
-require('lodash-migrate')
 
 import { csrfToken } from './searchPage'
-import { searchErrorHandler } from './searchErrorsHandler'
 import { queryServerAndRender } from './queryServerAndRender'
-import { removeResults } from './removeResults'
 import { dateFilterResetAll, checkMatchMediaForResultsContainerMarginTop } from './dateFilter'
 
 var addPageUrlsDiv$
@@ -39,8 +36,7 @@ function hideShowAddPageSubbar(refreshResults){
           console.log("slideUp end")
           addPageMaterialIcon$.removeClass('navBar-materialIcon-selected')
           if(refreshResults){
-            removeResults()
-            queryServerAndRender().catch(searchErrorHandler)
+            queryServerAndRender()
           }
         })
   }
@@ -103,18 +99,21 @@ function addUrlsInit(){
             if(currentlyShownSubBar$.hasClass('dateFilterSettings')){
               dateFilterResetAll()
             }
-            hideShowAddPageSubbar()
+            var refreshResults = false
+            hideShowAddPageSubbar(refreshResults)
           })
     }
     /****
      * Else show/hide the addPage subbar
      */
     else {
-      hideShowAddPageSubbar()
+      var refreshResults = false
+      hideShowAddPageSubbar(refreshResults)
     }
   })
   $('.urlCancelButton').click(event => {
-    hideShowAddPageSubbar(null)
+    var refreshResults = false
+    hideShowAddPageSubbar(refreshResults)
   })
   addUrlsProgress$ = $('.addUrlsProgress')
   progressInfo$ = $('.progressInfo', addPageUrlsDiv$)
@@ -159,7 +158,7 @@ function addUrlsInit(){
               progressInfo$.text(`Saving ${trimmedUrlsArray[i]}`)
               var encodedUrl = encodeURIComponent(trimmedUrlsArray[i])
               try{
-                yield got.post(`/indexPage_scrapeAndAdd/${encodedUrl}`, {headers: {'X-CSRF-Token': csrfToken}})
+                yield got.post(`/frontendapi/scrapeAndAdd/${encodedUrl}`, {headers: {'X-CSRF-Token': csrfToken}})
               }
               catch(err){
                 console.error(err)
@@ -191,7 +190,7 @@ function addUrlsInit(){
               if(urlsThatErrored.length !== trimmedUrlsArray.length){
                 errorTextBeginning = `Most URLs Saved, However `
               }
-              var il1$ = $(`<li>${errorTextBeginning}Errors Occured While Saving The Following URLs:</li>`).appendTo(ul$)
+              $(`<li>${errorTextBeginning}Errors Occured While Saving The Following URLs:</li>`).appendTo(ul$)
               for(var errUrl of urlsThatErrored){
                 $(`<li>${errUrl.url} - reason: ${errUrl.errMessage}</li>`).appendTo(ul$)
               }
@@ -201,7 +200,10 @@ function addUrlsInit(){
               progressBar$.velocity("stop")
               $.Velocity.animate(progressBar$[0], {width: progressBarContainerWidth}, 10, 'easeOutExpo')
               progressInfo$.text(`All URLs Saved`)
-              window.setTimeout(ev => { hideShowAddPageSubbar(true) }, 2500)
+              window.setTimeout(ev => {
+                var refreshResults = true
+                hideShowAddPageSubbar(refreshResults)
+              }, 2500)
             }
           })()
 
@@ -214,7 +216,8 @@ function addUrlsInit(){
       )
   )
   errorOKbutton$.click(event => {
-    hideShowAddPageSubbar(true)
+    var refreshResults = true
+    hideShowAddPageSubbar(refreshResults)
   })
 }
 /****

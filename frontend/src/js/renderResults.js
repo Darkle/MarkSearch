@@ -5,7 +5,6 @@ import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEven
 import { generateSearchClipAndHighlight } from './generateSearchClipAndHighlight'
 
 import _ from 'lodash'
-require('lodash-migrate')
 import DOMPurify from 'dompurify'
 //import moment from 'moment'
 
@@ -46,20 +45,20 @@ function renderResults(resultsChunk, searchTerms){
       else{
         addRemoveDiv = document.getElementById('addRemoveDiv')
       }
-      _.each(resultsChunk.resultRows, result => {
-        var doc = result.doc
+      _.each(resultsChunk.resultRows, row => {
         /****
          * generate search result text clip with the search term words in
          * them and then add highlighting.
          */
         if(searchTerms){
-          doc.searchHighlight = generateSearchClipAndHighlight(doc, searchTerms)
+          row.searchHighlight = generateSearchClipAndHighlight(row, searchTerms)
         }
         resultID++
 
         /****
          * prebrowsing for the first 2 results (if set in settings).
-         * Preconnect for the first and dns-prefetch for the second
+         * Preconnect for the first and dns-prefetch for the second.
+         * These are removed when results are removed in removeResults.js
          */
         if(markSearchSettings.prebrowsing){
           if(resultID < 3){
@@ -72,7 +71,7 @@ function renderResults(resultsChunk, searchTerms){
             }
             var link = document.createElement('link')
             link.setAttribute('class', 'prebrowsing')
-            link.setAttribute('href', doc._id)
+            link.setAttribute('href', row.pageUrl)
             link.setAttribute('rel', rel)
             document.head.appendChild(link)
           }
@@ -92,35 +91,35 @@ function renderResults(resultsChunk, searchTerms){
         mainDetails.appendChild(mainResultLink)
 
         var mainResultA = document.createElement('a')
-        mainResultA.setAttribute('href', doc._id)
+        mainResultA.setAttribute('href', row.pageUrl)
         /*****
          * If there's no pageTitle text, then just use the page url
          */
         var pageTitle = ''
-        if(doc.pageTitle){
-          pageTitle = _.trim(doc.pageTitle)
+        if(row.pageTitle){
+          pageTitle = _.trim(row.pageTitle)
         }
-        mainResultA.textContent = (pageTitle.length > 0) ? pageTitle : doc._id
+        mainResultA.textContent = (pageTitle.length > 0) ? pageTitle : row.pageUrl
         mainResultLink.appendChild(mainResultA)
 
         var resultUrlText = document.createElement('div')
         resultUrlText.className = 'resultUrlText'
-        resultUrlText.textContent = doc._id
+        resultUrlText.textContent = row.pageUrl
         mainDetails.appendChild(resultUrlText)
 
         //var resultDateCreated = document.createElement('div')
-        //resultDateCreated.textContent = moment(doc.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
+        //resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
         //mainDetails.appendChild(resultDateCreated)
-        if(result.score){
-          var resultSearchScore = document.createElement('div')
-          resultSearchScore.textContent = result.score
-          mainDetails.appendChild(resultSearchScore)
-        }
+        //if(result.score){
+        //  var resultSearchScore = document.createElement('div')
+        //  resultSearchScore.textContent = result.score
+        //  mainDetails.appendChild(resultSearchScore)
+        //}
 
         /*****
          * SafeBrowsing
          */
-        if(doc.safeBrowsing){
+        if(row.safeBrowsing){
           mainResultLink.className += ' warning'
           mainResultA.className += ' warning'
 
@@ -134,7 +133,9 @@ function renderResults(resultsChunk, searchTerms){
           safeBrowsing.className = 'safeBrowsing warning'
           mainDetails.appendChild(safeBrowsing)
 
-          _.each(doc.safeBrowsing.details, (sbDetails, sbType) => {
+          var safeBrowsingObj = JSON.parse(row.safeBrowsing)
+
+          _.each(safeBrowsingObj.details, (sbDetails, sbType) => {
 
             var safeBrowsingType = document.createElement('div')
             safeBrowsingType.className = sbType
@@ -178,11 +179,11 @@ function renderResults(resultsChunk, searchTerms){
         }
         var description = document.createElement('p')
         description.className = 'description'
-        if(doc.searchHighlight){
-          description.innerHTML = DOMPurify.sanitize(doc.searchHighlight)
+        if(row.searchHighlight){
+          description.innerHTML = DOMPurify.sanitize(row.searchHighlight)
         }
-        else if(doc.pageDescription){
-          description.textContent = _.trim(doc.pageDescription)
+        else if(row.pageDescription){
+          description.textContent = _.trim(row.pageDescription)
         }
         mainDetails.appendChild(description)
 
@@ -195,9 +196,9 @@ function renderResults(resultsChunk, searchTerms){
         metaIconsContainer.appendChild(metaIcons)
 
         var metaIconArchive
-        if(doc.archiveLink){
+        if(row.archiveLink){
           metaIconArchive = document.createElement('a')
-          metaIconArchive.setAttribute('href', doc.archiveLink)
+          metaIconArchive.setAttribute('href', row.archiveLink)
           metaIconArchive.setAttribute('title', 'Archive Link')
           metaIconArchive.setAttribute('data-pt-title', 'Archive Link')
           //metaIconArchive.setAttribute('data-pt-gravity', 'bottom 0 3')
@@ -216,7 +217,7 @@ function renderResults(resultsChunk, searchTerms){
          * If Unsafe, give the user a visual reminder that they can
          * delete this page from MarkSearch
          */
-        if(doc.safeBrowsing){
+        if(row.safeBrowsing){
           metaIconDelete.className = 'material-icons protip warning trashDelete'
         }
         else{
@@ -224,7 +225,7 @@ function renderResults(resultsChunk, searchTerms){
         }
         metaIconDelete.textContent = 'delete'
         metaIconDelete.addEventListener('click', deletePageFromMarksearch, false)
-        metaIconDelete.setAttribute('data-pageUrl', doc._id)
+        metaIconDelete.setAttribute('data-pageUrl', row.pageUrl)
         metaIcons.appendChild(metaIconDelete)
 
         resultDiv = null

@@ -1,50 +1,40 @@
 'use strict';
 
-import { csrfToken, haveShownSomeResults, set_haveShownSomeResults } from './searchPage'
-import { replaceResults } from './resultsObject'
+import { csrfToken } from './searchPage'
+import { updateResults } from './resultsObject'
 import { chunkResults } from './chunkResults'
-import { updateResultsCountDiv } from './updateResultsCountDiv'
 
-import _ from 'lodash'
-require('lodash-migrate')
 import got from 'got'
+import _ from 'lodash'
 
 /****
  * Exports
  */
-function queryServer(searchTerms){
-  var postUrl = `/indexPage_getall/`
+function queryServer(searchTerms, dateFilter){
+  var postUrl = `/frontendapi/getall/`
   if(searchTerms){
-    postUrl =`/indexPage_search/${searchTerms}`
+    postUrl =`/frontendapi/search/${searchTerms}`
   }
   /****
    * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax
    */
-  return got.post(postUrl,
-      {
-        headers:
+  return got.post(
+        postUrl,
         {
-          'X-CSRF-Token': csrfToken
+          headers: {
+            'X-CSRF-Token': csrfToken
+          },
+          body: dateFilter
         }
-      })
+      )
       .then( response => {
-        var responseData = JSON.parse(response.body)
-        updateResultsCountDiv(responseData.total_rows)
-        var responseRowsArray = []
-        if(responseData.total_rows > 0){
-          if(!haveShownSomeResults){
-            window.localStorage.haveShownSomeResults = 'true'
-            set_haveShownSomeResults(true)
-          }
-          responseRowsArray = responseData.rows
-        }
+        var rows = JSON.parse(response.body)
         /****
          * chunkResults returns an empty object if responseData.rows is empty
          */
-        replaceResults(responseRowsArray, chunkResults(responseData.rows))
-      })
+        updateResults(chunkResults(rows))
+        return rows
+      }) 
 }
-/****
- * Exports
- */
+
 export { queryServer }
