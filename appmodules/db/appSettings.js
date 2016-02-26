@@ -4,6 +4,7 @@ var path = require('path')
 var Crypto = require('crypto')
 
 var inspector = require('schema-inspector')
+var _ = require('lodash')
 
 var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 
@@ -103,7 +104,7 @@ appSettings.update = (settingsKeyValObj) => {
         .update(settingsKeyValObj)
         .return(appSettings.db('appSettings').where('id', 'appSettings'))
         .then( rows => {
-          appSettings.settings = rows[0]
+          appSettings.settings = _.omit(rows[0], ['JWTsecret'])
         })
   }
 }

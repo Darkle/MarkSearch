@@ -1,10 +1,65 @@
 'use strict';
 
+var pagesdb = require('../../db/pagesdb')
+
+function search(req, res, next){
+
+  //'pageUrl unindexed,' +
+  //'dateCreated unindexed,' +
+  //'pageDomain, ' +
+  //'pageTitle, ' +
+  //'pageText, ' +
+  //'pageDescription,' +
+  //'archiveLink unindexed,' +
+  //'safeBrowsing unindexed' +
+
+  //SELECT * FROM email WHERE email MATCH 'fts5';
+  //SELECT highlight(email, 2, '<b>', '</b>') FROM email('fts5');
+  //SELECT highlight(email, 2, '<b>', '</b>') FROM email WHERE email MATCH 'fts5';
+  //MATCH '"one two three"'
+  //MATCH '"one two three"'
+  //MATCH 'foo OR NEAR(foo bar)'
+  //SELECT * FROM fts WHERE fts MATCH ? ORDER BY bm25(fts)
+  //'pageTitle': 4,
+  //    'pageDescription': 2,
+  //    'pageText': 1
+  //SELECT * FROM email WHERE email MATCH ? ORDER BY bm25(email, 10.0, 5.0);
+
+  // Probably want to use the snippet() auxiliary function
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _ = require('lodash')
 require('lodash-migrate')
 var combs = require('combs')
 
 const STOPWORDS = require('../lunrStopwordFilter.json')
+
 
 function search(req, res, next){
   console.log('search running')

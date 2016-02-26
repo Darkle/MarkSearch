@@ -34,7 +34,7 @@ function queryServer(searchTerms, dateFilter){
          */
         updateResults(chunkResults(rows))
         return rows
-      }) 
+      })
 }
 
 export { queryServer }

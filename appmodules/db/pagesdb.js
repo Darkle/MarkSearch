@@ -70,20 +70,154 @@ pagesdb.init = (pagesDBFilePath) => {
        *  just doing a regular insert. Using the validation schema
        *  to make sure that have all necessary fields when upserting.
        */
-      return  pagesdb.db.raw('create table "pages" ' +
-          '(' +
-          '"pageUrl" text not null unique on conflict replace, ' +
-          '"dateCreated" integer not null, ' +
-          '"pageDomain" text not null, ' +
-          '"pageTitle" text null, ' +
-          '"pageText" text null, ' +
-          '"pageDescription" text null, ' +
-          '"archiveLink" text null, ' +
-          '"safeBrowsing" text null, ' +
-          'primary key ("pageUrl")' +
-          ');')
+      return  pagesdb.db.raw('' +
+          'create table "pages" (' +
+            '"pageUrl" text not null unique on conflict replace, ' +
+            '"dateCreated" integer not null, ' +
+            '"pageDomain" text not null, ' +
+            '"pageTitle" text null, ' +
+            '"pageText" text null, ' +
+            '"pageDescription" text null, ' +
+            '"archiveLink" text null, ' +
+            '"safeBrowsing" text null, ' +
+            'primary key ("pageUrl")' +
+          ');'
+      )
     }
-  })
+  }).then(() =>
+    /****
+     * Create the full text search table
+     */
+    pagesdb.db.schema.hasTable('fts').then( exists => {
+      if (!exists) {
+        console.log('creating "fts" table')
+        return  pagesdb.db.raw("" +
+            "create virtual table fts using fts5" +
+            "(" +
+              "content='pages', " +
+              "content_rowid='pageUrl', " +
+              "pageDomain, " +
+              "pageTitle, " +
+              "pageText, " +
+              "pageDescription" +
+            ");"
+        )
+        /****
+         * Create the triggers to update the fts index when the pages table
+         * changes. We dont bother with UPDATE as that is only used for safeBrowsing and archiveLink
+         * and we're not indexing/searching that.
+         */
+        .return(
+            pagesdb.db.raw(
+              `create trigger afterPagesInsert after insert on pages begin
+                insert into fts(pageUrl, pageDomain, pageTitle, pageText, pageDescription) values(new.pageUrl, new.pageDomain, new.pageTitle, new.pageText, new.pageDescription);
+              end;`
+            )
+        )
+        .return(
+            pagesdb.db.raw(
+              `create trigger afterPagesReplace after replace on pages begin
+                insert into fts(fts, pageUrl, pageDomain, pageTitle, pageText, pageDescription) values('delete', new.pageUrl, old.pageDomain, old.pageTitle, old.pageText, old.pageDescription);
+                insert into fts(pageUrl, pageDomain, pageTitle, pageText, pageDescription) values(new.pageUrl, new.pageDomain, new.pageTitle, new.pageText, new.pageDescription);
+              end;`
+            )
+        )
+        .return(
+            pagesdb.db.raw(
+              `create trigger afterPagesDelete after delete on pages begin
+                insert into fts(fts, pageUrl, pageDomain, pageTitle, pageText, pageDescription) values('delete', new.pageUrl, old.pageDomain, old.pageTitle, old.pageText, old.pageDescription);
+              end;`
+            )
+        )
+        //.then(() =>
+        //    //pagesdb.db.raw(`create trigger afterPagesInsert after insert on pages begin
+        //    //insert into fts(pageUrl, pageDomain, pageTitle, pageText, pageDescription) values(new.pageUrl, new.pageDomain, new.pageTitle, new.pageText, new.pageDescription)
+        //    //end;`)
+        //    //pagesdb.db.raw("" +
+        //    //    "create trigger afterPagesInsert after insert on pages begin \n" +
+        //    //    "insert into fts(" +
+        //    //    "pageUrl, " +
+        //    //    "pageDomain, " +
+        //    //    "pageTitle, " +
+        //    //    "pageText, " +
+        //    //    "pageDescription" +
+        //    //    ") " +
+        //    //    "values(" +
+        //    //    "new.pageUrl, " +
+        //    //    "new.pageDomain, " +
+        //    //    "new.pageTitle, " +
+        //    //    "new.pageText, " +
+        //    //    "new.pageDescription" +
+        //    //    ") \n" +
+        //    //    "end;"
+        //    //)
+        //)
+        //.then(() =>
+        //    /****
+        //     * on REPLACE, we delete first, then insert. That seems to be what SQLite
+        //     * recommends for UPDATEs https://sqlite.org/fts5.html#section_4_4_2, so
+        //     * I guess it should work for REPLACE's too.
+        //     */
+        //  pagesdb.db.raw("" +
+        //      "create trigger afterPagesReplace after replace on pages begin " +
+        //        "insert into fts(" +
+        //          "fts, " +
+        //          "pageUrl, " +
+        //          "pageDomain, " +
+        //          "pageTitle, " +
+        //          "pageText, " +
+        //          "pageDescription" +
+        //        ") " +
+        //        "values(" +
+        //          "'delete', " +
+        //          "new.pageUrl, " +
+        //          "old.pageDomain, " +
+        //          "old.pageTitle, " +
+        //          "old.pageText, " +
+        //          "old.pageDescription" +
+        //        ") " +
+        //        "insert into fts(" +
+        //          "pageUrl, " +
+        //          "pageDomain, " +
+        //          "pageTitle, " +
+        //          "pageText, " +
+        //          "pageDescription" +
+        //        ") " +
+        //        "values(" +
+        //          "new.pageUrl, " +
+        //          "new.pageDomain, " +
+        //          "new.pageTitle, " +
+        //          "new.pageText, " +
+        //          "new.pageDescription" +
+        //        ") " +
+        //      "end;"
+        //  )
+        //)
+        //.then(() =>
+        //  pagesdb.db.raw("" +
+        //      "create trigger afterPagesDelete after delete on pages begin " +
+        //        "insert into fts(" +
+        //          "fts, " +
+        //          "pageUrl, " +
+        //          "pageDomain, " +
+        //          "pageTitle, " +
+        //          "pageText, " +
+        //          "pageDescription" +
+        //        ") " +
+        //        "values(" +
+        //          "'delete', " +
+        //          "new.pageUrl, " +
+        //          "old.pageDomain, " +
+        //          "old.pageTitle, " +
+        //          "old.pageText, " +
+        //          "old.pageDescription" +
+        //        ") " +
+        //      "end;"
+        //  )
+        //)
+      }
+    })
+  )
 }
 
 pagesdb.updateColumn = (columnDataObj, pageUrlPrimaryKey) => {
