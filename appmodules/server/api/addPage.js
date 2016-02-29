@@ -24,8 +24,8 @@ function addPage(req, res, next) {
    *
    * Parsing the url to get the href from url.parse as that will
    * add a trailing slash to the end of the href if it's just a url
-   * without a path. Doing this so that we dont save the same url
-   * twice - e.g. if they saved http://foo.com, and then later
+   * without a path. Doing this so that we dont accidentally save the
+   * same url twice - e.g. if they saved http://foo.com, and then later
    * saved http://foo.com/, that would be intepreted as a seperate
    * site, which is not what we want, so use url.parse to
    * automatically add the trailing slash.
@@ -38,8 +38,8 @@ function addPage(req, res, next) {
   var pageDescriptionCollapsed = collapseWhiteSpace(req.body.pageDescription)
 
   var pageTitle = pageTitleCollapsed.length ? pageTitleCollapsed : null
-  var pageText = pageTextCollapsed.length ? pageTitleCollapsed : null
-  var pageDescription = pageDescriptionCollapsed.length ? pageTitleCollapsed : null
+  var pageText = pageTextCollapsed.length ? pageTextCollapsed : null
+  var pageDescription = pageDescriptionCollapsed.length ? pageDescriptionCollapsed : null
   /****
    * Get the domain from the parsedUrl.hostname and remove any subdomains
    */

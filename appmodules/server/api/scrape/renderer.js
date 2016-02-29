@@ -22,6 +22,8 @@ module.exports = function () {
   ipcRenderer.on('createAndLoadWebview', (event, urlToScrape) => {
 
     var numTimesRedirected = 0
+    var haveAskedForPageData = false
+    var domReadyFired = false
 
     var webview = document.createElement('webview')
     webview.setAttribute('src', urlToScrape)
@@ -34,25 +36,60 @@ module.exports = function () {
     }
 
     /****
-     * Cant set webview.setAudioMuted(true) until dom-ready
+     * A check in case there is a site that is online but just takes
+     * forever and never seems to load properly (e.g. http://www.technologytell.com/gadgets/)
      */
-    webview.addEventListener('dom-ready', event => {
+    webview.addEventListener('did-start-loading', () => {
+      console.log('did-start-loading')
+      setTimeout( () => {
+        if(!domReadyFired){
+          console.log('did-start-loading load timeout')
+          sendErrorToMainProcess(`webview: load timeout`)
+          removeWebview(webview)
+          webview = null
+        }
+      }, 20000)
+    })
+
+    /****
+     * Cant set webview.setAudioMuted(true) until dom-ready.
+     * Sometimes the 'did-finish-load' doesn't fire, so using
+     * a setTimeout as a backup. I'm not sure why it doesn't load
+     * sometimes, it seems to happen when saving a bunch of sites
+     * at once.
+     */
+    webview.addEventListener('dom-ready', () => {
+      console.log('dom-ready')
+      domReadyFired = true
       webview.setAudioMuted(true)
+      setTimeout( () => {
+        if(!haveAskedForPageData){
+          console.log('dom-ready setTimeout asking')
+          haveAskedForPageData = true
+          webview.send('sendPageData')
+        }
+      }, 5000)
     })
     /****
      * 'did-finish-load' fires when the onload event was dispatched
      * note: 'did-finish-load' fires at the end of all 'did-get-redirect-request'
      * events
      */
-    webview.addEventListener('did-finish-load', event => {
+    webview.addEventListener('did-finish-load', () => {
+      console.log('did-finish-load')
       /****
        * Ask webviewPreload.js to send back the page data
        */
-      webview.send('sendPageData')
+      if(!haveAskedForPageData){
+        console.log('did-finish-load asking')
+        haveAskedForPageData = true
+        webview.send('sendPageData')
+      }
     })
 
     webview.addEventListener('did-fail-load', event => {
       if(event.validatedURL === urlToScrape){
+        console.log('did-fail-load')
         //sendErrorToMainProcess(`
         //  webview: did-fail-load
         //  errorCode: ${event.errorCode}
@@ -60,7 +97,7 @@ module.exports = function () {
         //  validatedURL: ${event.validatedURL}
         //  urlToScrape: ${urlToScrape}
         //`)
-        sendErrorToMainProcess(`webview: did-fail-load on url ${event.srcElement.src}`)
+        sendErrorToMainProcess(`webview: did-fail-load`)
         removeWebview(webview)
         webview = null
       }
@@ -90,19 +127,20 @@ module.exports = function () {
       }
     })
 
-    webview.addEventListener('crashed', event => {
-      sendErrorToMainProcess(`webview: crashed on url ${event.srcElement.src}`)
+    webview.addEventListener('crashed', () => {
+      sendErrorToMainProcess(`webview: crashed`)
       removeWebview(webview)
       webview = null
     })
 
-    webview.addEventListener('gpu-crashed', event => {
-      sendErrorToMainProcess(`webview: crashed on url ${event.srcElement.src}`)
+    webview.addEventListener('gpu-crashed', () => {
+      sendErrorToMainProcess(`webview: crashed`)
       removeWebview(webview)
       webview = null
     })
 
     webview.addEventListener('ipc-message', event => {
+      console.log('ipc-message')
       if(event.channel === 'returnDocDetails'){
         /****
          * Send back the updated urlToScrape in the case of it being redirected

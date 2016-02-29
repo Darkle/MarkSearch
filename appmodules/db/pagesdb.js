@@ -95,8 +95,6 @@ pagesdb.init = (pagesDBFilePath) => {
             "create virtual table fts using fts5" +
             "(" +
               "content='pages', " +
-              "content_rowid='pageUrl', " +
-              "pageDomain, " +
               "pageTitle, " +
               "pageText, " +
               "pageDescription" +
@@ -104,117 +102,34 @@ pagesdb.init = (pagesDBFilePath) => {
         )
         /****
          * Create the triggers to update the fts index when the pages table
-         * changes. We dont bother with UPDATE as that is only used for safeBrowsing and archiveLink
-         * and we're not indexing/searching that.
+         * changes.
+         * We dont bother with a trigger for UPDATE as that is only used for
+         * safeBrowsing and archiveLink and we're not indexing/searching that.
+         * Also, we're not triggering on REPLACE as SQLite does a DELETE,
+         * then an INSERT for REPLACE, so triggering on INSERT and DELETE
+         * should suffice for RELPACE as well.
+         * http://stackoverflow.com/a/21557145/3458681
+         * http://www.sqlite.org/lang_conflict.html
+         * http://bit.ly/1WMPjMR
          */
         .return(
             pagesdb.db.raw(
-              `create trigger afterPagesInsert after insert on pages begin
-                insert into fts(pageUrl, pageDomain, pageTitle, pageText, pageDescription) values(new.pageUrl, new.pageDomain, new.pageTitle, new.pageText, new.pageDescription);
+              `create trigger afterPagesInsert after insert on pages
+              begin
+                insert into fts(rowid, pageTitle, pageText, pageDescription)
+                  values(new.rowid, new.pageTitle, new.pageText, new.pageDescription);
               end;`
             )
         )
         .return(
             pagesdb.db.raw(
-              `create trigger afterPagesReplace after replace on pages begin
-                insert into fts(fts, pageUrl, pageDomain, pageTitle, pageText, pageDescription) values('delete', new.pageUrl, old.pageDomain, old.pageTitle, old.pageText, old.pageDescription);
-                insert into fts(pageUrl, pageDomain, pageTitle, pageText, pageDescription) values(new.pageUrl, new.pageDomain, new.pageTitle, new.pageText, new.pageDescription);
+              `create trigger afterPagesDelete after delete on pages
+              begin
+                insert into fts(fts, rowid, pageTitle, pageText, pageDescription)
+                  values('delete', old.rowid, old.pageTitle, old.pageText, old.pageDescription);
               end;`
             )
         )
-        .return(
-            pagesdb.db.raw(
-              `create trigger afterPagesDelete after delete on pages begin
-                insert into fts(fts, pageUrl, pageDomain, pageTitle, pageText, pageDescription) values('delete', new.pageUrl, old.pageDomain, old.pageTitle, old.pageText, old.pageDescription);
-              end;`
-            )
-        )
-        //.then(() =>
-        //    //pagesdb.db.raw(`create trigger afterPagesInsert after insert on pages begin
-        //    //insert into fts(pageUrl, pageDomain, pageTitle, pageText, pageDescription) values(new.pageUrl, new.pageDomain, new.pageTitle, new.pageText, new.pageDescription)
-        //    //end;`)
-        //    //pagesdb.db.raw("" +
-        //    //    "create trigger afterPagesInsert after insert on pages begin \n" +
-        //    //    "insert into fts(" +
-        //    //    "pageUrl, " +
-        //    //    "pageDomain, " +
-        //    //    "pageTitle, " +
-        //    //    "pageText, " +
-        //    //    "pageDescription" +
-        //    //    ") " +
-        //    //    "values(" +
-        //    //    "new.pageUrl, " +
-        //    //    "new.pageDomain, " +
-        //    //    "new.pageTitle, " +
-        //    //    "new.pageText, " +
-        //    //    "new.pageDescription" +
-        //    //    ") \n" +
-        //    //    "end;"
-        //    //)
-        //)
-        //.then(() =>
-        //    /****
-        //     * on REPLACE, we delete first, then insert. That seems to be what SQLite
-        //     * recommends for UPDATEs https://sqlite.org/fts5.html#section_4_4_2, so
-        //     * I guess it should work for REPLACE's too.
-        //     */
-        //  pagesdb.db.raw("" +
-        //      "create trigger afterPagesReplace after replace on pages begin " +
-        //        "insert into fts(" +
-        //          "fts, " +
-        //          "pageUrl, " +
-        //          "pageDomain, " +
-        //          "pageTitle, " +
-        //          "pageText, " +
-        //          "pageDescription" +
-        //        ") " +
-        //        "values(" +
-        //          "'delete', " +
-        //          "new.pageUrl, " +
-        //          "old.pageDomain, " +
-        //          "old.pageTitle, " +
-        //          "old.pageText, " +
-        //          "old.pageDescription" +
-        //        ") " +
-        //        "insert into fts(" +
-        //          "pageUrl, " +
-        //          "pageDomain, " +
-        //          "pageTitle, " +
-        //          "pageText, " +
-        //          "pageDescription" +
-        //        ") " +
-        //        "values(" +
-        //          "new.pageUrl, " +
-        //          "new.pageDomain, " +
-        //          "new.pageTitle, " +
-        //          "new.pageText, " +
-        //          "new.pageDescription" +
-        //        ") " +
-        //      "end;"
-        //  )
-        //)
-        //.then(() =>
-        //  pagesdb.db.raw("" +
-        //      "create trigger afterPagesDelete after delete on pages begin " +
-        //        "insert into fts(" +
-        //          "fts, " +
-        //          "pageUrl, " +
-        //          "pageDomain, " +
-        //          "pageTitle, " +
-        //          "pageText, " +
-        //          "pageDescription" +
-        //        ") " +
-        //        "values(" +
-        //          "'delete', " +
-        //          "new.pageUrl, " +
-        //          "old.pageDomain, " +
-        //          "old.pageTitle, " +
-        //          "old.pageText, " +
-        //          "old.pageDescription" +
-        //        ") " +
-        //      "end;"
-        //  )
-        //)
       }
     })
   )

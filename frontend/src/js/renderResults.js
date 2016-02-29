@@ -46,15 +46,7 @@ function renderResults(resultsChunk, searchTerms){
         addRemoveDiv = document.getElementById('addRemoveDiv')
       }
       _.each(resultsChunk.resultRows, row => {
-        /****
-         * generate search result text clip with the search term words in
-         * them and then add highlighting.
-         */
-        if(searchTerms){
-          row.searchHighlight = generateSearchClipAndHighlight(row, searchTerms)
-        }
         resultID++
-
         /****
          * prebrowsing for the first 2 results (if set in settings).
          * Preconnect for the first and dns-prefetch for the second.
@@ -179,10 +171,7 @@ function renderResults(resultsChunk, searchTerms){
         }
         var description = document.createElement('p')
         description.className = 'description'
-        if(row.searchHighlight){
-          description.innerHTML = DOMPurify.sanitize(row.searchHighlight)
-        }
-        else if(row.pageDescription){
+        if(row.pageDescription){
           description.textContent = _.trim(row.pageDescription)
         }
         mainDetails.appendChild(description)

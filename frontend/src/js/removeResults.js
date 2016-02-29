@@ -35,6 +35,7 @@ function removeResults(){
    * - if there were 0 results last time, the user may think there are 0 results
    * this time too because the 0 from last time is still showing, so hide it.
    */
+  console.log(` resultsCountDiv$.addClass('visibilityHidden')`)
   resultsCountDiv$.addClass('visibilityHidden')
   //$(window).scrollTop(0)
 }

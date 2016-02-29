@@ -1,31 +1,89 @@
 'use strict';
 
 var pagesdb = require('../../db/pagesdb')
+var STOPWORDS = require('../lunrStopwordFilter.json')
 
 function search(req, res, next){
 
-  //'pageUrl unindexed,' +
-  //'dateCreated unindexed,' +
-  //'pageDomain, ' +
-  //'pageTitle, ' +
-  //'pageText, ' +
-  //'pageDescription,' +
-  //'archiveLink unindexed,' +
-  //'safeBrowsing unindexed' +
+/*
+  'pageTitle, ' +
+  'pageText, ' +
+  'pageDescription,' +
 
-  //SELECT * FROM email WHERE email MATCH 'fts5';
-  //SELECT highlight(email, 2, '<b>', '</b>') FROM email('fts5');
-  //SELECT highlight(email, 2, '<b>', '</b>') FROM email WHERE email MATCH 'fts5';
-  //MATCH '"one two three"'
-  //MATCH '"one two three"'
-  //MATCH 'foo OR NEAR(foo bar)'
-  //SELECT * FROM fts WHERE fts MATCH ? ORDER BY bm25(fts)
-  //'pageTitle': 4,
-  //    'pageDescription': 2,
-  //    'pageText': 1
-  //SELECT * FROM email WHERE email MATCH ? ORDER BY bm25(email, 10.0, 5.0);
+  SELECT * FROM email WHERE email MATCH 'fts5';
+  SELECT highlight(email, 2, '<b>', '</b>') FROM email('fts5');
+  SELECT highlight(email, 2, '<span class="searchHighlight">', '</span>') FROM email WHERE email MATCH 'fts5';
+  MATCH '"one two three"'
+  MATCH '"one two three"'
+  MATCH 'foo OR NEAR(foo bar)'
+  SELECT * FROM fts WHERE fts MATCH ? ORDER BY bm25(fts)
+  'pageTitle': 4,
+      'pageDescription': 2,
+      'pageText': 1
+  SELECT * FROM email WHERE email MATCH ? ORDER BY bm25(email, 10.0, 5.0);
 
-  // Probably want to use the snippet() auxiliary function
+   Probably want to use the snippet() auxiliary function
+
+  prolly do MATCH foo or NEAR
+   for regular search (no domain), could just rely on rowid
+   how will the ordering go, make sure to order by bm25
+   and then obviously if its a domain search with no query text, sort by dateCreated
+
+   see if i con construct it not using raw
+   pagesdb.db.raw
+
+  "SELECT * FROM example_table WHERE _id IN " +
+  "(SELECT docid FROM fts_example_table WHERE fts_example_table MATCH ?)"
+
+ SELECT *
+ FROM t2
+ WHERE id IN (SELECT docid
+ FROM fts_table
+ WHERE col_text MATCH 'something')
+
+  Whatever i use (raw or whatever), make sure to use the , [1], rather than inserting the query text directly
+  so no sql injection
+
+ Remember can use ones wrapped raw queries so if need to use raw, it doesn't have to be all raw
+
+  */
+
+  console.log('search running')
+  var lcaseSearchTerms = req.params.searchTerms.toLowerCase()
+  var domainToSearchFor = null
+  /****
+   * Filter out single characters.
+   * If searching by domain, store domain in domainToSearchFor
+   * and remove it from the searchTermsArr.
+   * Also remove word if it's in the stopword list.
+   * Stopword list is based on: http://git.io/T37UJA
+   */
+  var searchTerms = lcaseSearchTerms.split(' ').filter( searchTerm => {
+    var useSearchTerm = searchTerm.length > 1
+    if(searchTerm.startsWith('site:')){
+      domainToSearchFor = searchTerm.slice(5)
+      useSearchTerm = false
+    }
+    else if(STOPWORDS[searchTerm]){
+      useSearchTerm = false
+    }
+    return useSearchTerm
+  }).join(' ')
+
+  console.log(`searchTerms`)
+  console.log(searchTerms)
+
+  console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${domainToSearchFor}`)
+
+  pagesdb.db.raw("select * from pages where rowid in " +
+    "(select rowid from fts where fts match ? or near(?) order by rank)", [searchTerms, searchTerms])
+  .then(rows => {
+    console.log('rows')
+    console.log(rows)
+  })
+  .catch(err => {
+    console.error(err)
+  })
 
 }
 
@@ -58,34 +116,12 @@ var _ = require('lodash')
 require('lodash-migrate')
 var combs = require('combs')
 
-const STOPWORDS = require('../lunrStopwordFilter.json')
 
 
-function search(req, res, next){
-  console.log('search running')
-  var lcaseSearchTerms = req.params.searchTerms.toLowerCase()
-  var searchIsLoose = (req.params.searchingLoose === 'true')
-  console.log('lcaseSearchTerms : ', lcaseSearchTerms)
-  var domainToSearchFor = null
-  /****
-   *   Filter out single characters.
-   *   If searching by domain, store domain in domainToSearchFor
-   *   and remove it from the searchTermsArr. Also, even though pouchdb quick search plugin includes
-   *   a stopword list filter, I'm gonna filter the stopword list out here first.
-   *   Stopword list is based on: http://git.io/T37UJA
-   */
-  var searchTermsArr = req.params.searchTerms.split(' ').filter(searchTerm =>{
-    var useSearchTerm = searchTerm.length > 1
-    if(searchTerm.startsWith('site:')){
-      domainToSearchFor = searchTerm.slice(5)
-      useSearchTerm = false
-    }
-    else if(STOPWORDS[searchTerm]){
-      useSearchTerm = false
-    }
-    return useSearchTerm
-  })
-  console.log('Are we searching by domain?', !domainToSearchFor?' NO' : ` YES: ${domainToSearchFor}`)
+
+function searcasdh(req, res, next){
+
+
   var stCombinations = []
   if(!searchIsLoose){
     /****

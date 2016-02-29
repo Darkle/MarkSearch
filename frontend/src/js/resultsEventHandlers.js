@@ -37,20 +37,22 @@ function deletePageFromMarksearch(event){
         elem.removeEventListener('click', showSafeBrowsingDetails)
       })
     }
-    resultDiv.animate({height: "toggle"}, 500, () => resultDiv.remove())
-    got.delete(`/frontendapi/remove/${pageUrl}`,
-        {
-          headers:
+    resultDiv.animate({height: "toggle"}, 400, () => {
+      resultDiv.remove()
+      got.delete(`/frontendapi/remove/${pageUrl}`,
           {
-            'X-CSRF-Token': csrfToken
-          }
-        })
-        /****
-         * dont simplify this to .then(queryServerAndRender) as that
-         * will send through the response as searchTerms.
-         */
-        .then( response => queryServerAndRender())
-        .catch(err => console.error(err))
+            headers:
+            {
+              'X-CSRF-Token': csrfToken
+            }
+          })
+          /****
+           * dont simplify this to .then(queryServerAndRender) as that
+           * will send through the response as searchTerms.
+           */
+          .then( response => queryServerAndRender())
+          .catch(err => console.error(err))
+    })
   })
 }
 /****

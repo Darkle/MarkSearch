@@ -1271,6 +1271,7 @@ function queryServerAndRender() {
 
   return (0, _queryServer.queryServer)(searchTerms, dateFilter).then(function (rows) {
     var rowsLength = rows.length;
+    console.log(' rows.length ' + rows.length);
     (0, _updateResultsCountDiv.updateResultsCountDiv)(rowsLength);
     /****
      * Check if there are any results
@@ -1335,6 +1336,7 @@ function removeResults() {
    * - if there were 0 results last time, the user may think there are 0 results
    * this time too because the 0 from last time is still showing, so hide it.
    */
+  console.log(' resultsCountDiv$.addClass(\'visibilityHidden\')');
   _searchPage.resultsCountDiv$.addClass('visibilityHidden');
   //$(window).scrollTop(0)
 }
@@ -1412,15 +1414,7 @@ function renderResults(resultsChunk, searchTerms) {
           addRemoveDiv = document.getElementById('addRemoveDiv');
         }
         _lodash2.default.each(resultsChunk.resultRows, function (row) {
-          /****
-           * generate search result text clip with the search term words in
-           * them and then add highlighting.
-           */
-          if (searchTerms) {
-            row.searchHighlight = (0, _generateSearchClipAndHighlight.generateSearchClipAndHighlight)(row, searchTerms);
-          }
           resultID++;
-
           /****
            * prebrowsing for the first 2 results (if set in settings).
            * Preconnect for the first and dns-prefetch for the second.
@@ -1544,9 +1538,7 @@ function renderResults(resultsChunk, searchTerms) {
           }
           var description = document.createElement('p');
           description.className = 'description';
-          if (row.searchHighlight) {
-            description.innerHTML = _dompurify2.default.sanitize(row.searchHighlight);
-          } else if (row.pageDescription) {
+          if (row.pageDescription) {
             description.textContent = _lodash2.default.trim(row.pageDescription);
           }
           mainDetails.appendChild(description);
@@ -1673,22 +1665,22 @@ function deletePageFromMarksearch(event) {
         elem.removeEventListener('click', showSafeBrowsingDetails);
       });
     }
-    resultDiv.animate({ height: "toggle" }, 500, function () {
-      return resultDiv.remove();
-    });
-    _got2.default.delete('/frontendapi/remove/' + pageUrl, {
-      headers: {
-        'X-CSRF-Token': _searchPage.csrfToken
-      }
-    })
-    /****
-     * dont simplify this to .then(queryServerAndRender) as that
-     * will send through the response as searchTerms.
-     */
-    .then(function (response) {
-      return (0, _queryServerAndRender.queryServerAndRender)();
-    }).catch(function (err) {
-      return console.error(err);
+    resultDiv.animate({ height: "toggle" }, 400, function () {
+      resultDiv.remove();
+      _got2.default.delete('/frontendapi/remove/' + pageUrl, {
+        headers: {
+          'X-CSRF-Token': _searchPage.csrfToken
+        }
+      })
+      /****
+       * dont simplify this to .then(queryServerAndRender) as that
+       * will send through the response as searchTerms.
+       */
+      .then(function (response) {
+        return (0, _queryServerAndRender.queryServerAndRender)();
+      }).catch(function (err) {
+        return console.error(err);
+      });
     });
   });
 }

@@ -13,6 +13,7 @@ function queryServerAndRender(){
   return queryServer(searchTerms, dateFilter)
       .then(rows => {
         var rowsLength = rows.length
+        console.log(` rows.length ${rows.length}`)
         updateResultsCountDiv(rowsLength)
         /****
          * Check if there are any results
