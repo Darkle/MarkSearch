@@ -32,7 +32,6 @@
     "jsonwebtoken": "^5.7.0",
     "knex": "^0.10.0",
     "lodash": "^4.5.0",
-    "lodash-migrate": "^0.2.8",
     "mailgun-js": "^0.7.2",
     "moment": "^2.10.6",
     "morgan": "~1.6.1",

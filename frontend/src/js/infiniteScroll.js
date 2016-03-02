@@ -29,7 +29,7 @@ function initInfiniteScroll(event){
       /****
        * Only run if we find a chunk of results that hasn't been shown yet
        */
-      var nextResults = _.find(resultsObject.results, 'shownYet', false)
+      var nextResults = _.find(resultsObject.results, chunk => !chunk.shownYet)
       if(nextResults){
         renderResults(nextResults)
       }

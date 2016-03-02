@@ -45,7 +45,7 @@ function search(req, res, next){
   so no sql injection
 
  Remember can use ones wrapped raw queries so if need to use raw, it doesn't have to be all raw
-
+Remember to send back an error 500 or whatever on sql error
   */
 
   console.log('search running')
@@ -75,15 +75,99 @@ function search(req, res, next){
 
   console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${domainToSearchFor}`)
 
-  pagesdb.db.raw("select * from pages where rowid in " +
-    "(select rowid from fts where fts match ? or near(?) order by rank)", [searchTerms, searchTerms])
-  .then(rows => {
-    console.log('rows')
-    console.log(rows)
-  })
-  .catch(err => {
-    console.error(err)
-  })
+  if(!searchTerms.length){
+    if(domainToSearchFor){
+      pagesdb.db('pages')
+        .where({
+          pageDomain: domainToSearchFor
+        })
+        .orderBy('dateCreated', 'desc')
+        .then( rows => {
+          console.log(rows)
+          res.json(rows)
+        } )
+        .catch(err => {
+          console.error(err)
+          res.status(500).end()
+        })
+    }
+    else{
+      res.json([])
+    }
+  }
+  else{
+    var fullTextSearch = pagesdb.db.select('rowid')
+        .from('fts')
+        .whereRaw(
+            'fts match ? order by rank',
+            `"${searchTerms}" or NEAR(${searchTerms})`
+        )
+    if(domainToSearchFor){
+      pagesdb.db('pages')
+        .where({
+          pageDomain: domainToSearchFor
+        })
+        .whereIn('rowid', fullTextSearch)
+        .then( rows => res.json(rows) )
+        .catch(err => {
+          console.error(err)
+          res.status(500).end()
+        })
+    }
+    else{
+      console.log(pagesdb.db('pages').whereIn('rowid', fullTextSearch).toString());
+      pagesdb.db('pages').whereIn('rowid', fullTextSearch)
+          .then( rows => res.json(rows) )
+        .catch(err => {
+          console.error(err)
+          res.status(500).end()
+        })
+    }
+  }
+
+
+  //console.log(fullTextSearch)
+  //
+  //
+  //
+  //console.log()
+  //
+  //.catch( err => {
+  //  console.error(err)
+  //  res.status(500).end()
+  //})
+
+  //pagesdb.db.raw(finalSQLstring)
+  //    .then(rows => {
+  //      console.log('rows')
+  //      console.log(rows)
+  //    })
+  //    .catch(err => {
+  //      console.error(err)
+  //    })
+
+
+  //var knexRawString = pagesdb.db.raw(
+  //                      "select * from pages where rowid in ("+
+  //                        "select rowid from fts where fts match ? or NEAR(?) order by rank" +
+  //                      ")",
+  //                      [searchTerms, searchTerms]
+  //                    )
+  //
+  //
+  ////console.log(knexRawString)
+  //var startOfKnexRawSQLString = knexRawString.slice(0, 74)
+  ////console.log(startOfKnexRawSQLString)
+  //var middleOfKnexRawSQLString = knexRawString.slice(74, knexRawString.length - 15)
+  ////console.log(middleOfKnexRawSQLString)
+  //var endOfKnexRawSQLString = knexRawString.slice(-15, knexRawString.length)
+  ////console.log(endOfKnexRawSQLString)
+  //var finalSQLstring = `${startOfKnexRawSQLString}'${middleOfKnexRawSQLString}'${endOfKnexRawSQLString}`
+  ////console.log(finalSQLstring)
+
+
+
+
 
 }
 
@@ -105,16 +189,6 @@ function search(req, res, next){
 
 
 
-
-
-
-
-
-
-
-var _ = require('lodash')
-require('lodash-migrate')
-var combs = require('combs')
 
 
 

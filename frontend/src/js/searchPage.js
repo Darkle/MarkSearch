@@ -80,7 +80,7 @@ function searchPageInit(event){
    * Search
    */
   var searchForm$ = $('#searchForm')
-  var inputOldValue = searchInput$.val()
+  var inputOldValue = searchInput$.val().toLowerCase()
   /****
    * To get rid of the keyboard on submit on mobile/tablet.
    * So we're not actually querying server for results on submit, as the
@@ -107,7 +107,7 @@ function searchPageInit(event){
       "propertychange change click keyup input paste",
       _.debounce(
           () => {
-            var searchInputValue = _.trim(searchInput$.val())
+            var searchInputValue = _.trim(searchInput$.val()).toLowerCase()
             if(searchInputValue !== inputOldValue){
               inputOldValue = searchInputValue
               queryServerAndRender()

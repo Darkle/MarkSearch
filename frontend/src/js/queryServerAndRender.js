@@ -19,7 +19,7 @@ function queryServerAndRender(){
          * Check if there are any results
          */
         if(rowsLength){
-          return renderResults(resultsObject.results.chunk_0, searchTerms)
+          return renderResults(resultsObject.results.chunk_0)
         }
       })
       .catch(err => {console.error(err)})

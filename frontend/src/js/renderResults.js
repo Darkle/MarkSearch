@@ -3,6 +3,7 @@
 import { resultsContainer$ } from './searchPage'
 import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEventHandlers'
 import { generateSearchClipAndHighlight } from './generateSearchClipAndHighlight'
+import { updateChunkShownValue } from './resultsObject'
 
 import _ from 'lodash'
 import DOMPurify from 'dompurify'
@@ -12,10 +13,10 @@ import DOMPurify from 'dompurify'
  * Exports
  */
 
-function renderResults(resultsChunk, searchTerms){
+function renderResults(resultsChunk){
   return new Promise((resolve, reject) =>{
     try{
-      resultsChunk.shownYet = true
+      updateChunkShownValue(resultsChunk.chunkIndex, true)
       /****
        * 200 items in each chunk
        * id: `result_${resultID}` is for browser extension, so

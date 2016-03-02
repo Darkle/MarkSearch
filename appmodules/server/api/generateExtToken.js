@@ -2,7 +2,6 @@
 
 var jwt = require('jsonwebtoken')
 var _ = require('lodash')
-require('lodash-migrate')
 
 var appSettings = require('../../db/appSettings')
 

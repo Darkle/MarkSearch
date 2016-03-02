@@ -1013,7 +1013,9 @@ function initInfiniteScroll(event) {
       /****
        * Only run if we find a chunk of results that hasn't been shown yet
        */
-      var nextResults = _lodash2.default.find(_resultsObject.resultsObject.results, 'shownYet', false);
+      var nextResults = _lodash2.default.find(_resultsObject.resultsObject.results, function (chunk) {
+        return !chunk.shownYet;
+      });
       if (nextResults) {
         (0, _renderResults.renderResults)(nextResults);
       }
@@ -1277,7 +1279,7 @@ function queryServerAndRender() {
      * Check if there are any results
      */
     if (rowsLength) {
-      return (0, _renderResults.renderResults)(_resultsObject.resultsObject.results.chunk_0, searchTerms);
+      return (0, _renderResults.renderResults)(_resultsObject.resultsObject.results.chunk_0);
     }
   }).catch(function (err) {
     console.error(err);
@@ -1359,6 +1361,8 @@ var _resultsEventHandlers = require('./resultsEventHandlers');
 
 var _generateSearchClipAndHighlight = require('./generateSearchClipAndHighlight');
 
+var _resultsObject = require('./resultsObject');
+
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -1375,14 +1379,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Exports
  */
 
-function renderResults(resultsChunk, searchTerms) {
+function renderResults(resultsChunk) {
   return new Promise(function (resolve, reject) {
     try {
       var resultID;
       var docFragment;
 
       (function () {
-        resultsChunk.shownYet = true;
+        (0, _resultsObject.updateChunkShownValue)(resultsChunk.chunkIndex, true);
         /****
          * 200 items in each chunk
          * id: `result_${resultID}` is for browser extension, so
@@ -1609,7 +1613,7 @@ function renderResults(resultsChunk, searchTerms) {
  */
 exports.renderResults = renderResults;
 
-},{"./generateSearchClipAndHighlight":6,"./resultsEventHandlers":15,"./searchPage":18,"dompurify":221,"lodash":235}],15:[function(require,module,exports){
+},{"./generateSearchClipAndHighlight":6,"./resultsEventHandlers":15,"./resultsObject":16,"./searchPage":18,"dompurify":221,"lodash":235}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1703,11 +1707,17 @@ var resultsObject = {
 function updateResults(newResults) {
   resultsObject.results = newResults;
 }
+
+function updateChunkShownValue(chunkIndex, shownYetVal) {
+  resultsObject.results['chunk_' + chunkIndex].shownYet = shownYetVal;
+}
+
 /****
  * Exports
  */
 exports.resultsObject = resultsObject;
 exports.updateResults = updateResults;
+exports.updateChunkShownValue = updateChunkShownValue;
 
 },{}],17:[function(require,module,exports){
 'use strict';
@@ -1827,7 +1837,7 @@ function searchPageInit(event) {
    * Search
    */
   var searchForm$ = $('#searchForm');
-  var inputOldValue = searchInput$.val();
+  var inputOldValue = searchInput$.val().toLowerCase();
   /****
    * To get rid of the keyboard on submit on mobile/tablet.
    * So we're not actually querying server for results on submit, as the
@@ -1851,7 +1861,7 @@ function searchPageInit(event) {
    * Extra events cause of <IE10
    */
   searchForm$.on("propertychange change click keyup input paste", _lodash2.default.debounce(function () {
-    var searchInputValue = _lodash2.default.trim(searchInput$.val());
+    var searchInputValue = _lodash2.default.trim(searchInput$.val()).toLowerCase();
     if (searchInputValue !== inputOldValue) {
       inputOldValue = searchInputValue;
       (0, _queryServerAndRender.queryServerAndRender)();

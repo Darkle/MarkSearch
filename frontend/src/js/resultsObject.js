@@ -7,7 +7,12 @@ var resultsObject = {
 function updateResults(newResults){
   resultsObject.results = newResults
 }
+
+function updateChunkShownValue(chunkIndex, shownYetVal){
+  resultsObject.results[`chunk_${chunkIndex}`].shownYet = shownYetVal
+}
+
 /****
  * Exports
  */
-export { resultsObject, updateResults }
+export { resultsObject, updateResults, updateChunkShownValue }

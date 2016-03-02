@@ -3,6 +3,7 @@
 import _ from 'lodash'
 
 function searchErrorHandler(error){
+  console.error(error.stack)
   console.error(error)
   /*****
    * If Forbidden/Unauthorized, prolly an issue with csrf
