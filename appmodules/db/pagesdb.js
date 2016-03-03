@@ -65,14 +65,9 @@ pagesdb.init = (pagesDBFilePath) => {
   return pagesdb.db.schema.hasTable('pages').then( exists => {
     if (!exists) {
       console.log('creating "pages" table')
-      /****
-       *  Using 'unique on conflict replace' so can do upserts by
-       *  just doing a regular insert. Using the validation schema
-       *  to make sure that have all necessary fields when upserting.
-       */
       return  pagesdb.db.raw(
           `create table pages (
-            pageUrl text not null unique on conflict replace,
+            pageUrl text not null unique,
             dateCreated integer not null,
             pageDomain text not null,
             pageTitle text null,
@@ -87,9 +82,6 @@ pagesdb.init = (pagesDBFilePath) => {
   }).then(() =>
     /****
      * Create the full text search table.
-     * For some reason when I used the content=pages,
-     * the db would become corrupt, so just gonna replicate
-     * manually with the triggers.
      */
     pagesdb.db.schema.hasTable('fts').then( exists => {
       if (!exists) {
@@ -108,117 +100,26 @@ pagesdb.init = (pagesDBFilePath) => {
               tokenize = porter
             );`
         )
-        /****
-         * Create the triggers to update the fts index when the pages table
-         * changes.
-         * We dont bother with a trigger for UPDATE as that is only used for
-         * safeBrowsing and archiveLink and we're not indexing/searching that.
-         * We're not triggering on REPLACE as SQLite does a DELETE,
-         * then an INSERT for REPLACE, so triggering on INSERT and DELETE
-         * should suffice for RELPACE as well.
-         * http://stackoverflow.com/a/21557145/3458681
-         * http://www.sqlite.org/lang_conflict.html
-         * http://bit.ly/1WMPjMR
-         */
-        .return(
-            pagesdb.db.raw(
-              `create trigger afterPagesInsert after insert on pages
-              begin
-                insert into fts(
-                  rowid,
-                  pageUrl,
-                  dateCreated,
-                  pageDomain,
-                  pageTitle,
-                  pageText,
-                  pageDescription,
-                  archiveLink,
-                  safeBrowsing
-                )
-                values(
-                  new.rowid,
-                  new.pageUrl,
-                  new.dateCreated,
-                  new.pageDomain,
-                  new.pageTitle,
-                  new.pageText,
-                  new.pageDescription,
-                  new.archiveLink,
-                  new.safeBrowsing
-                );
-              end;`
-            )
-        )
-        .return(
-            pagesdb.db.raw(
-              `create trigger afterPagesUpdate after update on pages
-              begin
-                UPDATE fts SET archiveLink = new.archiveLink, safeBrowsing = new.safeBrowsing WHERE rowid = old.rowid;
-              end;`
-            )
-        )
-        .return(
-            pagesdb.db.raw(
-              `create trigger afterPagesDelete after delete on pages
-              begin
-                insert into fts(
-                  fts,
-                  rowid,
-                  pageUrl,
-                  dateCreated,
-                  pageDomain,
-                  pageTitle,
-                  pageText,
-                  pageDescription,
-                  archiveLink,
-                  safeBrowsing
-                )
-                values(
-                  'delete',
-                  old.rowid,
-                  old.pageUrl,
-                  old.dateCreated,
-                  old.pageDomain,
-                  old.pageTitle,
-                  old.pageText,
-                  old.pageDescription,
-                  old.archiveLink,
-                  old.safeBrowsing
-                );
-              end;`
-            )
-        )
       }
     })
   )
 }
 
-pagesdb.updateColumn = (columnDataObj, pageUrlPrimaryKey) => {
-  if(_.isObject(columnDataObj.safeBrowsing)){
-    columnDataObj.safeBrowsing = JSON.stringify(columnDataObj.safeBrowsing)
+pagesdb.updateColumns = (columnsDataObj) => {
+  if(_.isObject(columnsDataObj.safeBrowsing)){
+    columnsDataObj.safeBrowsing = JSON.stringify(columnsDataObj.safeBrowsing)
   }
-  var validatedColumnDataObj = inspector.validate(updateColumnValidation, columnDataObj)
-  if(!validatedColumnDataObj.valid){
+  var validatedColumnsDataObj = inspector.validate(updateColumnValidation, columnsDataObj)
+  if(!validatedColumnsDataObj.valid){
     var errMessage = `Error, passed in column data did not pass validation.
-                      Error(s): ${validatedColumnDataObj.format()}`
+                      Error(s): ${validatedColumnsDataObj.format()}`
     console.error(errMessage)
     return Promise.reject(errMessage)
   }
   else{
-    /****
-     * Doing a catch here as the knex statment doesn't seem to be run unless there
-     * is a .next or .catch following it. Putting catch here in case I forget to put
-     * a catch wherever i use pagesdb.updateColumn or pagesdb.upsertRow. And re-throwing
-     * the error so things work as expected down the line.
-     */
     return pagesdb.db('pages')
         .where('pageUrl', pageUrlPrimaryKey)
-        .update(columnDataObj)
-        .catch(err => {
-          console.log('an error occured with the update')
-          console.error(err)
-          throw new Error(err)
-        })
+        .update(columnsDataObj)
   }
 }
 
@@ -236,53 +137,99 @@ pagesdb.upsertRow = (pageDataObj) => {
     return Promise.reject(errMessage)
   }
   else{
-    return pagesdb.db('pages')
-        .insert(pageDataObj)
-        .catch(err => {
-          console.log('an error occured with the upsert')
-          console.error(err)
-          throw new Error(err)
-        })
+    pagesdb.db('pages')
+      .where({
+        pageUrl: pageDataObj.pageUrl
+      })
+      .select('pageUrl')
+      .then( rows => {
+        /****
+         * If row is already there, update it
+         */
+        if(rows.length){
+          return pagesdb.updateColumns(pageDataObj)
+        }
+        else{
+          /****
+           * Insert the new row, then need to grab that row to get its rowid
+           * for the fts insert
+           */
+          return pagesdb.db('pages')
+                  .insert(pageDataObj)
+                  .return(
+                    pagesdb
+                      .db
+                      .select(
+                        'rowid',
+                        'pageUrl',
+                        'dateCreated',
+                        'pageDomain',
+                        'pageTitle',
+                        'pageText',
+                        'pageDescription',
+                        'archiveLink',
+                        'safeBrowsing'
+                      )
+                      .from('pages')
+                      .where('pageUrl', pageDataObj.pageUrl)
+                      .then(rows =>
+                        pagesdb
+                          .db('fts')
+                          .insert({
+                            rowid: rows[0].rowid,
+                            pageUrl: rows[0].pageUrl,
+                            dateCreated: rows[0].dateCreated,
+                            pageDomain: rows[0].pageDomain,
+                            pageTitle: rows[0].pageTitle,
+                            pageText: rows[0].pageText,
+                            pageDescription: rows[0].pageDescription,
+                            archiveLink: rows[0].archiveLink,
+                            safeBrowsing: rows[0].safeBrowsing
+                          })
+                      )
+                  )
+        }
+      })
   }
 }
 
-//pagesdb.deleteRow = pageUrl =>
-//    pagesdb
-//      .db
-//      .select(
-//        'rowid',
-//        'pageUrl',
-//        'dateCreated',
-//        'pageDomain',
-//        'pageTitle',
-//        'pageText',
-//        'pageDescription',
-//        'archiveLink',
-//        'safeBrowsing'
-//      )
-//      .from('pages')
-//      .where('pageUrl', pageUrl)
-//      .then(rows =>
-//         pagesdb
-//          .db('fts')
-//          .insert({
-//            fts: 'delete',
-//            rowid: rows[0].rowid,
-//            pageUrl: rows[0].pageUrl,
-//            dateCreated: rows[0].dateCreated,
-//            pageDomain: rows[0].pageDomain,
-//            pageTitle: rows[0].pageTitle,
-//            pageText: rows[0].pageText,
-//            pageDescription: rows[0].pageDescription,
-//            archiveLink: rows[0].archiveLink,
-//            safeBrowsing: rows[0].safeBrowsing
-//          })
-//      )
-//      .return(
-//          pagesdb
-//            .db('pages')
-//            .where('pageUrl', pageUrl)
-//            .del()
-//      )
+pagesdb.deleteRow = pageUrl =>
+    pagesdb
+      .db
+      .select(
+        'rowid',
+        'pageUrl',
+        'dateCreated',
+        'pageDomain',
+        'pageTitle',
+        'pageText',
+        'pageDescription',
+        'archiveLink',
+        'safeBrowsing'
+      )
+      .from('pages')
+      .where('pageUrl', pageUrl)
+      .then(rows =>
+         pagesdb
+          .db('fts')
+          .insert({
+            fts: 'delete',
+            rowid: rows[0].rowid,
+            pageUrl: rows[0].pageUrl,
+            dateCreated: rows[0].dateCreated,
+            pageDomain: rows[0].pageDomain,
+            pageTitle: rows[0].pageTitle,
+            pageText: rows[0].pageText,
+            pageDescription: rows[0].pageDescription,
+            archiveLink: rows[0].archiveLink,
+            safeBrowsing: rows[0].safeBrowsing
+          })
+      )
+      .return(
+          pagesdb
+            .db('pages')
+            .where('pageUrl', pageUrl)
+            .del()
+      )
 
 module.exports = pagesdb

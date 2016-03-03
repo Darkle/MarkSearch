@@ -95,7 +95,7 @@ function addPage(req, res, next) {
          */
         var updateData = _.merge(archiveIsUrl, safeBrowsingData)
         if(!_.isEmpty(updateData)){
-          return pagesdb.updateColumn(updateData, this.pageUrl)
+          return pagesdb.updateColumns(updateData)
         }
       })
       .catch(err => {

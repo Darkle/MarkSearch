@@ -24,7 +24,9 @@ function generateArchiveOfPage(pageUrl){
           }
           else{
             archiveLink = {
-              archiveLink: httpResponse.headers.location}
+              archiveLink: httpResponse.headers.location,
+              pageUrl: pageUrl
+            }
           }
           resolve(archiveLink)
         }

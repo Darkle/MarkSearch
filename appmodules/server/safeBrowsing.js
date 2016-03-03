@@ -86,7 +86,8 @@ function safeBrowsingCheck(pageUrl){
           })
           safeBrowsingData = {
             safeBrowsing: {
-              details: safeBrowsingPossibilitiesReturned
+              details: safeBrowsingPossibilitiesReturned,
+              pageUrl: pageUrl
             }
           }
         }
