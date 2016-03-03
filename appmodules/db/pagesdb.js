@@ -62,30 +62,22 @@ pagesdb.init = (pagesDBFilePath) => {
   knexConfig.connection.filename = pagesDBFilePath
   //knexConfig.connection.filename = ':memory:'
   pagesdb.db = require('knex')(knexConfig)
-  return pagesdb.db.schema.hasTable('pages').then( exists => {
-    if (!exists) {
-      console.log('creating "pages" table')
-      return  pagesdb.db.raw(
-          `create table pages (
-            pageUrl text not null unique,
-            dateCreated integer not null,
-            pageDomain text not null,
-            pageTitle text null,
-            pageText text null,
-            pageDescription text null,
-            archiveLink text null,
-            safeBrowsing text null,
-            primary key (pageUrl)
-          );`
-      )
-    }
-  }).then(() =>
+  return pagesdb.db.schema.createTableIfNotExists('pages', function (table) {
+    table.text('pageUrl').primary().unique().notNullable()
+    table.integer('dateCreated').notNullable()
+    table.text('pageDomain').notNullable()
+    table.text('pageTitle').nullable()
+    table.text('pageText').nullable()
+    table.text('pageDescription').nullable()
+    table.text('archiveLink').nullable()
+    table.text('safeBrowsing').nullable()
+  })
+  .return(
     /****
      * Create the full text search table.
      */
     pagesdb.db.schema.hasTable('fts').then( exists => {
       if (!exists) {
-        console.log('creating "fts" table')
         return  pagesdb.db.raw(
             `create virtual table fts using fts5 (
               pageUrl unindexed,
