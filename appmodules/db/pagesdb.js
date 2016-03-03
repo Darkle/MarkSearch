@@ -146,82 +146,86 @@ pagesdb.upsertRow = (pageDataObj) => {
            * Insert the new row, then need to grab that row to get its rowid
            * for the fts insert
            */
-          return pagesdb.db('pages')
-                  .insert(pageDataObj)
-                  .return(
-                    pagesdb
-                      .db
-                      .select(
-                        'rowid',
-                        'pageUrl',
-                        'dateCreated',
-                        'pageDomain',
-                        'pageTitle',
-                        'pageText',
-                        'pageDescription',
-                        'archiveLink',
-                        'safeBrowsing'
-                      )
-                      .from('pages')
-                      .where('pageUrl', pageDataObj.pageUrl)
-                      .then(rows =>
-                        pagesdb
-                          .db('fts')
-                          .insert({
-                            rowid: rows[0].rowid,
-                            pageUrl: rows[0].pageUrl,
-                            dateCreated: rows[0].dateCreated,
-                            pageDomain: rows[0].pageDomain,
-                            pageTitle: rows[0].pageTitle,
-                            pageText: rows[0].pageText,
-                            pageDescription: rows[0].pageDescription,
-                            archiveLink: rows[0].archiveLink,
-                            safeBrowsing: rows[0].safeBrowsing
-                          })
-                      )
-                  )
+          return pagesdb.insertRow(pageDataObj)
         }
       })
   }
 }
 
-pagesdb.deleteRow = pageUrl =>
-    pagesdb
-      .db
-      .select(
-        'rowid',
-        'pageUrl',
-        'dateCreated',
-        'pageDomain',
-        'pageTitle',
-        'pageText',
-        'pageDescription',
-        'archiveLink',
-        'safeBrowsing'
-      )
-      .from('pages')
-      .where('pageUrl', pageUrl)
-      .then(rows =>
-         pagesdb
-          .db('fts')
-          .insert({
-            fts: 'delete',
-            rowid: rows[0].rowid,
-            pageUrl: rows[0].pageUrl,
-            dateCreated: rows[0].dateCreated,
-            pageDomain: rows[0].pageDomain,
-            pageTitle: rows[0].pageTitle,
-            pageText: rows[0].pageText,
-            pageDescription: rows[0].pageDescription,
-            archiveLink: rows[0].archiveLink,
-            safeBrowsing: rows[0].safeBrowsing
-          })
-      )
-      .return(
+pagesdb.insertRow = rowData =>
+  pagesdb
+    .db('pages')
+    .insert(rowData)
+    .return(
+      pagesdb
+        .db
+        .select(
+          'rowid',
+          'pageUrl',
+          'dateCreated',
+          'pageDomain',
+          'pageTitle',
+          'pageText',
+          'pageDescription',
+          'archiveLink',
+          'safeBrowsing'
+        )
+        .from('pages')
+        .where('pageUrl', rowData.pageUrl)
+        .then(rows =>
           pagesdb
-            .db('pages')
-            .where('pageUrl', pageUrl)
-            .del()
-      )
+            .db('fts')
+            .insert({
+              rowid: rows[0].rowid,
+              pageUrl: rows[0].pageUrl,
+              dateCreated: rows[0].dateCreated,
+              pageDomain: rows[0].pageDomain,
+              pageTitle: rows[0].pageTitle,
+              pageText: rows[0].pageText,
+              pageDescription: rows[0].pageDescription,
+              archiveLink: rows[0].archiveLink,
+              safeBrowsing: rows[0].safeBrowsing
+            })
+        )
+    )
+
+pagesdb.deleteRow = pageUrl =>
+  pagesdb
+    .db
+    .select(
+      'rowid',
+      'pageUrl',
+      'dateCreated',
+      'pageDomain',
+      'pageTitle',
+      'pageText',
+      'pageDescription',
+      'archiveLink',
+      'safeBrowsing'
+    )
+    .from('pages')
+    .where('pageUrl', pageUrl)
+    .then(rows =>
+       pagesdb
+        .db('fts')
+        .insert({
+          fts: 'delete',
+          rowid: rows[0].rowid,
+          pageUrl: rows[0].pageUrl,
+          dateCreated: rows[0].dateCreated,
+          pageDomain: rows[0].pageDomain,
+          pageTitle: rows[0].pageTitle,
+          pageText: rows[0].pageText,
+          pageDescription: rows[0].pageDescription,
+          archiveLink: rows[0].archiveLink,
+          safeBrowsing: rows[0].safeBrowsing
+        })
+    )
+    .return(
+        pagesdb
+          .db('pages')
+          .where('pageUrl', pageUrl)
+          .del()
+    )
 
 module.exports = pagesdb
