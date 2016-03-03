@@ -1371,9 +1371,11 @@ var _dompurify = require('dompurify');
 
 var _dompurify2 = _interopRequireDefault(_dompurify);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _moment = require('moment');
 
-//import moment from 'moment'
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /****
  * Exports
@@ -1470,14 +1472,9 @@ function renderResults(resultsChunk) {
           resultUrlText.textContent = row.pageUrl;
           mainDetails.appendChild(resultUrlText);
 
-          //var resultDateCreated = document.createElement('div')
-          //resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
-          //mainDetails.appendChild(resultDateCreated)
-          //if(result.score){
-          //  var resultSearchScore = document.createElement('div')
-          //  resultSearchScore.textContent = result.score
-          //  mainDetails.appendChild(resultSearchScore)
-          //}
+          var resultDateCreated = document.createElement('div');
+          resultDateCreated.textContent = (0, _moment2.default)(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a");
+          mainDetails.appendChild(resultDateCreated);
 
           /*****
            * SafeBrowsing
@@ -1542,7 +1539,9 @@ function renderResults(resultsChunk) {
           }
           var description = document.createElement('p');
           description.className = 'description';
-          if (row.pageDescription) {
+          if (row.snippet) {
+            description.innerHTML = _dompurify2.default.sanitize(_lodash2.default.trim(row.snippet));
+          } else if (row.pageDescription) {
             description.textContent = _lodash2.default.trim(row.pageDescription);
           }
           mainDetails.appendChild(description);
@@ -1613,7 +1612,7 @@ function renderResults(resultsChunk) {
  */
 exports.renderResults = renderResults;
 
-},{"./generateSearchClipAndHighlight":6,"./resultsEventHandlers":15,"./resultsObject":16,"./searchPage":18,"dompurify":221,"lodash":235}],15:[function(require,module,exports){
+},{"./generateSearchClipAndHighlight":6,"./resultsEventHandlers":15,"./resultsObject":16,"./searchPage":18,"dompurify":221,"lodash":235,"moment":237}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

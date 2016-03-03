@@ -7,7 +7,7 @@ import { updateChunkShownValue } from './resultsObject'
 
 import _ from 'lodash'
 import DOMPurify from 'dompurify'
-//import moment from 'moment'
+import moment from 'moment'
 
 /****
  * Exports
@@ -100,14 +100,9 @@ function renderResults(resultsChunk){
         resultUrlText.textContent = row.pageUrl
         mainDetails.appendChild(resultUrlText)
 
-        //var resultDateCreated = document.createElement('div')
-        //resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
-        //mainDetails.appendChild(resultDateCreated)
-        //if(result.score){
-        //  var resultSearchScore = document.createElement('div')
-        //  resultSearchScore.textContent = result.score
-        //  mainDetails.appendChild(resultSearchScore)
-        //}
+        var resultDateCreated = document.createElement('div')
+        resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
+        mainDetails.appendChild(resultDateCreated)
 
         /*****
          * SafeBrowsing
@@ -172,7 +167,10 @@ function renderResults(resultsChunk){
         }
         var description = document.createElement('p')
         description.className = 'description'
-        if(row.pageDescription){
+        if(row.snippet){
+          description.innerHTML = DOMPurify.sanitize(_.trim(row.snippet))
+        }
+        else if(row.pageDescription){
           description.textContent = _.trim(row.pageDescription)
         }
         mainDetails.appendChild(description)

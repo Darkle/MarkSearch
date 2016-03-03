@@ -86,7 +86,10 @@ pagesdb.init = (pagesDBFilePath) => {
     }
   }).then(() =>
     /****
-     * Create the full text search table
+     * Create the full text search table.
+     * For some reason when I used the content=pages,
+     * the db would become corrupt, so just gonna replicate
+     * manually with the triggers.
      */
     pagesdb.db.schema.hasTable('fts').then( exists => {
       if (!exists) {
@@ -94,10 +97,15 @@ pagesdb.init = (pagesDBFilePath) => {
         return  pagesdb.db.raw("" +
             "create virtual table fts using fts5" +
             "(" +
-              "content='pages', " +
+              "pageUrl unindexed," +
+              "dateCreated unindexed," +
+              "pageDomain unindexed," +
               "pageTitle, " +
               "pageText, " +
-              "pageDescription" +
+              "pageDescription, " +
+              "archiveLink unindexed, " +
+              "safeBrowsing unindexed, " +
+              "tokenize = porter" +
             ");"
         )
         /****
@@ -105,7 +113,7 @@ pagesdb.init = (pagesDBFilePath) => {
          * changes.
          * We dont bother with a trigger for UPDATE as that is only used for
          * safeBrowsing and archiveLink and we're not indexing/searching that.
-         * Also, we're not triggering on REPLACE as SQLite does a DELETE,
+         * We're not triggering on REPLACE as SQLite does a DELETE,
          * then an INSERT for REPLACE, so triggering on INSERT and DELETE
          * should suffice for RELPACE as well.
          * http://stackoverflow.com/a/21557145/3458681
@@ -116,8 +124,28 @@ pagesdb.init = (pagesDBFilePath) => {
             pagesdb.db.raw(
               `create trigger afterPagesInsert after insert on pages
               begin
-                insert into fts(rowid, pageTitle, pageText, pageDescription)
-                  values(new.rowid, new.pageTitle, new.pageText, new.pageDescription);
+                insert into fts(
+                  rowid,
+                  pageUrl,
+                  dateCreated,
+                  pageDomain,
+                  pageTitle,
+                  pageText,
+                  pageDescription,
+                  archiveLink,
+                  safeBrowsing
+                )
+                values(
+                  new.rowid,
+                  new.pageUrl,
+                  new.dateCreated,
+                  new.pageDomain,
+                  new.pageTitle,
+                  new.pageText,
+                  new.pageDescription,
+                  new.archiveLink,
+                  new.safeBrowsing
+                );
               end;`
             )
         )
@@ -125,8 +153,46 @@ pagesdb.init = (pagesDBFilePath) => {
             pagesdb.db.raw(
               `create trigger afterPagesDelete after delete on pages
               begin
-                insert into fts(fts, rowid, pageTitle, pageText, pageDescription)
-                  values('delete', old.rowid, old.pageTitle, old.pageText, old.pageDescription);
+                insert into fts( fts, rowid, pageUrl, dateCreated, pageDomain, pageTitle, pageText, pageDescription, archiveLink, safeBrowsing) values( 'delete', old.rowid, old.pageUrl, old.dateCreated, old.pageDomain, old.pageTitle, old.pageText, old.pageDescription, old.archiveLink, old.safeBrowsing );
+              end;`
+            )
+        )
+        //.return(
+        //    pagesdb.db.raw(
+        //      `create trigger afterPagesDelete after delete on pages
+        //      begin
+        //        insert into fts(
+        //          fts,
+        //          rowid,
+        //          pageUrl,
+        //          dateCreated,
+        //          pageDomain,
+        //          pageTitle,
+        //          pageText,
+        //          pageDescription,
+        //          archiveLink,
+        //          safeBrowsing
+        //        )
+        //        values(
+        //          'delete',
+        //          old.rowid,
+        //          old.pageUrl,
+        //          old.dateCreated,
+        //          old.pageDomain,
+        //          old.pageTitle,
+        //          old.pageText,
+        //          old.pageDescription,
+        //          old.archiveLink,
+        //          old.safeBrowsing
+        //        );
+        //      end;`
+        //    )
+        //)
+        .return(
+            pagesdb.db.raw(
+              `create trigger afterPagesUpdate after update on pages
+              begin
+                UPDATE fts SET archiveLink = new.archiveLink, safeBrowsing = new.safeBrowsing WHERE rowid = old.rowid;
               end;`
             )
         )
