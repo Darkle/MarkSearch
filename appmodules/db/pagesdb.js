@@ -70,18 +70,18 @@ pagesdb.init = (pagesDBFilePath) => {
        *  just doing a regular insert. Using the validation schema
        *  to make sure that have all necessary fields when upserting.
        */
-      return  pagesdb.db.raw('' +
-          'create table "pages" (' +
-            '"pageUrl" text not null unique on conflict replace, ' +
-            '"dateCreated" integer not null, ' +
-            '"pageDomain" text not null, ' +
-            '"pageTitle" text null, ' +
-            '"pageText" text null, ' +
-            '"pageDescription" text null, ' +
-            '"archiveLink" text null, ' +
-            '"safeBrowsing" text null, ' +
-            'primary key ("pageUrl")' +
-          ');'
+      return  pagesdb.db.raw(
+          `create table pages (
+            pageUrl text not null unique on conflict replace,
+            dateCreated integer not null,
+            pageDomain text not null,
+            pageTitle text null,
+            pageText text null,
+            pageDescription text null,
+            archiveLink text null,
+            safeBrowsing text null,
+            primary key (pageUrl)
+          );`
       )
     }
   }).then(() =>
@@ -94,19 +94,19 @@ pagesdb.init = (pagesDBFilePath) => {
     pagesdb.db.schema.hasTable('fts').then( exists => {
       if (!exists) {
         console.log('creating "fts" table')
-        return  pagesdb.db.raw("" +
-            "create virtual table fts using fts5" +
-            "(" +
-              "pageUrl unindexed," +
-              "dateCreated unindexed," +
-              "pageDomain unindexed," +
-              "pageTitle, " +
-              "pageText, " +
-              "pageDescription, " +
-              "archiveLink unindexed, " +
-              "safeBrowsing unindexed, " +
-              "tokenize = porter" +
-            ");"
+        return  pagesdb.db.raw(
+            `create virtual table fts using fts5 (
+              pageUrl unindexed,
+              dateCreated unindexed,
+              pageDomain unindexed,
+              pageTitle,
+              pageText,
+              pageDescription,
+              archiveLink unindexed,
+              safeBrowsing unindexed,
+              content='pages',
+              tokenize = porter
+            );`
         )
         /****
          * Create the triggers to update the fts index when the pages table
@@ -151,48 +151,40 @@ pagesdb.init = (pagesDBFilePath) => {
         )
         .return(
             pagesdb.db.raw(
-              `create trigger afterPagesDelete after delete on pages
-              begin
-                insert into fts( fts, rowid, pageUrl, dateCreated, pageDomain, pageTitle, pageText, pageDescription, archiveLink, safeBrowsing) values( 'delete', old.rowid, old.pageUrl, old.dateCreated, old.pageDomain, old.pageTitle, old.pageText, old.pageDescription, old.archiveLink, old.safeBrowsing );
-              end;`
-            )
-        )
-        //.return(
-        //    pagesdb.db.raw(
-        //      `create trigger afterPagesDelete after delete on pages
-        //      begin
-        //        insert into fts(
-        //          fts,
-        //          rowid,
-        //          pageUrl,
-        //          dateCreated,
-        //          pageDomain,
-        //          pageTitle,
-        //          pageText,
-        //          pageDescription,
-        //          archiveLink,
-        //          safeBrowsing
-        //        )
-        //        values(
-        //          'delete',
-        //          old.rowid,
-        //          old.pageUrl,
-        //          old.dateCreated,
-        //          old.pageDomain,
-        //          old.pageTitle,
-        //          old.pageText,
-        //          old.pageDescription,
-        //          old.archiveLink,
-        //          old.safeBrowsing
-        //        );
-        //      end;`
-        //    )
-        //)
-        .return(
-            pagesdb.db.raw(
               `create trigger afterPagesUpdate after update on pages
               begin
                 UPDATE fts SET archiveLink = new.archiveLink, safeBrowsing = new.safeBrowsing WHERE rowid = old.rowid;
+              end;`
+            )
+        )
+        .return(
+            pagesdb.db.raw(
+              `create trigger afterPagesDelete after delete on pages
+              begin
+                insert into fts(
+                  fts,
+                  rowid,
+                  pageUrl,
+                  dateCreated,
+                  pageDomain,
+                  pageTitle,
+                  pageText,
+                  pageDescription,
+                  archiveLink,
+                  safeBrowsing
+                )
+                values(
+                  'delete',
+                  old.rowid,
+                  old.pageUrl,
+                  old.dateCreated,
+                  old.pageDomain,
+                  old.pageTitle,
+                  old.pageText,
+                  old.pageDescription,
+                  old.archiveLink,
+                  old.safeBrowsing
+                );
               end;`
             )
         )
@@ -253,5 +245,44 @@ pagesdb.upsertRow = (pageDataObj) => {
         })
   }
 }
+
+//pagesdb.deleteRow = pageUrl =>
+//    pagesdb
+//      .db
+//      .select(
+//        'rowid',
+//        'pageUrl',
+//        'dateCreated',
+//        'pageDomain',
+//        'pageTitle',
+//        'pageText',
+//        'pageDescription',
+//        'archiveLink',
+//        'safeBrowsing'
+//      )
+//      .from('pages')
+//      .where('pageUrl', pageUrl)
+//      .then(rows =>
+//         pagesdb
+//          .db('fts')
+//          .insert({
+//            fts: 'delete',
+//            rowid: rows[0].rowid,
+//            pageUrl: rows[0].pageUrl,
+//            dateCreated: rows[0].dateCreated,
+//            pageDomain: rows[0].pageDomain,
+//            pageTitle: rows[0].pageTitle,
+//            pageText: rows[0].pageText,
+//            pageDescription: rows[0].pageDescription,
+//            archiveLink: rows[0].archiveLink,
+//            safeBrowsing: rows[0].safeBrowsing
+//          })
+//      )
+//      .return(
+//          pagesdb
+//            .db('pages')
+//            .where('pageUrl', pageUrl)
+//            .del()
+//      )
 
 module.exports = pagesdb
