@@ -38,10 +38,7 @@ function search(req, res, next){
      * If user just wants to list all saved pages by a domain with no text search
      */
     if(domainToSearchFor){
-      var domainSearchPagesdbSelect = pagesdb.db('pages')
-                                        .where({
-                                          pageDomain: domainToSearchFor
-                                        })
+      var domainSearchPagesdbSelect = pagesdb.db('pages').where({pageDomain: domainToSearchFor})
 
       if(dateFilter){
         /****
@@ -89,7 +86,7 @@ function search(req, res, next){
     }
     /****
      * https://sqlite.org/fts5.html#section_5_1_1
-     * bm25(fts, 4.0, 2.0) - Give pageTitle a boost of 4,
+     * bm25(fts, 4.0, 1.0, 2.0) - Give pageTitle a boost of 4,
      * and pageDescription a boost of 2.
      * Note: the SQL operators in the 'searchTerm OR NEAR()` are case-sensitive
      * and must be in uppercase!
