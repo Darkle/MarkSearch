@@ -97,6 +97,10 @@ function coerceIncomingColumnData(dataObj){
   if(dataObj.dateCreated){
     dataObj.dateCreated = _.toInteger(dataObj.dateCreated)
   }
+  /****
+   * _.isObject(dataObj.safeBrowsing) will also return false if
+   * dataObj.safeBrowsing does not exist
+   */
   if(_.isObject(dataObj.safeBrowsing)){
     dataObj.safeBrowsing = JSON.stringify(dataObj.safeBrowsing)
   }
@@ -127,16 +131,16 @@ pagesdb.init = (pagesDBFilePath) => {
         )
       }
     })
-  .then( () =>
+  .then(() =>
     /****
      * Create the full text search table.
      *
-     * I'm adding everything to the fts table
-     * as it will make it slightly faster when searching as wont need to query & join
-     * with the pages table. pageUrl, dateCreated, pageDomain, archiveLink & safeBrowsing
+     * I'm adding everything to the fts table as it will make it slightly faster
+     * when searching as wont need to query & join with the pages table.
+     * pageUrl, dateCreated, pageDomain, archiveLink & safeBrowsing
      * are all tiny anyway and shouldn't create any size issues duplicating those.
      *
-     * I'm not using triggers any more as I was having issues with REPLACE. Somehow
+     * Not using triggers any more as I was having issues with REPLACE. Somehow
      * the DELETE and INSERT for the REPLACE on the pages table was corrupting the
      * fts table.
      */
@@ -167,6 +171,7 @@ pagesdb.updateColumns = (columnsDataObj) => {
   var pageUrlPrimaryKey = coercedColumnsDataObj.pageUrl
   var coercedColumnsDataObjNoPageUrl = _.omit(coercedColumnsDataObj, ['pageUrl'])
   var validatedColumnsDataObj = inspector.validate(updateColumnValidation, coercedColumnsDataObjNoPageUrl)
+
   if(!validatedColumnsDataObj.valid){
     var errMessage = `Error, passed in column data did not pass validation.
                       Error(s): ${validatedColumnsDataObj.format()}`
@@ -178,7 +183,7 @@ pagesdb.updateColumns = (columnsDataObj) => {
             .db('pages')
             .where('pageUrl', pageUrlPrimaryKey)
             .update(coercedColumnsDataObjNoPageUrl)
-            .then( () =>
+            .then(() =>
               pagesdb
                 .db('fts')
                 .where('pageUrl', pageUrlPrimaryKey)
@@ -190,8 +195,9 @@ pagesdb.updateColumns = (columnsDataObj) => {
 pagesdb.upsertRow = (rowDataObj) => {
   var coercedPageDataObj = coerceIncomingColumnData(rowDataObj)
   var validatedPageDataObj = inspector.validate(upsertRowValidation, coercedPageDataObj)
+  
   if(!validatedPageDataObj.valid){
-    var errMessage = `Error, passed in page data did not pass validation.
+    var errMessage = `Error, passed in row data did not pass validation.
                       Error(s): ${validatedPageDataObj.format()}`
     console.error(errMessage)
     return Promise.reject(errMessage)
@@ -297,7 +303,7 @@ pagesdb.deleteRow = pageUrl =>
           safeBrowsing: rows[0].safeBrowsing
         })
     )
-    .then( () =>
+    .then(() =>
         pagesdb
           .db('pages')
           .where('pageUrl', pageUrl)
