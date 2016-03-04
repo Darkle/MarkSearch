@@ -2,6 +2,7 @@
 
 var pagesdb = require('../../db/pagesdb')
 var STOPWORDS = require('../lunrStopwordFilter.json')
+var checkAndCoerceDateFilterParams = require('../../utils/checkAndCoerceDateFilterParams')
 
 function search(req, res, next){
 
@@ -30,15 +31,28 @@ function search(req, res, next){
   console.log(searchTerms)
   console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${domainToSearchFor}`)
 
+  var dateFilter = checkAndCoerceDateFilterParams(req.body)
+
   if(!searchTerms.length){
     /****
      * If user just wants to list all saved pages by a domain with no text search
      */
     if(domainToSearchFor){
-      pagesdb.db('pages')
-        .where({
-          pageDomain: domainToSearchFor
-        })
+      var domainSearchPagesdbSelect = pagesdb.db('pages')
+                                        .where({
+                                          pageDomain: domainToSearchFor
+                                        })
+
+      if(dateFilter){
+        /****
+         * knex will automatically convert additional WHERE's to AND WHERE
+         */
+        domainSearchPagesdbSelect = domainSearchPagesdbSelect
+                                      .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
+                                      .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
+      }
+
+      domainSearchPagesdbSelect
         .orderBy('dateCreated', 'desc')
         .then( rows => res.json(rows))
         .catch(err => {
@@ -52,6 +66,7 @@ function search(req, res, next){
   }
   else{
     var selectFromFTS = pagesdb.db.select(
+          `rank`,
           `pageUrl`,
           `dateCreated`,
           `pageDomain`,
@@ -67,6 +82,11 @@ function search(req, res, next){
     if(domainToSearchFor){
       selectFromFTS = selectFromFTS.where({pageDomain: domainToSearchFor})
     }
+    if(dateFilter){
+      selectFromFTS = selectFromFTS
+                        .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
+                        .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
+    }
     /****
      * https://sqlite.org/fts5.html#section_5_1_1
      * bm25(fts, 4.0, 2.0) - Give pageTitle a boost of 4,
@@ -76,7 +96,9 @@ function search(req, res, next){
      */
     selectFromFTS
       .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${searchTerms}" OR NEAR(${searchTerms})`)
-      .then( rows => res.json(rows))
+      .then( rows => {
+        res.json(rows)
+      })
       .catch( err => {
         console.error(err)
         res.status(500).end()

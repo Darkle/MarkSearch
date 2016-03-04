@@ -102,6 +102,12 @@ function renderResults(resultsChunk, searchTerms){
         resultUrlText.textContent = row.pageUrl
         mainDetails.appendChild(resultUrlText)
 
+        //if(row.rank){
+        //  var resultRank = document.createElement('div')
+        //  resultRank.textContent = `${row.rank} - lower is higher match`
+        //  mainDetails.appendChild(resultRank)
+        //}
+        //
         //var resultDateCreated = document.createElement('div')
         //resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
         //mainDetails.appendChild(resultDateCreated)
@@ -180,7 +186,7 @@ function renderResults(resultsChunk, searchTerms){
            * in the snippet.
            */
           var highlightOpeningSpan = '<span class="searchHighlight">'
-          if(row.snippet.indexOf(highlightOpeningSpan) < 0 ){
+          if(row.snippet.indexOf(highlightOpeningSpan) < 0){
             searchTerms
               .toLowerCase()
               .split(' ')

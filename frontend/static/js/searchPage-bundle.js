@@ -793,7 +793,7 @@ function dateFilterInit() {
   /****
    * 2016 - year MarkSearch was released, so don't need any earlier
    */
-  var msReleaseDate = 2016;
+  var msReleaseDate = 2010;
   var numYearsToInclude = currentYear - msReleaseDate + 1;
 
   _lodash2.default.times(numYearsToInclude, function (index) {
@@ -1615,6 +1615,12 @@ function renderResults(resultsChunk, searchTerms) {
           resultUrlText.textContent = row.pageUrl;
           mainDetails.appendChild(resultUrlText);
 
+          //if(row.rank){
+          //  var resultRank = document.createElement('div')
+          //  resultRank.textContent = `${row.rank} - lower is higher match`
+          //  mainDetails.appendChild(resultRank)
+          //}
+          //
           //var resultDateCreated = document.createElement('div')
           //resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
           //mainDetails.appendChild(resultDateCreated)
