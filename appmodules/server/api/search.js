@@ -6,26 +6,72 @@ var checkAndCoerceDateFilterParams = require('../../utils/checkAndCoerceDateFilt
 
 function search(req, res, next){
 
-  var lcaseSearchTerms = req.params.searchTerms.toLowerCase()
+  var lowercaseSearchTerms = req.params.searchTerms.toLowerCase()
   var domainToSearchFor = null
+  var hyphenFound = false
+  console.log(lowercaseSearchTerms)
+  var quotedPhraseCheck = lowercaseSearchTerms.match('"')
+  var quotedPhrase = null
+  console.log(quotedPhraseCheck)
+  /****
+   * If they have quoted a phrase, slice it out, then add it back later.
+   */
+  if(quotedPhraseCheck && quotedPhraseCheck.length === 2){
+    var lastQuoteIndex = lowercaseSearchTerms.lastIndexOf('"') + 1
+    lowercaseSearchTerms = lowercaseSearchTerms.slice(lastQuoteIndex)
+    quotedPhrase = lowercaseSearchTerms.slice(0, lastQuoteIndex)
+  }
+
   /****
    * Filter out single characters.
    * If searching by domain, store domain in domainToSearchFor
    * and remove it from the searchTermsArr.
    * Also remove word if it's in the stopword list.
    * Stopword list is based on: http://git.io/T37UJA
+   * If there is a hyphen in any of the search words, then surround
+   * it in double quotes.
+   * If there is a hyphen at the start of the word, consider
+   * it an operator and add NOT to the start of the word.
+   * http://stackoverflow.com/a/21599291/3458681
+   * If there is a pipe at the start of the word, consider
+   * it an operator and add OR to the start of the word.
+   * SQLite fts MATCH considers a space between words to
+   * be an AND operator: https://sqlite.org/fts5.html#section_3
    */
-  var searchTerms = lcaseSearchTerms.split(' ').filter( searchTerm => {
-    var useSearchTerm = searchTerm.length > 1
-    if(searchTerm.startsWith('site:')){
-      domainToSearchFor = searchTerm.slice(5)
-      useSearchTerm = false
-    }
-    else if(STOPWORDS[searchTerm]){
-      useSearchTerm = false
-    }
-    return useSearchTerm
-  }).join(' ')
+  var searchTerms = lowercaseSearchTerms
+    .split(' ').filter( searchTerm => {
+      var useSearchTerm = searchTerm.length > 1
+      if(searchTerm.startsWith('site:')){
+        domainToSearchFor = searchTerm.slice(5)
+        useSearchTerm = false
+      }
+      else if(STOPWORDS[searchTerm]){
+        useSearchTerm = false
+      }
+      return useSearchTerm
+    })
+    .map(searchTerm => {
+      var hyphenIndex = searchTerm.indexOf('-')
+      if(hyphenIndex > -1){
+        hyphenFound = true
+        if(hyphenIndex === 0){
+          searchTerm = `NOT ${searchTerm.slice(1)}`
+        }
+        else{
+          searchTerm = `"${searchTerm}"`
+        }
+      }
+      if(searchTerm.indexOf('|') === 0){
+        searchTerm = `OR ${searchTerm.slice(1)}`
+      }
+      return searchTerm
+    })
+
+    //if(quotedPhrase){
+    //  searchTerms.unshift(quotedPhrase)
+    //}
+
+  searchTerms = searchTerms.join(' ')
 
   console.log(`searchTerms`)
   console.log(searchTerms)
@@ -45,8 +91,8 @@ function search(req, res, next){
          * knex will automatically convert additional WHERE's to AND WHERE
          */
         domainSearchPagesdbSelect = domainSearchPagesdbSelect
-                                      .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
-                                      .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
+          .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
+          .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
       }
 
       domainSearchPagesdbSelect
@@ -62,27 +108,32 @@ function search(req, res, next){
     }
   }
   else{
-    var selectFromFTS = pagesdb.db.select(
-          `rank`,
-          `pageUrl`,
-          `dateCreated`,
-          `pageDomain`,
-          `pageTitle`,
-          `pageText`,
-          `pageDescription`,
-          `archiveLink`,
-          `safeBrowsing`,
-          pagesdb.db.raw(`snippet(fts, -1, '<span class="searchHighlight">', '</span>', '...', 64) as snippet`)
+    var selectFromFTS = pagesdb
+      .db
+      .select(
+        `rank`,
+        `pageUrl`,
+        `dateCreated`,
+        `pageDomain`,
+        `pageTitle`,
+        `pageText`,
+        `pageDescription`,
+        `archiveLink`,
+        `safeBrowsing`,
+        pagesdb.db.raw(
+          `snippet(fts, -1, '<span class="searchHighlight">',
+          '</span>', '...', 64) as snippet`
         )
-        .from('fts')
+      )
+      .from('fts')
 
     if(domainToSearchFor){
       selectFromFTS = selectFromFTS.where({pageDomain: domainToSearchFor})
     }
     if(dateFilter){
       selectFromFTS = selectFromFTS
-                        .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
-                        .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
+        .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
+        .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
     }
     /****
      * https://sqlite.org/fts5.html#section_5_1_1
@@ -91,15 +142,17 @@ function search(req, res, next){
      * Note: the SQL operators in the 'searchTerm OR NEAR()` are case-sensitive
      * and must be in uppercase!
      */
-    selectFromFTS
-      .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${searchTerms}" OR NEAR(${searchTerms})`)
-      .then( rows => {
-        res.json(rows)
-      })
-      .catch( err => {
-        console.error(err)
-        res.status(500).end()
-      })
+    console.log(
+      selectFromFTS
+      //.whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${searchTerms}" OR NEAR(${searchTerms})`)
+      .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `${searchTerms}`).toString())
+      //.then( rows => {
+      //  res.json(rows)
+      //})
+      //.catch( err => {
+      //  console.error(err)
+      //  res.status(500).end()
+      //})
 
   }
 
