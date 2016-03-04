@@ -76,12 +76,8 @@ function search(req, res, next){
      */
     selectFromFTS
       .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${searchTerms}" OR NEAR(${searchTerms})`)
-      .then( rows => {
-        console.log('rows')
-        console.log(rows)
-        res.json(rows)
-      } )
-      .catch(err => {
+      .then( rows => res.json(rows))
+      .catch( err => {
         console.error(err)
         res.status(500).end()
       })

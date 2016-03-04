@@ -6,6 +6,7 @@ import { chunkResults } from './chunkResults'
 
 import got from 'got'
 import _ from 'lodash'
+import Promise from 'bluebird'
 
 /****
  * Exports
@@ -16,25 +17,29 @@ function queryServer(searchTerms, dateFilter){
     postUrl =`/frontendapi/search/${searchTerms}`
   }
   /****
-   * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax
+   * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax,
+   * Converting got to bluebird promise so I can bind stuff in queryServerAndRender
    */
-  return got.post(
-        postUrl,
-        {
-          headers: {
-            'X-CSRF-Token': csrfToken
-          },
-          body: dateFilter
-        }
-      )
-      .then( response => {
-        var rows = JSON.parse(response.body)
-        /****
-         * chunkResults returns an empty object if responseData.rows is empty
-         */
-        updateResults(chunkResults(rows))
-        return rows
-      })
+  return Promise
+          .resolve(
+            got.post(
+                  postUrl,
+                  {
+                    headers: {
+                      'X-CSRF-Token': csrfToken
+                    },
+                    body: dateFilter
+                  }
+                )
+                .then( response => {
+                  var rows = JSON.parse(response.body)
+                  /****
+                   * chunkResults returns an empty object if responseData.rows is empty
+                   */
+                  updateResults(chunkResults(rows))
+                  return rows
+                })
+          )
 }
 
 export { queryServer }

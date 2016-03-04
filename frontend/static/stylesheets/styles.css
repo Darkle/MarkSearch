@@ -810,7 +810,7 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   margin: 0;
 }
 .searchPage .description .searchHighlight {
-  color: red;
+  color: #BE3D3D;
 }
 .searchPage .description strong {
   color: #2670A2;

@@ -4,16 +4,18 @@ import { resultsContainer$ } from './searchPage'
 import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEventHandlers'
 import { generateSearchClipAndHighlight } from './generateSearchClipAndHighlight'
 import { updateChunkShownValue } from './resultsObject'
+var STOPWORDS = require('../../../appmodules/server/lunrStopwordFilter.json')
 
 import _ from 'lodash'
 import DOMPurify from 'dompurify'
 import moment from 'moment'
+import stem from 'stem-porter'
 
 /****
  * Exports
  */
 
-function renderResults(resultsChunk){
+function renderResults(resultsChunk, searchTerms){
   return new Promise((resolve, reject) =>{
     try{
       updateChunkShownValue(resultsChunk.chunkIndex, true)
@@ -100,9 +102,9 @@ function renderResults(resultsChunk){
         resultUrlText.textContent = row.pageUrl
         mainDetails.appendChild(resultUrlText)
 
-        var resultDateCreated = document.createElement('div')
-        resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
-        mainDetails.appendChild(resultDateCreated)
+        //var resultDateCreated = document.createElement('div')
+        //resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
+        //mainDetails.appendChild(resultDateCreated)
 
         /*****
          * SafeBrowsing
@@ -167,7 +169,31 @@ function renderResults(resultsChunk){
         }
         var description = document.createElement('p')
         description.className = 'description'
+
         if(row.snippet){
+          /****
+           * The snippet is set to -1 (in server side search.js) which means it chooses
+           * the column automatically and it usually picks a pageText snippet, however
+           * the bm25 is set to boost the pageTitle & pageDescription, so if those are
+           * selected, then the pageText snippet ends up having no highlighting applied
+           * to the tokens (search terms), so gonna manually add them if not already there
+           * in the snippet.
+           */
+          var highlightOpeningSpan = '<span class="searchHighlight">'
+          if(row.snippet.indexOf(highlightOpeningSpan) < 0 ){
+            searchTerms
+              .toLowerCase()
+              .split(' ')
+              .filter( searchTerm =>
+                searchTerm.length > 1 && !searchTerm.startsWith('site:') && !STOPWORDS[searchTerm]
+              )
+              .forEach( searchWord => {
+                var stemmedSearchWord = stem(searchWord)
+                var regex = new RegExp('(' + stemmedSearchWord + '[a-z]*)', 'gi')
+                var replacement = highlightOpeningSpan + '$1' + '</span>'
+                row.snippet = row.snippet.replace(regex, replacement)
+              })
+          }
           description.innerHTML = DOMPurify.sanitize(_.trim(row.snippet))
         }
         else if(row.pageDescription){

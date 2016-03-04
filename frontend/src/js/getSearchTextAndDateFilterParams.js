@@ -20,9 +20,14 @@ function getSearchTextAndDateFilterParams(){
    * excess (>1) whitespace in between words.
    */
   var searchInputValue = stringUtils(searchInput$.val()).collapseWhitespace().s
+  var unencodedSearchTerms
 
   if(searchInputValue.length){
     searchTerms = encodeURIComponent(searchInputValue)
+    /****
+     * We use unencodedSearchTerms in renderResults for the snippet highlight regex
+     */
+    unencodedSearchTerms = searchInputValue
   }
   /****
    * If they were searching when they have the date filter displayed
@@ -32,7 +37,7 @@ function getSearchTextAndDateFilterParams(){
   if(dateFilterIsSet()){
     dateFilter = getDateFilterParameters()
   }
-  return {searchTerms, dateFilter}
+  return {searchTerms, dateFilter, unencodedSearchTerms}
 }
 
 export { getSearchTextAndDateFilterParams }

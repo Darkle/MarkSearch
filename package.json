@@ -41,6 +41,7 @@
     "schema-inspector": "^1.6.4",
     "serve-favicon": "~2.3.0",
     "sqlite3": "^3.1.1",
+    "stem-porter": "0.0.1",
     "string": "^3.3.1",
     "suspend": "^0.7.0",
     "velocity-animate": "^1.2.3",

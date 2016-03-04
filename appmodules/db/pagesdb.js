@@ -195,7 +195,7 @@ pagesdb.updateColumns = (columnsDataObj) => {
 pagesdb.upsertRow = (rowDataObj) => {
   var coercedPageDataObj = coerceIncomingColumnData(rowDataObj)
   var validatedPageDataObj = inspector.validate(upsertRowValidation, coercedPageDataObj)
-  
+
   if(!validatedPageDataObj.valid){
     var errMessage = `Error, passed in row data did not pass validation.
                       Error(s): ${validatedPageDataObj.format()}`
