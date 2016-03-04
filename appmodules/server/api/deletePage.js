@@ -5,7 +5,8 @@ var pagesdb = require('../../db/pagesdb')
 function deletePage(req, res, next) {
   //TODO - validation on req.params.pageUrl
 
-      pagesdb.deleteRow(req.params.pageUrl)
+      pagesdb
+        .deleteRow(req.params.pageUrl)
         .then( numRowsAffected => {
           res.status(200).end()
         })

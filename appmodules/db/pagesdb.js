@@ -37,14 +37,48 @@ var upsertRowValidation = {
     },
     safeBrowsing: {
       type: ['string', 'null']
-    },
+    }
   }
 }
+/****
+ * The updateColumnValidation is slightly different as it doesn't
+ * always have data for every column.
+ */
 var updateColumnValidation = {
   type: 'object',
   strict: true,
-  someKeys: ['archiveLink', 'safeBrowsing'],
+  someKeys: [
+    'dateCreated',
+    'pageDomain',
+    'pageTitle',
+    'pageText',
+    'pageDescription',
+    'archiveLink',
+    'safeBrowsing'
+  ],
   properties: {
+    dateCreated: {
+      type: 'integer',
+      optional: true,
+      gt: 0,
+      error: 'dateCreated must be a valid integer and larger than 0'
+    },
+    pageDomain: {
+      type: ['string'],
+      optional: true
+    },
+    pageTitle: {
+      type: ['string', 'null'],
+      optional: true
+    },
+    pageText: {
+      type: ['string', 'null'],
+      optional: true
+    },
+    pageDescription: {
+      type: ['string', 'null'],
+      optional: true
+    },
     archiveLink: {
       type: ['string', 'null'],
       optional: true
@@ -56,28 +90,59 @@ var updateColumnValidation = {
   }
 }
 
+function coerceIncomingColumnData(dataObj){
+  if(dataObj.pageUrl){
+    dataObj.pageUrl = _.toLower(dataObj.pageUrl)
+  }
+  if(dataObj.dateCreated){
+    dataObj.dateCreated = _.toInteger(dataObj.dateCreated)
+  }
+  if(_.isObject(dataObj.safeBrowsing)){
+    dataObj.safeBrowsing = JSON.stringify(dataObj.safeBrowsing)
+  }
+  return dataObj
+}
+
 var pagesdb = {}
 
 pagesdb.init = (pagesDBFilePath) => {
   knexConfig.connection.filename = pagesDBFilePath
   //knexConfig.connection.filename = ':memory:'
   pagesdb.db = require('knex')(knexConfig)
-  return pagesdb.db.schema.createTableIfNotExists('pages', function (table) {
-    table.text('pageUrl').primary().unique().notNullable()
-    table.integer('dateCreated').notNullable()
-    table.text('pageDomain').notNullable()
-    table.text('pageTitle').nullable()
-    table.text('pageText').nullable()
-    table.text('pageDescription').nullable()
-    table.text('archiveLink').nullable()
-    table.text('safeBrowsing').nullable()
-  })
-  .return(
+  return pagesdb.db.schema.hasTable('pages').then( exists => {
+      if (!exists) {
+        console.log('creating "pages" table')
+        return  pagesdb.db.raw(
+          `create table pages (
+            pageUrl text not null unique on conflict replace,
+            dateCreated integer not null,
+            pageDomain text not null,
+            pageTitle text null,
+            pageText text null,
+            pageDescription text null,
+            archiveLink text null,
+            safeBrowsing text null,
+            primary key (pageUrl)
+          );`
+        )
+      }
+    })
+  .then( () =>
     /****
      * Create the full text search table.
+     *
+     * I'm adding everything to the fts table
+     * as it will make it slightly faster when searching as wont need to query & join
+     * with the pages table. pageUrl, dateCreated, pageDomain, archiveLink & safeBrowsing
+     * are all tiny anyway and shouldn't create any size issues duplicating those.
+     *
+     * I'm not using triggers any more as I was having issues with REPLACE. Somehow
+     * the DELETE and INSERT for the REPLACE on the pages table was corrupting the
+     * fts table.
      */
     pagesdb.db.schema.hasTable('fts').then( exists => {
       if (!exists) {
+        console.log('creating fts table')
         return  pagesdb.db.raw(
             `create virtual table fts using fts5 (
               pageUrl unindexed,
@@ -98,10 +163,10 @@ pagesdb.init = (pagesDBFilePath) => {
 }
 
 pagesdb.updateColumns = (columnsDataObj) => {
-  if(_.isObject(columnsDataObj.safeBrowsing)){
-    columnsDataObj.safeBrowsing = JSON.stringify(columnsDataObj.safeBrowsing)
-  }
-  var validatedColumnsDataObj = inspector.validate(updateColumnValidation, columnsDataObj)
+  var coercedColumnsDataObj = coerceIncomingColumnData(columnsDataObj)
+  var pageUrlPrimaryKey = coercedColumnsDataObj.pageUrl
+  var coercedColumnsDataObjNoPageUrl = _.omit(coercedColumnsDataObj, ['pageUrl'])
+  var validatedColumnsDataObj = inspector.validate(updateColumnValidation, coercedColumnsDataObjNoPageUrl)
   if(!validatedColumnsDataObj.valid){
     var errMessage = `Error, passed in column data did not pass validation.
                       Error(s): ${validatedColumnsDataObj.format()}`
@@ -109,19 +174,22 @@ pagesdb.updateColumns = (columnsDataObj) => {
     return Promise.reject(errMessage)
   }
   else{
-    return pagesdb.db('pages')
-        .where('pageUrl', pageUrlPrimaryKey)
-        .update(columnsDataObj)
+    return pagesdb
+            .db('pages')
+            .where('pageUrl', pageUrlPrimaryKey)
+            .update(coercedColumnsDataObjNoPageUrl)
+            .then( () =>
+              pagesdb
+                .db('fts')
+                .where('pageUrl', pageUrlPrimaryKey)
+                .update(coercedColumnsDataObjNoPageUrl)
+            )
   }
 }
 
-pagesdb.upsertRow = (pageDataObj) => {
-  pageDataObj.pageUrl = _.toLower(pageDataObj.pageUrl)
-  pageDataObj.dateCreated = _.toInteger(pageDataObj.dateCreated)
-  if(_.isObject(pageDataObj.safeBrowsing)){
-    pageDataObj.safeBrowsing = JSON.stringify(pageDataObj.safeBrowsing)
-  }
-  var validatedPageDataObj = inspector.validate(upsertRowValidation, pageDataObj)
+pagesdb.upsertRow = (rowDataObj) => {
+  var coercedPageDataObj = coerceIncomingColumnData(rowDataObj)
+  var validatedPageDataObj = inspector.validate(upsertRowValidation, coercedPageDataObj)
   if(!validatedPageDataObj.valid){
     var errMessage = `Error, passed in page data did not pass validation.
                       Error(s): ${validatedPageDataObj.format()}`
@@ -129,34 +197,37 @@ pagesdb.upsertRow = (pageDataObj) => {
     return Promise.reject(errMessage)
   }
   else{
-    pagesdb.db('pages')
-      .where({
-        pageUrl: pageDataObj.pageUrl
-      })
-      .select('pageUrl')
-      .then( rows => {
-        /****
-         * If row is already there, update it
-         */
-        if(rows.length){
-          return pagesdb.updateColumns(pageDataObj)
-        }
-        else{
-          /****
-           * Insert the new row, then need to grab that row to get its rowid
-           * for the fts insert
-           */
-          return pagesdb.insertRow(pageDataObj)
-        }
-      })
+    return pagesdb
+            .db('pages')
+            .where({
+              pageUrl: coercedPageDataObj.pageUrl
+            })
+            .select('pageUrl')
+            .then( rows => {
+              /****
+               * If row is already there, update it
+               */
+              if(rows.length){
+                return pagesdb.updateColumns(coercedPageDataObj)
+              }
+              else{
+                return pagesdb.insertRow(coercedPageDataObj)
+              }
+            })
   }
 }
 
 pagesdb.insertRow = rowData =>
-  pagesdb
+  /****
+   * We query the pages table again in the middle as the
+   * rowid is needed for the fts insert and below for the
+   * 'delete' insert - the rowid's need to match up with their
+   * pages table rowid counterpart.
+   */
+   pagesdb
     .db('pages')
     .insert(rowData)
-    .return(
+    .then(numRowsUpdated =>
       pagesdb
         .db
         .select(
@@ -186,10 +257,15 @@ pagesdb.insertRow = rowData =>
               archiveLink: rows[0].archiveLink,
               safeBrowsing: rows[0].safeBrowsing
             })
+
         )
     )
 
+
 pagesdb.deleteRow = pageUrl =>
+/****
+ * Gotta do the fts delete first as it relies on the rowid from the pages table.
+ */
   pagesdb
     .db
     .select(
@@ -221,7 +297,7 @@ pagesdb.deleteRow = pageUrl =>
           safeBrowsing: rows[0].safeBrowsing
         })
     )
-    .return(
+    .then( () =>
         pagesdb
           .db('pages')
           .where('pageUrl', pageUrl)
