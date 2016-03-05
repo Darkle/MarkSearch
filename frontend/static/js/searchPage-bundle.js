@@ -1419,6 +1419,11 @@ function queryServerAndRender() {
       return (0, _renderResults.renderResults)(_resultsObject.resultsObject.results.chunk_0, this.unencodedSearchTerms);
     }
   }).catch(function (err) {
+    var parsedresponseBody;
+    try {
+      parsedresponseBody = JSON.parse(err.response.body);
+    } catch (e) {}
+    (0, _updateResultsCountDiv.updateResultsCountDiv)(parsedresponseBody);
     console.error(err);
   });
 }
@@ -2125,13 +2130,23 @@ exports.updateResultsCountDiv = undefined;
 
 var _searchPage = require('./searchPage');
 
-function updateResultsCountDiv(resultsCount) {
-  _searchPage.resultsCountDiv$.text(resultsCount + ' Results').removeClass('visibilityHidden');
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function updateResultsCountDiv(resultsCountOrErrorMessage) {
+  var resultsCountText = resultsCountOrErrorMessage + ' Results';
+  if (_lodash2.default.isObject(resultsCountOrErrorMessage)) {
+    resultsCountText = _lodash2.default.get(resultsCountOrErrorMessage, 'searchError');
+  }
+  _searchPage.resultsCountDiv$.text(resultsCountText).removeClass('visibilityHidden');
 }
 
 exports.updateResultsCountDiv = updateResultsCountDiv;
 
-},{"./searchPage":19}],22:[function(require,module,exports){
+},{"./searchPage":19,"lodash":237}],22:[function(require,module,exports){
 (function (process){
 
 // Use the fastest possible means to execute a task in a future turn

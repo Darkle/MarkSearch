@@ -26,7 +26,15 @@ function queryServerAndRender(){
               return renderResults(resultsObject.results.chunk_0, this.unencodedSearchTerms)
             }
           })
-          .catch(err => {console.error(err)})
+          .catch(err => {
+            var parsedresponseBody
+            try {
+              parsedresponseBody = JSON.parse(err.response.body)
+            }
+            catch(e){}
+            updateResultsCountDiv(parsedresponseBody)
+            console.error(err)
+          })
 }
 /****
  * Exports

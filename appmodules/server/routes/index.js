@@ -4,6 +4,7 @@ var express = require('express')
 var requireDir = require('require-dir')
 
 var apiModules = requireDir('../api')
+var searchApi = require('../api/search/search')
 var scrapeAndAddPage = require('../api/scrape/scrapeAndAddPage')
 var appSettings = require('../../db/appSettings')
 
@@ -65,7 +66,7 @@ router.get('/settingsPage', (req, res, next) => {
  * the api from the frontend. (OWASP seems to recommend making them into POST so I guess do that)
  */
 router.post('/frontendapi/getall/', apiModules.getAllPages)
-router.post('/frontendapi/search/:searchTerms', apiModules.search)
+router.post('/frontendapi/search/:searchTerms', searchApi)
 router.post('/frontendapi/scrapeAndAdd/:pageUrl', scrapeAndAddPage)
 router.delete('/frontendapi/remove/:pageUrl', apiModules.deletePage)
 router.post('/frontendapi/settings/update/', apiModules.updateMarkSearchSettings)

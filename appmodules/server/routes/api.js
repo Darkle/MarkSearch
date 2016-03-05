@@ -6,10 +6,11 @@ var _ = require('lodash')
 
 var router = express.Router()
 var apiModules = requireDir('../api')
+var searchApi = require('../api/search/search')
 
 router.get('/get/:pageUrl', apiModules.getSinglePage)
 router.get('/getall/', apiModules.getAllPages)
-router.get('/search/:searchTerms', apiModules.search)
+router.get('/search/:searchTerms', searchApi)
 /****
  * /add/:pageUrl is used by the extensions as they send all the page data
  * and dont need to use scrapeAndAddPage
