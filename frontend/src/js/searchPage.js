@@ -10,6 +10,7 @@ import { checkIfTouchDevice } from './checkIfTouchDevice'
 import { initSearchPlaceholder } from './initSearchPlaceholder'
 import { tooltips } from './tooltips'
 import { dateFilterInit } from './dateFilter'
+import { parseLocationHash } from './parseLocationHash'
 
 import _ from 'lodash'
 
@@ -40,9 +41,12 @@ function searchPageInit(event){
   dateFilterInit()
 
   /****
-   * Display all bookmarks stored in MarkSearch on page load
+   * If there is a hash in the browser location, search using the hash details and
+   * scroll to the resultID in the hash.
+   *
+   * If there is no hash, display all bookmarks stored in MarkSearch on page load.
    */
-  queryServerAndRender()
+  queryServerAndRender(parseLocationHash())
       .then(() => {
         tooltips()
         /****

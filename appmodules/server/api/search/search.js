@@ -79,7 +79,7 @@ function search(req, res, next){
   /****
    * Examples of the SQL statements created in search.js: http://bit.ly/1TxvdZa
    */
-  console.log(knexSQL.toString())
+  //console.log(knexSQL.toString())
 
   knexSQL
     .then( rows => {

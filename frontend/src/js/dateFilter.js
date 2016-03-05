@@ -231,7 +231,7 @@ function dateFilterInit(){
   /****
    * 2016 - year MarkSearch was released, so don't need any earlier
    */
-  var msReleaseDate = 2010
+  var msReleaseDate = 2016
   var numYearsToInclude = (currentYear - msReleaseDate) + 1
 
   _.times(numYearsToInclude, index => {

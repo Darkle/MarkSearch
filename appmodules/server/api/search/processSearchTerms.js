@@ -70,8 +70,9 @@ function processSearchTerms(searchTerms){
            *
            * match regex from: http://stackoverflow.com/a/147667/3458681
            */
-          if(!/^\|?".+"$/.test(searchTerm)){
-            var searchTermIsinsideQuotes = false
+          var searchTermItselfIsEnclosedInQuotes = /^\|?".+"$/.test(searchTerm)
+          if(!searchTermItselfIsEnclosedInQuotes){
+            var searchTermIsInsideLargerQuotedPhrase = false
             var matchQuotes = lowercaseSearchTerms.match(/[^"]+(?=(" ")|"$)/g)
             console.log(`matchQuotes`)
             console.log(matchQuotes)
@@ -83,9 +84,9 @@ function processSearchTerms(searchTerms){
                * we captured with match.
                */
               var searchTermSansTrailingQuote = searchTerm.split('"')[0]
-              searchTermIsinsideQuotes = matchQuotes.some(val => val.indexOf(searchTermSansTrailingQuote) > -1)
+              searchTermIsInsideLargerQuotedPhrase = matchQuotes.some(val => val.indexOf(searchTermSansTrailingQuote) > -1)
             }
-            if(!searchTermIsinsideQuotes){
+            if(!searchTermIsInsideLargerQuotedPhrase){
               /****
                * If it's not quoted and has a pipe preceding it, then remove pipe,
                * add quotes and add pipe back for the pipe check and add OR below.
@@ -104,7 +105,7 @@ function processSearchTerms(searchTerms){
        * Use 'if{}' instead of 'else if{}' as there may be a word
        * that has a hyphen in it that they also preface with
        * pipe - another if here will let it be quoted in previous if statment
-       * and then add OR here.
+       * and so we can then add an OR to it here.
        */
       if(pipeIndex === 0){
         searchTerm = `OR ${searchTerm.slice(pipeIndex + 1)}`
