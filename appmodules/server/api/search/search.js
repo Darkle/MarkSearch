@@ -70,9 +70,8 @@ function search(req, res, next){
      * and pageDescription a boost of 2.
      * Note: the SQL operators in the 'searchTerm OR NEAR()` are case-sensitive
      * and must be in uppercase!
-     * The final SQL statement should be similar to this:
-     * select "rank", "pageUrl", "dateCreated", "pageDomain", "pageTitle", "pageText", "pageDescription", "archiveLink", "safeBrowsing", snippet(fts, -1, '<span class="searchHighlight">',
-     '</span>', '...', 64) as snippet from "fts" where fts match 'foo bar' order by bm25(fts, 4.0, 1.0, 2.0)
+     * The final SQL statement should be something like this:
+     * select "rank", "pageUrl", "dateCreated", "pageDomain", "pageTitle", "pageText", "pageDescription", "archiveLink", "safeBrowsing", snippet(fts, -1, '<span class="searchHighlight">', '</span>', '...', 64) as snippet from "fts" where fts match 'foo bar' order by bm25(fts, 4.0, 1.0, 2.0)
      */
     knexSQL = knexSQL
       //.whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${searchTerms}" OR NEAR(${searchTerms})`)
