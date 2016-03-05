@@ -70,13 +70,16 @@ function search(req, res, next){
      * and pageDescription a boost of 2.
      * Note: the SQL operators in the 'searchTerm OR NEAR()` are case-sensitive
      * and must be in uppercase!
-     * The final SQL statement (when searching with search terms) should be
-     * something like this: http://bit.ly/1TxvdZa
      */
     knexSQL = knexSQL
       //.whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${searchTerms}" OR NEAR(${searchTerms})`)
       .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `${searchTerms}`)
   }
+
+  /****
+   * Examples of the SQL statements created in search.js: http://bit.ly/1TxvdZa
+   */
+  console.log(knexSQL.toString())
 
   knexSQL
     .then( rows => {
