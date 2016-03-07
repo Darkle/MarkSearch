@@ -1,5 +1,7 @@
 extends layout
+block vars
+  - var bodyClass = 'errorPage';
 block content
-  h1 Error
-  p #{message}
-  p #{error}
+  .errorContainer
+    p Error: #{message}
+    i.material-icons priority_high

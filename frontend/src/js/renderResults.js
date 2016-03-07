@@ -2,7 +2,6 @@
 
 import { resultsContainer$ } from './searchPage'
 import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEventHandlers'
-import { generateSearchClipAndHighlight } from './generateSearchClipAndHighlight'
 import { updateChunkShownValue } from './resultsObject'
 var STOPWORDS = require('../../../appmodules/server/lunrStopwordFilter.json')
 
@@ -21,11 +20,8 @@ function renderResults(resultsChunk, searchTerms){
       updateChunkShownValue(resultsChunk.chunkIndex, true)
       /****
        * 200 items in each chunk
-       * id: `result_${resultID}` is for browser extension, so
-       * they can link to a particular result in the MarkSearch results page
-       * (Results are in chunks of 200)
        */
-      var resultID = resultsChunk.chunkIndex * 200
+      var resultItemNumber = resultsChunk.chunkIndex * 200
       /****
        * Not using jQuery here so can more carefully manage the element references and event listener
        * functions myself to make sure we dont get memory leaks when removing the results elements and
@@ -49,19 +45,19 @@ function renderResults(resultsChunk, searchTerms){
         addRemoveDiv = document.getElementById('addRemoveDiv')
       }
       _.each(resultsChunk.resultRows, row => {
-        resultID++
+        resultItemNumber++
         /****
          * prebrowsing for the first 2 results (if set in settings).
          * Preconnect for the first and dns-prefetch for the second.
          * These are removed when results are removed in removeResults.js
          */
         if(markSearchSettings.prebrowsing){
-          if(resultID < 3){
+          if(resultItemNumber < 3){
             var rel
-            if(resultID === 1){
+            if(resultItemNumber === 1){
               rel = 'preconnect'
             }
-            else if(resultID === 2){
+            else if(resultItemNumber === 2){
               rel = 'dns-prefetch'
             }
             var link = document.createElement('link')
@@ -73,7 +69,7 @@ function renderResults(resultsChunk, searchTerms){
         }
 
         var resultDiv = document.createElement('div')
-        resultDiv.setAttribute('id', `result_${resultID}`)
+        resultDiv.setAttribute('id', `result_${resultItemNumber}`)
         resultDiv.className = 'result'
         addRemoveDiv.appendChild(resultDiv)
 

@@ -6,38 +6,16 @@ import { renderResults } from './renderResults'
 import { removeResults } from './removeResults'
 import { getSearchTextAndDateFilterParams } from './getSearchTextAndDateFilterParams'
 import { updateResultsCountDiv } from './updateResultsCountDiv'
-import { setSearchBoxAndOpenDateFilter } from './setSearchBoxAndOpenDateFilter'
 
-import _ from 'lodash'
-
-function queryServerAndRender(locationHashData){
+function queryServerAndRender(){
   removeResults()
-
-  var searchTerms
-  var dateFilter
-  var unencodedSearchTerms
-  var resultId
-
-  if(locationHashData){
-    searchTerms = _.get(locationHashData, 'searchTerms', null)
-    dateFilter = _.get(locationHashData, 'dateFilter', null)
-    unencodedSearchTerms = _.get(locationHashData, 'unencodedSearchTerms', null)
-    resultId = _.get(locationHashData, 'resultId', null)
-    setSearchBoxAndOpenDateFilter(dateFilter, unencodedSearchTerms)
-  }
-  else{
-    var searchTextAndDateFilterParams = getSearchTextAndDateFilterParams()
-    searchTerms = _.get(searchTextAndDateFilterParams, 'searchTerms', null)
-    dateFilter = _.get(searchTextAndDateFilterParams, 'dateFilter', null)
-    unencodedSearchTerms = _.get(searchTextAndDateFilterParams, 'unencodedSearchTerms', null)
-  }
-
+  var {searchTerms, dateFilter, unencodedSearchTerms} = getSearchTextAndDateFilterParams()
   return queryServer(searchTerms, dateFilter)
           /****
-           * Bind unencodedSearchTerms & resultId in case queryServerAndRender gets called
+           * Bind unencodedSearchTerms in case queryServerAndRender gets called
            * again before queryServer finishes.
            */
-          .bind({unencodedSearchTerms, resultId})
+          .bind({unencodedSearchTerms})
           .then(function(rows){
             var rowsLength = rows.length
             updateResultsCountDiv(rowsLength)
@@ -47,7 +25,6 @@ function queryServerAndRender(locationHashData){
             if(rowsLength){
               return renderResults(resultsObject.results.chunk_0, this.unencodedSearchTerms)
             }
-            return this.resultId
           })
           .catch(err => {
             var parsedresponseBody

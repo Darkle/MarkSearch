@@ -26,7 +26,23 @@ block content
               img(src="images/clippy.svg", alt="Copy to clipboard")
         .settingDetail.
           This token is used in the MarkSearch browser extension. More info info
-          is available on the <a href="/help#browserAddon">HelpPage</a>
+          is available on the <a href="/helpPage#browserAddon">HelpPage</a>
+      .bookmarkletContainer
+        .genTokenContainer
+          a#bookmarkletButton.button.black.square(href="#") Generate Bookmarklet
+          .formplate
+            input#bookmarkletText.square(type="text", name="bookmarkletText")
+            a.clipBoardButton.button.square(data-clipboard-target="#bookmarkletText")
+              img(src="images/clippy.svg", alt="Copy to clipboard")
+        .genTokenContainer
+          a#emailBookmarkletButton.button.black.square(href="#") Email Bookmarklet
+          .formplate
+            input#bookmarkletEmail.square(type="text", name="bookmarkletEmail")
+        .settingDetail.
+          You can use the bookmarklet to save pages from browsers that cant run extensions (e.g. mobile
+          browsers). You can either generate the bookmarklet text and copy & paste, or you can have the
+          bookmarklet emailed to you. More info info
+          is available on the <a href="/helpPage#bookmarklet">Help & About Page</a>
       .dbLocationContainer
         .currentLocation
           span Current Database Location:
@@ -54,13 +70,3 @@ block content
     var markSearchSettings = !{markSearchSettings}
   script(src='/js/settingsPage-bundle.js')
 
-//.bookmarkletContainer
-//  .genTokenContainer
-//    a#bookmarkletButton.button.black.square(href="#") Generate Bookmarklet
-//    .formplate
-//      input#bookmarkletText.square(type="text", name="bookmarkletText")
-//      a.clipBoardButton.button.square(data-clipboard-target="#bookmarkletText")
-//        img(src="images/clippy.svg", alt="Copy to clipboard")
-//  .settingDetail.
-//    This javascript is used in the MarkSearch bookmarklet. More info info
-//    is available on the <a href="/help_about#bookmarklet">Help & About Page</a>

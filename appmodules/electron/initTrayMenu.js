@@ -13,6 +13,7 @@ var settingsWindow = null
 var helpWindow = null
 var aboutWindow = null
 var appTrayMenu = null
+var devMode = process.env.NODE_ENV === 'development'
 
 function trayMenu(){
   var BrowserWindow = electron.BrowserWindow
@@ -28,6 +29,10 @@ function trayMenu(){
         }
         else{
           var windowSize = checkScreenSize()
+          if(devMode){
+            windowSize.width = 1050
+            windowSize.height = 1200
+          }
 
           settingsWindow = new BrowserWindow(
               {
@@ -41,7 +46,7 @@ function trayMenu(){
           )
           //TODO - get address dynamically
           settingsWindow.loadURL(`http://localhost:3020/settingsPage`)
-          if(process.env.NODE_ENV === 'development'){
+          if(devMode){
             settingsWindow.openDevTools()
           }
 
@@ -72,7 +77,7 @@ function trayMenu(){
           )
 
           helpWindow.loadURL(`http://localhost:3020/help`)
-          if(process.env.NODE_ENV === 'development'){
+          if(devMode){
             helpWindow.openDevTools()
           }
 
@@ -102,7 +107,7 @@ function trayMenu(){
               }
           )
           aboutWindow.loadURL(`http://localhost:3020/about`)
-          if(process.env.NODE_ENV === 'development'){
+          if(devMode){
             aboutWindow.openDevTools()
           }
 

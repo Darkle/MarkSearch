@@ -10,7 +10,6 @@ import { checkIfTouchDevice } from './checkIfTouchDevice'
 import { initSearchPlaceholder } from './initSearchPlaceholder'
 import { tooltips } from './tooltips'
 import { dateFilterInit } from './dateFilter'
-import { parseLocationHash } from './parseLocationHash'
 
 import _ from 'lodash'
 
@@ -41,12 +40,9 @@ function searchPageInit(event){
   dateFilterInit()
 
   /****
-   * If there is a hash in the browser location, search using the hash details and
-   * scroll to the resultID in the hash.
-   *
-   * If there is no hash, display all bookmarks stored in MarkSearch on page load.
+   * Display all bookmarks stored in MarkSearch on page load
    */
-  queryServerAndRender(parseLocationHash())
+  queryServerAndRender()
       .then(() => {
         tooltips()
         /****
@@ -54,32 +50,8 @@ function searchPageInit(event){
          */
         $(window).on('scroll touchmove', initInfiniteScroll)
       })
-      .then(() => {
-        //TODO - need to fix this with the hash stuff
-        /****
-         * For when the user has loaded the MarkSearch search page
-         * via clicking on the results "more" link/button in the
-         * browser extension, we want the browser to go to the next set
-         * (chunk) of results by using the hash fragment identifier. The results
-         * aren't there on page load so we miss the browsers opportunity
-         * to scroll to the element with the fragment id, so we have to
-         * force the browser to do it again after the results are loaded in
-         * the DOM
-         * Need to change the result number slightly becuase the browser doesnt
-         * take into account the nav/header on the MarkSearch search page which
-         * is posistion:fixed and obscures the results at the top of the window,
-         * so scroll to the previous result
-         */
-        var urlHash = window.location.hash
-        if(urlHash.indexOf('#result_') > -1){
-          var resultNumberLookingFor = Number(urlHash.split('#result_')[1])
-          if(!_.isNaN(resultNumberLookingFor) && resultNumberLookingFor > 1){
-            resultNumberLookingFor--
-            window.location.hash = `#result_${resultNumberLookingFor}`
-          }
-        }
-      })
       .catch(err => {console.error(err)})
+
   /****
    * Search
    */
@@ -145,21 +117,23 @@ function searchPageInit(event){
   /****
    * Doing hover this way cause of this: http://stackoverflow.com/questions/17233804/
    */
-  $('#dateFilterButton, #addPageButton, #settingsButton').hover(
+  $('#dateFilterButton, #addPageButton, #settingsButton')
+    .hover(
       (event) => {
         $(event.currentTarget.firstElementChild).addClass('navBar-materialIcon-hover')
       },
       (event) => {
         $(event.currentTarget.firstElementChild).removeClass('navBar-materialIcon-hover')
       }
-  ).on('touchend',
+    )
+    .on('touchend',
       (event) => {
         $(event.currentTarget.firstElementChild).removeClass('navBar-materialIcon-hover')
       }
-  )
+    )
 
   addUrlsInit()
-  //settingsSubbarInit()
+  
 }
 /****
  * Exports

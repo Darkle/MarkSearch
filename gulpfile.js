@@ -38,7 +38,7 @@ gulp.task('nodemon', cb => {
     script: 'appInit.js',
     watch: [
       'appInit.js',
-      path.join('appmodules', '**', '*.*')
+      path.join(__dirname, 'appmodules', '**', '*.*')
     ],
     env: env,
     execMap: {
@@ -46,7 +46,8 @@ gulp.task('nodemon', cb => {
     },
     ignore: [
       path.join(__dirname, 'frontend', 'static', '**', '*.*'),
-      path.join(__dirname, 'frontend', 'src', '**', '*.*')
+      path.join(__dirname, 'frontend', 'src', '**', '*.*'),
+      path.join(__dirname, 'appmodules', 'server', 'views', '*.jade')
     ]
   }).once('start', cb)
 })

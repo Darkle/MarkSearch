@@ -27,8 +27,8 @@ router.get('/', (req, res, next) => {
 })
 
 /* GET about page. */
-router.get('/about', (req, res, next) => {
-  res.render('about',
+router.get('/aboutPage', (req, res, next) => {
+  res.render('aboutPage',
       {
         title: 'MarkSearch About'
       }
@@ -36,8 +36,8 @@ router.get('/about', (req, res, next) => {
 })
 
 /* GET help page. */
-router.get('/help', (req, res, next) => {
-  res.render('help',
+router.get('/helpPage', (req, res, next) => {
+  res.render('helpPage',
       {
         title: 'MarkSearch Help'
       }
@@ -53,6 +53,7 @@ router.get('/settingsPage', (req, res, next) => {
         markSearchSettings: JSON.stringify(
             {
               prebrowsing: Boolean(appSettings.settings.prebrowsing),
+              pagesDBFilePath: JSON.stringify(appSettings.settings.pagesDBFilePath),
               alwaysDisableTooltips: Boolean(appSettings.settings.alwaysDisableTooltips)
             }
         )
@@ -72,6 +73,7 @@ router.delete('/frontendapi/remove/:pageUrl', apiModules.deletePage)
 router.post('/frontendapi/settings/update/', apiModules.updateMarkSearchSettings)
 router.post('/frontendapi/settings/changePagesDBlocation/', apiModules.changePagesDBlocation)
 router.post('/frontendapi/settings/generateExtToken/', apiModules.generateExtToken)
+router.post('/frontendapi/settings/emailBookmarklet/', apiModules.emailBookmarklet)
 
 
 module.exports = router

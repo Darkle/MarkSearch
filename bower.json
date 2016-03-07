@@ -24,7 +24,7 @@
     "Formplate": "formplate#~2.0.2",
     "modernizer": "~2.8.2",
     "jquery": "~2.2.0",
-    "buttonplate": "~2.0.3",
-    "clipboard": "~1.5.5"
+    "clipboard": "~1.5.5",
+    "buttonplate": "~2.0.3"
   }
 }

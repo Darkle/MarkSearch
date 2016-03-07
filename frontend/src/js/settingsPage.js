@@ -34,6 +34,7 @@ $(document).ready(settingsPageInit)
 function settingsPageInit(event){
   console.log( "settingsPage.js ready!" )
   csrfToken = $('#csrfInput').val()
+  $('.brandLogo').removeAttr()
   formplate($('body'))
   buttonplate($('.button'))
   new Clipboard('.clipBoardButton')
@@ -48,6 +49,8 @@ function settingsPageInit(event){
   var browserAddonTokenButton$ = $('#browserAddonTokenButton')
   var browserAddonTokenText$ = $('#browserAddonTokenText')
   var bookmarkletButton$ = $('#bookmarkletButton')
+  var emailBookmarkletButton$ = $('#emailBookmarkletButton')
+  var bookmarkletEmail$ = $('#bookmarkletEmail')
   var bookmarkletText$ = $('#bookmarkletText')
   var dbLocationText$ = $('.dbLocationContainer .locationText')
   //var dragAndDropDiv$ = $('#dragAndDrop')
@@ -73,7 +76,7 @@ function settingsPageInit(event){
    */
   browserAddonTokenButton$.click( event => {
     event.preventDefault()
-    got.post('/settings/generateJWTExtensionToken',
+    got.post('/frontendapi/settings/generateExtToken',
         {
           headers: {
             'X-CSRF-Token': csrfToken
@@ -109,28 +112,61 @@ function settingsPageInit(event){
     }
   })
 
-
   /****
    * Generate bookmarklet
    */
-  //bookmarkletButton$.click( event => {
-  //  event.preventDefault()
-  //  got.post('/settings/generateJWTBookmarkletToken',
-  //      {
-  //        headers: {
-  //          'X-CSRF-Token': csrfToken
-  //        },
-  //          tokenType : 'Bookmarklet'
-  //      }
-  //      )
-  //      .then( response => {
-  //        var responseData = JSON.parse(response.body)
-  //        var bookmarkletJS = generateBookmarkletJS(locationHostAndProtocol, responseData.token)
-  //        bookmarkletText$.val(`javascript:${encodeURIComponent(bookmarkletJS)}`)
-  //      })
-  //      .catch( err => {
-  //        console.error(err)
-  //      })
-  //})
+  bookmarkletButton$.click( event => {
+    event.preventDefault()
+    got.post('/frontendapi/settings/generateExtToken',
+        {
+          headers: {
+            'X-CSRF-Token': csrfToken
+          },
+            tokenType : 'Bookmarklet'
+        }
+        )
+        .then( response => {
+          var responseData = JSON.parse(response.body)
+          var bookmarkletJS = generateBookmarkletJS(locationHostAndProtocol, responseData.token)
+          bookmarkletText$.val(`javascript:${encodeURIComponent(bookmarkletJS)}`)
+        })
+        .catch( err => {
+          console.error(err)
+        })
+  })
+  /****
+   * Email bookmarklet
+   */
+  emailBookmarkletButton$.click( event => {
+    event.preventDefault()
+
+    got.post('/frontendapi/settings/generateExtToken',
+        {
+          headers: {
+            'X-CSRF-Token': csrfToken
+          }
+        }
+        )
+        .then( response => {
+          var responseData = JSON.parse(response.body)
+          var bookmarkletJS = generateBookmarkletJS(locationHostAndProtocol, responseData.token)
+          var generatedBookmarkletText = `javascript:${encodeURIComponent(bookmarkletJS)}`
+          var bookmarkletEmail = bookmarkletEmail$.val()
+          return got.post('/frontendapi/settings/emailBookmarklet',
+                  {
+                    headers: {
+                      'X-CSRF-Token': csrfToken
+                    },
+                    body: {
+                      email: JSON.stringify(bookmarkletEmail),
+                      bookmarkletText: generatedBookmarkletText
+                    }
+                  }
+                )
+        })
+        .catch( err => {
+          console.error(err)
+        })
+  })
 
 }
