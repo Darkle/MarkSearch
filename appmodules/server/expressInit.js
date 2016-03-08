@@ -11,7 +11,7 @@ var csurf = require('csurf')
 var expressValidator = require('express-validator')
 var compression = require('compression')
 
-var authenticationCheck = require('./authenticationCheck')
+var authorizationCheck = require('./authorizationCheck')
 var expressErrorMiddleware = require('./expressErrorMiddleware')
 var paramsPageUrlToLowercase = require('./paramsPageUrlToLowerCase')
 var routes = require('./routes/index')
@@ -42,7 +42,7 @@ function expressInit(expressApp, serverPort){
   /****
    * Routes
    */
-  expressApp.use('/api', authenticationCheck, api)
+  expressApp.use('/api', authorizationCheck, api)
   //expressApp.use('/api', api)
   expressApp.use('/', csurf({ cookie: true, httpOnly: true }), routes)
   //expressApp.use('/', routes)

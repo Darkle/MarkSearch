@@ -4,7 +4,7 @@ var jwt = require('jsonwebtoken')
 
 var appSettings = require('../db/appSettings')
 
-function authenticationCheck(req, res, next){
+function authorizationCheck(req, res, next){
   var token = req.get('Authorization') || req.body.JWT
   if(!token){
     console.log('Request missing Authorization Header or JWT post body data.')
@@ -26,4 +26,4 @@ function authenticationCheck(req, res, next){
   })
 }
 
-module.exports = authenticationCheck
+module.exports = authorizationCheck
