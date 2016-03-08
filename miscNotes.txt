@@ -1,1 +1,9 @@
-* note: knex relies on sqlite3 so must install & build sqlite3 node module before install knex
+* knex relies on sqlite3 so must install & build sqlite3 node module before install knex
+* When setting up dev on another mac, for some reason the sqlite3 binaries i have in repo
+    arent working for compiling sqlite3 node module against them (fts5 module not found)
+    so seem to need to build sqlite3 on new mac and then pass that into npm sqlite build.
+    So make sure hombrew has the version we want, then do:
+    `brew install sqlite3 --with-fts5`,
+     then build sqlite3 node module using:
+    `npm install sqlite3 --save --build-from-source --sqlite=/usr/local/Cellar/sqlite/versionWeAreUsing`
+

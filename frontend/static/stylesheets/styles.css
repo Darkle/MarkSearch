@@ -73,6 +73,9 @@ body {
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
+  margin: 0;
+  /*TIL browsers add default margins to body*/
+  padding: 0;
 }
 /****
   Utilities
