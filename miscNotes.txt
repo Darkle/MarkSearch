@@ -1,0 +1,1 @@
+* note: knex relies on sqlite3 so must install & build sqlite3 node module before install knex
