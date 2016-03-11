@@ -8,6 +8,28 @@ import got from 'got'
 import notie from 'notie'
 import _ from 'lodash'
 
+function showNotie(notieElement, classToAdd, alertType, alertMessage, duration){
+  notieElement.removeClass('notie-alert-success notie-alert-error')
+  notieElement.addClass(classToAdd)
+  notie.alert(alertType, alertMessage, duration)
+}
+
+function getErrorMessage(err){
+  var errorMessage = _.get(err, 'message')
+  var responseBody = _.trim(_.get(err, 'response.body'))
+  var parsedResponseBody
+  if(responseBody.length){
+    try{
+      parsedResponseBody = JSON.parse(responseBody)
+    }
+    catch(e){}
+  }
+  if(_.get(parsedResponseBody, 'errorMessage')){
+    errorMessage = parsedResponseBody.errorMessage
+  }
+  return errorMessage
+}
+
 $(document).ready(settingsPageInit)
 
 function settingsPageInit(event){
@@ -76,6 +98,15 @@ function settingsPageInit(event){
       })
       .catch( err => {
         console.error(err)
+        var errorMessage = getErrorMessage(err)
+        showNotie(
+          notieAlert$,
+          'notie-alert-error',
+          3,
+          `There Was An Error Generating The Browser Extension Token.
+           Error: ${errorMessage}`,
+          6
+        )
       })
   })
 
@@ -92,6 +123,15 @@ function settingsPageInit(event){
       })
       .catch( err => {
         console.error(err)
+        var errorMessage = getErrorMessage(err)
+        showNotie(
+          notieAlert$,
+          'notie-alert-error',
+          3,
+          `There Was An Error Generating The Bookmarklet.
+           Error: ${errorMessage}`,
+          6
+        )
       })
   })
   /****
@@ -117,18 +157,23 @@ function settingsPageInit(event){
               )
       })
       .then(response => {
-        notieAlert$.removeClass('notie-alert-success notie-alert-error')
-        notieAlert$.addClass('notie-alert-success')
-        notie.alert(1, 'Email Sent. (check your spam folder)', 5)
+        showNotie(
+          notieAlert$,
+          'notie-alert-success',
+          1,
+          'Email Sent. (check your spam folder)',
+          5
+        )
       })
       .catch( err => {
         console.error(err)
-        notieAlert$.removeClass('notie-alert-success notie-alert-error')
-        notieAlert$.addClass('notie-alert-error')
-        notie.alert(
+        var errorMessage = getErrorMessage(err)
+        showNotie(
+          notieAlert$,
+          'notie-alert-error',
           3,
           `There Was An Error Sending The Email.
-          Error: ${JSON.parse(_.get(err, 'response.body'))}`,
+           Error: ${errorMessage}`,
           6
         )
       })
@@ -171,6 +216,9 @@ function settingsPageInit(event){
     }
   })
 
+  /****
+   * Save Settings
+   */
   saveSettingsButtonButton$.click( event => {
     event.preventDefault()
     var possibleDBchangePromise = Promise.resolve()
@@ -209,24 +257,20 @@ function settingsPageInit(event){
         )
       )
       .then( response => {
-        notieAlert$.removeClass('notie-alert-success notie-alert-error')
-        notieAlert$.addClass('notie-alert-success')
-        notie.alert(1, 'Settings Saved', 3.4)
+        showNotie(
+          notieAlert$,
+          'notie-alert-success',
+          1,
+          'Settings Saved',
+          3
+        )
       })
       .catch( err => {
         console.error(err)
-        notieAlert$.removeClass('notie-alert-success notie-alert-error')
-        notieAlert$.addClass('notie-alert-error')
-        var errorMessage = _.get(err, 'message')
-        var responseBody = _.trim(_.get(err, 'response.body'))
-        var parsedResponseBody
-        if(responseBody.length){
-          parsedResponseBody = JSON.parse(responseBody)
-        }
-        if(_.get(parsedResponseBody, 'errorMessage')){
-          errorMessage = parsedResponseBody.errorMessage
-        }
-        notie.alert(
+        var errorMessage = getErrorMessage(err)
+        showNotie(
+          notieAlert$,
+          'notie-alert-error',
           3,
           `There Was An Error Saving The Settings.
           Error: ${errorMessage}`,

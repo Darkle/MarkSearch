@@ -37,7 +37,11 @@ function emailBookmarklet(req, res, next){
   })
   .catch(err => {
     console.error(err)
-    res.status(500).json(JSON.stringify(err.message))
+    res.status(500).json(
+      {
+        errorMessage: JSON.stringify(err.message)
+      }
+    )
   })
 }
 

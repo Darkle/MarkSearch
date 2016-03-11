@@ -114,6 +114,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 //needs to be first
 
+function showNotie(notieElement, classToAdd, alertType, alertMessage, duration) {
+  notieElement.removeClass('notie-alert-success notie-alert-error');
+  notieElement.addClass(classToAdd);
+  _notie2.default.alert(alertType, alertMessage, duration);
+}
+
+function getErrorMessage(err) {
+  var errorMessage = _lodash2.default.get(err, 'message');
+  var responseBody = _lodash2.default.trim(_lodash2.default.get(err, 'response.body'));
+  var parsedResponseBody;
+  if (responseBody.length) {
+    try {
+      parsedResponseBody = JSON.parse(responseBody);
+    } catch (e) {}
+  }
+  if (_lodash2.default.get(parsedResponseBody, 'errorMessage')) {
+    errorMessage = parsedResponseBody.errorMessage;
+  }
+  return errorMessage;
+}
+
 $(document).ready(settingsPageInit);
 
 function settingsPageInit(event) {
@@ -178,6 +199,8 @@ function settingsPageInit(event) {
       browserAddonTokenText$.val(responseData.protocolIpandPort + ',' + responseData.token);
     }).catch(function (err) {
       console.error(err);
+      var errorMessage = getErrorMessage(err);
+      showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Generating The Browser Extension Token.\n           Error: ' + errorMessage, 6);
     });
   });
 
@@ -192,6 +215,8 @@ function settingsPageInit(event) {
       bookmarkletText$.val('javascript:' + encodeURIComponent(bookmarkletJS));
     }).catch(function (err) {
       console.error(err);
+      var errorMessage = getErrorMessage(err);
+      showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Generating The Bookmarklet.\n           Error: ' + errorMessage, 6);
     });
   });
   /****
@@ -213,14 +238,11 @@ function settingsPageInit(event) {
         }
       });
     }).then(function (response) {
-      notieAlert$.removeClass('notie-alert-success notie-alert-error');
-      notieAlert$.addClass('notie-alert-success');
-      _notie2.default.alert(1, 'Email Sent. (check your spam folder)', 5);
+      showNotie(notieAlert$, 'notie-alert-success', 1, 'Email Sent. (check your spam folder)', 5);
     }).catch(function (err) {
       console.error(err);
-      notieAlert$.removeClass('notie-alert-success notie-alert-error');
-      notieAlert$.addClass('notie-alert-error');
-      _notie2.default.alert(3, 'There Was An Error Sending The Email.\n          Error: ' + JSON.parse(_lodash2.default.get(err, 'response.body')), 6);
+      var errorMessage = getErrorMessage(err);
+      showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Sending The Email.\n           Error: ' + errorMessage, 6);
     });
   });
 
@@ -260,6 +282,9 @@ function settingsPageInit(event) {
     }
   });
 
+  /****
+   * Save Settings
+   */
   saveSettingsButtonButton$.click(function (event) {
     event.preventDefault();
     var possibleDBchangePromise = Promise.resolve();
@@ -292,23 +317,11 @@ function settingsPageInit(event) {
         body: settings
       });
     }).then(function (response) {
-      notieAlert$.removeClass('notie-alert-success notie-alert-error');
-      notieAlert$.addClass('notie-alert-success');
-      _notie2.default.alert(1, 'Settings Saved', 3.4);
+      showNotie(notieAlert$, 'notie-alert-success', 1, 'Settings Saved', 3);
     }).catch(function (err) {
       console.error(err);
-      notieAlert$.removeClass('notie-alert-success notie-alert-error');
-      notieAlert$.addClass('notie-alert-error');
-      var errorMessage = _lodash2.default.get(err, 'message');
-      var responseBody = _lodash2.default.trim(_lodash2.default.get(err, 'response.body'));
-      var parsedResponseBody;
-      if (responseBody.length) {
-        parsedResponseBody = JSON.parse(responseBody);
-      }
-      if (_lodash2.default.get(parsedResponseBody, 'errorMessage')) {
-        errorMessage = parsedResponseBody.errorMessage;
-      }
-      _notie2.default.alert(3, 'There Was An Error Saving The Settings.\n          Error: ' + errorMessage, 6);
+      var errorMessage = getErrorMessage(err);
+      showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Saving The Settings.\n          Error: ' + errorMessage, 6);
     });
   });
 
