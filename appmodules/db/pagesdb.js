@@ -229,6 +229,8 @@ pagesdb.insertRow = rowData =>
    * rowid is needed for the fts insert and below for the
    * 'delete' insert - the rowid's need to match up with their
    * pages table rowid counterpart.
+   * note: we never call insertRow directly, only via upsertRow,
+   * so leave the validation to upsertRow.
    */
    pagesdb
     .db('pages')
@@ -268,46 +270,53 @@ pagesdb.insertRow = rowData =>
     )
 
 
-pagesdb.deleteRow = pageUrl =>
-/****
- * Gotta do the fts delete first as it relies on the rowid from the pages table.
- */
-  pagesdb
-    .db
-    .select(
-      'rowid',
-      'pageUrl',
-      'dateCreated',
-      'pageDomain',
-      'pageTitle',
-      'pageText',
-      'pageDescription',
-      'archiveLink',
-      'safeBrowsing'
-    )
-    .from('pages')
-    .where('pageUrl', pageUrl)
-    .then(rows =>
-       pagesdb
-        .db('fts')
-        .insert({
-          fts: 'delete',
-          rowid: rows[0].rowid,
-          pageUrl: rows[0].pageUrl,
-          dateCreated: rows[0].dateCreated,
-          pageDomain: rows[0].pageDomain,
-          pageTitle: rows[0].pageTitle,
-          pageText: rows[0].pageText,
-          pageDescription: rows[0].pageDescription,
-          archiveLink: rows[0].archiveLink,
-          safeBrowsing: rows[0].safeBrowsing
-        })
-    )
-    .then(() =>
+pagesdb.deleteRow = pageUrl => {
+  if(!_.isString(pageUrl)){
+    return Promise.reject(`pageUrl passed to pagesdb.deleteRow was not a string`)
+  }
+  else{
+    /****
+     * note: gotta do the fts delete first as it relies on the rowid from the pages table.
+     */
+    return pagesdb
+      .db
+      .select(
+        'rowid',
+        'pageUrl',
+        'dateCreated',
+        'pageDomain',
+        'pageTitle',
+        'pageText',
+        'pageDescription',
+        'archiveLink',
+        'safeBrowsing'
+      )
+      .from('pages')
+      .where('pageUrl', pageUrl)
+      .then(rows =>
+        pagesdb
+          .db('fts')
+          .insert({
+            fts: 'delete',
+            rowid: rows[0].rowid,
+            pageUrl: rows[0].pageUrl,
+            dateCreated: rows[0].dateCreated,
+            pageDomain: rows[0].pageDomain,
+            pageTitle: rows[0].pageTitle,
+            pageText: rows[0].pageText,
+            pageDescription: rows[0].pageDescription,
+            archiveLink: rows[0].archiveLink,
+            safeBrowsing: rows[0].safeBrowsing
+          })
+      )
+      .then(() =>
         pagesdb
           .db('pages')
           .where('pageUrl', pageUrl)
           .del()
-    )
+      )
+  }
+
+}
 
 module.exports = pagesdb

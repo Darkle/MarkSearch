@@ -1,0 +1,9 @@
+extends layout
+block vars
+  - var bodyClass = 'bookmarkletPage';
+block content
+  #bookmarkletPageContainer
+    //a(href=#{bookmarkletHref})
+    p Bookmark the link below
+    a(href=bookmarkletHref) Save To MarkSearch
+

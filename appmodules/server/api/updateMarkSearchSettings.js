@@ -6,27 +6,23 @@ var appSettings = require('../../db/appSettings')
 
 function updateMarkSearchSettings(req, res, next){
 
-  //console.log(req.body)
+  console.log('updateMarkSearchSettings')
+  console.log(req.body)
 
   //TODO - validate req.body
   var reqBody = req.body
-  var settingsObj = _.mapValues(reqBody, val => {
-    if(val === 'false'){
-      val = false
-    }
-    if(val === 'true'){
-      val = true
-    }
-    return val
-  })
-  appSettings.update(settingsObj)
-      .then( () => {
-        res.status(200).end()
-      })
-      .catch( err => {
-        console.error(err)
-        res.status(500).send(JSON.stringify(err.message))
-      })
+  appSettings.update(reqBody)
+    .then( () => {
+      res.status(200).end()
+    })
+    .catch( err => {
+      console.error(err)
+      var errorMessage = err
+      if(!_.isString(errorMessage)){
+        errorMessage = JSON.stringify(err.message)
+      }
+      res.status(500).json({errorMessage: errorMessage})
+    })
 
 }
 

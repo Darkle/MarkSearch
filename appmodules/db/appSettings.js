@@ -30,6 +30,19 @@ var appSettingsValidation = {
     }
   }
 }
+
+function coerceIncomingSettingsData(dataObj){
+  return _.mapValues(dataObj, val => {
+    if(val === 'false'){
+      val = false
+    }
+    if(val === 'true'){
+      val = true
+    }
+    return val
+  })
+}
+
 var appSettings = {}
 
 appSettings.init = (appDataPath) => {
@@ -91,7 +104,8 @@ appSettings.init = (appDataPath) => {
 }
 
 appSettings.update = (settingsKeyValObj) => {
-  var validatedSettingsKeyValObj = inspector.validate(appSettingsValidation, settingsKeyValObj)
+  var coercedSettingsKeyValObj = _.omit(coerceIncomingSettingsData(settingsKeyValObj), ['JWTsecret', 'id'])
+  var validatedSettingsKeyValObj = inspector.validate(appSettingsValidation, coercedSettingsKeyValObj)
   if(!validatedSettingsKeyValObj.valid){
     var errMessage = `Error, passed in app settings did not pass validation.
                       Error(s): ${validatedSettingsKeyValObj.format()}`
@@ -101,7 +115,7 @@ appSettings.update = (settingsKeyValObj) => {
   else{
     return appSettings.db('appSettings')
         .where('id', 'appSettings')
-        .update(settingsKeyValObj)
+        .update(coercedSettingsKeyValObj)
         .return(appSettings.db('appSettings').where('id', 'appSettings'))
         .then( rows => {
           appSettings.settings = _.omit(rows[0], ['JWTsecret'])

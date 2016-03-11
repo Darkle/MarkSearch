@@ -26,41 +26,41 @@
   html {
     font-size: 12px;
   }
-  .navHeader .brandLogo {
+  .searchPage .navHeader .brandLogo {
     padding-left: 0.6rem;
     flex-grow: 0;
   }
-  .navHeader .brandLogo .brandLogoSmall {
+  .searchPage .navHeader .brandLogo .brandLogoSmall {
     display: none;
   }
-  .navHeader .rightContainer {
+  .searchPage .navHeader .rightContainer {
     flex-grow: 0;
   }
-  .navHeader .rightContainer > div {
+  .searchPage .navHeader .rightContainer > div {
     padding: 0 0.5rem;
   }
-  .navHeader .addPageUrls textarea {
+  .searchPage .navHeader .addPageUrls textarea {
     font-size: 1.2rem;
   }
-  .navHeader .addPageUrls .addPageButtons {
+  .searchPage .navHeader .addPageUrls .addPageButtons {
     font-size: 1.8rem;
   }
-  .navHeader .dateFilterSettings {
+  .searchPage .navHeader .dateFilterSettings {
     font-size: 1.5rem;
     flex-direction: column;
     height: 100px
   }
-  .navHeader .dateFilterSettings .formplate-select select {
+  .searchPage .navHeader .dateFilterSettings .formplate-select select {
     padding-right: 38px;
   }
-  .navHeader .dateFilterSettings .fromContainer > span {
+  .searchPage .navHeader .dateFilterSettings .fromContainer > span {
     width: 5rem;
   }
 
-  .navHeader .dateFilterSettings .toContainer > span {
+  .searchPage .navHeader .dateFilterSettings .toContainer > span {
     width: 3.1rem;
   }
-  .navHeader .dateFilterSettings .shortcutsContainer {
+  .searchPage .navHeader .dateFilterSettings .shortcutsContainer {
     border-left-width: initial;
     border-left-style: initial;
     border-left-color: initial;
@@ -68,9 +68,6 @@
     border-top-color: #3498DB;
     border-top-style: solid;
   }
-  /****
-    Search Page
-  */
   .searchPage #resultsOuterContainer {
     margin-top: 84px;
   }
@@ -104,13 +101,13 @@
 35em width and less
 *****/
 @media (max-width: 36em) {
-  .navHeader .dateFilterSettings {
+  .searchPage .navHeader .dateFilterSettings {
     height: 140px;
   }
-  .navHeader .dateFilterSettings .fromToContainer {
+  .searchPage .navHeader .dateFilterSettings .fromToContainer {
     flex-direction: column;
   }
-  .navHeader .dateFilterSettings .toContainer {
+  .searchPage .navHeader .dateFilterSettings .toContainer {
     margin-top: 2px;
   }
 }
@@ -119,10 +116,10 @@
 40em width and less
 *****/
 @media (max-width: 40em) {
-  .navHeader .brandLogo .brandLogoSmall {
+  .searchPage .navHeader .brandLogo .brandLogoSmall {
     display: flex;
   }
-  .navHeader .brandLogo .brandLogoLarge {
+  .searchPage .navHeader .brandLogo .brandLogoLarge {
     display: none;
   }
 }
@@ -132,7 +129,7 @@
 35.8em width and less
 *****/
 @media (max-width: 35.8em) {
-  .searchPage #resultsContainer {
+  .searchPage .searchPage #resultsContainer {
     margin: 0 3rem;
   }
 }
@@ -141,7 +138,7 @@
 32.1em width and less
 *****/
 @media (max-width: 32.1em) {
-  .searchPage #resultsContainer {
+  .searchPage .searchPage #resultsContainer {
     margin: 0 2rem;
   }
 }
@@ -150,13 +147,13 @@
 28.6em width and less
 *****/
 @media (max-width: 28.6em) {
-  .navHeader .searchContainer {
+  .searchPage .navHeader .searchContainer {
     padding: 0 0 0 0.3rem;
   }
-  .navHeader .brandLogo {
+  .searchPage .navHeader .brandLogo {
     display: none;
   }
-  .navHeader #searchForm > input{
+  .searchPage .navHeader #searchForm > input{
     font-size: 1.4rem;
   }
   //.navHeader .rightContainer {
@@ -171,7 +168,7 @@
   /*****
     Prevent auto-zoom into the textarea
   */
-  .navHeader .addPageUrls textarea {
+  .searchPage .navHeader .addPageUrls textarea {
     font-size: 16px;
   }
   .searchPage #resultsCount {
@@ -206,11 +203,14 @@
 22.5em width and less
 *****/
 @media (max-width: 22.5em) {
-  .navHeader .searchContainer {
+  .searchPage .navHeader .searchContainer {
     flex-basis: 14rem;
   }
-  .navHeader .searchContainer #searchInput {
+  .searchPage .navHeader .searchContainer #searchInput {
     flex-basis: 16rem;
     flex-grow: 0;
+  }
+  .bookmarkletPage .navHeader .brandLogo a h1 {
+    font-size: 2rem;
   }
 }

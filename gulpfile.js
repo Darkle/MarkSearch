@@ -44,6 +44,7 @@ gulp.task('nodemon', cb => {
     execMap: {
       js: path.join('node_modules', '.bin', 'electron')
     },
+    //verbose: true,
     ignore: [
       path.join(__dirname, 'frontend', 'static', '**', '*.*'),
       path.join(__dirname, 'frontend', 'src', '**', '*.*'),
@@ -55,9 +56,9 @@ gulp.task('nodemon', cb => {
 gulp.task('browser-sync', () =>
   browserSync.init({
     proxy: "localhost:3000",
-    files: [
-      path.join('appmodules', '**', '*.*')
-    ],
+    //files: [
+    //  path.join('appmodules', '**', '*.*')
+    //],
     port: 3020,
     open: false, // Stop the browser from automatically opening
     notify: false,
@@ -149,7 +150,8 @@ gulp.task('browserify', () => {
 })
 
 gulp.task('build-sqlite3-osx-x86-64', () => {
-  var osxSqliteBinaryDir = path.join(__dirname, 'sqliteBinaries', 'osx_x86_64', '3.10.2')
+  //var osxSqliteBinaryDir = path.join(__dirname, 'sqliteBinaries', 'osx_x86_64', '3.10.2')
+  var osxSqliteBinaryDir = '/usr/local/Cellar/sqlite/3.11.0/'
   shell.exec(
       `npm install sqlite3 --save --build-from-source --sqlite=${osxSqliteBinaryDir}`,
       (exitCode, stdout, stderr) => {

@@ -1,4 +1,10 @@
 
+.settingsPage {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 .settingsPage .navHeader .searchContainer {
   display: none;
 }
@@ -28,6 +34,7 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
+  flex: 1;
 }
 
 .settingsPage .settingsHeader {
@@ -61,6 +68,14 @@
 
 .settingsPage .settings > div:last-child {
   border-bottom: none;
+}
+
+.settingsPage .settings > div:nth-of-type(1) {
+  margin-top:0.5rem;
+  padding-top: 1.5rem;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #77BBEB;
 }
 
 .settingsPage .settings .button {
@@ -107,11 +122,6 @@
 
 .settingsPage .settings .formplate .formplate-checkbox.checked input {
   z-index: 50;
-}
-
-.settingsPage .prebrowsingSettingContainer {
-  display: flex;
-  flex-direction: column;
 }
 
 .settingsPage .genTokenOuterContainer {
@@ -191,6 +201,12 @@
   width: 19px;
 }
 
+
+.settingsPage .prebrowsingSettingContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .settingsPage .dbLocationContainer {
   display: flex;
   flex-direction: column;
@@ -250,6 +266,50 @@
   color: white;
 }
 
+.settingsPage .settingsSaveCancelButtons {
+  //text-align: center;
+  display: flex;
+  flex: 1 1 auto;
+  //color: #90C4E6;
+  color: white;
+  height: 50px;
+  font-size: 24px;
+  line-height: 50px;
+  max-height: 50px;
+}
+
+.settingsPage .saveSettingsButton {
+  //text-align: center;
+  flex: 1 1 auto;
+  border: none;
+  text-align: center;
+  //padding: 2px 0 3px 0;
+  //border-right: 1px solid #2670A2;
+  //outline: 1px solid #2670A2;
+  //background-color: #F1C40F;
+  background-color: #3498DB;
+}
+
+.settingsPage .saveSettingsButton:hover {
+  color: #2670A2;
+  cursor: pointer;
+}
+
+.settingsPage .cancelSettingsButton {
+  //text-align: center;
+  flex: 1 1 auto;
+  background-color: #34495E;
+  border: none;
+  text-align: center;
+  //padding: 2px 0 3px 0;
+  //border-left: 1px solid #2670A2;
+  //outline: 1px solid #2670A2;
+}
+
+.settingsPage .cancelSettingsButton:hover {
+  color: #77BBEB;
+  cursor: pointer;
+}
 
 
 

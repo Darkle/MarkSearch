@@ -913,6 +913,18 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 #formplateFontHack {
   visibility: hidden !important;
 }
+.settingsPage {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  min-height: 100vh;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
 .settingsPage .navHeader .searchContainer {
   display: none;
 }
@@ -950,6 +962,10 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
 }
 .settingsPage .settingsHeader {
   text-align: center;
@@ -971,6 +987,13 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 }
 .settingsPage .settings > div:last-child {
   border-bottom: none;
+}
+.settingsPage .settings > div:nth-of-type(1) {
+  margin-top: 0.5rem;
+  padding-top: 1.5rem;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #77BBEB;
 }
 .settingsPage .settings .button {
   background-color: #2670A2;
@@ -1007,17 +1030,6 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 }
 .settingsPage .settings .formplate .formplate-checkbox.checked input {
   z-index: 50;
-}
-.settingsPage .prebrowsingSettingContainer {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
 }
 .settingsPage .genTokenOuterContainer {
   display: -webkit-box;
@@ -1119,6 +1131,17 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 .settingsPage .bookmarkletContainer .clipBoardButton img {
   width: 19px;
 }
+.settingsPage .prebrowsingSettingContainer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
 .settingsPage .dbLocationContainer {
   display: -webkit-box;
   display: -webkit-flex;
@@ -1208,8 +1231,95 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   border: 10px dashed #A3A3A3;
   color: white;
 }
+.settingsPage .settingsSaveCancelButtons {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  color: white;
+  height: 50px;
+  font-size: 24px;
+  line-height: 50px;
+  max-height: 50px;
+}
+.settingsPage .saveSettingsButton {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  border: none;
+  text-align: center;
+  background-color: #3498DB;
+}
+.settingsPage .saveSettingsButton:hover {
+  color: #2670A2;
+  cursor: pointer;
+}
+.settingsPage .cancelSettingsButton {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  background-color: #34495E;
+  border: none;
+  text-align: center;
+}
+.settingsPage .cancelSettingsButton:hover {
+  color: #77BBEB;
+  cursor: pointer;
+}
 .settingsPage #formPlateFontHack {
   visibility: hidden;
+}
+.bookmarkletPage .navHeader .searchContainer {
+  display: none;
+}
+.bookmarkletPage .navHeader .rightContainer {
+  display: none;
+}
+.bookmarkletPage .navHeader .brandLogo h1 {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-weight: bold;
+}
+.bookmarkletPage .navHeader .brandLogo .brandLogoSmall {
+  display: none;
+}
+.bookmarkletPage #bookmarkletPageContainer {
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 140px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+}
+.bookmarkletPage #bookmarkletPageContainer a {
+  text-decoration: none;
+  color: #3498DB;
+}
+.bookmarkletPage #bookmarkletPageContainer a:hover {
+  color: #2670A2;
+  text-decoration: none;
 }
 .helpPage .navHeader .searchContainer {
   display: none;
@@ -1305,32 +1415,32 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   html {
     font-size: 12px;
   }
-  .navHeader .brandLogo {
+  .searchPage .navHeader .brandLogo {
     padding-left: 0.6rem;
     -webkit-box-flex: 0;
     -webkit-flex-grow: 0;
         -ms-flex-positive: 0;
             flex-grow: 0;
   }
-  .navHeader .brandLogo .brandLogoSmall {
+  .searchPage .navHeader .brandLogo .brandLogoSmall {
     display: none;
   }
-  .navHeader .rightContainer {
+  .searchPage .navHeader .rightContainer {
     -webkit-box-flex: 0;
     -webkit-flex-grow: 0;
         -ms-flex-positive: 0;
             flex-grow: 0;
   }
-  .navHeader .rightContainer > div {
+  .searchPage .navHeader .rightContainer > div {
     padding: 0 0.5rem;
   }
-  .navHeader .addPageUrls textarea {
+  .searchPage .navHeader .addPageUrls textarea {
     font-size: 1.2rem;
   }
-  .navHeader .addPageUrls .addPageButtons {
+  .searchPage .navHeader .addPageUrls .addPageButtons {
     font-size: 1.8rem;
   }
-  .navHeader .dateFilterSettings {
+  .searchPage .navHeader .dateFilterSettings {
     font-size: 1.5rem;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -1339,16 +1449,16 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
             flex-direction: column;
     height: 100px;
   }
-  .navHeader .dateFilterSettings .formplate-select select {
+  .searchPage .navHeader .dateFilterSettings .formplate-select select {
     padding-right: 38px;
   }
-  .navHeader .dateFilterSettings .fromContainer > span {
+  .searchPage .navHeader .dateFilterSettings .fromContainer > span {
     width: 5rem;
   }
-  .navHeader .dateFilterSettings .toContainer > span {
+  .searchPage .navHeader .dateFilterSettings .toContainer > span {
     width: 3.1rem;
   }
-  .navHeader .dateFilterSettings .shortcutsContainer {
+  .searchPage .navHeader .dateFilterSettings .shortcutsContainer {
     border-left-width: initial;
     border-left-style: initial;
     border-left-color: initial;
@@ -1356,9 +1466,6 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
     border-top-color: #3498DB;
     border-top-style: solid;
   }
-  /****
-    Search Page
-  */
   .searchPage #resultsOuterContainer {
     margin-top: 84px;
   }
@@ -1393,17 +1500,17 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 35em width and less
 *****/
 @media (max-width: 36em) {
-  .navHeader .dateFilterSettings {
+  .searchPage .navHeader .dateFilterSettings {
     height: 140px;
   }
-  .navHeader .dateFilterSettings .fromToContainer {
+  .searchPage .navHeader .dateFilterSettings .fromToContainer {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -webkit-flex-direction: column;
         -ms-flex-direction: column;
             flex-direction: column;
   }
-  .navHeader .dateFilterSettings .toContainer {
+  .searchPage .navHeader .dateFilterSettings .toContainer {
     margin-top: 2px;
   }
 }
@@ -1411,13 +1518,13 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 40em width and less
 *****/
 @media (max-width: 40em) {
-  .navHeader .brandLogo .brandLogoSmall {
+  .searchPage .navHeader .brandLogo .brandLogoSmall {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
   }
-  .navHeader .brandLogo .brandLogoLarge {
+  .searchPage .navHeader .brandLogo .brandLogoLarge {
     display: none;
   }
 }
@@ -1425,7 +1532,7 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 35.8em width and less
 *****/
 @media (max-width: 35.8em) {
-  .searchPage #resultsContainer {
+  .searchPage .searchPage #resultsContainer {
     margin: 0 3rem;
   }
 }
@@ -1433,7 +1540,7 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 32.1em width and less
 *****/
 @media (max-width: 32.1em) {
-  .searchPage #resultsContainer {
+  .searchPage .searchPage #resultsContainer {
     margin: 0 2rem;
   }
 }
@@ -1441,19 +1548,19 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 28.6em width and less
 *****/
 @media (max-width: 28.6em) {
-  .navHeader .searchContainer {
+  .searchPage .navHeader .searchContainer {
     padding: 0 0 0 0.3rem;
   }
-  .navHeader .brandLogo {
+  .searchPage .navHeader .brandLogo {
     display: none;
   }
-  .navHeader #searchForm > input {
+  .searchPage .navHeader #searchForm > input {
     font-size: 1.4rem;
   }
   /*****
     Prevent auto-zoom into the textarea
   */
-  .navHeader .addPageUrls textarea {
+  .searchPage .navHeader .addPageUrls textarea {
     font-size: 16px;
   }
   .searchPage #resultsCount {
@@ -1486,12 +1593,12 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 22.5em width and less
 *****/
 @media (max-width: 22.5em) {
-  .navHeader .searchContainer {
+  .searchPage .navHeader .searchContainer {
     -webkit-flex-basis: 14rem;
         -ms-flex-preferred-size: 14rem;
             flex-basis: 14rem;
   }
-  .navHeader .searchContainer #searchInput {
+  .searchPage .navHeader .searchContainer #searchInput {
     -webkit-flex-basis: 16rem;
         -ms-flex-preferred-size: 16rem;
             flex-basis: 16rem;
@@ -1500,6 +1607,18 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
         -ms-flex-positive: 0;
             flex-grow: 0;
   }
+  .bookmarkletPage .navHeader .brandLogo a h1 {
+    font-size: 2rem;
+  }
+}
+#notie-alert-outer {
+  min-height: 85px;
+}
+.notie-alert-error {
+  background-color: #F1C40F !important;
+}
+.notie-alert-success {
+  background-color: #2670A2 !important;
 }
 #notie-confirm-inner {
   background-color: #3498DB !important;

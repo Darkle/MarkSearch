@@ -1,5 +1,7 @@
 'use strict';
 
+var url = require('url')
+
 var express = require('express')
 var requireDir = require('require-dir')
 
@@ -7,10 +9,12 @@ var apiModules = requireDir('../api')
 var searchApi = require('../api/search/search')
 var scrapeAndAddPage = require('../api/scrape/scrapeAndAddPage')
 var appSettings = require('../../db/appSettings')
+var generateBookmarkletJS = require('../generateBookmarkletJS')
+var generateProtocolIpAndPort = require('../../utils/generateProtocolIpAndPort')
+var generateJWTtoken = require('../../utils/generateJWTtoken')
 
 var router = express.Router()
 
-/* GET home page. */
 router.get('/', (req, res, next) => {
   res.render('searchPage',
       {
@@ -26,7 +30,6 @@ router.get('/', (req, res, next) => {
   )
 })
 
-/* GET about page. */
 router.get('/aboutPage', (req, res, next) => {
   res.render('aboutPage',
       {
@@ -35,7 +38,6 @@ router.get('/aboutPage', (req, res, next) => {
   )
 })
 
-/* GET help page. */
 router.get('/helpPage', (req, res, next) => {
   res.render('helpPage',
       {
@@ -44,7 +46,6 @@ router.get('/helpPage', (req, res, next) => {
   )
 })
 
-/* GET settings page. */
 router.get('/settingsPage', (req, res, next) => {
   res.render('settingsPage',
       {
@@ -61,6 +62,19 @@ router.get('/settingsPage', (req, res, next) => {
   )
 })
 
+router.get('/bookmarklet', (req, res, next) => {
+  var token = generateJWTtoken()
+  var protocolIpandPort = generateProtocolIpAndPort(req)
+  var bookmarkletJS = generateBookmarkletJS(protocolIpandPort, token)
+  res.render('bookmarkletPage',
+      {
+        title: 'MarkSearch Bookmarklet',
+        csrfToken: req.csrfToken(),
+        bookmarkletHref: `javascript:${encodeURIComponent(bookmarkletJS)}`
+      }
+  )
+})
+
 /****
  * Doing it this way so dont have to bother with auth sessions to call the api from the frontend
  * (the api routes are protected by the JWT) and also so need csrf token to be able to call
@@ -70,6 +84,7 @@ router.post('/frontendapi/getall/', apiModules.getAllPages)
 router.post('/frontendapi/search/:searchTerms', searchApi)
 router.post('/frontendapi/scrapeAndAdd/:pageUrl', scrapeAndAddPage)
 router.delete('/frontendapi/remove/:pageUrl', apiModules.deletePage)
+router.post('/frontendapi/openUrlInBrowser/:urlToOpen', apiModules.openUrlInBrowser)
 router.post('/frontendapi/settings/update/', apiModules.updateMarkSearchSettings)
 router.post('/frontendapi/settings/changePagesDBlocation/', apiModules.changePagesDBlocation)
 router.post('/frontendapi/settings/generateExtToken/', apiModules.generateExtToken)

@@ -27,6 +27,7 @@
     "fs-extra": "^0.26.2",
     "got": "^6.1.1",
     "hyperbole": "^1.0.0",
+    "internal-ip": "^1.2.0",
     "jade": "~1.11.0",
     "jquery": "^2.2.0",
     "jsonwebtoken": "^5.7.0",

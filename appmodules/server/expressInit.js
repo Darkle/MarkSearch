@@ -13,7 +13,7 @@ var compression = require('compression')
 
 var authorizationCheck = require('./authorizationCheck')
 var expressErrorMiddleware = require('./expressErrorMiddleware')
-var paramsPageUrlToLowercase = require('./paramsPageUrlToLowerCase')
+var paramsPageUrlToLowercase = require('./../utils/paramsPageUrlToLowerCase')
 var routes = require('./routes/index')
 var api = require('./routes/api')
 

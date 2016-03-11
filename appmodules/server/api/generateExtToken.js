@@ -1,23 +1,20 @@
 'use strict';
 
-var jwt = require('jsonwebtoken')
-var _ = require('lodash')
 
-var appSettings = require('../../db/appSettings')
+var generateProtocolIpAndPort = require('../../utils/generateProtocolIpAndPort')
+var generateJWTtoken = require('../../utils/generateJWTtoken')
 
-function generateExtToken(req, res, next){
+function generateExtToken(req, res){
   /****
    * tokenType is either browserExtension or bookmarklet.
    * Give it a somewhat unique id - could be helpful for debugging.
    */
-      //TODO - validation of req.body.tokenType
-  var token = jwt.sign(
-      {
-        client: `${req.body.tokenType}_${_.random(0, 100)}`
-      },
-      appSettings.settings.JWTsecret
-  )
-  res.json({token: token})
+  var protocolIpandPort = generateProtocolIpAndPort(req)
+  var token = generateJWTtoken()
+  res.json({
+    protocolIpandPort: protocolIpandPort,
+    token: token
+  })
 }
 
 module.exports = generateExtToken
