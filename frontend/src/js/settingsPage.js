@@ -30,6 +30,59 @@ function getErrorMessage(err){
   return errorMessage
 }
 
+function coerceSettingsData(dataObj){
+  return _.mapValues(dataObj, val => {
+    if(val === 'false'){
+      val = false
+    }
+    if(val === 'true'){
+      val = true
+    }
+    return val
+  })
+}
+
+var prebrowsingCheckbox$
+var alwaysDisableTooltipsCheckbox$
+var dbLocationText$
+
+function updateSettingsOnPage(settingsObj){
+  settingsObj = coerceSettingsData(settingsObj)
+  /****
+   * Prebrowsing
+   */
+  if(settingsObj.prebrowsing){
+    prebrowsingCheckbox$.prop('checked', true)
+    prebrowsingCheckbox$.parent().addClass('checked')
+  }
+  markSearchSettings.prebrowsing = settingsObj.prebrowsing
+
+  /****
+   * Always Disable Tooltips
+   */
+  if(settingsObj.alwaysDisableTooltips){
+    alwaysDisableTooltipsCheckbox$.prop('checked', true)
+    alwaysDisableTooltipsCheckbox$.parent().addClass('checked')
+  }
+  markSearchSettings.alwaysDisableTooltips = settingsObj.alwaysDisableTooltips
+
+  /****
+   * Current Database Location
+   */
+  if(settingsObj.pagesDBFilePath){
+    markSearchSettings.pagesDBFilePath = settingsObj.pagesDBFilePath
+    /****
+     * files[0].path only returns the path (with no trailing slash) so remove the filename and trailing
+     * slash from the markSearchSettings.pagesDBFilePath
+     */
+    if(settingsObj.pagesDBFilePath.endsWith('MarkSearchPages.db')){
+      markSearchSettings.pagesDBFilePath = settingsObj.pagesDBFilePath.slice(0, -19)
+    }
+    dbLocationText$.text(markSearchSettings.pagesDBFilePath)
+  }
+
+}
+
 $(document).ready(settingsPageInit)
 
 function settingsPageInit(event){
@@ -42,25 +95,21 @@ function settingsPageInit(event){
   var xhrHeaders = {
       'X-CSRF-Token': csrfToken
   }
-  /****
-   * files[0].path only returns the path (with no trailing slash) so remove the filename and trailing
-   * slash from the markSearchSettings.pagesDBFilePath
-   */
-  markSearchSettings.pagesDBFilePath = JSON.parse(markSearchSettings.pagesDBFilePath).slice(0, -19)
 
   /****
    * formplate moves things around, so grab elements after its
    * done its thing
    */
-  var prebrowsingCheckbox$ = $('#prebrowsingCheckbox')
-  var alwaysDisableTooltipsCheckbox$ = $('#alwaysDisableTooltipsCheckbox')
+  prebrowsingCheckbox$ = $('#prebrowsingCheckbox')
+  alwaysDisableTooltipsCheckbox$ = $('#alwaysDisableTooltipsCheckbox')
+  dbLocationText$ = $('.dbLocationContainer .locationText')
+
   var browserAddonTokenButton$ = $('#browserAddonTokenButton')
   var browserAddonTokenText$ = $('#browserAddonTokenText')
   var bookmarkletButton$ = $('#bookmarkletButton')
   var emailBookmarkletButton$ = $('#emailBookmarkletButton')
   var bookmarkletEmail$ = $('#bookmarkletEmail')
   var bookmarkletText$ = $('#bookmarkletText')
-  var dbLocationText$ = $('.dbLocationContainer .locationText')
   //var dragAndDropDiv$ = $('#dragAndDrop')
   var changeDBLocInput$ = $('#changeDBLocationInput')
   var changeDBLocButton$ = $('#changeDBLocationButton')
@@ -69,6 +118,8 @@ function settingsPageInit(event){
   var saveSettingsButtonButton$ = $('.saveSettingsButton')
   var dbLocationInfoTitle$ = $('#dbLocationInfoTitle')
 
+
+  updateSettingsOnPage(markSearchSettings)
 
   /****
    * External links
@@ -180,30 +231,12 @@ function settingsPageInit(event){
   })
 
   /****
-   * Prebrowsing
+   * Change DB Location Folder
    */
-  if(markSearchSettings.prebrowsing){
-    prebrowsingCheckbox$.prop('checked', true)
-    prebrowsingCheckbox$.parent().addClass('checked')
-  }
-
-  /****
-   * Always Disable Tooltips
-   */
-  if(markSearchSettings.alwaysDisableTooltips){
-    alwaysDisableTooltipsCheckbox$.prop('checked', true)
-    alwaysDisableTooltipsCheckbox$.parent().addClass('checked')
-  }
-
-  /****
-   * Current Database Location
-   */
-  dbLocationText$.text(markSearchSettings.pagesDBFilePath)
   changeDBLocButton$.click(event => {
     event.preventDefault()
     changeDBLocInput$.click()
   })
-
 
   changeDBLocInput$.change(event => {
     var files = changeDBLocInput$[0].files
@@ -223,7 +256,6 @@ function settingsPageInit(event){
     event.preventDefault()
     var possibleDBchangePromise = Promise.resolve()
     var dbLocationText = _.trim(dbLocationText$.text())
-
     if(markSearchSettings.pagesDBFilePath !== dbLocationText){
       possibleDBchangePromise = got.post('/frontendapi/settings/changePagesDBlocation',
         {
@@ -264,6 +296,7 @@ function settingsPageInit(event){
           'Settings Saved',
           3
         )
+        updateSettingsOnPage(JSON.parse(response.body))
       })
       .catch( err => {
         console.error(err)

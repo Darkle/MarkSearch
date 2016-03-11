@@ -4,15 +4,17 @@ var path = require('path')
 
 var Promise = require("bluebird")
 var fsExtra = Promise.promisifyAll(require('fs-extra'))
+var parsePath = require('parse-filepath')
 
 var pagesdb = require('../../db/pagesdb')
 
 function changePagesDBlocation(req, res, next){
   console.log(`req.body`)
   console.log(req.body)
-//TODO - req.body validation goes here
-  var newPagesDBFilePath = path.join(req.body.newPagesDBFileFolder, 'MarkSearchPages.db')
-  var oldPagesDBFilePath = path.join(req.body.oldPagesDBFilePath, 'MarkSearchPages.db')
+  var parsedNewPagesDBFileFolder = parsePath(req.body.newPagesDBFileFolder).path
+  var parsedOldPagesDBFilePath = parsePath(req.body.oldPagesDBFilePath).path
+  var newPagesDBFilePath = path.join(parsedNewPagesDBFileFolder, 'MarkSearchPages.db')
+  var oldPagesDBFilePath = path.join(parsedOldPagesDBFilePath, 'MarkSearchPages.db')
   console.log(`newPagesDBFilePath`)
   console.log(newPagesDBFilePath)
   console.log(`oldPagesDBFilePath`)

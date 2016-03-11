@@ -13,7 +13,7 @@ function updateMarkSearchSettings(req, res, next){
   var reqBody = req.body
   appSettings.update(reqBody)
     .then( () => {
-      res.status(200).end()
+      res.status(200).json(reqBody)
     })
     .catch( err => {
       console.error(err)

@@ -1245,6 +1245,10 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   font-size: 24px;
   line-height: 50px;
   max-height: 50px;
+  bottom: 0;
+  position: fixed;
+  z-index: 99;
+  width: 100%;
 }
 .settingsPage .saveSettingsButton {
   -webkit-box-flex: 1;
