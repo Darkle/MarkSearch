@@ -522,7 +522,7 @@ function settingsPageInit(event) {
     }
   });
   /****
-   * Importing URLs
+   * Importing URLs From File
    */
   importHTMLFileButton$.click(function (event) {
     event.preventDefault();
@@ -536,7 +536,7 @@ function settingsPageInit(event) {
       var reader = new FileReader();
       setFileReadErroProgressAndStartListeners(reader);
       reader.onload = function (event) {
-        progressInfo$.text('Loaded ' + files[0].name);
+        progressInfo$.text('Loaded ' + file.name);
         var fileText = event.target.result;
         var bookmarksDoc = document.implementation.createHTMLDocument('');
         bookmarksDoc.body.innerHTML = fileText;
@@ -566,19 +566,17 @@ function settingsPageInit(event) {
       var reader = new FileReader();
       setFileReadErroProgressAndStartListeners(reader);
       reader.onload = function (event) {
-        progressInfo$.text('Loaded ' + files[0].name);
+        progressInfo$.text('Loaded ' + file.name);
         var fileText = event.target.result;
         var filteredLinesOfText = _lodash2.default.filter(fileText.split(/\r?\n/), function (lineValue) {
           return _lodash2.default.trim(lineValue).length;
         });
         var urlsToSave = _lodash2.default.map(filteredLinesOfText, function (lineValue) {
-          if (_lodash2.default.trim(lineValue).length) {
-            var a = document.createElement('a');
-            a.href = lineValue;
-            var href = a.href;
-            a = null;
-            return href;
-          }
+          var a = document.createElement('a');
+          a.href = lineValue;
+          var href = a.href;
+          a = null;
+          return href;
         });
         saveUrls(urlsToSave);
       };

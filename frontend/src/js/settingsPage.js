@@ -392,7 +392,7 @@ function settingsPageInit(event){
     }
   })
   /****
-   * Importing URLs
+   * Importing URLs From File
    */
   importHTMLFileButton$.click(event => {
     event.preventDefault()
@@ -406,7 +406,7 @@ function settingsPageInit(event){
       var reader = new FileReader()
       setFileReadErroProgressAndStartListeners(reader)
       reader.onload = event => {
-        progressInfo$.text(`Loaded ${files[0].name}`)
+        progressInfo$.text(`Loaded ${file.name}`)
         var fileText = event.target.result
         var bookmarksDoc = document.implementation.createHTMLDocument('')
         bookmarksDoc.body.innerHTML = fileText
@@ -437,17 +437,15 @@ function settingsPageInit(event){
       var reader = new FileReader()
       setFileReadErroProgressAndStartListeners(reader)
       reader.onload = event => {
-        progressInfo$.text(`Loaded ${files[0].name}`)
+        progressInfo$.text(`Loaded ${file.name}`)
         var fileText = event.target.result
         var filteredLinesOfText = _.filter(fileText.split(/\r?\n/), lineValue => _.trim(lineValue).length)
         var urlsToSave = _.map(filteredLinesOfText, lineValue => {
-          if(_.trim(lineValue).length){
-            var a = document.createElement('a')
-            a.href = lineValue
-            var href = a.href
-            a = null
-            return href
-          }
+          var a = document.createElement('a')
+          a.href = lineValue
+          var href = a.href
+          a = null
+          return href
         })
         saveUrls(urlsToSave)
       }
