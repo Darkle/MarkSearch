@@ -440,14 +440,34 @@ function settingsPageInit(event){
         progressInfo$.text(`Loaded ${file.name}`)
         var fileText = event.target.result
         var filteredLinesOfText = _.filter(fileText.split(/\r?\n/), lineValue => _.trim(lineValue).length)
-        var urlsToSave = _.map(filteredLinesOfText, lineValue => {
+        var urlsToSave = []
+        _.each(filteredLinesOfText, lineValue => {
           var a = document.createElement('a')
           a.href = lineValue
-          var href = a.href
-          a = null
-          return href
+          /****
+           * For checks against non-urls and the file not being text (e.g. binary):
+           *  1.  Check if the a.hostname is the same as the window.location.hostname -
+           *        If the text is not a url, then a.href = lineValue results in lineValue
+           *        being appended to the current base url in the window and saved as that,
+           *        so we chech against the hostname being the same.
+           *  2.  Also need to check against empty href as binary data might not be parsable
+           *        by a element href assignment and ends up being an empty string.
+           *  3.  Some binary as text characters seem to also be able to be created as an
+           *        href for the a element, but not have a hostname.
+           */
+          if(a.hostname.length && a.href.length && a.hostname !== window.location.hostname){
+            debugger
+            var href = a.href
+            a = null
+            urlsToSave.push(href)
+          }
+          else{
+            a = null
+          }
         })
-        saveUrls(urlsToSave)
+        console.log('urlsToSave')
+        console.log(urlsToSave)
+        //saveUrls(urlsToSave)
       }
       showAddPageSubbar()
         .then(() => {
