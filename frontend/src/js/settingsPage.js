@@ -118,7 +118,6 @@ function hidePageSubbarAndReset(){
 }
 
 function setFileReadErroProgressAndStartListeners(reader){
-
   reader.onloadstart = event => {
     progressBarContainerWidth = addUrlsProgress$.width()
     /****
@@ -133,7 +132,6 @@ function setFileReadErroProgressAndStartListeners(reader){
       'easeOutExpo'
     )
   }
-
   reader.onprogress = event => {
     progressBar$.velocity("stop")
     var animationDuration = event.loaded === event.total ? 0 : 500
@@ -146,7 +144,6 @@ function setFileReadErroProgressAndStartListeners(reader){
       'easeOutSine'
     )
   }
-
   reader.onerror = event => {
     console.error(event)
     console.error(reader.error)
@@ -159,17 +156,17 @@ function setFileReadErroProgressAndStartListeners(reader){
       6
     )
   }
-
 }
 
 function saveUrls(urlsToSave){
   suspend(function*(urlsToSave){
+    var urlsThatErrored = []
+    var progressStepAmount = progressBarContainerWidth/urlsToSave.length
+    var error
     progressBar$.velocity("stop")
     progressBar$.width(0)
     progressBar$.removeClass('hide')
-    var error
-    var urlsThatErrored = []
-    var progressStepAmount = progressBarContainerWidth/urlsToSave.length
+
     for(var i = 0; i < urlsToSave.length; i++) {
       progressInfo$.text(`Saving ${urlsToSave[i]}`)
       $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 5000, 'easeOutSine')
@@ -338,7 +335,6 @@ function settingsPageInit(event){
    */
   emailBookmarkletButton$.click( event => {
     event.preventDefault()
-
     got.post('/frontendapi/settings/generateExtToken', {headers: xhrHeaders})
       .then( response => {
         var responseData = JSON.parse(response.body)

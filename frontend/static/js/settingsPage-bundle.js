@@ -223,7 +223,6 @@ function hidePageSubbarAndReset() {
 }
 
 function setFileReadErroProgressAndStartListeners(reader) {
-
   reader.onloadstart = function (event) {
     progressBarContainerWidth = addUrlsProgress$.width();
     /****
@@ -233,7 +232,6 @@ function setFileReadErroProgressAndStartListeners(reader) {
       width: 20
     }, 500, 'easeOutExpo');
   };
-
   reader.onprogress = function (event) {
     progressBar$.velocity("stop");
     var animationDuration = event.loaded === event.total ? 0 : 500;
@@ -241,7 +239,6 @@ function setFileReadErroProgressAndStartListeners(reader) {
       width: event.loaded / event.total * progressBarContainerWidth
     }, animationDuration, 'easeOutSine');
   };
-
   reader.onerror = function (event) {
     console.error(event);
     console.error(reader.error);
@@ -251,17 +248,19 @@ function setFileReadErroProgressAndStartListeners(reader) {
 
 function saveUrls(urlsToSave) {
   (0, _suspend2.default)(regeneratorRuntime.mark(function _callee(urlsToSave) {
-    var error, urlsThatErrored, progressStepAmount, i, encodedUrl, errMessage, ul$, errorTextBeginning, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, errUrl;
+    var urlsThatErrored, progressStepAmount, error, i, encodedUrl, errMessage, ul$, errorTextBeginning, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, errUrl;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            urlsThatErrored = [];
+            progressStepAmount = progressBarContainerWidth / urlsToSave.length;
+
             progressBar$.velocity("stop");
             progressBar$.width(0);
             progressBar$.removeClass('hide');
-            urlsThatErrored = [];
-            progressStepAmount = progressBarContainerWidth / urlsToSave.length;
+
             i = 0;
 
           case 6:
@@ -484,7 +483,6 @@ function settingsPageInit(event) {
    */
   emailBookmarkletButton$.click(function (event) {
     event.preventDefault();
-
     _got2.default.post('/frontendapi/settings/generateExtToken', { headers: xhrHeaders }).then(function (response) {
       var responseData = JSON.parse(response.body);
       var bookmarkletJS = (0, _bookmarkletTemplate.generateBookmarkletJS)(responseData.protocolIpandPort, responseData.token);
