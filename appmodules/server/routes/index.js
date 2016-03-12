@@ -90,6 +90,6 @@ router.post('/frontendapi/settings/changePagesDBlocation/', apiModules.changePag
 router.post('/frontendapi/settings/generateExtToken/', apiModules.generateExtToken)
 router.post('/frontendapi/settings/emailBookmarklet/', apiModules.emailBookmarklet)
 router.post('/frontendapi/settings/checkIfFileIsBinary/:filePath', apiModules.checkIfFileIsBinary)
-
+router.post('/frontendapi/settings/exportUrls/', apiModules.exportUrls)
 
 module.exports = router

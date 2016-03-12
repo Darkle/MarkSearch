@@ -428,6 +428,37 @@ function saveUrls(urlsToSave) {
   }))(urlsToSave);
 }
 
+function exportUrl(event) {
+
+  console.log(event.target.dataset.exporttype);
+  //var files = event.target.files
+  //if(files.length > 0){
+  //  var file = files[0]
+  //  got.post(
+  //    '/frontendapi/settings/exportUrls/',
+  //    {
+  //      headers: xhrHeaders,
+  //      body: {
+  //        filePath: file.path,
+  //        exportType:
+  //      }
+  //    }
+  //  )
+  //  .catch(err =>{
+  //    console.error(err)
+  //    var errorMessage = getErrorMessage(err)
+  //    showNotie(
+  //      notieAlert$,
+  //      'notie-alert-error',
+  //      3,
+  //      `There Was An Error Exporting.
+  //        Error: ${errorMessage}`,
+  //      6
+  //    )
+  //  })
+  //}
+}
+
 $(document).ready(settingsPageInit);
 
 function settingsPageInit(event) {
@@ -472,6 +503,9 @@ function settingsPageInit(event) {
   var exportHTMLFileButton$ = $('#exportHTMLFileButton');
   var exportTextFileButton$ = $('#exportTextFileButton');
   var exportPlainHTMLFileButton$ = $('#exportPlainHTMLFileButton');
+  var exportHTMLFileInput$ = $('#exportHTMLFileInput');
+  var exportTextFileInput$ = $('#exportTextFileInput');
+  var exportPlainHTMLFileInput$ = $('#exportPlainHTMLFileInput');
 
   $('.addPageButtons').addClass('hide');
   addUrlsProgress$.removeClass('hide');
@@ -694,19 +728,21 @@ function settingsPageInit(event) {
 
   exportHTMLFileButton$.click(function (event) {
     event.preventDefault();
-    _got2.default.post('/frontendapi/getall/', { headers: xhrHeaders }).then(function (response) {
-      var rows = JSON.parse(response.body);
-      console.log(rows);
-    });
+    exportHTMLFileInput$.click();
   });
+  exportHTMLFileInput$.change(exportUrl);
 
   exportTextFileButton$.click(function (event) {
     event.preventDefault();
+    exportTextFileInput$.click();
   });
+  exportTextFileInput$.change(exportUrl);
 
   exportPlainHTMLFileButton$.click(function (event) {
     event.preventDefault();
+    exportPlainHTMLFileInput$.click();
   });
+  exportPlainHTMLFileInput$.change(exportUrl);
 
   /****
    * Save Settings

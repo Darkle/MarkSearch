@@ -220,32 +220,35 @@ function saveUrls(urlsToSave){
   })(urlsToSave)
 }
 
-function exportUrls(typeOfExport){
-  got.post('/frontendapi/getall/', {headers: xhrHeaders})
-    .then( response => {
-      var rows = JSON.parse(response.body)
-      console.log(rows)
-      if(typeOfExport === 'HTML'){
-        var bookmarks = {
-          "MarkSearch Bookmarks": {
-            "contents": {}
-          }
-        }
-        _.each(rows, pageData => {
-          if(!pageData.pageTitle || !_.trim(pageData.pageTitle).length){
-            pageData.pageTitle = pageData.pageDomain + _.random(0, 1000000)
-          }
-          bookmarks["MarkSearch Bookmarks"].contents[pageData.pageTitle] = pageData.pageUrl
-        })
+function exportUrl(event){
 
-      }
-      else if(typeOfExport === 'Text'){
-
-      }
-      else if(typeOfExport === 'PlainHTML'){
-
-      }
-    })
+  console.log(event.target.dataset.exporttype)
+  //var files = event.target.files
+  //if(files.length > 0){
+  //  var file = files[0]
+  //  got.post(
+  //    '/frontendapi/settings/exportUrls/',
+  //    {
+  //      headers: xhrHeaders,
+  //      body: {
+  //        filePath: file.path,
+  //        exportType:
+  //      }
+  //    }
+  //  )
+  //  .catch(err =>{
+  //    console.error(err)
+  //    var errorMessage = getErrorMessage(err)
+  //    showNotie(
+  //      notieAlert$,
+  //      'notie-alert-error',
+  //      3,
+  //      `There Was An Error Exporting.
+  //        Error: ${errorMessage}`,
+  //      6
+  //    )
+  //  })
+  //}
 }
 
 $(document).ready(settingsPageInit)
@@ -292,6 +295,9 @@ function settingsPageInit(event){
   var exportHTMLFileButton$ = $('#exportHTMLFileButton')
   var exportTextFileButton$ = $('#exportTextFileButton')
   var exportPlainHTMLFileButton$ = $('#exportPlainHTMLFileButton')
+  var exportHTMLFileInput$ = $('#exportHTMLFileInput')
+  var exportTextFileInput$ = $('#exportTextFileInput')
+  var exportPlainHTMLFileInput$ = $('#exportPlainHTMLFileInput')
 
   $('.addPageButtons').addClass('hide')
   addUrlsProgress$.removeClass('hide')
@@ -593,18 +599,22 @@ function settingsPageInit(event){
 
    exportHTMLFileButton$.click(event => {
      event.preventDefault()
-     exportUrls('HTML')
+     exportHTMLFileInput$.click()
    })
+  exportHTMLFileInput$.change(exportUrl)
 
    exportTextFileButton$.click(event => {
      event.preventDefault()
-     exportUrls('Text')
+     exportTextFileInput$.click()
    })
+  exportTextFileInput$.change(exportUrl)
 
    exportPlainHTMLFileButton$.click(event => {
      event.preventDefault()
-     exportUrls('PlainHTML')
+     exportPlainHTMLFileInput$.click()
    })
+  exportPlainHTMLFileInput$.change(exportUrl)
+
 
   /****
    * Save Settings

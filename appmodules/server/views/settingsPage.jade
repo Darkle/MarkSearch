@@ -89,6 +89,9 @@ block content
       .exportContainer
         .exportTitle Export URLs
         .exportButtonsContainer
+          input#exportHTMLFileInput(type="file", data-exporttype="HTML")
+          input#exportTextFileInput(type="file", data-exporttype="Text")
+          input#exportPlainHTMLFileInput(type="file", data-exporttype="PlainHTML")
           a#exportHTMLFileButton.button.black.square(href="#") Export As Bookmarks.html File
           a#exportTextFileButton.button.black.square(href="#") Export As Plain Text File
           a#exportPlainHTMLFileButton.button.black.square(href="#") Export As Plain HTML File
