@@ -86,6 +86,22 @@ block content
           p.
             When importing, MarkSearch scrapes the web page for each URL you are importing, so the import may take some time if
             there are a large number of URLs to import/scrape.
+      .exportContainer
+        .exportTitle Export URLs
+        .exportButtonsContainer
+          a#exportHTMLFileButton.button.black.square(href="#") Export As Bookmarks.html File
+          a#exportTextFileButton.button.black.square(href="#") Export As Plain Text File
+          a#exportPlainHTMLFileButton.button.black.square(href="#") Export As Plain HTML File
+        .settingDetail
+          p.
+            Exporting as a Bookmarkls.html file (aka Netscape Bookmarks html file) will allow you to import your MarkSearch
+            URLs into Chrome, Firefox & IE.
+          p.
+            Exporting as a Plain Text file will export all your MarkSearch URLs as plain text with each URL on a new line
+            in the file.
+          p.
+            Exporting as a Plain HTML file will export your MarkSearch URLs into an html file with the URLs as links, so
+            you could then open that html file in a browser and click on the links to open them.
 
   .settingsSaveCancelButtons
     .saveSettingsButton Save

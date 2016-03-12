@@ -100,7 +100,7 @@ function showAddPageSubbar(){
 }
 
 function hidePageSubbarAndReset(){
-  $.Velocity(
+  return $.Velocity(
     addPageUrlsDiv$[0],
     "slideUp",
     {
@@ -155,22 +155,25 @@ function setFileReadErroProgressAndStartListeners(reader){
           Error: ${reader.error.name}`,
       6
     )
+    reader.abort()
   }
 }
 
 function saveUrls(urlsToSave){
   suspend(function*(urlsToSave){
     var urlsThatErrored = []
-    var progressStepAmount = progressBarContainerWidth/urlsToSave.length
+    var progressStepAmount = progressBarContainerWidth/urlsToSave.size
     var error
+    var index = 0
     progressBar$.velocity("stop")
     progressBar$.width(0)
     progressBar$.removeClass('hide')
 
-    for(var i = 0; i < urlsToSave.length; i++) {
-      progressInfo$.text(`Saving ${urlsToSave[i]}`)
-      $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 5000, 'easeOutSine')
-      var encodedUrl = encodeURIComponent(urlsToSave[i])
+    for(var url of urlsToSave) {
+      progressInfo$.text(`Saving ${url}`)
+      $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(index+1))}, 4000, 'easeInOutCubic')
+      index = index + 1
+      var encodedUrl = encodeURIComponent(url)
       try{
         yield got.post(`/frontendapi/scrapeAndAdd/${encodedUrl}`, {headers: xhrHeaders})
       }
@@ -182,7 +185,7 @@ function saveUrls(urlsToSave){
           errMessage = JSON.parse(errMessage).errorMessage
         }
         urlsThatErrored.push({
-          url: urlsToSave[i],
+          url: url,
           errMessage: errMessage
         })
       }
@@ -197,7 +200,7 @@ function saveUrls(urlsToSave){
       progressBar$.addClass('hide')
       var ul$ = $('<ul>')
       var errorTextBeginning = ``
-      if(urlsThatErrored.length !== urlsToSave.length){
+      if(urlsThatErrored.length !== urlsToSave.size){
         errorTextBeginning = `Most URLs Saved, However `
       }
       $(`<li>${errorTextBeginning}Errors Occured While Saving The Following URLs:</li>`).appendTo(ul$)
@@ -215,6 +218,34 @@ function saveUrls(urlsToSave){
       }, 2500)
     }
   })(urlsToSave)
+}
+
+function exportUrls(typeOfExport){
+  got.post('/frontendapi/getall/', {headers: xhrHeaders})
+    .then( response => {
+      var rows = JSON.parse(response.body)
+      console.log(rows)
+      if(typeOfExport === 'HTML'){
+        var bookmarks = {
+          "MarkSearch Bookmarks": {
+            "contents": {}
+          }
+        }
+        _.each(rows, pageData => {
+          if(!pageData.pageTitle || !_.trim(pageData.pageTitle).length){
+            pageData.pageTitle = pageData.pageDomain + _.random(0, 1000000)
+          }
+          bookmarks["MarkSearch Bookmarks"].contents[pageData.pageTitle] = pageData.pageUrl
+        })
+
+      }
+      else if(typeOfExport === 'Text'){
+
+      }
+      else if(typeOfExport === 'PlainHTML'){
+
+      }
+    })
 }
 
 $(document).ready(settingsPageInit)
@@ -258,6 +289,9 @@ function settingsPageInit(event){
   var importTextFileInput$ = $('#importTextFileInput')
   var importTextFileButton$ = $('#importTextFileButton')
   var importHTMLFileButton$ = $('#importHTMLFileButton')
+  var exportHTMLFileButton$ = $('#exportHTMLFileButton')
+  var exportTextFileButton$ = $('#exportTextFileButton')
+  var exportPlainHTMLFileButton$ = $('#exportPlainHTMLFileButton')
 
   $('.addPageButtons').addClass('hide')
   addUrlsProgress$.removeClass('hide')
@@ -406,17 +440,55 @@ function settingsPageInit(event){
       var reader = new FileReader()
       setFileReadErroProgressAndStartListeners(reader)
       reader.onload = event => {
-        progressInfo$.text(`Loaded ${file.name}`)
-        var fileText = event.target.result
-        var bookmarksDoc = document.implementation.createHTMLDocument('')
-        bookmarksDoc.body.innerHTML = fileText
-        var urlsToSave = _.map(bookmarksDoc.body.querySelectorAll('a'), element => {
-          if(_.trim(element.href).length){
-            return element.href
+        got.post(
+          `/frontendapi/settings/checkIfFileIsBinary/${encodeURIComponent(file.path)}`,
+          {
+            headers: xhrHeaders
+          }
+        )
+        .then( response => {
+          progressInfo$.text(`Loaded ${file.name}`)
+          var fileText = event.target.result
+          var bookmarksDoc = document.implementation.createHTMLDocument('')
+          bookmarksDoc.body.innerHTML = fileText
+          var urlsToSave = _.map(bookmarksDoc.body.querySelectorAll('a'), element => {
+            if(_.trim(element.href).length){
+              return element.href
+            }
+          })
+          console.log(`urlsToSave`)
+          console.log(urlsToSave)
+          if(!urlsToSave.length){
+            showNotie(
+              notieAlert$,
+              'notie-alert-error',
+              3,
+              `Error: No URLs Were Found In The File.`,
+              6
+            )
+          }
+          else{
+            var deDupedUrlsToSave = new Set(urlsToSave)
+            saveUrls(deDupedUrlsToSave)
           }
         })
-        saveUrls(urlsToSave)
+        .catch( err => {
+          console.error(err)
+          var errorMessage = getErrorMessage(err)
+          hidePageSubbarAndReset()
+            .then(() => {
+              showNotie(
+                notieAlert$,
+                'notie-alert-error',
+                3,
+                `There Was An Error Opening The File.
+                      Error: ${errorMessage}`,
+                6
+              )
+            })
+        })
       }
+
       showAddPageSubbar()
         .then(() => {
           progressInfo$.text(`Loading ${file.name}`)
@@ -436,39 +508,70 @@ function settingsPageInit(event){
       var file = files[0]
       var reader = new FileReader()
       setFileReadErroProgressAndStartListeners(reader)
+
       reader.onload = event => {
-        progressInfo$.text(`Loaded ${file.name}`)
-        var fileText = event.target.result
-        var filteredLinesOfText = _.filter(fileText.split(/\r?\n/), lineValue => _.trim(lineValue).length)
-        var urlsToSave = []
-        _.each(filteredLinesOfText, lineValue => {
-          var a = document.createElement('a')
-          a.href = lineValue
-          /****
-           * For checks against non-urls and the file not being text (e.g. binary):
-           *  1.  Check if the a.hostname is the same as the window.location.hostname -
-           *        If the text is not a url, then a.href = lineValue results in lineValue
-           *        being appended to the current base url in the window and saved as that,
-           *        so we chech against the hostname being the same.
-           *  2.  Also need to check against empty href as binary data might not be parsable
-           *        by a element href assignment and ends up being an empty string.
-           *  3.  Some binary as text characters seem to also be able to be created as an
-           *        href for the a element, but not have a hostname.
-           */
-          if(a.hostname.length && a.href.length && a.hostname !== window.location.hostname){
-            debugger
-            var href = a.href
-            a = null
-            urlsToSave.push(href)
+        got.post(
+          `/frontendapi/settings/checkIfFileIsBinary/${encodeURIComponent(file.path)}`,
+          {
+            headers: xhrHeaders
+          }
+        )
+        .then( response => {
+          progressInfo$.text(`Loaded ${file.name}`)
+          var fileText = event.target.result
+          var filteredLinesOfText = _.filter(fileText.split(/\r?\n/), lineValue => _.trim(lineValue).length)
+          var urlsToSave = []
+          _.each(filteredLinesOfText, lineValue => {
+            var a = document.createElement('a')
+            a.href = lineValue
+            /****
+             * If the text is not a url, then a.href = lineValue results in lineValue being appended
+             * to the current base url in the window and saved as that. Also check against empty stuff.
+             * Leave a.hostname.length check in there.
+             * Null the a element in case we are creating 1000s
+             */
+            if(a.href.length && a.hostname.length && a.hostname !== window.location.hostname){
+              var href = a.href
+              a = null
+              urlsToSave.push(href)
+            }
+            else{
+              a = null
+            }
+          })
+          console.log(`urlsToSave`)
+          console.log(urlsToSave)
+          if(!urlsToSave.length){
+            showNotie(
+              notieAlert$,
+              'notie-alert-error',
+              3,
+              `Error: No URLs Were Found In The File.`,
+              6
+            )
           }
           else{
-            a = null
+            var deDupedUrlsToSave = new Set(urlsToSave)
+            saveUrls(deDupedUrlsToSave)
           }
         })
-        console.log('urlsToSave')
-        console.log(urlsToSave)
-        //saveUrls(urlsToSave)
+        .catch( err => {
+          console.error(err)
+          var errorMessage = getErrorMessage(err)
+          hidePageSubbarAndReset()
+            .then(() => {
+              showNotie(
+                notieAlert$,
+                'notie-alert-error',
+                3,
+                `There Was An Error Opening The File.
+                  Error: ${errorMessage}`,
+                6
+              )
+            })
+        })
       }
+
       showAddPageSubbar()
         .then(() => {
           progressInfo$.text(`Loading ${file.name}`)
@@ -478,11 +581,30 @@ function settingsPageInit(event){
   })
 
   /****
-   * OK Button On Saving Error
+   * OK Button On Importing URLs Saving Error
    */
   errorOKbutton$.click(event => {
     hidePageSubbarAndReset()
   })
+
+  /****
+   * Export URLs
+   */
+
+   exportHTMLFileButton$.click(event => {
+     event.preventDefault()
+     exportUrls('HTML')
+   })
+
+   exportTextFileButton$.click(event => {
+     event.preventDefault()
+     exportUrls('Text')
+   })
+
+   exportPlainHTMLFileButton$.click(event => {
+     event.preventDefault()
+     exportUrls('PlainHTML')
+   })
 
   /****
    * Save Settings

@@ -315,7 +315,7 @@ function addUrlsInit() {
               }
 
               progressInfo$.text('Saving ' + trimmedUrlsArray[i]);
-              $.Velocity.animate(progressBar$[0], { width: progressStepAmount * (i + 1) }, 5000, 'easeOutSine');
+              $.Velocity.animate(progressBar$[0], { width: progressStepAmount * (i + 1) }, 4000, 'easeOutSine');
               encodedUrl = encodeURIComponent(trimmedUrlsArray[i]);
               _context.prev = 6;
               _context.next = 9;

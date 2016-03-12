@@ -164,7 +164,7 @@ function addUrlsInit(){
             var urlsThatErrored = []
             for(var i = 0; i < trimmedUrlsArray.length; i++) {
               progressInfo$.text(`Saving ${trimmedUrlsArray[i]}`)
-              $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 5000, 'easeOutSine')
+              $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 4000, 'easeOutSine')
               var encodedUrl = encodeURIComponent(trimmedUrlsArray[i])
               try{
                 yield got.post(`/frontendapi/scrapeAndAdd/${encodedUrl}`, {headers: {'X-CSRF-Token': csrfToken}})

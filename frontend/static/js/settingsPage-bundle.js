@@ -210,7 +210,7 @@ function showAddPageSubbar() {
 }
 
 function hidePageSubbarAndReset() {
-  $.Velocity(addPageUrlsDiv$[0], "slideUp", {
+  return $.Velocity(addPageUrlsDiv$[0], "slideUp", {
     duration: 500,
     display: 'none'
   }).then(function () {
@@ -243,46 +243,55 @@ function setFileReadErroProgressAndStartListeners(reader) {
     console.error(event);
     console.error(reader.error);
     showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Loading The File.\n          Error: ' + reader.error.name, 6);
+    reader.abort();
   };
 }
 
 function saveUrls(urlsToSave) {
   (0, _suspend2.default)(regeneratorRuntime.mark(function _callee(urlsToSave) {
-    var urlsThatErrored, progressStepAmount, error, i, encodedUrl, errMessage, ul$, errorTextBeginning, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, errUrl;
+    var urlsThatErrored, progressStepAmount, error, index, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, url, encodedUrl, errMessage, ul$, errorTextBeginning, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, errUrl;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             urlsThatErrored = [];
-            progressStepAmount = progressBarContainerWidth / urlsToSave.length;
+            progressStepAmount = progressBarContainerWidth / urlsToSave.size;
+            index = 0;
 
             progressBar$.velocity("stop");
             progressBar$.width(0);
             progressBar$.removeClass('hide');
 
-            i = 0;
+            _iteratorNormalCompletion = true;
+            _didIteratorError = false;
+            _iteratorError = undefined;
+            _context.prev = 9;
+            _iterator = urlsToSave[Symbol.iterator]();
 
-          case 6:
-            if (!(i < urlsToSave.length)) {
-              _context.next = 25;
+          case 11:
+            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+              _context.next = 32;
               break;
             }
 
-            progressInfo$.text('Saving ' + urlsToSave[i]);
-            $.Velocity.animate(progressBar$[0], { width: progressStepAmount * (i + 1) }, 5000, 'easeOutSine');
-            encodedUrl = encodeURIComponent(urlsToSave[i]);
-            _context.prev = 10;
-            _context.next = 13;
+            url = _step.value;
+
+            progressInfo$.text('Saving ' + url);
+            $.Velocity.animate(progressBar$[0], { width: progressStepAmount * (index + 1) }, 4000, 'easeInOutCubic');
+            index = index + 1;
+            encodedUrl = encodeURIComponent(url);
+            _context.prev = 17;
+            _context.next = 20;
             return _got2.default.post('/frontendapi/scrapeAndAdd/' + encodedUrl, { headers: xhrHeaders });
 
-          case 13:
-            _context.next = 22;
+          case 20:
+            _context.next = 29;
             break;
 
-          case 15:
-            _context.prev = 15;
-            _context.t0 = _context['catch'](10);
+          case 22:
+            _context.prev = 22;
+            _context.t0 = _context['catch'](17);
 
             console.error(_context.t0);
             error = _context.t0;
@@ -292,18 +301,52 @@ function saveUrls(urlsToSave) {
               errMessage = JSON.parse(errMessage).errorMessage;
             }
             urlsThatErrored.push({
-              url: urlsToSave[i],
+              url: url,
               errMessage: errMessage
             });
 
-          case 22:
-            i++;
-            _context.next = 6;
+          case 29:
+            _iteratorNormalCompletion = true;
+            _context.next = 11;
             break;
 
-          case 25:
+          case 32:
+            _context.next = 38;
+            break;
+
+          case 34:
+            _context.prev = 34;
+            _context.t1 = _context['catch'](9);
+            _didIteratorError = true;
+            _iteratorError = _context.t1;
+
+          case 38:
+            _context.prev = 38;
+            _context.prev = 39;
+
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+
+          case 41:
+            _context.prev = 41;
+
+            if (!_didIteratorError) {
+              _context.next = 44;
+              break;
+            }
+
+            throw _iteratorError;
+
+          case 44:
+            return _context.finish(41);
+
+          case 45:
+            return _context.finish(38);
+
+          case 46:
             if (!error) {
-              _context.next = 59;
+              _context.next = 80;
               break;
             }
 
@@ -317,58 +360,58 @@ function saveUrls(urlsToSave) {
             ul$ = $('<ul>');
             errorTextBeginning = '';
 
-            if (urlsThatErrored.length !== urlsToSave.length) {
+            if (urlsThatErrored.length !== urlsToSave.size) {
               errorTextBeginning = 'Most URLs Saved, However ';
             }
             $('<li>' + errorTextBeginning + 'Errors Occured While Saving The Following URLs:</li>').appendTo(ul$);
-            _iteratorNormalCompletion = true;
-            _didIteratorError = false;
-            _iteratorError = undefined;
-            _context.prev = 40;
-            for (_iterator = urlsThatErrored[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-              errUrl = _step.value;
+            _iteratorNormalCompletion2 = true;
+            _didIteratorError2 = false;
+            _iteratorError2 = undefined;
+            _context.prev = 61;
+            for (_iterator2 = urlsThatErrored[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              errUrl = _step2.value;
 
               $('<li>' + errUrl.url + ' - reason: ' + errUrl.errMessage + '</li>').appendTo(ul$);
             }
-            _context.next = 48;
+            _context.next = 69;
             break;
 
-          case 44:
-            _context.prev = 44;
-            _context.t1 = _context['catch'](40);
-            _didIteratorError = true;
-            _iteratorError = _context.t1;
+          case 65:
+            _context.prev = 65;
+            _context.t2 = _context['catch'](61);
+            _didIteratorError2 = true;
+            _iteratorError2 = _context.t2;
 
-          case 48:
-            _context.prev = 48;
-            _context.prev = 49;
+          case 69:
+            _context.prev = 69;
+            _context.prev = 70;
 
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
             }
 
-          case 51:
-            _context.prev = 51;
+          case 72:
+            _context.prev = 72;
 
-            if (!_didIteratorError) {
-              _context.next = 54;
+            if (!_didIteratorError2) {
+              _context.next = 75;
               break;
             }
 
-            throw _iteratorError;
+            throw _iteratorError2;
 
-          case 54:
-            return _context.finish(51);
+          case 75:
+            return _context.finish(72);
 
-          case 55:
-            return _context.finish(48);
+          case 76:
+            return _context.finish(69);
 
-          case 56:
+          case 77:
             progressInfo$.append(ul$);
-            _context.next = 63;
+            _context.next = 84;
             break;
 
-          case 59:
+          case 80:
             progressBar$.velocity("stop");
             $.Velocity.animate(progressBar$[0], { width: progressBarContainerWidth }, 10, 'easeOutExpo');
             progressInfo$.text('All URLs Saved');
@@ -376,12 +419,12 @@ function saveUrls(urlsToSave) {
               hidePageSubbarAndReset();
             }, 2500);
 
-          case 63:
+          case 84:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[10, 15], [40, 44, 48, 56], [49,, 51, 55]]);
+    }, _callee, this, [[9, 34, 38, 46], [17, 22], [39,, 41, 45], [61, 65, 69, 77], [70,, 72, 76]]);
   }))(urlsToSave);
 }
 
@@ -426,6 +469,9 @@ function settingsPageInit(event) {
   var importTextFileInput$ = $('#importTextFileInput');
   var importTextFileButton$ = $('#importTextFileButton');
   var importHTMLFileButton$ = $('#importHTMLFileButton');
+  var exportHTMLFileButton$ = $('#exportHTMLFileButton');
+  var exportTextFileButton$ = $('#exportTextFileButton');
+  var exportPlainHTMLFileButton$ = $('#exportPlainHTMLFileButton');
 
   $('.addPageButtons').addClass('hide');
   addUrlsProgress$.removeClass('hide');
@@ -536,17 +582,35 @@ function settingsPageInit(event) {
       var reader = new FileReader();
       setFileReadErroProgressAndStartListeners(reader);
       reader.onload = function (event) {
-        progressInfo$.text('Loaded ' + file.name);
-        var fileText = event.target.result;
-        var bookmarksDoc = document.implementation.createHTMLDocument('');
-        bookmarksDoc.body.innerHTML = fileText;
-        var urlsToSave = _lodash2.default.map(bookmarksDoc.body.querySelectorAll('a'), function (element) {
-          if (_lodash2.default.trim(element.href).length) {
-            return element.href;
+        _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
+          headers: xhrHeaders
+        }).then(function (response) {
+          progressInfo$.text('Loaded ' + file.name);
+          var fileText = event.target.result;
+          var bookmarksDoc = document.implementation.createHTMLDocument('');
+          bookmarksDoc.body.innerHTML = fileText;
+          var urlsToSave = _lodash2.default.map(bookmarksDoc.body.querySelectorAll('a'), function (element) {
+            if (_lodash2.default.trim(element.href).length) {
+              return element.href;
+            }
+          });
+          console.log('urlsToSave');
+          console.log(urlsToSave);
+          if (!urlsToSave.length) {
+            showNotie(notieAlert$, 'notie-alert-error', 3, 'Error: No URLs Were Found In The File.', 6);
+          } else {
+            var deDupedUrlsToSave = new Set(urlsToSave);
+            saveUrls(deDupedUrlsToSave);
           }
+        }).catch(function (err) {
+          console.error(err);
+          var errorMessage = getErrorMessage(err);
+          hidePageSubbarAndReset().then(function () {
+            showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Opening The File.\n                      Error: ' + errorMessage, 6);
+          });
         });
-        saveUrls(urlsToSave);
       };
+
       showAddPageSubbar().then(function () {
         progressInfo$.text('Loading ' + file.name);
         reader.readAsText(file);
@@ -565,40 +629,51 @@ function settingsPageInit(event) {
       var file = files[0];
       var reader = new FileReader();
       setFileReadErroProgressAndStartListeners(reader);
+
       reader.onload = function (event) {
-        progressInfo$.text('Loaded ' + file.name);
-        var fileText = event.target.result;
-        var filteredLinesOfText = _lodash2.default.filter(fileText.split(/\r?\n/), function (lineValue) {
-          return _lodash2.default.trim(lineValue).length;
-        });
-        var urlsToSave = [];
-        _lodash2.default.each(filteredLinesOfText, function (lineValue) {
-          var a = document.createElement('a');
-          a.href = lineValue;
-          /****
-           * For checks against non-urls and the file not being text (e.g. binary):
-           *  1.  Check if the a.hostname is the same as the window.location.hostname -
-           *        If the text is not a url, then a.href = lineValue results in lineValue
-           *        being appended to the current base url in the window and saved as that,
-           *        so we chech against the hostname being the same.
-           *  2.  Also need to check against empty href as binary data might not be parsable
-           *        by a element href assignment and ends up being an empty string.
-           *  3.  Some binary as text characters seem to also be able to be created as an
-           *        href for the a element, but not have a hostname.
-           */
-          if (a.hostname.length && a.href.length && a.hostname !== window.location.hostname) {
-            debugger;
-            var href = a.href;
-            a = null;
-            urlsToSave.push(href);
+        _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
+          headers: xhrHeaders
+        }).then(function (response) {
+          progressInfo$.text('Loaded ' + file.name);
+          var fileText = event.target.result;
+          var filteredLinesOfText = _lodash2.default.filter(fileText.split(/\r?\n/), function (lineValue) {
+            return _lodash2.default.trim(lineValue).length;
+          });
+          var urlsToSave = [];
+          _lodash2.default.each(filteredLinesOfText, function (lineValue) {
+            var a = document.createElement('a');
+            a.href = lineValue;
+            /****
+             * If the text is not a url, then a.href = lineValue results in lineValue being appended
+             * to the current base url in the window and saved as that. Also check against empty stuff.
+             * Leave a.hostname.length check in there.
+             * Null the a element in case we are creating 1000s
+             */
+            if (a.href.length && a.hostname.length && a.hostname !== window.location.hostname) {
+              var href = a.href;
+              a = null;
+              urlsToSave.push(href);
+            } else {
+              a = null;
+            }
+          });
+          console.log('urlsToSave');
+          console.log(urlsToSave);
+          if (!urlsToSave.length) {
+            showNotie(notieAlert$, 'notie-alert-error', 3, 'Error: No URLs Were Found In The File.', 6);
           } else {
-            a = null;
+            var deDupedUrlsToSave = new Set(urlsToSave);
+            saveUrls(deDupedUrlsToSave);
           }
+        }).catch(function (err) {
+          console.error(err);
+          var errorMessage = getErrorMessage(err);
+          hidePageSubbarAndReset().then(function () {
+            showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Opening The File.\n                  Error: ' + errorMessage, 6);
+          });
         });
-        console.log('urlsToSave');
-        console.log(urlsToSave);
-        //saveUrls(urlsToSave)
       };
+
       showAddPageSubbar().then(function () {
         progressInfo$.text('Loading ' + file.name);
         reader.readAsText(file);
@@ -607,10 +682,30 @@ function settingsPageInit(event) {
   });
 
   /****
-   * OK Button On Saving Error
+   * OK Button On Importing URLs Saving Error
    */
   errorOKbutton$.click(function (event) {
     hidePageSubbarAndReset();
+  });
+
+  /****
+   * Export URLs
+   */
+
+  exportHTMLFileButton$.click(function (event) {
+    event.preventDefault();
+    _got2.default.post('/frontendapi/getall/', { headers: xhrHeaders }).then(function (response) {
+      var rows = JSON.parse(response.body);
+      console.log(rows);
+    });
+  });
+
+  exportTextFileButton$.click(function (event) {
+    event.preventDefault();
+  });
+
+  exportPlainHTMLFileButton$.click(function (event) {
+    event.preventDefault();
   });
 
   /****
