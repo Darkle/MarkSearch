@@ -276,7 +276,14 @@ function addUrlsInit() {
     //addUrlsProgress$.height(addPageButtonsContainer$.height())
     addUrlsTextArea$.toggleClass('hide');
     addUrlsTextArea$.val('');
-    progressInfo$.height(textAreaHeight);
+    progressInfo$.css('height', textAreaHeight);
+    setTimeout(function (event) {
+      //progressInfo$.velocity({ height: 35 }, 500)
+      $.Velocity.animate(progressInfo$[0], { height: 35 }, 500).then(function (elements) {
+        console.log('progressInfo$ then');
+        progressInfo$.css('height', '');
+      });
+    }, 10);
     progressInfo$.toggleClass('hide');
     addPageButtonsContainer$.toggleClass('hide');
     addUrlsProgress$.toggleClass('hide');
@@ -308,18 +315,19 @@ function addUrlsInit() {
               }
 
               progressInfo$.text('Saving ' + trimmedUrlsArray[i]);
+              $.Velocity.animate(progressBar$[0], { width: progressStepAmount * (i + 1) }, 5000, 'easeOutSine');
               encodedUrl = encodeURIComponent(trimmedUrlsArray[i]);
-              _context.prev = 5;
-              _context.next = 8;
+              _context.prev = 6;
+              _context.next = 9;
               return _got2.default.post('/frontendapi/scrapeAndAdd/' + encodedUrl, { headers: { 'X-CSRF-Token': _searchPage.csrfToken } });
 
-            case 8:
-              _context.next = 17;
+            case 9:
+              _context.next = 18;
               break;
 
-            case 10:
-              _context.prev = 10;
-              _context.t0 = _context['catch'](5);
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context['catch'](6);
 
               console.error(_context.t0);
               error = _context.t0;
@@ -334,9 +342,6 @@ function addUrlsInit() {
                 url: trimmedUrlsArray[i],
                 errMessage: errMessage
               });
-
-            case 17:
-              $.Velocity.animate(progressBar$[0], { width: progressStepAmount * (i + 1) }, 1000, 'easeOutSine');
 
             case 18:
               i++;
@@ -424,7 +429,7 @@ function addUrlsInit() {
               return _context.stop();
           }
         }
-      }, _callee, this, [[5, 10], [36, 40, 44, 52], [45,, 47, 51]]);
+      }, _callee, this, [[6, 11], [36, 40, 44, 52], [45,, 47, 51]]);
     }))();
   }, 3000, {
     'leading': true,
@@ -533,6 +538,8 @@ exports.chunkResults = chunkResults;
 
 },{"lodash":329}],6:[function(require,module,exports){
 'use strict';
+
+/* globals formplate */
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -1164,6 +1171,8 @@ exports.removeResults = removeResults;
 },{"./resultsEventHandlers":14,"./searchPage":17,"lodash":329}],13:[function(require,module,exports){
 'use strict';
 
+/* globals markSearchSettings  */
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -1722,6 +1731,8 @@ exports.searchInput$ = searchInput$;
 
 },{"./addUrls":2,"./checkIfTouchDevice":3,"./checkIfiOS7":4,"./dateFilter":6,"./infiniteScroll":8,"./initSearchPlaceholder":9,"./queryServerAndRender":11,"./tooltips":18,"babel-polyfill":21,"lodash":329}],18:[function(require,module,exports){
 'use strict';
+
+/* globals markSearchSettings */
 
 Object.defineProperty(exports, "__esModule", {
   value: true

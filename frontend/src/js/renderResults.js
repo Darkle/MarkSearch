@@ -1,5 +1,7 @@
 'use strict';
 
+/* globals markSearchSettings  */
+
 import { resultsContainer$ } from './searchPage'
 import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEventHandlers'
 import { updateChunkShownValue } from './resultsObject'

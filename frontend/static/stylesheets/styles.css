@@ -565,6 +565,7 @@ body {
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
+  font-size: 1.1rem;
 }
 .navHeader .addPageUrls .progressInfo ul {
   list-style: none;
@@ -924,6 +925,7 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
+  padding-bottom: 40px;
 }
 .settingsPage .navHeader .searchContainer {
   display: none;
@@ -941,6 +943,9 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
           justify-content: center;
   cursor: default;
   font-weight: bold;
+}
+.settingsPage .subBar .addPageUrls textarea {
+  display: none;
 }
 .settingsPage .formplate * {
   border-radius: 0 !important;
@@ -979,7 +984,7 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   margin-right: auto;
 }
 .settingsPage .settings > div {
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.4rem;
   padding-bottom: 1rem;
   border-bottom-width: 1px;
   border-bottom-style: solid;
@@ -990,7 +995,7 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 }
 .settingsPage .settings > div:nth-of-type(1) {
   margin-top: 0.5rem;
-  padding-top: 1.5rem;
+  padding-top: 1.2rem;
   border-top-width: 1px;
   border-top-style: solid;
   border-top-color: #77BBEB;
@@ -1031,7 +1036,7 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 .settingsPage .settings .formplate .formplate-checkbox.checked input {
   z-index: 50;
 }
-.settingsPage .genTokenOuterContainer {
+.settingsPage .settings .genTokenOuterContainer {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1041,6 +1046,10 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
+  margin-bottom: 1.1rem;
+}
+.settingsPage .genTokenOuterContainer .browserTokenTitle {
+  margin-bottom: 0.7rem;
 }
 .settingsPage .genTokenOuterContainer #browserAddonTokenButton {
   font-size: 0.8rem;
@@ -1093,8 +1102,8 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
       -ms-flex-direction: column;
           flex-direction: column;
 }
-.settingsPage .bookmarkletContainer .genTokenContainer:nth-child(2) {
-  margin-top: 1rem;
+.settingsPage .bookmarkletContainer .genTokenContainer {
+  margin-top: 0.7rem;
 }
 .settingsPage .bookmarkletContainer .settingDetail {
   margin-top: 0.5rem;
@@ -1230,6 +1239,58 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 .settingsPage .dbLocationContainer #dragAndDropContainer #dragAndDrop.dragHover {
   border: 10px dashed #A3A3A3;
   color: white;
+}
+.settingsPage .importContainer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.settingsPage .importContainer .importButtonsContainer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.settingsPage .importContainer #importTextFileInput {
+  display: none;
+}
+.settingsPage .importContainer #importHTMLFileInput {
+  display: none;
+}
+.settingsPage .importContainer #importHTMLFileButton {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 12rem;
+  margin-top: 0.7rem;
+}
+.settingsPage .importContainer #importTextFileButton {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 9rem;
+  margin-top: 0.7rem;
 }
 .settingsPage .settingsSaveCancelButtons {
   display: -webkit-box;
@@ -1439,10 +1500,14 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
     padding: 0 0.5rem;
   }
   .searchPage .navHeader .addPageUrls textarea {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    line-height: 1.5rem;
   }
   .searchPage .navHeader .addPageUrls .addPageButtons {
     font-size: 1.8rem;
+  }
+  .searchPage .navHeader .addPageUrls .progressInfo {
+    font-size: 1.6rem;
   }
   .searchPage .navHeader .dateFilterSettings {
     font-size: 1.5rem;
@@ -1504,6 +1569,9 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 35em width and less
 *****/
 @media (max-width: 36em) {
+  .searchPage .navHeader .addPageUrls .progressInfo {
+    font-size: 1rem;
+  }
   .searchPage .navHeader .dateFilterSettings {
     height: 140px;
   }
@@ -1564,9 +1632,6 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   /*****
     Prevent auto-zoom into the textarea
   */
-  .searchPage .navHeader .addPageUrls textarea {
-    font-size: 16px;
-  }
   .searchPage #resultsCount {
     font-size: 1rem;
   }

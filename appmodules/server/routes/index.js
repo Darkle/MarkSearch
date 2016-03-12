@@ -89,7 +89,6 @@ router.post('/frontendapi/settings/update/', apiModules.updateMarkSearchSettings
 router.post('/frontendapi/settings/changePagesDBlocation/', apiModules.changePagesDBlocation)
 router.post('/frontendapi/settings/generateExtToken/', apiModules.generateExtToken)
 router.post('/frontendapi/settings/emailBookmarklet/', apiModules.emailBookmarklet)
-router.post('/frontendapi/settings/parseImportFileAndReturnUrls/:fileType/:importBookmarksFilePath', apiModules.parseImportFileAndReturnUrls)
 
 
 module.exports = router

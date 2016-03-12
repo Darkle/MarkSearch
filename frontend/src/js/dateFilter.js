@@ -1,5 +1,7 @@
 'use strict';
 
+/* globals formplate */
+
 import { queryServerAndRender } from './queryServerAndRender'
 
 import velocity from 'velocity-animate'

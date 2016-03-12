@@ -56,9 +56,10 @@ gulp.task('nodemon', cb => {
 gulp.task('browser-sync', () =>
   browserSync.init({
     proxy: "localhost:3000",
-    //files: [
-    //  path.join('appmodules', '**', '*.*')
-    //],
+    files: [
+      //path.join('appmodules', '**', '*.*')
+      path.join(__dirname, 'appmodules', 'server', 'views', '*.jade')
+    ],
     port: 3020,
     open: false, // Stop the browser from automatically opening
     notify: false,

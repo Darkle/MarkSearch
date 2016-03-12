@@ -40,10 +40,14 @@
     padding: 0 0.5rem;
   }
   .searchPage .navHeader .addPageUrls textarea {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    line-height: 1.5rem;
   }
   .searchPage .navHeader .addPageUrls .addPageButtons {
     font-size: 1.8rem;
+  }
+  .searchPage .navHeader  .addPageUrls .progressInfo {
+    font-size: 1.6rem;
   }
   .searchPage .navHeader .dateFilterSettings {
     font-size: 1.5rem;
@@ -101,6 +105,9 @@
 35em width and less
 *****/
 @media (max-width: 36em) {
+  .searchPage .navHeader  .addPageUrls .progressInfo {
+    font-size: 1rem;
+  }
   .searchPage .navHeader .dateFilterSettings {
     height: 140px;
   }
@@ -168,9 +175,6 @@
   /*****
     Prevent auto-zoom into the textarea
   */
-  .searchPage .navHeader .addPageUrls textarea {
-    font-size: 16px;
-  }
   .searchPage #resultsCount {
     font-size: 1rem;
   }

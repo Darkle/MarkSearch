@@ -9,6 +9,7 @@ block content
     .settings
       input#csrfInput(type="hidden", name="_csrf", value="#{csrfToken}")
       .genTokenOuterContainer
+        .browserTokenTitle Browser Token
         .genTokenContainer
           a#browserAddonTokenButton.button.black.square(href="#") Generate Browser Token
           .formplate
@@ -19,6 +20,7 @@ block content
           This token is used in the MarkSearch browser extension. More info info
           is available on the <a href="/helpPage#browserAddon">Help Page</a>
       .bookmarkletContainer
+        .bookmarkletTokenTitle Bookmarklet
         .genTokenContainer
           a#bookmarkletButton.button.black.square(href="#") Generate Bookmarklet
           .formplate
@@ -63,6 +65,27 @@ block content
           if you want to have your bookmarks automatically backed up (e.g. putting them in
           a Dropbox folder). <strong>Note: if you already have a
           file named "MarkSearchPages.db" in that directory, it will be overwritten.</strong>
+      .importContainer
+        .importTitle Import URLs
+        .importButtonsContainer
+          input#importHTMLFileInput(type="file")
+          input#importTextFileInput(type="file")
+          a#importHTMLFileButton.button.black.square(href="#") Import Bookmarks.html File
+          a#importTextFileButton.button.black.square(href="#") Import Plain Text File
+        .settingDetail
+          p.
+            You can import URLs into MarkSearch using either a Netscape Bookmarks html file or a Plain Text file.
+          p.
+            Netscape Bookmarks html files can be exported by Chrome, Firefox and IE, so you can export your bookmarks from
+            those browsers and then import them into MarkSearch.
+          p.
+            You can also import bookmarks from Instapaper, Pocket & Pinboard using the "Import Bookmarks.html File" method.
+            Note: make sure when exporting your bookmarks from Instapaper or Pinboard, that you choose the "html" export method.
+          p.
+            You can also import URLs via a plain text file. The plain text file must contain a url on each new line.
+          p.
+            When importing, MarkSearch scrapes the web page for each URL you are importing, so the import may take some time if
+            there are a large number of URLs to import/scrape.
 
   .settingsSaveCancelButtons
     .saveSettingsButton Save

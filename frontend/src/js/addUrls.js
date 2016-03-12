@@ -136,7 +136,15 @@ function addUrlsInit(){
           //addUrlsProgress$.height(addPageButtonsContainer$.height())
           addUrlsTextArea$.toggleClass('hide')
           addUrlsTextArea$.val('')
-          progressInfo$.height(textAreaHeight)
+          progressInfo$.css('height', textAreaHeight)
+          setTimeout(event => {
+            //progressInfo$.velocity({ height: 35 }, 500)
+            $.Velocity.animate(progressInfo$[0], {height: 35}, 500)
+              .then(elements => {
+                console.log('progressInfo$ then')
+                progressInfo$.css('height', '')
+              })
+          }, 10)
           progressInfo$.toggleClass('hide')
           addPageButtonsContainer$.toggleClass('hide')
           addUrlsProgress$.toggleClass('hide')
@@ -156,6 +164,7 @@ function addUrlsInit(){
             var urlsThatErrored = []
             for(var i = 0; i < trimmedUrlsArray.length; i++) {
               progressInfo$.text(`Saving ${trimmedUrlsArray[i]}`)
+              $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 5000, 'easeOutSine')
               var encodedUrl = encodeURIComponent(trimmedUrlsArray[i])
               try{
                 yield got.post(`/frontendapi/scrapeAndAdd/${encodedUrl}`, {headers: {'X-CSRF-Token': csrfToken}})
@@ -175,7 +184,6 @@ function addUrlsInit(){
                   errMessage: errMessage
                 })
               }
-              $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 1000, 'easeOutSine')
             }
             if(error){
               progressBar$.velocity("stop")

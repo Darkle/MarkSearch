@@ -1,5 +1,7 @@
 'use strict';
 
+/* globals markSearchSettings */
+
 import { checkIfTouchDevice } from './checkIfTouchDevice'
 
 /****

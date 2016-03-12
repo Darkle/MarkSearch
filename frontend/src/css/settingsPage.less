@@ -3,6 +3,7 @@
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  padding-bottom: 40px;
 }
 
 .settingsPage .navHeader .searchContainer {
@@ -21,6 +22,10 @@
   justify-content: center;
   cursor: default;
   font-weight: bold;
+}
+
+.settingsPage .subBar .addPageUrls textarea{
+  display: none;
 }
 
 .settingsPage .formplate * {
@@ -59,7 +64,7 @@
 }
 
 .settingsPage .settings > div {
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.4rem;
   padding-bottom: 1rem;
   border-bottom-width: 1px;
   border-bottom-style: solid;
@@ -72,7 +77,7 @@
 
 .settingsPage .settings > div:nth-of-type(1) {
   margin-top:0.5rem;
-  padding-top: 1.5rem;
+  padding-top: 1.2rem;
   border-top-width: 1px;
   border-top-style: solid;
   border-top-color: #77BBEB;
@@ -124,9 +129,14 @@
   z-index: 50;
 }
 
-.settingsPage .genTokenOuterContainer {
+.settingsPage .settings .genTokenOuterContainer {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1.1rem;
+}
+
+.settingsPage .genTokenOuterContainer .browserTokenTitle {
+  margin-bottom: 0.7rem;
 }
 
 .settingsPage .genTokenOuterContainer #browserAddonTokenButton {
@@ -167,8 +177,12 @@
   flex-direction: column;
 }
 
-.settingsPage .bookmarkletContainer .genTokenContainer:nth-child(2) {
-  margin-top: 1rem;
+.settingsPage .bookmarkletContainer .bookmarkletTokenTitle {
+
+}
+
+.settingsPage .bookmarkletContainer .genTokenContainer {
+  margin-top: 0.7rem;
 }
 
 .settingsPage .bookmarkletContainer .settingDetail {
@@ -259,12 +273,44 @@
   color: #ccc;
 }
 
-
 .settingsPage .dbLocationContainer #dragAndDropContainer #dragAndDrop.dragHover {
   border: 10px dashed #A3A3A3;
   //border: 10px dashed red;
   color: white;
 }
+
+.settingsPage .importContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsPage .importContainer .importButtonsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsPage .importContainer #importTextFileInput {
+  display: none;
+}
+
+.settingsPage .importContainer #importHTMLFileInput {
+  display: none;
+}
+
+.settingsPage .importContainer #importHTMLFileButton {
+  align-items: center;
+  display: flex;
+  width: 12rem;
+  margin-top: 0.7rem;
+}
+
+.settingsPage .importContainer #importTextFileButton {
+  align-items: center;
+  display: flex;
+  width: 9rem;
+  margin-top: 0.7rem;
+}
+
 
 .settingsPage .settingsSaveCancelButtons {
   //text-align: center;
