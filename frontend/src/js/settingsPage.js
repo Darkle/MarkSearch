@@ -11,6 +11,7 @@ import notie from 'notie'
 import _ from 'lodash'
 import velocity from 'velocity-animate'
 import suspend from 'suspend'
+import netscape from 'netscape-bookmarks'
 
 var prebrowsingCheckbox$
 var alwaysDisableTooltipsCheckbox$
@@ -107,14 +108,14 @@ function hidePageSubbarAndReset(){
       duration: 500,
       display: 'none'
     }
-  )
-  .then(() => {
-    progressBar$.width(0)
-    errorOKbutton$.addClass('hide')
-    progressInfo$.text(``)
-    progressBar$.removeClass('hide')
-    progressInfo$.css('overflow-y', 'visible')
-  })
+    )
+    .then(() => {
+      progressBar$.width(0)
+      errorOKbutton$.addClass('hide')
+      progressInfo$.text(``)
+      progressBar$.removeClass('hide')
+      progressInfo$.css('overflow-y', 'visible')
+    })
 }
 
 function setFileReadErroProgressAndStartListeners(reader){
@@ -220,35 +221,57 @@ function saveUrls(urlsToSave){
   })(urlsToSave)
 }
 
-function exportUrl(event){
+function exportUrls(typeOfExport){
+  got.post('/frontendapi/getall/', {headers: xhrHeaders})
+    .then( response => {
+      var rows = JSON.parse(response.body)
+      var downloadUrl
+      var blobData = ''
+      var fileExtension = 'html'
+      var downloadLink = document.createElement("a")
+      document.body.appendChild(downloadLink)
+      downloadLink.style = "display: none"
 
-  console.log(event.target.dataset.exporttype)
-  //var files = event.target.files
-  //if(files.length > 0){
-  //  var file = files[0]
-  //  got.post(
-  //    '/frontendapi/settings/exportUrls/',
-  //    {
-  //      headers: xhrHeaders,
-  //      body: {
-  //        filePath: file.path,
-  //        exportType:
-  //      }
-  //    }
-  //  )
-  //  .catch(err =>{
-  //    console.error(err)
-  //    var errorMessage = getErrorMessage(err)
-  //    showNotie(
-  //      notieAlert$,
-  //      'notie-alert-error',
-  //      3,
-  //      `There Was An Error Exporting.
-  //        Error: ${errorMessage}`,
-  //      6
-  //    )
-  //  })
-  //}
+      if(typeOfExport === 'HTML'){
+        var bookmarks = {
+          "MarkSearch Bookmarks": {
+            "contents": {}
+          }
+        }
+        _.each(rows, pageData => {
+          if(!pageData.pageTitle || !_.trim(pageData.pageTitle).length){
+            pageData.pageTitle = pageData.pageDomain + _.random(0, 1000000)
+          }
+          bookmarks["MarkSearch Bookmarks"].contents[pageData.pageTitle] = pageData.pageUrl
+        })
+        blobData = netscape(bookmarks)
+      }
+      else{
+        fileExtension = 'txt'
+        _.each(rows, pageData => {
+          blobData = blobData + pageData.pageUrl + '\n'
+        })
+      }
+      var blob = new Blob([blobData], {type : 'text/html'} )
+      downloadUrl = window.URL.createObjectURL(blob)
+      downloadLink.href = downloadUrl
+      downloadLink.download = `MarkSearch.${fileExtension}`
+      downloadLink.click()
+      window.URL.revokeObjectURL(downloadUrl)
+      document.body.removeChild(downloadLink)
+    })
+    .catch(err =>{
+      console.error(err)
+      var errorMessage = getErrorMessage(err)
+      showNotie(
+        notieAlert$,
+        'notie-alert-error',
+        3,
+        `There Was An Error Exporting.
+          Error: ${errorMessage}`,
+        6
+      )
+    })
 }
 
 $(document).ready(settingsPageInit)
@@ -294,10 +317,6 @@ function settingsPageInit(event){
   var importHTMLFileButton$ = $('#importHTMLFileButton')
   var exportHTMLFileButton$ = $('#exportHTMLFileButton')
   var exportTextFileButton$ = $('#exportTextFileButton')
-  var exportPlainHTMLFileButton$ = $('#exportPlainHTMLFileButton')
-  var exportHTMLFileInput$ = $('#exportHTMLFileInput')
-  var exportTextFileInput$ = $('#exportTextFileInput')
-  var exportPlainHTMLFileInput$ = $('#exportPlainHTMLFileInput')
 
   $('.addPageButtons').addClass('hide')
   addUrlsProgress$.removeClass('hide')
@@ -382,14 +401,14 @@ function settingsPageInit(event){
         var generatedBookmarkletText = `javascript:${encodeURIComponent(bookmarkletJS)}`
         var bookmarkletEmail = bookmarkletEmail$.val()
         return got.post('/frontendapi/settings/emailBookmarklet',
-                {
-                  headers: xhrHeaders,
-                  body: {
-                    email: JSON.stringify(bookmarkletEmail),
-                    bookmarkletText: generatedBookmarkletText
-                  }
-                }
-              )
+          {
+            headers: xhrHeaders,
+            body: {
+              email: JSON.stringify(bookmarkletEmail),
+              bookmarkletText: generatedBookmarkletText
+            }
+          }
+        )
       })
       .then(response => {
         showNotie(
@@ -451,48 +470,48 @@ function settingsPageInit(event){
           {
             headers: xhrHeaders
           }
-        )
-        .then( response => {
-          progressInfo$.text(`Loaded ${file.name}`)
-          var fileText = event.target.result
-          var bookmarksDoc = document.implementation.createHTMLDocument('')
-          bookmarksDoc.body.innerHTML = fileText
-          var urlsToSave = _.map(bookmarksDoc.body.querySelectorAll('a'), element => {
-            if(_.trim(element.href).length){
-              return element.href
-            }
-          })
-          console.log(`urlsToSave`)
-          console.log(urlsToSave)
-          if(!urlsToSave.length){
-            showNotie(
-              notieAlert$,
-              'notie-alert-error',
-              3,
-              `Error: No URLs Were Found In The File.`,
-              6
-            )
-          }
-          else{
-            var deDupedUrlsToSave = new Set(urlsToSave)
-            saveUrls(deDupedUrlsToSave)
-          }
-        })
-        .catch( err => {
-          console.error(err)
-          var errorMessage = getErrorMessage(err)
-          hidePageSubbarAndReset()
-            .then(() => {
+          )
+          .then( response => {
+            progressInfo$.text(`Loaded ${file.name}`)
+            var fileText = event.target.result
+            var bookmarksDoc = document.implementation.createHTMLDocument('')
+            bookmarksDoc.body.innerHTML = fileText
+            var urlsToSave = _.map(bookmarksDoc.body.querySelectorAll('a'), element => {
+              if(_.trim(element.href).length){
+                return element.href
+              }
+            })
+            console.log(`urlsToSave`)
+            console.log(urlsToSave)
+            if(!urlsToSave.length){
               showNotie(
                 notieAlert$,
                 'notie-alert-error',
                 3,
-                `There Was An Error Opening The File.
-                      Error: ${errorMessage}`,
+                `Error: No URLs Were Found In The File.`,
                 6
               )
-            })
-        })
+            }
+            else{
+              var deDupedUrlsToSave = new Set(urlsToSave)
+              saveUrls(deDupedUrlsToSave)
+            }
+          })
+          .catch( err => {
+            console.error(err)
+            var errorMessage = getErrorMessage(err)
+            hidePageSubbarAndReset()
+              .then(() => {
+                showNotie(
+                  notieAlert$,
+                  'notie-alert-error',
+                  3,
+                  `There Was An Error Opening The File.
+                      Error: ${errorMessage}`,
+                  6
+                )
+              })
+          })
       }
 
       showAddPageSubbar()
@@ -521,61 +540,61 @@ function settingsPageInit(event){
           {
             headers: xhrHeaders
           }
-        )
-        .then( response => {
-          progressInfo$.text(`Loaded ${file.name}`)
-          var fileText = event.target.result
-          var filteredLinesOfText = _.filter(fileText.split(/\r?\n/), lineValue => _.trim(lineValue).length)
-          var urlsToSave = []
-          _.each(filteredLinesOfText, lineValue => {
-            var a = document.createElement('a')
-            a.href = lineValue
-            /****
-             * If the text is not a url, then a.href = lineValue results in lineValue being appended
-             * to the current base url in the window and saved as that. Also check against empty stuff.
-             * Leave a.hostname.length check in there.
-             * Null the a element in case we are creating 1000s
-             */
-            if(a.href.length && a.hostname.length && a.hostname !== window.location.hostname){
-              var href = a.href
-              a = null
-              urlsToSave.push(href)
-            }
-            else{
-              a = null
-            }
-          })
-          console.log(`urlsToSave`)
-          console.log(urlsToSave)
-          if(!urlsToSave.length){
-            showNotie(
-              notieAlert$,
-              'notie-alert-error',
-              3,
-              `Error: No URLs Were Found In The File.`,
-              6
-            )
-          }
-          else{
-            var deDupedUrlsToSave = new Set(urlsToSave)
-            saveUrls(deDupedUrlsToSave)
-          }
-        })
-        .catch( err => {
-          console.error(err)
-          var errorMessage = getErrorMessage(err)
-          hidePageSubbarAndReset()
-            .then(() => {
+          )
+          .then( response => {
+            progressInfo$.text(`Loaded ${file.name}`)
+            var fileText = event.target.result
+            var filteredLinesOfText = _.filter(fileText.split(/\r?\n/), lineValue => _.trim(lineValue).length)
+            var urlsToSave = []
+            _.each(filteredLinesOfText, lineValue => {
+              var a = document.createElement('a')
+              a.href = lineValue
+              /****
+               * If the text is not a url, then a.href = lineValue results in lineValue being appended
+               * to the current base url in the window and saved as that. Also check against empty stuff.
+               * Leave a.hostname.length check in there.
+               * Null the a element in case we are creating 1000s
+               */
+              if(a.href.length && a.hostname.length && a.hostname !== window.location.hostname){
+                var href = a.href
+                a = null
+                urlsToSave.push(href)
+              }
+              else{
+                a = null
+              }
+            })
+            console.log(`urlsToSave`)
+            console.log(urlsToSave)
+            if(!urlsToSave.length){
               showNotie(
                 notieAlert$,
                 'notie-alert-error',
                 3,
-                `There Was An Error Opening The File.
-                  Error: ${errorMessage}`,
+                `Error: No URLs Were Found In The File.`,
                 6
               )
-            })
-        })
+            }
+            else{
+              var deDupedUrlsToSave = new Set(urlsToSave)
+              saveUrls(deDupedUrlsToSave)
+            }
+          })
+          .catch( err => {
+            console.error(err)
+            var errorMessage = getErrorMessage(err)
+            hidePageSubbarAndReset()
+              .then(() => {
+                showNotie(
+                  notieAlert$,
+                  'notie-alert-error',
+                  3,
+                  `There Was An Error Opening The File.
+                  Error: ${errorMessage}`,
+                  6
+                )
+              })
+          })
       }
 
       showAddPageSubbar()
@@ -597,24 +616,15 @@ function settingsPageInit(event){
    * Export URLs
    */
 
-   exportHTMLFileButton$.click(event => {
-     event.preventDefault()
-     exportHTMLFileInput$.click()
-   })
-  exportHTMLFileInput$.change(exportUrl)
+  exportHTMLFileButton$.click(event => {
+    event.preventDefault()
+    exportUrls('HTML')
+  })
 
-   exportTextFileButton$.click(event => {
-     event.preventDefault()
-     exportTextFileInput$.click()
-   })
-  exportTextFileInput$.change(exportUrl)
-
-   exportPlainHTMLFileButton$.click(event => {
-     event.preventDefault()
-     exportPlainHTMLFileInput$.click()
-   })
-  exportPlainHTMLFileInput$.change(exportUrl)
-
+  exportTextFileButton$.click(event => {
+    event.preventDefault()
+    exportUrls('Text')
+  })
 
   /****
    * Save Settings
@@ -632,8 +642,8 @@ function settingsPageInit(event){
             oldPagesDBFilePath: markSearchSettings.pagesDBFilePath
           }
         }
-      )
-      .then(response => JSON.parse(response.body).newPagesDBFilePath)
+        )
+        .then(response => JSON.parse(response.body).newPagesDBFilePath)
     }
 
     possibleDBchangePromise

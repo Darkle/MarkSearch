@@ -91,10 +91,8 @@ block content
         .exportButtonsContainer
           input#exportHTMLFileInput(type="file", data-exporttype="HTML")
           input#exportTextFileInput(type="file", data-exporttype="Text")
-          input#exportPlainHTMLFileInput(type="file", data-exporttype="PlainHTML")
           a#exportHTMLFileButton.button.black.square(href="#") Export As Bookmarks.html File
           a#exportTextFileButton.button.black.square(href="#") Export As Plain Text File
-          a#exportPlainHTMLFileButton.button.black.square(href="#") Export As Plain HTML File
         .settingDetail
           p.
             Exporting as a Bookmarkls.html file (aka Netscape Bookmarks html file) will allow you to import your MarkSearch
@@ -102,9 +100,6 @@ block content
           p.
             Exporting as a Plain Text file will export all your MarkSearch URLs as plain text with each URL on a new line
             in the file.
-          p.
-            Exporting as a Plain HTML file will export your MarkSearch URLs into an html file with the URLs as links, so
-            you could then open that html file in a browser and click on the links to open them.
 
   .settingsSaveCancelButtons
     .saveSettingsButton Save
