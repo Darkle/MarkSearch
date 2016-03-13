@@ -54,7 +54,8 @@ var updateColumnValidation = {
     'pageText',
     'pageDescription',
     'archiveLink',
-    'safeBrowsing'
+    'safeBrowsing',
+    'checkedForExpiry'
   ],
   properties: {
     dateCreated: {
@@ -87,6 +88,10 @@ var updateColumnValidation = {
       type: ['string', 'null'],
       optional: true
     },
+    checkedForExpiry: {
+      type: 'boolean',
+      optional: true
+    },
   }
 }
 
@@ -103,6 +108,14 @@ function coerceIncomingColumnData(dataObj){
    */
   if(_.isObject(dataObj.safeBrowsing)){
     dataObj.safeBrowsing = JSON.stringify(dataObj.safeBrowsing)
+  }
+  if(dataObj.checkedForExpiry){
+    if(dataObj.checkedForExpiry === 'true'){
+      dataObj.checkedForExpiry = true
+    }
+    if(dataObj.checkedForExpiry === 'false'){
+      dataObj.checkedForExpiry = false
+    }
   }
   return dataObj
 }
@@ -126,6 +139,7 @@ pagesdb.init = (pagesDBFilePath) => {
             pageDescription text null,
             archiveLink text null,
             safeBrowsing text null,
+            checkedForExpiry boolean null,
             primary key (pageUrl)
           );`
         )
@@ -157,6 +171,7 @@ pagesdb.init = (pagesDBFilePath) => {
               pageDescription,
               archiveLink unindexed,
               safeBrowsing unindexed,
+              checkedForExpiry unindexed,
               content='pages',
               tokenize = porter
             );`
@@ -247,7 +262,8 @@ pagesdb.insertRow = rowData =>
           'pageText',
           'pageDescription',
           'archiveLink',
-          'safeBrowsing'
+          'safeBrowsing',
+          'checkedForExpiry'
         )
         .from('pages')
         .where('pageUrl', rowData.pageUrl)
@@ -263,7 +279,8 @@ pagesdb.insertRow = rowData =>
               pageText: rows[0].pageText,
               pageDescription: rows[0].pageDescription,
               archiveLink: rows[0].archiveLink,
-              safeBrowsing: rows[0].safeBrowsing
+              safeBrowsing: rows[0].safeBrowsing,
+              checkedForExpiry: rows[0].checkedForExpiry
             })
 
         )
@@ -289,7 +306,8 @@ pagesdb.deleteRow = pageUrl => {
         'pageText',
         'pageDescription',
         'archiveLink',
-        'safeBrowsing'
+        'safeBrowsing',
+        'checkedForExpiry'
       )
       .from('pages')
       .where('pageUrl', pageUrl)
@@ -306,7 +324,8 @@ pagesdb.deleteRow = pageUrl => {
             pageText: rows[0].pageText,
             pageDescription: rows[0].pageDescription,
             archiveLink: rows[0].archiveLink,
-            safeBrowsing: rows[0].safeBrowsing
+            safeBrowsing: rows[0].safeBrowsing,
+            checkedForExpiry: rows[0].checkedForExpiry
           })
       )
       .then(() =>

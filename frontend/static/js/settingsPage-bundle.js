@@ -685,7 +685,7 @@ function settingsPageInit(event) {
     }).catch(function (err) {
       console.error(err);
       var errorMessage = getErrorMessage(err);
-      showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Generating The Bookmarklet.\n           Error: ' + errorMessage, 6);
+      showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Revoking The Tokens.\n           Error: ' + errorMessage, 6);
     });
   });
 

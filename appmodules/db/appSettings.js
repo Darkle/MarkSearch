@@ -14,7 +14,14 @@ var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 var appSettingsValidation = {
   type: 'object',
   strict: true,
-  someKeys: ['pagesDBFilePath', 'prebrowsing', 'alwaysDisableTooltips'],
+  someKeys: [
+    'pagesDBFilePath',
+    'prebrowsing',
+    'alwaysDisableTooltips',
+    'bookmarkExpiryEnabled',
+    'bookmarkExpiryEmail',
+    'bookmarkExpiryMonths'
+  ],
   properties: {
     pagesDBFilePath: {
       type: 'string',
@@ -27,6 +34,19 @@ var appSettingsValidation = {
     alwaysDisableTooltips: {
       type: 'boolean',
       optional: true
+    },
+    bookmarkExpiryEnabled: {
+      type: 'boolean',
+      optional: true
+    },
+    bookmarkExpiryEmail: {
+      type: 'string',
+      optional: true
+    },
+    bookmarkExpiryMonths: {
+      type: 'integer',
+      gt: 0,
+      error: 'bookmarkExpiryMonths must be a valid integer and larger than 0'
     }
   }
 }
@@ -58,6 +78,10 @@ appSettings.init = (appDataPath) => {
         table.text('pagesDBFilePath').notNullable()
         table.boolean('prebrowsing').notNullable()
         table.boolean('alwaysDisableTooltips').notNullable()
+        table.boolean('bookmarkExpiryEnabled').notNullable()
+        table.text('bookmarkExpiryEmail').notNullable()
+        table.integer('bookmarkExpiryMonths').notNullable()
+        table.integer('bookmarkExpiryLastCheck').notNullable()
       })
     }
   })
@@ -76,7 +100,11 @@ appSettings.init = (appDataPath) => {
                 JWTsecret: Crypto.randomBytes(128).toString('hex'),
                 pagesDBFilePath: path.join(appDataPath, 'MarkSearchPages.db'),
                 prebrowsing: true,
-                alwaysDisableTooltips: false
+                alwaysDisableTooltips: false,
+                bookmarkExpiryEnabled: false,
+                bookmarkExpiryEmail: '',
+                bookmarkExpiryMonths: 3,
+                bookmarkExpiryLastCheck: Date.now()
               }
           )
     }

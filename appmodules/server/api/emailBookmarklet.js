@@ -1,6 +1,6 @@
 'use strict';
 
-var MailGun = require('mailgun-es6');
+var MailGun = require('mailgun-es6')
 
 var generateProtocolIpAndPort = require('../../utils/generateProtocolIpAndPort')
 var APIKEYS = require('../../../config/apikeys.json')

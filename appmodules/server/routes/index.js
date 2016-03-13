@@ -15,6 +15,9 @@ var generateJWTtoken = require('../../utils/generateJWTtoken')
 
 var router = express.Router()
 
+/****
+ * sqlite's Boolean's are integers 0 or 1, so convert with Boolean()
+ */
 router.get('/', (req, res, next) => {
   res.render('searchPage',
       {
@@ -55,7 +58,10 @@ router.get('/settingsPage', (req, res, next) => {
             {
               prebrowsing: Boolean(appSettings.settings.prebrowsing),
               pagesDBFilePath: appSettings.settings.pagesDBFilePath,
-              alwaysDisableTooltips: Boolean(appSettings.settings.alwaysDisableTooltips)
+              alwaysDisableTooltips: Boolean(appSettings.settings.alwaysDisableTooltips),
+              bookmarkExpiryEnabled: Boolean(appSettings.settings.bookmarkExpiryEnabled),
+              bookmarkExpiryEmail: appSettings.settings.bookmarkExpiryEmail,
+              bookmarkExpiryMonths: appSettings.settings.bookmarkExpiryMonths
             }
         )
       }
