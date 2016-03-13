@@ -437,6 +437,7 @@ function exportUrls(typeOfExport) {
     var downloadUrl;
     var blobData = '';
     var fileExtension = 'html';
+
     var downloadLink = document.createElement("a");
     document.body.appendChild(downloadLink);
     downloadLink.style = "display: none";
@@ -463,7 +464,7 @@ function exportUrls(typeOfExport) {
     var blob = new Blob([blobData], { type: 'text/html' });
     downloadUrl = window.URL.createObjectURL(blob);
     downloadLink.href = downloadUrl;
-    downloadLink.download = 'MarkSearch.' + fileExtension;
+    downloadLink.download = 'MarkSearchExport.' + fileExtension;
     downloadLink.click();
     window.URL.revokeObjectURL(downloadUrl);
     document.body.removeChild(downloadLink);
