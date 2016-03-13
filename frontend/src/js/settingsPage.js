@@ -118,48 +118,6 @@ function hidePageSubbarAndReset(){
     })
 }
 
-function setFileReadErrorProgressAndStartListeners(reader){
-  reader.onloadstart = event => {
-    progressBarContainerWidth = addUrlsProgress$.width()
-    /****
-     * Add a little bit of progress to show the user that it has started
-     */
-    $.Velocity.animate(
-      progressBar$[0],
-      {
-        width: 20
-      },
-      500,
-      'easeOutExpo'
-    )
-  }
-  reader.onprogress = event => {
-    progressBar$.velocity("stop")
-    var animationDuration = event.loaded === event.total ? 0 : 500
-    $.Velocity.animate(
-      progressBar$[0],
-      {
-        width: (event.loaded/event.total) * progressBarContainerWidth
-      },
-      animationDuration,
-      'easeOutSine'
-    )
-  }
-  reader.onerror = event => {
-    console.error(event)
-    console.error(reader.error)
-    showNotie(
-      notieAlert$,
-      'notie-alert-error',
-      3,
-      `There Was An Error Loading The File.
-          Error: ${reader.error.name}`,
-      6
-    )
-    reader.abort()
-  }
-}
-
 function saveUrls(urlsToSave){
   suspend(function*(urlsToSave){
     var urlsThatErrored = []
@@ -216,9 +174,109 @@ function saveUrls(urlsToSave){
       progressInfo$.text(`All URLs Saved`)
       window.setTimeout(ev => {
         hidePageSubbarAndReset()
-      }, 2500)
+      }, 3500)
     }
   })(urlsToSave)
+}
+
+function importUrls(event){
+  var eventElement = event.target
+  var files = eventElement.files
+  if(files.length > 0){
+    var file = files[0]
+    var reader = new FileReader()
+
+    reader.onload = event => {
+      got.post(
+        `/frontendapi/settings/checkIfFileIsBinary/${encodeURIComponent(file.path)}`,
+        {
+          headers: xhrHeaders
+        }
+      )
+      .then( response => {
+        //progressInfo$.text(`Loaded ${file.name}`)
+        var fileText = event.target.result
+        var urlsToSave = []
+        if(eventElement.dataset.importType === 'html'){
+          var bookmarksDoc = document.implementation.createHTMLDocument('')
+          bookmarksDoc.body.innerHTML = fileText
+          urlsToSave = _.map(bookmarksDoc.body.querySelectorAll('a'), element =>{
+            if(_.trim(element.href).length){
+              return element.href
+            }
+          })
+        }
+        else{
+          var filteredLinesOfText = _.filter(fileText.split(/\r?\n/), lineValue => _.trim(lineValue).length)
+          _.each(filteredLinesOfText, lineValue =>{
+            var a = document.createElement('a')
+            a.href = lineValue
+            /****
+             * If the text is not a url, then a.href = lineValue results in lineValue being appended
+             * to the current base url in the window and saved as that. Also check against empty stuff.
+             * Leave a.hostname.length check in there.
+             * Null the a element in case we are creating 1000s
+             */
+            if(a.href.length && a.hostname.length && a.hostname !== window.location.hostname){
+              var href = a.href
+              a = null
+              urlsToSave.push(href)
+            }
+            else{
+              a = null
+            }
+          })
+        }
+        if(!urlsToSave.length){
+          showNotie(
+            notieAlert$,
+            'notie-alert-error',
+            3,
+            `Error: No URLs Were Found In The File.`,
+            6
+          )
+        }
+        else{
+          var deDupedUrlsToSave = new Set(urlsToSave)
+          saveUrls(deDupedUrlsToSave)
+        }
+      })
+      .catch( err => {
+        console.error(err)
+        var errorMessage = getErrorMessage(err)
+        hidePageSubbarAndReset()
+          .then(() => {
+            showNotie(
+              notieAlert$,
+              'notie-alert-error',
+              3,
+              `There Was An Error Opening The File.
+                    Error: ${errorMessage}`,
+              6
+            )
+          })
+      })
+      reader.onerror = event => {
+      console.error(event)
+      console.error(reader.error)
+      showNotie(
+        notieAlert$,
+        'notie-alert-error',
+        3,
+        `There Was An Error Loading The File.
+          Error: ${reader.error.name}`,
+        6
+      )
+      reader.abort()
+    }  }
+
+    showAddPageSubbar()
+      .then(() => {
+        progressBarContainerWidth = addUrlsProgress$.width()
+        //progressInfo$.text(`Loading ${file.name}`)
+        reader.readAsText(file)
+      })
+  }
 }
 
 function exportUrls(typeOfExport){
@@ -231,7 +289,7 @@ function exportUrls(typeOfExport){
 
       var downloadLink = document.createElement("a")
       document.body.appendChild(downloadLink)
-      downloadLink.style = "display: none"
+      downloadLink.setAttribute('style', "display: none")
 
       if(typeOfExport === 'HTML'){
         var bookmarks = {
@@ -458,153 +516,13 @@ function settingsPageInit(event){
     event.preventDefault()
     importHTMLFileInput$.click()
   })
-
-  importHTMLFileInput$.change(event => {
-    var files = event.target.files
-    if(files.length > 0){
-      var file = files[0]
-      var reader = new FileReader()
-      setFileReadErrorProgressAndStartListeners(reader)
-      reader.onload = event => {
-        got.post(
-          `/frontendapi/settings/checkIfFileIsBinary/${encodeURIComponent(file.path)}`,
-          {
-            headers: xhrHeaders
-          }
-          )
-          .then( response => {
-            progressInfo$.text(`Loaded ${file.name}`)
-            var fileText = event.target.result
-            var bookmarksDoc = document.implementation.createHTMLDocument('')
-            bookmarksDoc.body.innerHTML = fileText
-            var urlsToSave = _.map(bookmarksDoc.body.querySelectorAll('a'), element => {
-              if(_.trim(element.href).length){
-                return element.href
-              }
-            })
-            console.log(`urlsToSave`)
-            console.log(urlsToSave)
-            if(!urlsToSave.length){
-              showNotie(
-                notieAlert$,
-                'notie-alert-error',
-                3,
-                `Error: No URLs Were Found In The File.`,
-                6
-              )
-            }
-            else{
-              var deDupedUrlsToSave = new Set(urlsToSave)
-              saveUrls(deDupedUrlsToSave)
-            }
-          })
-          .catch( err => {
-            console.error(err)
-            var errorMessage = getErrorMessage(err)
-            hidePageSubbarAndReset()
-              .then(() => {
-                showNotie(
-                  notieAlert$,
-                  'notie-alert-error',
-                  3,
-                  `There Was An Error Opening The File.
-                      Error: ${errorMessage}`,
-                  6
-                )
-              })
-          })
-      }
-
-      showAddPageSubbar()
-        .then(() => {
-          progressInfo$.text(`Loading ${file.name}`)
-          reader.readAsText(file)
-        })
-    }
-  })
+  importHTMLFileInput$.change(importUrls)
 
   importTextFileButton$.click(event => {
     event.preventDefault()
     importTextFileInput$.click()
   })
-
-  importTextFileInput$.change(event => {
-    var files = event.target.files
-    if(files.length > 0){
-      var file = files[0]
-      var reader = new FileReader()
-      setFileReadErrorProgressAndStartListeners(reader)
-
-      reader.onload = event => {
-        got.post(
-          `/frontendapi/settings/checkIfFileIsBinary/${encodeURIComponent(file.path)}`,
-          {
-            headers: xhrHeaders
-          }
-          )
-          .then( response => {
-            progressInfo$.text(`Loaded ${file.name}`)
-            var fileText = event.target.result
-            var filteredLinesOfText = _.filter(fileText.split(/\r?\n/), lineValue => _.trim(lineValue).length)
-            var urlsToSave = []
-            _.each(filteredLinesOfText, lineValue => {
-              var a = document.createElement('a')
-              a.href = lineValue
-              /****
-               * If the text is not a url, then a.href = lineValue results in lineValue being appended
-               * to the current base url in the window and saved as that. Also check against empty stuff.
-               * Leave a.hostname.length check in there.
-               * Null the a element in case we are creating 1000s
-               */
-              if(a.href.length && a.hostname.length && a.hostname !== window.location.hostname){
-                var href = a.href
-                a = null
-                urlsToSave.push(href)
-              }
-              else{
-                a = null
-              }
-            })
-            console.log(`urlsToSave`)
-            console.log(urlsToSave)
-            if(!urlsToSave.length){
-              showNotie(
-                notieAlert$,
-                'notie-alert-error',
-                3,
-                `Error: No URLs Were Found In The File.`,
-                6
-              )
-            }
-            else{
-              var deDupedUrlsToSave = new Set(urlsToSave)
-              saveUrls(deDupedUrlsToSave)
-            }
-          })
-          .catch( err => {
-            console.error(err)
-            var errorMessage = getErrorMessage(err)
-            hidePageSubbarAndReset()
-              .then(() => {
-                showNotie(
-                  notieAlert$,
-                  'notie-alert-error',
-                  3,
-                  `There Was An Error Opening The File.
-                  Error: ${errorMessage}`,
-                  6
-                )
-              })
-          })
-      }
-
-      showAddPageSubbar()
-        .then(() => {
-          progressInfo$.text(`Loading ${file.name}`)
-          reader.readAsText(file)
-        })
-    }
-  })
+  importTextFileInput$.change(importUrls)
 
   /****
    * OK Button On Importing URLs Saving Error

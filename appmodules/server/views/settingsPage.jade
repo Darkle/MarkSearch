@@ -68,8 +68,8 @@ block content
       .importContainer
         .importTitle Import URLs
         .importButtonsContainer
-          input#importHTMLFileInput(type="file")
-          input#importTextFileInput(type="file")
+          input#importHTMLFileInput(type="file", data-import-type="html")
+          input#importTextFileInput(type="file", data-import-type="text")
           a#importHTMLFileButton.button.black.square(href="#") Import Bookmarks.html File
           a#importTextFileButton.button.black.square(href="#") Import Plain Text File
         .settingDetail
@@ -89,8 +89,8 @@ block content
       .exportContainer
         .exportTitle Export URLs
         .exportButtonsContainer
-          input#exportHTMLFileInput(type="file", data-exporttype="HTML")
-          input#exportTextFileInput(type="file", data-exporttype="Text")
+          //input#exportHTMLFileInput(type="file")
+          //input#exportTextFileInput(type="file")
           a#exportHTMLFileButton.button.black.square(href="#") Export As Bookmarks.html File
           a#exportTextFileButton.button.black.square(href="#") Export As Plain Text File
         .settingDetail

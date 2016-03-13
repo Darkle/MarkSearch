@@ -225,31 +225,6 @@ function hidePageSubbarAndReset() {
   });
 }
 
-function setFileReadErrorProgressAndStartListeners(reader) {
-  reader.onloadstart = function (event) {
-    progressBarContainerWidth = addUrlsProgress$.width();
-    /****
-     * Add a little bit of progress to show the user that it has started
-     */
-    $.Velocity.animate(progressBar$[0], {
-      width: 20
-    }, 500, 'easeOutExpo');
-  };
-  reader.onprogress = function (event) {
-    progressBar$.velocity("stop");
-    var animationDuration = event.loaded === event.total ? 0 : 500;
-    $.Velocity.animate(progressBar$[0], {
-      width: event.loaded / event.total * progressBarContainerWidth
-    }, animationDuration, 'easeOutSine');
-  };
-  reader.onerror = function (event) {
-    console.error(event);
-    console.error(reader.error);
-    showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Loading The File.\n          Error: ' + reader.error.name, 6);
-    reader.abort();
-  };
-}
-
 function saveUrls(urlsToSave) {
   (0, _suspend2.default)(regeneratorRuntime.mark(function _callee(urlsToSave) {
     var urlsThatErrored, progressStepAmount, error, index, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, url, encodedUrl, errMessage, ul$, errorTextBeginning, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, errUrl;
@@ -420,7 +395,7 @@ function saveUrls(urlsToSave) {
             progressInfo$.text('All URLs Saved');
             window.setTimeout(function (ev) {
               hidePageSubbarAndReset();
-            }, 2500);
+            }, 3500);
 
           case 84:
           case 'end':
@@ -429,6 +404,79 @@ function saveUrls(urlsToSave) {
       }
     }, _callee, this, [[9, 34, 38, 46], [17, 22], [39,, 41, 45], [61, 65, 69, 77], [70,, 72, 76]]);
   }))(urlsToSave);
+}
+
+function importUrls(event) {
+  var eventElement = event.target;
+  var files = eventElement.files;
+  if (files.length > 0) {
+    var file = files[0];
+    var reader = new FileReader();
+
+    reader.onload = function (event) {
+      _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
+        headers: xhrHeaders
+      }).then(function (response) {
+        //progressInfo$.text(`Loaded ${file.name}`)
+        var fileText = event.target.result;
+        var urlsToSave = [];
+        if (eventElement.dataset.importType === 'html') {
+          var bookmarksDoc = document.implementation.createHTMLDocument('');
+          bookmarksDoc.body.innerHTML = fileText;
+          urlsToSave = _lodash2.default.map(bookmarksDoc.body.querySelectorAll('a'), function (element) {
+            if (_lodash2.default.trim(element.href).length) {
+              return element.href;
+            }
+          });
+        } else {
+          var filteredLinesOfText = _lodash2.default.filter(fileText.split(/\r?\n/), function (lineValue) {
+            return _lodash2.default.trim(lineValue).length;
+          });
+          _lodash2.default.each(filteredLinesOfText, function (lineValue) {
+            var a = document.createElement('a');
+            a.href = lineValue;
+            /****
+             * If the text is not a url, then a.href = lineValue results in lineValue being appended
+             * to the current base url in the window and saved as that. Also check against empty stuff.
+             * Leave a.hostname.length check in there.
+             * Null the a element in case we are creating 1000s
+             */
+            if (a.href.length && a.hostname.length && a.hostname !== window.location.hostname) {
+              var href = a.href;
+              a = null;
+              urlsToSave.push(href);
+            } else {
+              a = null;
+            }
+          });
+        }
+        if (!urlsToSave.length) {
+          showNotie(notieAlert$, 'notie-alert-error', 3, 'Error: No URLs Were Found In The File.', 6);
+        } else {
+          var deDupedUrlsToSave = new Set(urlsToSave);
+          saveUrls(deDupedUrlsToSave);
+        }
+      }).catch(function (err) {
+        console.error(err);
+        var errorMessage = getErrorMessage(err);
+        hidePageSubbarAndReset().then(function () {
+          showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Opening The File.\n                    Error: ' + errorMessage, 6);
+        });
+      });
+      reader.onerror = function (event) {
+        console.error(event);
+        console.error(reader.error);
+        showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Loading The File.\n          Error: ' + reader.error.name, 6);
+        reader.abort();
+      };
+    };
+
+    showAddPageSubbar().then(function () {
+      progressBarContainerWidth = addUrlsProgress$.width();
+      //progressInfo$.text(`Loading ${file.name}`)
+      reader.readAsText(file);
+    });
+  }
 }
 
 function exportUrls(typeOfExport) {
@@ -440,7 +488,7 @@ function exportUrls(typeOfExport) {
 
     var downloadLink = document.createElement("a");
     document.body.appendChild(downloadLink);
-    downloadLink.style = "display: none";
+    downloadLink.setAttribute('style', "display: none");
 
     if (typeOfExport === 'HTML') {
       var bookmarks = {
@@ -620,112 +668,13 @@ function settingsPageInit(event) {
     event.preventDefault();
     importHTMLFileInput$.click();
   });
-
-  importHTMLFileInput$.change(function (event) {
-    var files = event.target.files;
-    if (files.length > 0) {
-      var file = files[0];
-      var reader = new FileReader();
-      setFileReadErrorProgressAndStartListeners(reader);
-      reader.onload = function (event) {
-        _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
-          headers: xhrHeaders
-        }).then(function (response) {
-          progressInfo$.text('Loaded ' + file.name);
-          var fileText = event.target.result;
-          var bookmarksDoc = document.implementation.createHTMLDocument('');
-          bookmarksDoc.body.innerHTML = fileText;
-          var urlsToSave = _lodash2.default.map(bookmarksDoc.body.querySelectorAll('a'), function (element) {
-            if (_lodash2.default.trim(element.href).length) {
-              return element.href;
-            }
-          });
-          console.log('urlsToSave');
-          console.log(urlsToSave);
-          if (!urlsToSave.length) {
-            showNotie(notieAlert$, 'notie-alert-error', 3, 'Error: No URLs Were Found In The File.', 6);
-          } else {
-            var deDupedUrlsToSave = new Set(urlsToSave);
-            saveUrls(deDupedUrlsToSave);
-          }
-        }).catch(function (err) {
-          console.error(err);
-          var errorMessage = getErrorMessage(err);
-          hidePageSubbarAndReset().then(function () {
-            showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Opening The File.\n                      Error: ' + errorMessage, 6);
-          });
-        });
-      };
-
-      showAddPageSubbar().then(function () {
-        progressInfo$.text('Loading ' + file.name);
-        reader.readAsText(file);
-      });
-    }
-  });
+  importHTMLFileInput$.change(importUrls);
 
   importTextFileButton$.click(function (event) {
     event.preventDefault();
     importTextFileInput$.click();
   });
-
-  importTextFileInput$.change(function (event) {
-    var files = event.target.files;
-    if (files.length > 0) {
-      var file = files[0];
-      var reader = new FileReader();
-      setFileReadErrorProgressAndStartListeners(reader);
-
-      reader.onload = function (event) {
-        _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
-          headers: xhrHeaders
-        }).then(function (response) {
-          progressInfo$.text('Loaded ' + file.name);
-          var fileText = event.target.result;
-          var filteredLinesOfText = _lodash2.default.filter(fileText.split(/\r?\n/), function (lineValue) {
-            return _lodash2.default.trim(lineValue).length;
-          });
-          var urlsToSave = [];
-          _lodash2.default.each(filteredLinesOfText, function (lineValue) {
-            var a = document.createElement('a');
-            a.href = lineValue;
-            /****
-             * If the text is not a url, then a.href = lineValue results in lineValue being appended
-             * to the current base url in the window and saved as that. Also check against empty stuff.
-             * Leave a.hostname.length check in there.
-             * Null the a element in case we are creating 1000s
-             */
-            if (a.href.length && a.hostname.length && a.hostname !== window.location.hostname) {
-              var href = a.href;
-              a = null;
-              urlsToSave.push(href);
-            } else {
-              a = null;
-            }
-          });
-          console.log('urlsToSave');
-          console.log(urlsToSave);
-          if (!urlsToSave.length) {
-            showNotie(notieAlert$, 'notie-alert-error', 3, 'Error: No URLs Were Found In The File.', 6);
-          } else {
-            var deDupedUrlsToSave = new Set(urlsToSave);
-            saveUrls(deDupedUrlsToSave);
-          }
-        }).catch(function (err) {
-          console.error(err);
-          var errorMessage = getErrorMessage(err);
-          hidePageSubbarAndReset().then(function () {
-            showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Opening The File.\n                  Error: ' + errorMessage, 6);
-          });
-        });
-      };
-
-      showAddPageSubbar().then(function () {
-        progressInfo$.text('Loading ' + file.name);
-        reader.readAsText(file);
-      });
-    }
-  });
+  importTextFileInput$.change(importUrls);
 
   /****
    * OK Button On Importing URLs Saving Error
