@@ -225,7 +225,7 @@ function hidePageSubbarAndReset() {
   });
 }
 
-function setFileReadErroProgressAndStartListeners(reader) {
+function setFileReadErrorProgressAndStartListeners(reader) {
   reader.onloadstart = function (event) {
     progressBarContainerWidth = addUrlsProgress$.width();
     /****
@@ -625,7 +625,7 @@ function settingsPageInit(event) {
     if (files.length > 0) {
       var file = files[0];
       var reader = new FileReader();
-      setFileReadErroProgressAndStartListeners(reader);
+      setFileReadErrorProgressAndStartListeners(reader);
       reader.onload = function (event) {
         _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
           headers: xhrHeaders
@@ -673,7 +673,7 @@ function settingsPageInit(event) {
     if (files.length > 0) {
       var file = files[0];
       var reader = new FileReader();
-      setFileReadErroProgressAndStartListeners(reader);
+      setFileReadErrorProgressAndStartListeners(reader);
 
       reader.onload = function (event) {
         _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
