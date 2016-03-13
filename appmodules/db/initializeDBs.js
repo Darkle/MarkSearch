@@ -8,6 +8,7 @@ var fsExtra = Promise.promisifyAll(require('fs-extra'))
 
 var appSettings = require('./appSettings')
 var pagesdb = require('./pagesdb')
+var initBookmarkExpiry = require('../server/bookmarkExpiry').init
 
 var appDataPath = path.join(electron.app.getPath('appData'), 'MarkSearch')
 
@@ -18,6 +19,7 @@ function initializeDBs(){
   return fsExtra.ensureDirAsync(appDataPath)
       .return(appSettings.init(appDataPath))
       .then(pagesDBFilePath => pagesdb.init(pagesDBFilePath))
+      .then(initBookmarkExpiry)
 }
 
 module.exports = initializeDBs
