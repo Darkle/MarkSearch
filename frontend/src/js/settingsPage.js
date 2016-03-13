@@ -118,6 +118,9 @@ function hidePageSubbarAndReset(){
     })
 }
 
+/****
+ * urlsToSave is a Set
+ */
 function saveUrls(urlsToSave){
   suspend(function*(urlsToSave){
     var urlsThatErrored = []
@@ -298,6 +301,10 @@ function exportUrls(typeOfExport){
           }
         }
         _.each(rows, pageData => {
+          /****
+           * If there's no pageTitle, then use the pageDomain with a random number
+           * string attached to make it unique.
+           */
           if(!pageData.pageTitle || !_.trim(pageData.pageTitle).length){
             pageData.pageTitle = pageData.pageDomain + _.random(0, 1000000)
           }
@@ -364,7 +371,6 @@ function settingsPageInit(event){
   var emailBookmarkletButton$ = $('#emailBookmarkletButton')
   var bookmarkletEmail$ = $('#bookmarkletEmail')
   var bookmarkletText$ = $('#bookmarkletText')
-  //var dragAndDropDiv$ = $('#dragAndDrop')
   var changeDBLocInput$ = $('#changeDBLocationInput')
   var changeDBLocButton$ = $('#changeDBLocationButton')
   var cancelSettingsButton$ = $('.cancelSettingsButton')
@@ -552,6 +558,7 @@ function settingsPageInit(event){
     event.preventDefault()
     var possibleDBchangePromise = Promise.resolve()
     var dbLocationText = _.trim(dbLocationText$.text())
+    
     if(markSearchSettings.pagesDBFilePath !== dbLocationText){
       possibleDBchangePromise = got.post('/frontendapi/settings/changePagesDBlocation',
         {

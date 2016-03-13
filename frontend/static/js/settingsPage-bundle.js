@@ -225,6 +225,9 @@ function hidePageSubbarAndReset() {
   });
 }
 
+/****
+ * urlsToSave is a Set
+ */
 function saveUrls(urlsToSave) {
   (0, _suspend2.default)(regeneratorRuntime.mark(function _callee(urlsToSave) {
     var urlsThatErrored, progressStepAmount, error, index, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, url, encodedUrl, errMessage, ul$, errorTextBeginning, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, errUrl;
@@ -497,6 +500,10 @@ function exportUrls(typeOfExport) {
         }
       };
       _lodash2.default.each(rows, function (pageData) {
+        /****
+         * If there's no pageTitle, then use the pageDomain with a random number
+         * string attached to make it unique.
+         */
         if (!pageData.pageTitle || !_lodash2.default.trim(pageData.pageTitle).length) {
           pageData.pageTitle = pageData.pageDomain + _lodash2.default.random(0, 1000000);
         }
@@ -554,7 +561,6 @@ function settingsPageInit(event) {
   var emailBookmarkletButton$ = $('#emailBookmarkletButton');
   var bookmarkletEmail$ = $('#bookmarkletEmail');
   var bookmarkletText$ = $('#bookmarkletText');
-  //var dragAndDropDiv$ = $('#dragAndDrop')
   var changeDBLocInput$ = $('#changeDBLocationInput');
   var changeDBLocButton$ = $('#changeDBLocationButton');
   var cancelSettingsButton$ = $('.cancelSettingsButton');
@@ -704,6 +710,7 @@ function settingsPageInit(event) {
     event.preventDefault();
     var possibleDBchangePromise = Promise.resolve();
     var dbLocationText = _lodash2.default.trim(dbLocationText$.text());
+
     if (markSearchSettings.pagesDBFilePath !== dbLocationText) {
       possibleDBchangePromise = _got2.default.post('/frontendapi/settings/changePagesDBlocation', {
         headers: xhrHeaders,
