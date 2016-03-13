@@ -228,6 +228,7 @@ function exportUrls(typeOfExport){
       var downloadUrl
       var blobData = ''
       var fileExtension = 'html'
+      
       var downloadLink = document.createElement("a")
       document.body.appendChild(downloadLink)
       downloadLink.style = "display: none"
