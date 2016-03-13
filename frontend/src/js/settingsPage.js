@@ -553,7 +553,7 @@ function settingsPageInit(event){
   })
 
   /****
-   * Importing URLs From File
+   * Importing Bookmarks From File
    */
   importHTMLFileButton$.click(event => {
     event.preventDefault()
@@ -568,14 +568,14 @@ function settingsPageInit(event){
   importTextFileInput$.change(importUrls)
 
   /****
-   * OK Button On Importing URLs Saving Error
+   * OK Button On Importing Bookmarks Saving Error
    */
   errorOKbutton$.click(event => {
     hidePageSubbarAndReset()
   })
 
   /****
-   * Export URLs
+   * Export Bookmarks
    */
 
   exportHTMLFileButton$.click(event => {

@@ -690,7 +690,7 @@ function settingsPageInit(event) {
   });
 
   /****
-   * Importing URLs From File
+   * Importing Bookmarks From File
    */
   importHTMLFileButton$.click(function (event) {
     event.preventDefault();
@@ -705,14 +705,14 @@ function settingsPageInit(event) {
   importTextFileInput$.change(importUrls);
 
   /****
-   * OK Button On Importing URLs Saving Error
+   * OK Button On Importing Bookmarks Saving Error
    */
   errorOKbutton$.click(function (event) {
     hidePageSubbarAndReset();
   });
 
   /****
-   * Export URLs
+   * Export Bookmarks
    */
 
   exportHTMLFileButton$.click(function (event) {

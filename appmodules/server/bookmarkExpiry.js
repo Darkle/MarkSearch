@@ -19,7 +19,7 @@ var mailGun = new MailGun({
 function shouldWeRunBookmarkExpiryCheck() {
   var bookmarkExpiryLastCheck = appSettings.settings.bookmarkExpiryLastCheck
   var bookmarkExpiryMonths = appSettings.settings.bookmarkExpiryMonths
-  return moment(bookmarkExpiryLastCheck).add(bookmarkExpiryMonths, 'M').valueOf() > Date.now()
+  return moment(bookmarkExpiryLastCheck).add(bookmarkExpiryMonths, 'M').valueOf() < Date.now()
 }
 
 function checkForExpiredBookmarks() {
@@ -36,6 +36,7 @@ function checkForExpiredBookmarks() {
           .update({
             checkedForExpiry: true
           })
+          .then(() => appSettings.update({bookmarkExpiryLastCheck: expiryTimestamp}))
           .then(() => {
             sendExpiredBookmarksEmail(rows)
           })
