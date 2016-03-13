@@ -10,6 +10,7 @@ var existent = require('existent')
 var appErrorHandler = require('./appmodules/appErrorHandler')
 var initializeDBs = require('./appmodules/db/initializeDBs')
 var expressInit = require('./appmodules/server/expressInit')
+var initBookmarkExpiry = require('./appmodules/server/bookmarkExpiry')
 var electronInit = require('./appmodules/electron/electronInit')
 var initElectronTrayMenu = require('./appmodules/electron/initTrayMenu')
 
@@ -26,6 +27,7 @@ electronInit()
     })
     .then(() => expressInit(expressApp, serverPort))
     .then(initElectronTrayMenu)
+    .then(initBookmarkExpiry)
     .then(() => {
       if(firstRun){
         console.log('first run')

@@ -118,7 +118,7 @@ appSettings.update = (settingsKeyValObj) => {
         .update(coercedSettingsKeyValObj)
         .return(appSettings.db('appSettings').where('id', 'appSettings'))
         .then( rows => {
-          appSettings.settings = _.omit(rows[0], ['JWTsecret'])
+          appSettings.settings = _.omit(rows[0], ['JWTsecret', 'id'])
         })
   }
 }

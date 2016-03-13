@@ -415,7 +415,10 @@ function importUrls(event) {
   if (files.length > 0) {
     var file = files[0];
     var reader = new FileReader();
-
+    /****
+     * .path is available in Electron.
+     * http://electron.atom.io/docs/all/#file-object
+     */
     reader.onload = function (event) {
       _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
         headers: xhrHeaders
@@ -572,6 +575,7 @@ function settingsPageInit(event) {
   var importHTMLFileButton$ = $('#importHTMLFileButton');
   var exportHTMLFileButton$ = $('#exportHTMLFileButton');
   var exportTextFileButton$ = $('#exportTextFileButton');
+  var revokeTokens$ = $('#revokeTokens');
 
   $('.addPageButtons').addClass('hide');
   addUrlsProgress$.removeClass('hide');
@@ -661,12 +665,30 @@ function settingsPageInit(event) {
   changeDBLocInput$.change(function (event) {
     var files = changeDBLocInput$[0].files;
     if (files.length > 0) {
+      /****
+       *
+       */
       dbLocationText$.text(files[0].path);
       if (markSearchSettings.pagesDBFilePath !== _lodash2.default.trim(dbLocationText$.text())) {
         dbLocationInfoTitle$.text('Database Will Be Moved To:');
       }
     }
   });
+
+  /****
+   * Revoke Tokens
+   */
+  revokeTokens$.click(function (event) {
+    event.preventDefault();
+    _got2.default.post('/frontendapi/settings/revokeExtTokens', { headers: xhrHeaders }).then(function () {
+      showNotie(notieAlert$, 'notie-alert-success', 1, 'Tokens Successfully Revoked', 5);
+    }).catch(function (err) {
+      console.error(err);
+      var errorMessage = getErrorMessage(err);
+      showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Generating The Bookmarklet.\n           Error: ' + errorMessage, 6);
+    });
+  });
+
   /****
    * Importing URLs From File
    */
