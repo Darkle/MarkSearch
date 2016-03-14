@@ -50,19 +50,15 @@ function getErrorMessage(err){
 }
 
 function updateSettingsOnPage(){
-
   if(markSearchSettings.prebrowsing){
     prebrowsingCheckbox$.prop('checked', true)
     prebrowsingCheckbox$.parent().addClass('checked')
   }
-
   if(markSearchSettings.alwaysDisableTooltips){
     alwaysDisableTooltipsCheckbox$.prop('checked', true)
     alwaysDisableTooltipsCheckbox$.parent().addClass('checked')
   }
-
   dbLocationText$.text(markSearchSettings.pagesDBFilePath)
-
   //TODO set the bookmarkExpiryEnabled, bookmarkExpiryMonths on the page & bookmarkExpiryEmail (the elements valuse i mean)
   if(markSearchSettings.bookmarkExpiryEnabled){
     bookmarkExpiryCheckbox$.prop('checked', true)
@@ -70,8 +66,6 @@ function updateSettingsOnPage(){
   }
   //markSearchSettings.bookmarkExpiryMonths
   //markSearchSettings.bookmarkExpiryEnabled
-
-
 }
 
 function pagesDBFilePathSansTrailingSlashAndFileName(pagesDBFilePath){
@@ -106,7 +100,7 @@ function hidePageSubbarAndReset(){
 }
 
 /****
- * urlsToSave is a Set
+ * @param urlsToSave - Set()
  */
 function saveUrls(urlsToSave){
   suspend(function*(urlsToSave){
