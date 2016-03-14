@@ -14,7 +14,7 @@ function changePagesDBlocation(req, res, next){
   var parsedNewPagesDBFileFolder = parsePath(req.body.newPagesDBFileFolder).path
   var parsedOldPagesDBFilePath = parsePath(req.body.oldPagesDBFilePath).path
   var newPagesDBFilePath = path.join(parsedNewPagesDBFileFolder, 'MarkSearchPages.db')
-  var oldPagesDBFilePath = path.join(parsedOldPagesDBFilePath, 'MarkSearchPages.db')
+  var oldPagesDBFilePath = parsedOldPagesDBFilePath
   console.log(`newPagesDBFilePath`)
   console.log(newPagesDBFilePath)
   console.log(`oldPagesDBFilePath`)

@@ -109,14 +109,6 @@ function coerceIncomingColumnData(dataObj){
   if(_.isObject(dataObj.safeBrowsing)){
     dataObj.safeBrowsing = JSON.stringify(dataObj.safeBrowsing)
   }
-  if(dataObj.checkedForExpiry){
-    if(dataObj.checkedForExpiry === 'true'){
-      dataObj.checkedForExpiry = true
-    }
-    if(dataObj.checkedForExpiry === 'false'){
-      dataObj.checkedForExpiry = false
-    }
-  }
   return dataObj
 }
 

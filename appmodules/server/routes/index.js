@@ -25,8 +25,8 @@ router.get('/', (req, res, next) => {
         csrfToken: req.csrfToken(),
         markSearchSettings: JSON.stringify(
             {
-              prebrowsing: Boolean(appSettings.settings.prebrowsing),
-              alwaysDisableTooltips: Boolean(appSettings.settings.alwaysDisableTooltips)
+              prebrowsing: appSettings.settings.prebrowsing,
+              alwaysDisableTooltips: appSettings.settings.alwaysDisableTooltips
             }
         )
       }
@@ -56,10 +56,10 @@ router.get('/settingsPage', (req, res, next) => {
         csrfToken: req.csrfToken(),
         markSearchSettings: JSON.stringify(
             {
-              prebrowsing: Boolean(appSettings.settings.prebrowsing),
+              prebrowsing: appSettings.settings.prebrowsing,
               pagesDBFilePath: appSettings.settings.pagesDBFilePath,
-              alwaysDisableTooltips: Boolean(appSettings.settings.alwaysDisableTooltips),
-              bookmarkExpiryEnabled: Boolean(appSettings.settings.bookmarkExpiryEnabled),
+              alwaysDisableTooltips: appSettings.settings.alwaysDisableTooltips,
+              bookmarkExpiryEnabled: appSettings.settings.bookmarkExpiryEnabled,
               bookmarkExpiryEmail: appSettings.settings.bookmarkExpiryEmail,
               bookmarkExpiryMonths: appSettings.settings.bookmarkExpiryMonths
             }
