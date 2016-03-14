@@ -56,13 +56,24 @@ var appSettingsValidation = {
   }
 }
 
-function coerceIncomingSettingsData(dataObj){
-  return _.mapValues(dataObj, val => {
+/****
+ * Coerce the 'true'/'false' string values might get back from frontend as when they send
+ * settings via ajax, they are converted to string, so convert any true'/'false' string values
+ * back to boolean.
+ *
+ * Also, SQLite stores Boolean values as a 0 for false or 1 for true, so convert them to
+ * boolean when getting settings from the db, so they are slightly easier to work with.
+ */
+function coerceSettingsValuesInAndOut(dataObj){
+  return _.mapValues(dataObj, (val, key) => {
     if(val === 'false'){
       val = false
     }
     if(val === 'true'){
       val = true
+    }
+    if(key === 'prebrowsing' || key === 'alwaysDisableTooltips' || key === 'bookmarkExpiryEnabled'){
+      val = Boolean(val)
     }
     return val
   })
@@ -131,13 +142,13 @@ appSettings.init = (appDataPath) => {
      * (as a js object) and slightly faster (e.g. for settings router.get('/')
      * uses et.al.)
      */
-    appSettings.settings = rows[0]
+    appSettings.settings = coerceSettingsValuesInAndOut(rows[0])
     return rows[0].pagesDBFilePath
   })
 }
 
 appSettings.update = (settingsKeyValObj) => {
-  var coercedSettingsKeyValObj = _.omit(coerceIncomingSettingsData(settingsKeyValObj), ['JWTsecret', 'id'])
+  var coercedSettingsKeyValObj = _.omit(coerceSettingsValuesInAndOut(settingsKeyValObj), ['JWTsecret', 'id'])
   var validatedSettingsKeyValObj = inspector.validate(appSettingsValidation, coercedSettingsKeyValObj)
   if(!validatedSettingsKeyValObj.valid){
     var errMessage = `Error, passed in app settings did not pass validation.
@@ -151,7 +162,7 @@ appSettings.update = (settingsKeyValObj) => {
         .update(coercedSettingsKeyValObj)
         .return(appSettings.db('appSettings').where('id', 'appSettings'))
         .then( rows => {
-          appSettings.settings = _.omit(rows[0], ['JWTsecret', 'id'])
+          appSettings.settings = coerceSettingsValuesInAndOut(rows[0])
         })
   }
 }

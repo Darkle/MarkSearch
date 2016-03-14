@@ -12,6 +12,9 @@ function search(req, res, next){
   var dateFilter = checkAndCoerceDateFilterParams(req.body)
   var knexSQL = null
 
+  /****
+   * note: knex will automatically convert additional WHERE's to AND WHERE
+   */
   if(!searchTerms.length){
     /****
      * If user just wants to list all saved pages by a domain (with no text search)
@@ -20,11 +23,14 @@ function search(req, res, next){
       knexSQL = pagesdb.db('pages').where({pageDomain: domainToSearchFor})
       if(dateFilter){
         /****
-         * knex will automatically convert additional WHERE's to AND WHERE
+         * http://knexjs.org/#Builder-where - Grouped Chain
+         *
+         * note: the ".where(function() {}" needs to be a regular function or the "this" context is wrong
          */
-        knexSQL = knexSQL
-          .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
-          .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
+        knexSQL = knexSQL.where(function() {
+          this.where('dateCreated', '>=', dateFilter.dateFilterStartDate)
+            .orWhere('dateCreated', '<=', dateFilter.dateFilterEndDate)
+        })
       }
       knexSQL = knexSQL.orderBy('dateCreated', 'desc')
     }
@@ -60,9 +66,13 @@ function search(req, res, next){
       knexSQL = knexSQL.where({pageDomain: domainToSearchFor})
     }
     if(dateFilter){
-      knexSQL = knexSQL
-        .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
-        .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
+      /****
+       * note: the ".where(function() {}" needs to be a regular function or the "this" context is wrong
+       */
+      knexSQL = knexSQL.where(function() {
+          this.where('dateCreated', '>=', dateFilter.dateFilterStartDate)
+            .orWhere('dateCreated', '<=', dateFilter.dateFilterEndDate)
+        })
     }
     /****
      * https://sqlite.org/fts5.html#section_5_1_1

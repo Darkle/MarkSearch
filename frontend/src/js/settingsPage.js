@@ -12,6 +12,7 @@ import _ from 'lodash'
 import velocity from 'velocity-animate'
 import suspend from 'suspend'
 import netscape from 'netscape-bookmarks'
+import Promise from 'bluebird'
 
 var prebrowsingCheckbox$
 var alwaysDisableTooltipsCheckbox$
@@ -24,6 +25,7 @@ var progressBar$
 var progressBarContainerWidth
 var errorOKbutton$
 var xhrHeaders
+var bookmarkExpiryCheckbox$
 
 function showNotie(notieElement, classToAdd, alertType, alertMessage, duration){
   notieElement.removeClass('notie-alert-success notie-alert-error')
@@ -47,53 +49,38 @@ function getErrorMessage(err){
   return errorMessage
 }
 
-function coerceSettingsData(dataObj){
-  return _.mapValues(dataObj, val => {
-    if(val === 'false'){
-      val = false
-    }
-    if(val === 'true'){
-      val = true
-    }
-    return val
-  })
-}
+function updateSettingsOnPage(){
 
-function updateSettingsOnPage(settingsObj){
-  settingsObj = coerceSettingsData(settingsObj)
-  /****
-   * Prebrowsing
-   */
-  if(settingsObj.prebrowsing){
+  if(markSearchSettings.prebrowsing){
     prebrowsingCheckbox$.prop('checked', true)
     prebrowsingCheckbox$.parent().addClass('checked')
   }
-  markSearchSettings.prebrowsing = settingsObj.prebrowsing
 
-  /****
-   * Always Disable Tooltips
-   */
-  if(settingsObj.alwaysDisableTooltips){
+  if(markSearchSettings.alwaysDisableTooltips){
     alwaysDisableTooltipsCheckbox$.prop('checked', true)
     alwaysDisableTooltipsCheckbox$.parent().addClass('checked')
   }
-  markSearchSettings.alwaysDisableTooltips = settingsObj.alwaysDisableTooltips
 
-  /****
-   * Current Database Location
-   */
-  if(settingsObj.pagesDBFilePath){
-    markSearchSettings.pagesDBFilePath = settingsObj.pagesDBFilePath
-    /****
-     * files[0].path only returns the path (with no trailing slash) so remove the filename and trailing
-     * slash from the markSearchSettings.pagesDBFilePath
-     */
-    if(settingsObj.pagesDBFilePath.endsWith('MarkSearchPages.db')){
-      markSearchSettings.pagesDBFilePath = settingsObj.pagesDBFilePath.slice(0, -19)
-    }
-    dbLocationText$.text(markSearchSettings.pagesDBFilePath)
+  dbLocationText$.text(markSearchSettings.pagesDBFilePath)
+
+  //TODO set the bookmarkExpiryEnabled, bookmarkExpiryMonths on the page & bookmarkExpiryEmail (the elements valuse i mean)
+  if(markSearchSettings.bookmarkExpiryEnabled){
+    bookmarkExpiryCheckbox$.prop('checked', true)
+    bookmarkExpiryCheckbox$.parent().addClass('checked')
   }
+  //markSearchSettings.bookmarkExpiryMonths
+  //markSearchSettings.bookmarkExpiryEnabled
 
+
+}
+
+function pagesDBFilePathSansTrailingSlashAndFileName(pagesDBFilePath){
+  //TODO - double check the trailing slash (here and on checking text value at bottom) is
+  // there on Windows and this code works ok
+  if(pagesDBFilePath.endsWith('MarkSearchPages.db')){
+    pagesDBFilePath = pagesDBFilePath.slice(0, -19)
+  }
+  return pagesDBFilePath
 }
 
 function showAddPageSubbar(){
@@ -368,6 +355,7 @@ function settingsPageInit(event){
   progressInfo$ = $('.progressInfo')
   progressBar$ = $('.progressBar')
   errorOKbutton$ = $('.errorOKbutton')
+  bookmarkExpiryCheckbox$ = $('#bookmarkExpiryCheckbox')
   var browserAddonTokenButton$ = $('#browserAddonTokenButton')
   var browserAddonTokenText$ = $('#browserAddonTokenText')
   var bookmarkletButton$ = $('#bookmarkletButton')
@@ -392,7 +380,7 @@ function settingsPageInit(event){
   progressInfo$.removeClass('hide')
 
 
-  updateSettingsOnPage(markSearchSettings)
+  updateSettingsOnPage()
 
   /****
    * External links
@@ -514,10 +502,12 @@ function settingsPageInit(event){
     var files = changeDBLocInput$[0].files
     if(files.length > 0){
       /****
-       *
+       * files[0].path only returns the path (with no trailing slash) so remove the filename and trailing
+       * slash from the markSearchSettings.pagesDBFilePath when checking against dbLocationText$.text().
        */
       dbLocationText$.text(files[0].path)
-      if(markSearchSettings.pagesDBFilePath !== _.trim(dbLocationText$.text())){
+      var pagesDBFilePathSansTrailingSlashAndFileName = pagesDBFilePathSansTrailingSlashAndFileName(markSearchSettings.pagesDBFilePath)
+      if(pagesDBFilePathSansTrailingSlashAndFileName !== _.trim(dbLocationText$.text())){
         dbLocationInfoTitle$.text('Database Will Be Moved To:')
       }
     }
@@ -593,11 +583,12 @@ function settingsPageInit(event){
    */
   saveSettingsButtonButton$.click( event => {
     event.preventDefault()
-    var possibleDBchangePromise = Promise.resolve()
+    var dbChangePromise = null
     var dbLocationText = _.trim(dbLocationText$.text())
+    var pagesDBFilePathSansTrailingSlashAndFileName = pagesDBFilePathSansTrailingSlashAndFileName(markSearchSettings.pagesDBFilePath)
 
-    if(markSearchSettings.pagesDBFilePath !== dbLocationText){
-      possibleDBchangePromise = got.post('/frontendapi/settings/changePagesDBlocation',
+    if(pagesDBFilePathSansTrailingSlashAndFileName !== dbLocationText){
+      dbChangePromise = got.post('/frontendapi/settings/changePagesDBlocation',
         {
           headers: xhrHeaders,
           body: {
@@ -609,7 +600,7 @@ function settingsPageInit(event){
         .then(response => JSON.parse(response.body).newPagesDBFilePath)
     }
 
-    possibleDBchangePromise
+    Promise.resolve(dbChangePromise)
       .then( newPagesDBFilePath => {
         var settings = {
           prebrowsing: prebrowsingCheckbox$[0].checked,
@@ -620,7 +611,7 @@ function settingsPageInit(event){
         }
         return settings
       })
-      .then( settings =>
+      .tap( settings =>
         got.post('/frontendapi/settings/update',
           {
             headers: xhrHeaders,
@@ -628,7 +619,7 @@ function settingsPageInit(event){
           }
         )
       )
-      .then( response => {
+      .then( settings => {
         showNotie(
           notieAlert$,
           'notie-alert-success',
@@ -636,7 +627,8 @@ function settingsPageInit(event){
           'Settings Saved',
           3
         )
-        updateSettingsOnPage(JSON.parse(response.body))
+        markSearchSettings = settings
+        updateSettingsOnPage()
       })
       .catch( err => {
         console.error(err)
