@@ -285,7 +285,7 @@ function settingsPageInit(event){
           alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked
         }
         if(newPagesDBFilePath){
-          settings.pagesDBFilePath = newPagesDBFilePath
+          newSettings.pagesDBFilePath = newPagesDBFilePath
         }
         return newSettings
       })
