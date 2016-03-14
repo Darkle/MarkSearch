@@ -94,7 +94,7 @@ exports.generateBookmarkletJS = generateBookmarkletJS;
 },{}],2:[function(require,module,exports){
 'use strict';
 
-/* globals markSearchSettings, formplate, buttonplate, Clipboard  */
+/* globals markSearchSettings, buttonplate, Clipboard  */
 
 require('babel-polyfill');
 
