@@ -9,6 +9,7 @@ import { getErrorMessage } from './getErrorMessage'
 import { importUrls } from './importUrls'
 import { exportUrls } from './exportUrls'
 import { hidePageSubbarAndReset } from './hideShowAddPageSubbar'
+import { setSettingsElementValues } from './setSettingsElementValues'
 
 import got from 'got'
 import Promise from 'bluebird'
@@ -20,14 +21,15 @@ var errorOKbutton$
 var progressInfo$
 var addUrlsProgress$
 var notieAlert$
+var dbLocationInfoTitle$
+var prebrowsingCheckbox$
+var alwaysDisableTooltipsCheckbox$
+var bookmarkExpiryCheckbox$
 
 $(document).ready(settingsPageInit)
 
 function settingsPageInit(event){
-  var prebrowsingCheckbox$ = $('#prebrowsingCheckbox')
-  var alwaysDisableTooltipsCheckbox$ = $('#alwaysDisableTooltipsCheckbox')
   var dbLocationText$ = $('.dbLocationContainer .locationText')
-  var bookmarkExpiryCheckbox$ = $('#bookmarkExpiryCheckbox')
   var browserAddonTokenButton$ = $('#browserAddonTokenButton')
   var browserAddonTokenText$ = $('#browserAddonTokenText')
   var bookmarkletButton$ = $('#bookmarkletButton')
@@ -38,7 +40,6 @@ function settingsPageInit(event){
   var changeDBLocButton$ = $('#changeDBLocationButton')
   var cancelSettingsButton$ = $('.cancelSettingsButton')
   var saveSettingsButtonButton$ = $('.saveSettingsButton')
-  var dbLocationInfoTitle$ = $('#dbLocationInfoTitle')
   var importHTMLFileInput$ = $('#importHTMLFileInput')
   var importTextFileInput$ = $('#importTextFileInput')
   var importTextFileButton$ = $('#importTextFileButton')
@@ -47,6 +48,10 @@ function settingsPageInit(event){
   var exportTextFileButton$ = $('#exportTextFileButton')
   var revokeTokens$ = $('#revokeTokens')
   var csrfToken = $('#csrfInput').val()
+  bookmarkExpiryCheckbox$ = $('#bookmarkExpiryCheckbox')
+  alwaysDisableTooltipsCheckbox$ = $('#alwaysDisableTooltipsCheckbox')
+  prebrowsingCheckbox$ = $('#prebrowsingCheckbox')
+  dbLocationInfoTitle$ = $('#dbLocationInfoTitle')
   notieAlert$ = $('#notie-alert-outer')
   addPageUrlsDiv$ = $('.addPageUrls')
   addUrlsProgress$ = $('.addUrlsProgress')
@@ -63,21 +68,7 @@ function settingsPageInit(event){
   addUrlsProgress$.removeClass('hide')
   progressInfo$.removeClass('hide')
 
-  if(markSearchSettings.prebrowsing){
-    prebrowsingCheckbox$.prop('checked', true)
-    prebrowsingCheckbox$.parent().addClass('checked')
-  }
-  if(markSearchSettings.alwaysDisableTooltips){
-    alwaysDisableTooltipsCheckbox$.prop('checked', true)
-    alwaysDisableTooltipsCheckbox$.parent().addClass('checked')
-  }
-  //TODO set the bookmarkExpiryEnabled, bookmarkExpiryMonths on the page & bookmarkExpiryEmail (the elements valuse i mean)
-  if(markSearchSettings.bookmarkExpiryEnabled){
-    bookmarkExpiryCheckbox$.prop('checked', true)
-    bookmarkExpiryCheckbox$.parent().addClass('checked')
-  }
-  //markSearchSettings.bookmarkExpiryMonths
-  //markSearchSettings.bookmarkExpiryEnabled
+  setSettingsElementValues()
 
   /****
    * External links
@@ -289,32 +280,35 @@ function settingsPageInit(event){
 
     Promise.resolve(dbChangePromise)
       .then( newPagesDBFilePath => {
-        var settings = {
+        var newSettings = {
           prebrowsing: prebrowsingCheckbox$[0].checked,
           alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked
         }
         if(newPagesDBFilePath){
           settings.pagesDBFilePath = newPagesDBFilePath
         }
-        return settings
+        return newSettings
       })
-      .tap( settings =>
+      .tap( newSettings =>
         got.post('/frontendapi/settings/update',
           {
             headers: xhrHeaders,
-            body: settings
+            body: newSettings
           }
         )
       )
-      .then( settings => {
+      .then( newSettings => {
         showNotie('notie-alert-success', 1, 'Settings Saved', 3)
-        markSearchSettings = settings
-        dbLocationInfoTitle$.text('Current Database Location:')
+        markSearchSettings = newSettings
       })
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
-        dbLocationInfoTitle$.text('Current Database Location:')
+        /****
+         * Put the settings element values back to what they were before
+         * the user tried to save.
+         */
+        setSettingsElementValues()
         showNotie(
           'notie-alert-error',
           3,
@@ -339,5 +333,9 @@ export {
   errorOKbutton$,
   progressInfo$,
   addUrlsProgress$,
-  notieAlert$
+  notieAlert$,
+  dbLocationInfoTitle$,
+  prebrowsingCheckbox$,
+  alwaysDisableTooltipsCheckbox$,
+  bookmarkExpiryCheckbox$
 }
