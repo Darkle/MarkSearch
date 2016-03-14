@@ -49,7 +49,7 @@ function getErrorMessage(err){
   return errorMessage
 }
 
-function updateSettingsOnPage(){
+function setSettingsElementValues(){
   if(markSearchSettings.prebrowsing){
     prebrowsingCheckbox$.prop('checked', true)
     prebrowsingCheckbox$.parent().addClass('checked')
@@ -58,7 +58,6 @@ function updateSettingsOnPage(){
     alwaysDisableTooltipsCheckbox$.prop('checked', true)
     alwaysDisableTooltipsCheckbox$.parent().addClass('checked')
   }
-  dbLocationText$.text(markSearchSettings.pagesDBFilePath)
   //TODO set the bookmarkExpiryEnabled, bookmarkExpiryMonths on the page & bookmarkExpiryEmail (the elements valuse i mean)
   if(markSearchSettings.bookmarkExpiryEnabled){
     bookmarkExpiryCheckbox$.prop('checked', true)
@@ -66,15 +65,6 @@ function updateSettingsOnPage(){
   }
   //markSearchSettings.bookmarkExpiryMonths
   //markSearchSettings.bookmarkExpiryEnabled
-}
-
-function pagesDBFilePathSansTrailingSlashAndFileName(pagesDBFilePath){
-  //TODO - double check the trailing slash (here and on checking text value at bottom) is
-  // there on Windows and this code works ok
-  if(pagesDBFilePath.endsWith('MarkSearchPages.db')){
-    pagesDBFilePath = pagesDBFilePath.slice(0, -19)
-  }
-  return pagesDBFilePath
 }
 
 function showAddPageSubbar(){
@@ -373,8 +363,7 @@ function settingsPageInit(event){
   addUrlsProgress$.removeClass('hide')
   progressInfo$.removeClass('hide')
 
-
-  updateSettingsOnPage()
+  setSettingsElementValues()
 
   /****
    * External links
@@ -495,13 +484,13 @@ function settingsPageInit(event){
   changeDBLocInput$.change(event => {
     var files = changeDBLocInput$[0].files
     if(files.length > 0){
+      dbLocationText$.text(files[0].path)
       /****
        * files[0].path only returns the path (with no trailing slash) so remove the filename and trailing
        * slash from the markSearchSettings.pagesDBFilePath when checking against dbLocationText$.text().
        */
-      dbLocationText$.text(files[0].path)
-      var pagesDBFilePathSansTrailingSlashAndFileName = pagesDBFilePathSansTrailingSlashAndFileName(markSearchSettings.pagesDBFilePath)
-      if(pagesDBFilePathSansTrailingSlashAndFileName !== _.trim(dbLocationText$.text())){
+      //TODO - double check the .slice(0, -19) works ok on windows & linux
+      if(markSearchSettings.pagesDBFilePath.slice(0, -19) !== _.trim(dbLocationText$.text())){
         dbLocationInfoTitle$.text('Database Will Be Moved To:')
       }
     }
@@ -579,9 +568,13 @@ function settingsPageInit(event){
     event.preventDefault()
     var dbChangePromise = null
     var dbLocationText = _.trim(dbLocationText$.text())
-    var pagesDBFilePathSansTrailingSlashAndFileName = pagesDBFilePathSansTrailingSlashAndFileName(markSearchSettings.pagesDBFilePath)
 
-    if(pagesDBFilePathSansTrailingSlashAndFileName !== dbLocationText){
+    /****
+     * dbLocationText only has the path (with no trailing slash) so remove the filename and trailing
+     * slash from the markSearchSettings.pagesDBFilePath when checking against dbLocationText.
+     */
+    //TODO - double check the .slice(0, -19) works ok on windows & linux
+    if(markSearchSettings.pagesDBFilePath.slice(0, -19) !== dbLocationText){
       dbChangePromise = got.post('/frontendapi/settings/changePagesDBlocation',
         {
           headers: xhrHeaders,
@@ -622,11 +615,12 @@ function settingsPageInit(event){
           3
         )
         markSearchSettings = settings
-        updateSettingsOnPage()
+        dbLocationInfoTitle$.text('Current Database Location:')
       })
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
+        dbLocationInfoTitle$.text('Current Database Location:')
         showNotie(
           notieAlert$,
           'notie-alert-error',
