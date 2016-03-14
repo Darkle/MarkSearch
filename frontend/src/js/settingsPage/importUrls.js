@@ -63,13 +63,7 @@ function importUrls(event){
           })
         }
         if(!urlsToSave.length){
-          showNotie(
-            notieAlert$,
-            'notie-alert-error',
-            3,
-            `Error: No URLs Were Found In The File.`,
-            6
-          )
+          showNotie('notie-alert-error', 3, `Error: No URLs Were Found In The File.`, 6)
         }
         else{
           var deDupedUrlsToSave = new Set(urlsToSave)
@@ -82,7 +76,6 @@ function importUrls(event){
         hidePageSubbarAndReset()
           .then(() => {
             showNotie(
-              notieAlert$,
               'notie-alert-error',
               3,
               `There Was An Error Opening The File.
@@ -95,7 +88,6 @@ function importUrls(event){
       console.error(event)
       console.error(reader.error)
       showNotie(
-        notieAlert$,
         'notie-alert-error',
         3,
         `There Was An Error Loading The File.

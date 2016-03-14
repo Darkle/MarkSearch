@@ -109,7 +109,6 @@ function settingsPageInit(event){
         console.error(err)
         var errorMessage = getErrorMessage(err)
         showNotie(
-          notieAlert$,
           'notie-alert-error',
           3,
           `There Was An Error Generating The Browser Extension Token.
@@ -134,7 +133,6 @@ function settingsPageInit(event){
         console.error(err)
         var errorMessage = getErrorMessage(err)
         showNotie(
-          notieAlert$,
           'notie-alert-error',
           3,
           `There Was An Error Generating The Bookmarklet.
@@ -165,19 +163,12 @@ function settingsPageInit(event){
         )
       })
       .then(response => {
-        showNotie(
-          notieAlert$,
-          'notie-alert-success',
-          1,
-          'Email Sent. (check your spam folder)',
-          5
-        )
+        showNotie('notie-alert-success', 1, 'Email Sent. (check your spam folder)', 5)
       })
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
         showNotie(
-          notieAlert$,
           'notie-alert-error',
           3,
           `There Was An Error Sending The Email.
@@ -206,6 +197,7 @@ function settingsPageInit(event){
      * slash from the markSearchSettings.pagesDBFilePath when checking against dbLocationText$.text().
      */
     //TODO - double check the .slice(0, -19) works ok on windows & linux
+    //TODO - also check files[0].path doesnt have a trailing slash on windows & linux
     if(markSearchSettings.pagesDBFilePath.slice(0, -19) !== dbLocationText$.text().trim){
       dbLocationInfoTitle$.text('Database Will Be Moved To:')
     }
@@ -218,19 +210,12 @@ function settingsPageInit(event){
     event.preventDefault()
     got.post('/frontendapi/settings/revokeExtTokens', {headers: xhrHeaders})
       .then( () => {
-        showNotie(
-          notieAlert$,
-          'notie-alert-success',
-          1,
-          'Tokens Successfully Revoked',
-          5
-        )
+        showNotie('notie-alert-success', 1, 'Tokens Successfully Revoked', 5)
       })
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
         showNotie(
-          notieAlert$,
           'notie-alert-error',
           3,
           `There Was An Error Revoking The Tokens.
@@ -322,13 +307,7 @@ function settingsPageInit(event){
         )
       )
       .then( settings => {
-        showNotie(
-          notieAlert$,
-          'notie-alert-success',
-          1,
-          'Settings Saved',
-          3
-        )
+        showNotie('notie-alert-success', 1, 'Settings Saved', 3)
         markSearchSettings = settings
         dbLocationInfoTitle$.text('Current Database Location:')
       })
@@ -337,7 +316,6 @@ function settingsPageInit(event){
         var errorMessage = getErrorMessage(err)
         dbLocationInfoTitle$.text('Current Database Location:')
         showNotie(
-          notieAlert$,
           'notie-alert-error',
           3,
           `There Was An Error Saving The Settings.

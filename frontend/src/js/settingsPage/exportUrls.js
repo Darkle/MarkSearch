@@ -56,7 +56,6 @@ function exportUrls(typeOfExport){
       console.error(err)
       var errorMessage = getErrorMessage(err)
       showNotie(
-        notieAlert$,
         'notie-alert-error',
         3,
         `There Was An Error Exporting.
