@@ -30,21 +30,20 @@ function importUrls(event){
       }
     )
     .then( response => {
-      //progressInfo$.text(`Loaded ${file.name}`)
+      var urlsToSave
+      var urlsArray
       var fileText = event.target.result
-      var urlsToSave = []
-      var arrayOfUrls
       if(eventElement.dataset.importType === 'html'){
         var bookmarksDoc = document.implementation.createHTMLDocument('')
         bookmarksDoc.body.innerHTML = fileText
         var allAelements = bookmarksDoc.body.querySelectorAll('a')
-        arrayOfUrls = _.map(allAelements, element => element.href)
+        urlsArray = _.map(allAelements, element => element.href)
       }
       else{
-        arrayOfUrls = fileText.split(/\r?\n/)
+        urlsArray = fileText.split(/\r?\n/)
       }
       urlsToSave = _.filter(
-        arrayOfUrls,
+        urlsArray,
         lineValue => _.trim(lineValue).length && validUrl.isWebUri(lineValue)
       )
       if(!urlsToSave.length){
@@ -84,7 +83,6 @@ function importUrls(event){
 
   showAddPageSubbar()
     .then(() => {
-      //progressInfo$.text(`Loading ${file.name}`)
       reader.readAsText(file)
     })
 }
