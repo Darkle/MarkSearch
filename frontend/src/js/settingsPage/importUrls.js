@@ -33,18 +33,18 @@ function importUrls(event){
       //progressInfo$.text(`Loaded ${file.name}`)
       var fileText = event.target.result
       var urlsToSave = []
-      var arrayOrNodelist
+      var arrayOfUrls
       if(eventElement.dataset.importType === 'html'){
         var bookmarksDoc = document.implementation.createHTMLDocument('')
         bookmarksDoc.body.innerHTML = fileText
         var allAelements = bookmarksDoc.body.querySelectorAll('a')
-        arrayOrNodelist = _.map(allAelements, element => element.href)
+        arrayOfUrls = _.map(allAelements, element => element.href)
       }
       else{
-        arrayOrNodelist = fileText.split(/\r?\n/)
+        arrayOfUrls = fileText.split(/\r?\n/)
       }
       urlsToSave = _.filter(
-        arrayOrNodelist,
+        arrayOfUrls,
         lineValue => _.trim(lineValue).length && validUrl.isWebUri(lineValue)
       )
       if(!urlsToSave.length){
