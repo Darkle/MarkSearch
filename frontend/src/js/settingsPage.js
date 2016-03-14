@@ -11,7 +11,7 @@ import notie from 'notie'
 import _ from 'lodash'
 import velocity from 'velocity-animate'
 import suspend from 'suspend'
-import netscape from 'netscape-bookmarks'
+import {netscape as createNetscapeBookarkFile} from 'netscape-bookmarks'
 import Promise from 'bluebird'
 
 var prebrowsingCheckbox$
@@ -267,7 +267,7 @@ function exportUrls(typeOfExport){
           }
           bookmarks["MarkSearch Bookmarks"].contents[pageData.pageTitle] = pageData.pageUrl
         })
-        blobData = netscape(bookmarks)
+        blobData = createNetscapeBookarkFile(bookmarks)
       }
       else{
         fileExtension = 'txt'

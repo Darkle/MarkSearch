@@ -122,8 +122,6 @@ var _suspend2 = _interopRequireDefault(_suspend);
 
 var _netscapeBookmarks = require('netscape-bookmarks');
 
-var _netscapeBookmarks2 = _interopRequireDefault(_netscapeBookmarks);
-
 var _bluebird = require('bluebird');
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
@@ -164,24 +162,6 @@ function getErrorMessage(err) {
     errorMessage = parsedResponseBody.errorMessage;
   }
   return errorMessage;
-}
-
-function setSettingsElementValues() {
-  if (markSearchSettings.prebrowsing) {
-    prebrowsingCheckbox$.prop('checked', true);
-    prebrowsingCheckbox$.parent().addClass('checked');
-  }
-  if (markSearchSettings.alwaysDisableTooltips) {
-    alwaysDisableTooltipsCheckbox$.prop('checked', true);
-    alwaysDisableTooltipsCheckbox$.parent().addClass('checked');
-  }
-  //TODO set the bookmarkExpiryEnabled, bookmarkExpiryMonths on the page & bookmarkExpiryEmail (the elements valuse i mean)
-  if (markSearchSettings.bookmarkExpiryEnabled) {
-    bookmarkExpiryCheckbox$.prop('checked', true);
-    bookmarkExpiryCheckbox$.parent().addClass('checked');
-  }
-  //markSearchSettings.bookmarkExpiryMonths
-  //markSearchSettings.bookmarkExpiryEnabled
 }
 
 function showAddPageSubbar() {
@@ -388,77 +368,78 @@ function saveUrls(urlsToSave) {
 function importUrls(event) {
   var eventElement = event.target;
   var files = eventElement.files;
-  if (files.length > 0) {
-    var file = files[0];
-    var reader = new FileReader();
-    /****
-     * .path is available in Electron.
-     * http://electron.atom.io/docs/all/#file-object
-     */
-    reader.onload = function (event) {
-      _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
-        headers: xhrHeaders
-      }).then(function (response) {
-        //progressInfo$.text(`Loaded ${file.name}`)
-        var fileText = event.target.result;
-        var urlsToSave = [];
-        if (eventElement.dataset.importType === 'html') {
-          var bookmarksDoc = document.implementation.createHTMLDocument('');
-          bookmarksDoc.body.innerHTML = fileText;
-          urlsToSave = _lodash2.default.map(bookmarksDoc.body.querySelectorAll('a'), function (element) {
-            if (_lodash2.default.trim(element.href).length) {
-              return element.href;
-            }
-          });
-        } else {
-          var filteredLinesOfText = _lodash2.default.filter(fileText.split(/\r?\n/), function (lineValue) {
-            return _lodash2.default.trim(lineValue).length;
-          });
-          _lodash2.default.each(filteredLinesOfText, function (lineValue) {
-            var a = document.createElement('a');
-            a.href = lineValue;
-            /****
-             * If the text is not a url, then a.href = lineValue results in lineValue being appended
-             * to the current base url in the window and saved as that. Also check against empty stuff.
-             * Leave a.hostname.length check in there.
-             * Null the a element in case we are creating 1000s
-             */
-            if (a.href.length && a.hostname.length && a.hostname !== window.location.hostname) {
-              var href = a.href;
-              a = null;
-              urlsToSave.push(href);
-            } else {
-              a = null;
-            }
-          });
-        }
-        if (!urlsToSave.length) {
-          showNotie(notieAlert$, 'notie-alert-error', 3, 'Error: No URLs Were Found In The File.', 6);
-        } else {
-          var deDupedUrlsToSave = new Set(urlsToSave);
-          saveUrls(deDupedUrlsToSave);
-        }
-      }).catch(function (err) {
-        console.error(err);
-        var errorMessage = getErrorMessage(err);
-        hidePageSubbarAndReset().then(function () {
-          showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Opening The File.\n                    Error: ' + errorMessage, 6);
-        });
-      });
-      reader.onerror = function (event) {
-        console.error(event);
-        console.error(reader.error);
-        showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Loading The File.\n          Error: ' + reader.error.name, 6);
-        reader.abort();
-      };
-    };
-
-    showAddPageSubbar().then(function () {
-      progressBarContainerWidth = addUrlsProgress$.width();
-      //progressInfo$.text(`Loading ${file.name}`)
-      reader.readAsText(file);
-    });
+  if (!files.length) {
+    return;
   }
+  var file = files[0];
+  var reader = new FileReader();
+  /****
+   * .path is available in Electron.
+   * http://electron.atom.io/docs/all/#file-object
+   */
+  reader.onload = function (event) {
+    _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
+      headers: xhrHeaders
+    }).then(function (response) {
+      //progressInfo$.text(`Loaded ${file.name}`)
+      var fileText = event.target.result;
+      var urlsToSave = [];
+      if (eventElement.dataset.importType === 'html') {
+        var bookmarksDoc = document.implementation.createHTMLDocument('');
+        bookmarksDoc.body.innerHTML = fileText;
+        urlsToSave = _lodash2.default.map(bookmarksDoc.body.querySelectorAll('a'), function (element) {
+          if (_lodash2.default.trim(element.href).length) {
+            return element.href;
+          }
+        });
+      } else {
+        var filteredLinesOfText = _lodash2.default.filter(fileText.split(/\r?\n/), function (lineValue) {
+          return _lodash2.default.trim(lineValue).length;
+        });
+        _lodash2.default.each(filteredLinesOfText, function (lineValue) {
+          var a = document.createElement('a');
+          a.href = lineValue;
+          /****
+           * If the text is not a url, then a.href = lineValue results in lineValue being appended
+           * to the current base url in the window and saved as that. Also check against empty stuff.
+           * Leave a.hostname.length check in there.
+           * Null the a element in case we are creating 1000s
+           */
+          if (a.href.length && a.hostname.length && a.hostname !== window.location.hostname) {
+            var href = a.href;
+            a = null;
+            urlsToSave.push(href);
+          } else {
+            a = null;
+          }
+        });
+      }
+      if (!urlsToSave.length) {
+        showNotie(notieAlert$, 'notie-alert-error', 3, 'Error: No URLs Were Found In The File.', 6);
+      } else {
+        var deDupedUrlsToSave = new Set(urlsToSave);
+        saveUrls(deDupedUrlsToSave);
+      }
+    }).catch(function (err) {
+      console.error(err);
+      var errorMessage = getErrorMessage(err);
+      hidePageSubbarAndReset().then(function () {
+        showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Opening The File.\n                  Error: ' + errorMessage, 6);
+      });
+    });
+    reader.onerror = function (event) {
+      console.error(event);
+      console.error(reader.error);
+      showNotie(notieAlert$, 'notie-alert-error', 3, 'There Was An Error Loading The File.\n        Error: ' + reader.error.name, 6);
+      reader.abort();
+    };
+  };
+
+  showAddPageSubbar().then(function () {
+    progressBarContainerWidth = addUrlsProgress$.width();
+    //progressInfo$.text(`Loading ${file.name}`)
+    reader.readAsText(file);
+  });
 }
 
 function exportUrls(typeOfExport) {
@@ -488,7 +469,7 @@ function exportUrls(typeOfExport) {
         }
         bookmarks["MarkSearch Bookmarks"].contents[pageData.pageTitle] = pageData.pageUrl;
       });
-      blobData = (0, _netscapeBookmarks2.default)(bookmarks);
+      blobData = (0, _netscapeBookmarks.netscape)(bookmarks);
     } else {
       fileExtension = 'txt';
       _lodash2.default.each(rows, function (pageData) {
@@ -558,7 +539,21 @@ function settingsPageInit(event) {
   addUrlsProgress$.removeClass('hide');
   progressInfo$.removeClass('hide');
 
-  setSettingsElementValues();
+  if (markSearchSettings.prebrowsing) {
+    prebrowsingCheckbox$.prop('checked', true);
+    prebrowsingCheckbox$.parent().addClass('checked');
+  }
+  if (markSearchSettings.alwaysDisableTooltips) {
+    alwaysDisableTooltipsCheckbox$.prop('checked', true);
+    alwaysDisableTooltipsCheckbox$.parent().addClass('checked');
+  }
+  //TODO set the bookmarkExpiryEnabled, bookmarkExpiryMonths on the page & bookmarkExpiryEmail (the elements valuse i mean)
+  if (markSearchSettings.bookmarkExpiryEnabled) {
+    bookmarkExpiryCheckbox$.prop('checked', true);
+    bookmarkExpiryCheckbox$.parent().addClass('checked');
+  }
+  //markSearchSettings.bookmarkExpiryMonths
+  //markSearchSettings.bookmarkExpiryEnabled
 
   /****
    * External links
@@ -641,16 +636,17 @@ function settingsPageInit(event) {
 
   changeDBLocInput$.change(function (event) {
     var files = changeDBLocInput$[0].files;
-    if (files.length > 0) {
-      dbLocationText$.text(files[0].path);
-      /****
-       * files[0].path only returns the path (with no trailing slash) so remove the filename and trailing
-       * slash from the markSearchSettings.pagesDBFilePath when checking against dbLocationText$.text().
-       */
-      //TODO - double check the .slice(0, -19) works ok on windows & linux
-      if (markSearchSettings.pagesDBFilePath.slice(0, -19) !== _lodash2.default.trim(dbLocationText$.text())) {
-        dbLocationInfoTitle$.text('Database Will Be Moved To:');
-      }
+    if (!files.length) {
+      return;
+    }
+    dbLocationText$.text(files[0].path);
+    /****
+     * files[0].path only returns the path (with no trailing slash) so remove the filename and trailing
+     * slash from the markSearchSettings.pagesDBFilePath when checking against dbLocationText$.text().
+     */
+    //TODO - double check the .slice(0, -19) works ok on windows & linux
+    if (markSearchSettings.pagesDBFilePath.slice(0, -19) !== _lodash2.default.trim(dbLocationText$.text())) {
+      dbLocationInfoTitle$.text('Database Will Be Moved To:');
     }
   });
 
