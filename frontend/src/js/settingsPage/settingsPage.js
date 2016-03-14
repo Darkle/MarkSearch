@@ -99,13 +99,7 @@ function settingsPageInit(event){
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
-        showNotie(
-          'notie-alert-error',
-          3,
-          `There Was An Error Generating The Browser Extension Token.
-           Error: ${errorMessage}`,
-          6
-        )
+        showNotie(3, `There Was An Error Generating The Browser Extension Token. Error: ${errorMessage}`, 6)
       })
   })
 
@@ -123,13 +117,7 @@ function settingsPageInit(event){
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
-        showNotie(
-          'notie-alert-error',
-          3,
-          `There Was An Error Generating The Bookmarklet.
-           Error: ${errorMessage}`,
-          6
-        )
+        showNotie(3, `There Was An Error Generating The Bookmarklet. Error: ${errorMessage}`, 6)
       })
   })
   /****
@@ -154,18 +142,12 @@ function settingsPageInit(event){
         )
       })
       .then(response => {
-        showNotie('notie-alert-success', 1, 'Email Sent. (check your spam folder)', 5)
+        showNotie(1, 'Email Sent. (check your spam folder)', 5)
       })
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
-        showNotie(
-          'notie-alert-error',
-          3,
-          `There Was An Error Sending The Email.
-           Error: ${errorMessage}`,
-          6
-        )
+        showNotie(3, `There Was An Error Sending The Email. Error: ${errorMessage}`, 6)
       })
   })
 
@@ -201,18 +183,12 @@ function settingsPageInit(event){
     event.preventDefault()
     got.post('/frontendapi/settings/revokeExtTokens', {headers: xhrHeaders})
       .then( () => {
-        showNotie('notie-alert-success', 1, 'Tokens Successfully Revoked', 5)
+        showNotie(1, 'Tokens Successfully Revoked', 5)
       })
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
-        showNotie(
-          'notie-alert-error',
-          3,
-          `There Was An Error Revoking The Tokens.
-           Error: ${errorMessage}`,
-          6
-        )
+        showNotie(3, `There Was An Error Revoking The Tokens. Error: ${errorMessage}`, 6)
       })
   })
 
@@ -298,7 +274,7 @@ function settingsPageInit(event){
         )
       )
       .then( newSettings => {
-        showNotie('notie-alert-success', 1, 'Settings Saved', 3)
+        showNotie(1, 'Settings Saved', 3)
         markSearchSettings = newSettings
       })
       .catch( err => {
@@ -309,13 +285,7 @@ function settingsPageInit(event){
          * the user tried to save.
          */
         setSettingsElementValues()
-        showNotie(
-          'notie-alert-error',
-          3,
-          `There Was An Error Saving The Settings.
-          Error: ${errorMessage}`,
-          6
-        )
+        showNotie(3,`There Was An Error Saving The Settings. Error: ${errorMessage}`, 6)
       })
   })
 

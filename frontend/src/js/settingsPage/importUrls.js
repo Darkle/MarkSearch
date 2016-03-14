@@ -47,7 +47,7 @@ function importUrls(event){
         lineValue => _.trim(lineValue).length && validUrl.isWebUri(lineValue)
       )
       if(!urlsToSave.length){
-        showNotie('notie-alert-error', 3, `Error: No URLs Were Found In The File.`, 6)
+        showNotie(3, `Error: No URLs Were Found In The File.`, 6)
       }
       else{
         var deDupedUrlsToSave = new Set(urlsToSave)
@@ -59,25 +59,13 @@ function importUrls(event){
       var errorMessage = getErrorMessage(err)
       hidePageSubbarAndReset()
         .then(() => {
-          showNotie(
-            'notie-alert-error',
-            3,
-            `There Was An Error Opening The File.
-                Error: ${errorMessage}`,
-            6
-          )
+          showNotie(3, `There Was An Error Opening The File. Error: ${errorMessage}`, 6)
         })
     })
     reader.onerror = event => {
       console.error(event)
       console.error(reader.error)
-      showNotie(
-        'notie-alert-error',
-        3,
-        `There Was An Error Loading The File.
-        Error: ${reader.error.name}`,
-        6
-      )
+      showNotie(3, `There Was An Error Loading The File. Error: ${reader.error.name}`, 6)
       reader.abort()
     }  }
 
