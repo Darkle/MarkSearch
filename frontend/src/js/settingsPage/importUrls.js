@@ -44,7 +44,7 @@ function importUrls(event){
       }
       urlsToSave = _.filter(
         urlsArray,
-        lineValue => _.trim(lineValue).length && validUrl.isWebUri(lineValue)
+        url => _.trim(url).length && validUrl.isWebUri(url)
       )
       if(!urlsToSave.length){
         showNotie(3, `Error: No URLs Were Found In The File.`, 6)
