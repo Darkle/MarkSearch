@@ -67,12 +67,9 @@ function importUrls(event){
       console.error(reader.error)
       showNotie(3, `There Was An Error Loading The File. Error: ${reader.error.name}`, 6)
       reader.abort()
-    }  }
-
-  showAddPageSubbar()
-    .then(() => {
-      reader.readAsText(file)
-    })
+    }
+  }
+  showAddPageSubbar().then(() => { reader.readAsText(file) })
 }
 
 export { importUrls }
