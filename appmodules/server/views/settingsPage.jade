@@ -2,10 +2,14 @@ extends layout
 block vars
   - var bodyClass = 'settingsPage';
 block content
+  .settingsSaveCancelButtons
+    .saveSettingsButton Save
+    .cancelSettingsButton Cancel
+
+
   #settingsContainer
 
     //.settingsHeader Changes Are Automatically Saved
-
     .settings
       input#csrfInput(type="hidden", name="_csrf", value="#{csrfToken}")
       .genTokenOuterContainer
@@ -51,12 +55,29 @@ block content
           label(for="alwaysDisableTooltipsCheckbox") Always Disable Tooltips
         .settingDetail.
           MarkSearch shows tooltips when you hover over icons on the MarkSearch search page. It does this until there have been pages saved to the database and there has been at least one result shown. This is done to help the user know what the icons do. If you are always running in incognito mode, then you probably want to always disable the tooltips.
+      .bookmarkExpiryContainer
+        .bookmarkExpirySettings
+          .formplate
+            input#bookmarkExpiryCheckbox(type="checkbox", name="bookmarkExpiryCheckbox")
+            label(for="bookmarkExpiryCheckbox") Bookmark Expiry
+          .formplate
+            select#bookmarkExpirySelect
+              option(value="3") Every 3 Months
+              option(value="6") Every 6 Months
+          .formplate
+            input#bookmarkExpiryEmail.square(type="text", name="bookmarkExpiryEmail", placeholder="Enter Email Address")
+        .settingDetail
+          p.
+            MarkSearch can check every 3 or 6 months for old bookmarks and then email you
+            with details of the old bookmarks. In the email, you are given a link to a page where you can delete the old
+            bookmarks from MarkSearch.
+          p.
+            MarkSearch remembers which links it has already checked, so you wont get an email with previously
+            checked links.
       .dbLocationContainer
         .currentLocation
           span#dbLocationInfoTitle Current Database Location:
           span.locationText
-        //#dragAndDropContainer
-        //  #dragAndDrop Drag Folder Here
         .changeDBLocationButtonContainer
           input#changeDBLocationInput(type="file" webkitdirectory directory)
           a#changeDBLocationButton.button.black.square(href="#") Change Directory
@@ -72,15 +93,6 @@ block content
         .settingDetail
           p.
             Use this button to revoke all tokens generated for extensions or bookmarklets.
-      .bookmarkExpiryContainer
-        .formplate
-          input#bookmarkExpiryCheckbox(type="checkbox", name="bookmarkExpiryCheckbox")
-          label(for="bookmarkExpiryCheckbox") Bookmark Expiry
-        .bookmarkExpirySettings
-        .settingDetail
-          p.
-            .
-
       .importContainer
         .importTitle Import Bookmarks
         .importButtonsContainer
@@ -116,11 +128,6 @@ block content
           p.
             Exporting as a Plain Text file will export all your MarkSearch Bookmarks as plain text with each Bookmarks URL on a new line
             in the file.
-
-  .settingsSaveCancelButtons
-    .saveSettingsButton Save
-    .cancelSettingsButton Cancel
-
 
   //#formPlateFontHack.formplate
   //  .formplate-checkbox.checked

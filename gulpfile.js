@@ -76,7 +76,7 @@ gulp.task('watch-js', () =>
   /****
    * Doing it this way because of the map issue in browser-sync task below
    */
-  gulp.watch(path.join(__dirname, 'frontend', 'src', 'js', '*.js'), () => {
+  gulp.watch(path.join(__dirname, 'frontend', 'src', 'js', '**', '*.*'), () => {
     runSequence('browserify', 'browsersync-reload')
   })
 )
@@ -105,7 +105,7 @@ gulp.task('less', () =>
 gulp.task('browserify', () => {
   var files = [
     path.join(__dirname, 'frontend', 'src', 'js', 'searchPage.js'),
-    path.join(__dirname, 'frontend', 'src', 'js', 'settingsPage.js'),
+    path.join(__dirname, 'frontend', 'src', 'js', 'settingsPage', 'settingsPage.js'),
     path.join(__dirname, 'frontend', 'src', 'js', 'helpPage.js'),
     path.join(__dirname, 'frontend', 'src', 'js', 'aboutPage.js')
   ]

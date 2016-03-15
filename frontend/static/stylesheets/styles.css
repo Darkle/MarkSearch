@@ -1296,6 +1296,18 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
       -ms-flex-direction: column;
           flex-direction: column;
 }
+.settingsPage .bookmarkExpiryContainer .bookmarkExpirySettings > div:nth-of-type(1) {
+  margin-top: 0;
+}
+.settingsPage .bookmarkExpiryContainer .bookmarkExpirySettings > div:nth-of-type(2) {
+  margin-top: 0.7rem;
+}
+.settingsPage .bookmarkExpiryContainer .bookmarkExpirySettings > div:nth-of-type(3) {
+  margin-top: 0.2rem;
+}
+.settingsPage .bookmarkExpiryContainer .bookmarkExpirySettings #bookmarkExpiryEmail {
+  margin-bottom: 0;
+}
 .settingsPage .importContainer {
   display: -webkit-box;
   display: -webkit-flex;

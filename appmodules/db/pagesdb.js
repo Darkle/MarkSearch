@@ -152,7 +152,7 @@ pagesdb.init = (pagesDBFilePath) => {
      */
     pagesdb.db.schema.hasTable('fts').then( exists => {
       if (!exists) {
-        console.log('creating fts table')
+        console.log('creating "fts" table')
         return  pagesdb.db.raw(
             `create virtual table fts using fts5 (
               pageUrl unindexed,

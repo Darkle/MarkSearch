@@ -10,6 +10,7 @@ var APIKEYS = require('../../config/apikeys.json')
 
 var bookmarkExpiry = {}
 var setTimeoutRef = null
+var checkInterval = moment().add(3, 'hours') - moment()
 var mailGun = new MailGun({
   privateApi: APIKEYS.mailgunPrivateApiKey,
   publicApi: APIKEYS.mailgunPublicApiKey,
@@ -85,9 +86,7 @@ function sendExpiredBookmarksEmail(rows) {
     </p>
     `
   })
-
   //TODO change from to 'expiry@'+ host and get host dynamically
-
   mailGun.sendEmail({
     to: [appSettings.settings.bookmarkExpiryEmail],
     from: 'expiry@marksearch.local',
@@ -119,7 +118,7 @@ bookmarkExpiry.init = () => {
         console.log('setTimeout shouldWeRunBookmarkExpiryCheck true')
         checkForExpiredBookmarks()
       }
-    }, 10800000)
+    }, checkInterval)
   }
 }
 

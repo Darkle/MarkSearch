@@ -1,6 +1,6 @@
 'use strict';
 
-/* globals markSearchSettings: true, Clipboard  */
+/* globals markSearchSettings: true, Clipboard, formplate, buttonplate  */
 
 import "babel-polyfill"
 import { generateBookmarkletJS } from '../bookmarkletTemplate'
@@ -25,10 +25,18 @@ var dbLocationInfoTitle$
 var prebrowsingCheckbox$
 var alwaysDisableTooltipsCheckbox$
 var bookmarkExpiryCheckbox$
+var bookmarkExpiryEmail$
+var bookmarkExpirySelectMonths$
 
 $(document).ready(settingsPageInit)
 
 function settingsPageInit(event){
+  formplate($('body'))
+  buttonplate($('.button'))
+  /****
+   * formplate moves things around, so grab elements only after its
+   * done its thing
+   */
   var dbLocationText$ = $('.dbLocationContainer .locationText')
   var browserAddonTokenButton$ = $('#browserAddonTokenButton')
   var browserAddonTokenText$ = $('#browserAddonTokenText')
@@ -47,8 +55,9 @@ function settingsPageInit(event){
   var exportHTMLFileButton$ = $('#exportHTMLFileButton')
   var exportTextFileButton$ = $('#exportTextFileButton')
   var revokeTokens$ = $('#revokeTokens')
-  var csrfToken = $('#csrfInput').val()
   bookmarkExpiryCheckbox$ = $('#bookmarkExpiryCheckbox')
+  bookmarkExpiryEmail$ = $('#bookmarkExpiryEmail')
+  bookmarkExpirySelectMonths$ = $('#bookmarkExpirySelect')
   alwaysDisableTooltipsCheckbox$ = $('#alwaysDisableTooltipsCheckbox')
   prebrowsingCheckbox$ = $('#prebrowsingCheckbox')
   dbLocationInfoTitle$ = $('#dbLocationInfoTitle')
@@ -59,6 +68,7 @@ function settingsPageInit(event){
   progressBar$ = $('.progressBar')
   errorOKbutton$ = $('.errorOKbutton')
 
+  var csrfToken = $('#csrfInput').val()
   $('.brandLogo').removeAttr()
   new Clipboard('.clipBoardButton')
   xhrHeaders = {
@@ -166,7 +176,7 @@ function settingsPageInit(event){
     }
     dbLocationText$.text(files[0].path)
     /****
-     * files[0].path only returns the path (with no trailing slash) so remove the filename and trailing
+     * files[0].path only returns the path (with no trailing slash or filename) so remove the filename and trailing
      * slash from the markSearchSettings.pagesDBFilePath when checking against dbLocationText$.text().
      */
     //TODO - double check the .slice(0, -19) works ok on windows & linux
@@ -191,6 +201,11 @@ function settingsPageInit(event){
         showNotie(3, `There Was An Error Revoking The Tokens. Error: ${errorMessage}`, 6)
       })
   })
+
+  /****
+   * Bookmark Expiry
+   */
+
 
   /****
    * Importing Bookmarks From File
@@ -237,8 +252,9 @@ function settingsPageInit(event){
     var dbLocationText = dbLocationText$.text().trim()
 
     /****
-     * dbLocationText only has the path (with no trailing slash) so remove the filename and trailing
-     * slash from the markSearchSettings.pagesDBFilePath when checking against dbLocationText.
+     * dbLocationText only has the path (with no trailing slash or filename) so remove the
+     * filename and trailing slash from the markSearchSettings.pagesDBFilePath when
+     * checking against dbLocationText.
      */
     //TODO - double check the .slice(0, -19) works ok on windows & linux
     if(markSearchSettings.pagesDBFilePath.slice(0, -19) !== dbLocationText){
@@ -251,42 +267,47 @@ function settingsPageInit(event){
           }
         }
         )
-        .then(response => JSON.parse(response.body).newPagesDBFilePath)
+        .then(response =>
+          JSON.parse(response.body).newPagesDBFilePath
+        )
     }
 
+    /****
+     * note: for the bookmark expiry, the bookmarkExpiry.init minimal check is always running,
+     * so don't need to init/change anything, it will just check the settings every 3 hours
+     * and if enabled, run, and then get the email/months dynamically from the appSettings.settings.
+     */
+
     Promise.resolve(dbChangePromise)
-      .then( newPagesDBFilePath => {
-        var newSettings = {
-          prebrowsing: prebrowsingCheckbox$[0].checked,
-          alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked
-        }
-        if(newPagesDBFilePath){
-          newSettings.pagesDBFilePath = newPagesDBFilePath
-        }
-        return newSettings
-      })
-      .tap( newSettings =>
-        got.post('/frontendapi/settings/update',
-          {
-            headers: xhrHeaders,
-            body: newSettings
-          }
-        )
-      )
-      .then( newSettings => {
-        showNotie(1, 'Settings Saved', 3)
-        markSearchSettings = newSettings
-      })
-      .catch( err => {
-        console.error(err)
-        var errorMessage = getErrorMessage(err)
-        /****
-         * Put the settings element values back to what they were before
-         * the user tried to save.
-         */
-        setSettingsElementValues()
-        showNotie(3,`There Was An Error Saving The Settings. Error: ${errorMessage}`, 6)
-      })
+    .then( newPagesDBFilePath => {
+      var newSettings = {
+        prebrowsing: prebrowsingCheckbox$[0].checked,
+        alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked,
+        bookmarkExpiryEnabled: bookmarkExpiryCheckbox$[0].checked,
+        bookmarkExpiryMonths: parseInt(bookmarkExpirySelectMonths$.val()),
+        bookmarkExpiryEmail: bookmarkExpiryEmail$.val()
+      }
+      if(newPagesDBFilePath){
+        newSettings.pagesDBFilePath = newPagesDBFilePath
+      }
+      return newSettings
+    })
+    .tap( newSettings => got.post('/frontendapi/settings/update', {headers: xhrHeaders, body: newSettings})
+    )
+    .then( newSettings => {
+      showNotie(1, 'Settings Saved', 3)
+      markSearchSettings = newSettings
+    })
+    .catch(err => {
+      console.error(err)
+      var errorMessage = getErrorMessage(err)
+      /****
+       * Put the settings element values back to what they were before
+       * the user tried to save.
+       */
+      setSettingsElementValues()
+      showNotie(3,`There Was An Error Saving The Settings. Error: ${errorMessage}`, 6)
+    })
   })
 
   cancelSettingsButton$.click( event => {
@@ -307,5 +328,7 @@ export {
   dbLocationInfoTitle$,
   prebrowsingCheckbox$,
   alwaysDisableTooltipsCheckbox$,
-  bookmarkExpiryCheckbox$
+  bookmarkExpiryCheckbox$,
+  bookmarkExpiryEmail$,
+  bookmarkExpirySelectMonths$
 }

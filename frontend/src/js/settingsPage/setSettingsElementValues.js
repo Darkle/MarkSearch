@@ -6,7 +6,9 @@ import {
   dbLocationInfoTitle$,
   prebrowsingCheckbox$,
   alwaysDisableTooltipsCheckbox$,
-  bookmarkExpiryCheckbox$
+  bookmarkExpiryCheckbox$,
+  bookmarkExpiryEmail$,
+  bookmarkExpirySelectMonths$
 } from './settingsPage'
 
 function setSettingsElementValues(){
@@ -19,13 +21,12 @@ function setSettingsElementValues(){
     alwaysDisableTooltipsCheckbox$.prop('checked', true)
     alwaysDisableTooltipsCheckbox$.parent().addClass('checked')
   }
-  //TODO set the bookmarkExpiryEnabled, bookmarkExpiryMonths on the page & bookmarkExpiryEmail (the elements valuse i mean)
   if(markSearchSettings.bookmarkExpiryEnabled){
     bookmarkExpiryCheckbox$.prop('checked', true)
     bookmarkExpiryCheckbox$.parent().addClass('checked')
   }
-  //markSearchSettings.bookmarkExpiryMonths
-  //markSearchSettings.bookmarkExpiryEnabled
+  bookmarkExpiryEmail$.val(markSearchSettings.bookmarkExpiryEmail)
+  bookmarkExpirySelectMonths$.val(markSearchSettings.bookmarkExpiryMonths)
 }
 
 export { setSettingsElementValues }

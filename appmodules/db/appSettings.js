@@ -75,6 +75,9 @@ function coerceSettingsValuesInAndOut(dataObj){
     if(key === 'prebrowsing' || key === 'alwaysDisableTooltips' || key === 'bookmarkExpiryEnabled'){
       val = Boolean(val)
     }
+    if(key === 'bookmarkExpiryMonths'){
+      val = _.toInteger(val)
+    }
     return val
   })
 }
