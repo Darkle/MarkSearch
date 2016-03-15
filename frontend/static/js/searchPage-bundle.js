@@ -280,7 +280,6 @@ function addUrlsInit() {
     setTimeout(function (event) {
       //progressInfo$.velocity({ height: 35 }, 500)
       $.Velocity.animate(progressInfo$[0], { height: 35 }, 500).then(function (elements) {
-        console.log('progressInfo$ then');
         progressInfo$.css('height', '');
       });
     }, 10);

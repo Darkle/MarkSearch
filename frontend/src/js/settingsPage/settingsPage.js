@@ -27,6 +27,7 @@ var alwaysDisableTooltipsCheckbox$
 var bookmarkExpiryCheckbox$
 var bookmarkExpiryEmail$
 var bookmarkExpirySelectMonths$
+var dbLocationText$
 
 $(document).ready(settingsPageInit)
 
@@ -37,7 +38,6 @@ function settingsPageInit(event){
    * formplate moves things around, so grab elements only after its
    * done its thing
    */
-  var dbLocationText$ = $('.dbLocationContainer .locationText')
   var browserAddonTokenButton$ = $('#browserAddonTokenButton')
   var browserAddonTokenText$ = $('#browserAddonTokenText')
   var bookmarkletButton$ = $('#bookmarkletButton')
@@ -55,6 +55,7 @@ function settingsPageInit(event){
   var exportHTMLFileButton$ = $('#exportHTMLFileButton')
   var exportTextFileButton$ = $('#exportTextFileButton')
   var revokeTokens$ = $('#revokeTokens')
+  dbLocationText$ = $('.dbLocationContainer .locationText')
   bookmarkExpiryCheckbox$ = $('#bookmarkExpiryCheckbox')
   bookmarkExpiryEmail$ = $('#bookmarkExpiryEmail')
   bookmarkExpirySelectMonths$ = $('#bookmarkExpirySelect')
@@ -271,7 +272,6 @@ function settingsPageInit(event){
           JSON.parse(response.body).newPagesDBFilePath
         )
     }
-
     /****
      * note: for the bookmark expiry, the bookmarkExpiry.init minimal check is always running,
      * so don't need to init/change anything, it will just check the settings every 3 hours
@@ -287,15 +287,14 @@ function settingsPageInit(event){
         bookmarkExpiryMonths: parseInt(bookmarkExpirySelectMonths$.val()),
         bookmarkExpiryEmail: bookmarkExpiryEmail$.val()
       }
-      if(newPagesDBFilePath){
-        newSettings.pagesDBFilePath = newPagesDBFilePath
-      }
+      newSettings.pagesDBFilePath = newPagesDBFilePath || markSearchSettings.pagesDBFilePath
       return newSettings
     })
     .tap( newSettings => got.post('/frontendapi/settings/update', {headers: xhrHeaders, body: newSettings})
     )
     .then( newSettings => {
       showNotie(1, 'Settings Saved', 3)
+      dbLocationInfoTitle$.text('Current Database Location:')
       markSearchSettings = newSettings
     })
     .catch(err => {
@@ -330,5 +329,6 @@ export {
   alwaysDisableTooltipsCheckbox$,
   bookmarkExpiryCheckbox$,
   bookmarkExpiryEmail$,
-  bookmarkExpirySelectMonths$
+  bookmarkExpirySelectMonths$,
+  dbLocationText$
 }

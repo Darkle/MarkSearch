@@ -4,7 +4,7 @@ import { xhrHeaders, notieAlert$ } from './settingsPage'
 import { showNotie } from './showNotie'
 import { getErrorMessage } from './getErrorMessage'
 
-import {netscape as createNetscapeBookarkFile} from 'netscape-bookmarks'
+import netscape from 'netscape-bookmarks'
 import got from 'got'
 import _ from 'lodash'
 
@@ -36,7 +36,7 @@ function exportUrls(typeOfExport){
           }
           bookmarks["MarkSearch Bookmarks"].contents[pageData.pageTitle] = pageData.pageUrl
         })
-        blobData = createNetscapeBookarkFile(bookmarks)
+        blobData = netscape(bookmarks)
       }
       else{
         fileExtension = 'txt'

@@ -141,7 +141,6 @@ function addUrlsInit(){
             //progressInfo$.velocity({ height: 35 }, 500)
             $.Velocity.animate(progressInfo$[0], {height: 35}, 500)
               .then(elements => {
-                console.log('progressInfo$ then')
                 progressInfo$.css('height', '')
               })
           }, 10)

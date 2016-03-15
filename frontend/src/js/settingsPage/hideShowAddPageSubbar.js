@@ -1,5 +1,7 @@
 'use strict';
 
+import velocity from 'velocity-animate'
+
 import { addPageUrlsDiv$, progressBar$, errorOKbutton$, progressInfo$ } from './settingsPage'
 
 function showAddPageSubbar(){
