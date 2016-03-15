@@ -209,21 +209,19 @@ pagesdb.upsertRow = (rowDataObj) => {
     console.error(errMessage)
     return Promise.reject(errMessage)
   }
-  else{
-    return pagesdb
-            .db('pages')
-            .where({
-              pageUrl: coercedPageDataObj.pageUrl
-            })
-            .then( rows => {
-              if(rows.length){
-                return pagesdb.updateColumns(coercedPageDataObj)
-              }
-              else{
-                return pagesdb.insertRow(coercedPageDataObj)
-              }
-            })
-  }
+  return pagesdb
+    .db('pages')
+    .where({
+      pageUrl: coercedPageDataObj.pageUrl
+    })
+    .then( rows => {
+      if(rows.length){
+        return pagesdb.updateColumns(coercedPageDataObj)
+      }
+      else{
+        return pagesdb.insertRow(coercedPageDataObj)
+      }
+    })
 }
 
 pagesdb.insertRow = rowData =>
