@@ -23,7 +23,7 @@ function shouldWeRunBookmarkExpiryCheck() {
   var bookmarkExpiryMonths = appSettings.settings.bookmarkExpiryMonths
   console.log(`bookmarkExpiryLastCheck : ${bookmarkExpiryLastCheck}`)
   console.log(`bookmarkExpiryMonths : ${bookmarkExpiryMonths}`)
-  var timestampMonthsFromNow = moment(bookmarkExpiryLastCheck).add(bookmarkExpiryMonths, 'M').valueOf()
+  var timestampMonthsFromNow = moment(bookmarkExpiryLastCheck).add(bookmarkExpiryMonths, 'months').valueOf()
   console.log(`timestampMonthsFromNow : ${timestampMonthsFromNow}`)
   var returnValue = timestampMonthsFromNow < Date.now()
   console.log(`shouldWeRunBookmarkExpiryCheck result: ${returnValue}`)
