@@ -216,9 +216,6 @@ pagesdb.upsertRow = (rowDataObj) => {
               pageUrl: coercedPageDataObj.pageUrl
             })
             .then( rows => {
-              /****
-               * If row is already there, update it
-               */
               if(rows.length){
                 return pagesdb.updateColumns(coercedPageDataObj)
               }
