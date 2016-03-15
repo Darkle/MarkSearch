@@ -280,6 +280,7 @@ function importUrls(event) {
    * .path is available in Electron.
    * http://electron.atom.io/docs/all/#file-object
    */
+  //TODO - also check file.path doesnt have a trailing slash on windows & linux
   reader.onload = function (event) {
     _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
       headers: _settingsPage.xhrHeaders
@@ -788,10 +789,6 @@ function settingsPageInit(event) {
   });
 
   /****
-   * Bookmark Expiry
-   */
-
-  /****
    * Importing Bookmarks From File
    */
   importHTMLFileButton$.click(function (event) {
@@ -816,7 +813,6 @@ function settingsPageInit(event) {
   /****
    * Export Bookmarks
    */
-
   exportHTMLFileButton$.click(function (event) {
     event.preventDefault();
     (0, _exportUrls.exportUrls)('HTML');

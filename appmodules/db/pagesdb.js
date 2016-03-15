@@ -215,7 +215,6 @@ pagesdb.upsertRow = (rowDataObj) => {
             .where({
               pageUrl: coercedPageDataObj.pageUrl
             })
-            .select('pageUrl')
             .then( rows => {
               /****
                * If row is already there, update it

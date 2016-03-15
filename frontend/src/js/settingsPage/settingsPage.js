@@ -204,11 +204,6 @@ function settingsPageInit(event){
   })
 
   /****
-   * Bookmark Expiry
-   */
-
-
-  /****
    * Importing Bookmarks From File
    */
   importHTMLFileButton$.click(event => {
@@ -233,7 +228,6 @@ function settingsPageInit(event){
   /****
    * Export Bookmarks
    */
-
   exportHTMLFileButton$.click(event => {
     event.preventDefault()
     exportUrls('HTML')

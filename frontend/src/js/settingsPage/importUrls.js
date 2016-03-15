@@ -22,6 +22,7 @@ function importUrls(event){
    * .path is available in Electron.
    * http://electron.atom.io/docs/all/#file-object
    */
+    //TODO - also check file.path doesnt have a trailing slash on windows & linux
   reader.onload = event => {
     got.post(
       `/frontendapi/settings/checkIfFileIsBinary/${encodeURIComponent(file.path)}`,
