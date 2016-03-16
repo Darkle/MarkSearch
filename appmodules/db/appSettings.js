@@ -60,9 +60,8 @@ var appSettingsValidation = {
 }
 
 /****
- * Coerce the 'true'/'false' string values might get back from frontend as when they send
- * settings via ajax, they are converted to string, so convert any true'/'false' string values
- * back to boolean.
+ * Coerce the true/false/Integer values might get back from frontend as when they send
+ * settings via ajax, they are converted to string, so convert back to their proper type.
  *
  * Also, SQLite stores Boolean values as a 0 for false or 1 for true, so convert them to
  * boolean when getting settings from the db, so they are slightly easier to work with.
