@@ -153,6 +153,7 @@ appSettings.init = (appDataPath) => {
 appSettings.update = (settingsKeyValObj) => {
   var coercedSettingsKeyValObj = _.omit(coerceSettingsValuesInAndOut(settingsKeyValObj), ['JWTsecret', 'id'])
   var validatedSettingsKeyValObj = inspector.validate(appSettingsValidation, coercedSettingsKeyValObj)
+  
   if(!validatedSettingsKeyValObj.valid){
     var errMessage = `Error, passed in app settings did not pass validation.
                       Error(s): ${validatedSettingsKeyValObj.format()}`
