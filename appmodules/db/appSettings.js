@@ -46,8 +46,8 @@ var appSettingsValidation = {
     },
     bookmarkExpiryMonths: {
       type: 'integer',
-      gt: 0,
-      error: 'bookmarkExpiryMonths must be a valid integer and larger than 0',
+      eq: [3, 6],
+      error: 'bookmarkExpiryMonths must be a an integer of 3 or 6',
       optional: true
     },
     bookmarkExpiryLastCheck: {
