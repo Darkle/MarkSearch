@@ -21,13 +21,8 @@ var mailGun = new MailGun({
 function shouldWeRunBookmarkExpiryCheck() {
   var bookmarkExpiryLastCheck = appSettings.settings.bookmarkExpiryLastCheck
   var bookmarkExpiryMonths = appSettings.settings.bookmarkExpiryMonths
-  console.log(`bookmarkExpiryLastCheck : ${bookmarkExpiryLastCheck}`)
-  console.log(`bookmarkExpiryMonths : ${bookmarkExpiryMonths}`)
-  var timestampMonthsFromNow = moment(bookmarkExpiryLastCheck).add(bookmarkExpiryMonths, 'months').valueOf()
-  console.log(`timestampMonthsFromNow : ${timestampMonthsFromNow}`)
-  var returnValue = timestampMonthsFromNow < Date.now()
-  console.log(`shouldWeRunBookmarkExpiryCheck result: ${returnValue}`)
-  return returnValue
+  var timestampMonthsFromLastCheck = moment(bookmarkExpiryLastCheck).add(bookmarkExpiryMonths, 'months').valueOf()
+  return timestampMonthsFromLastCheck < Date.now()
 }
 
 /****
@@ -40,7 +35,6 @@ function shouldWeRunBookmarkExpiryCheck() {
  * note: the ".where(function() {}" needs to be a regular function or the "this" context is wrong
  */
 function checkForExpiredBookmarks() {
-  console.log('checkForExpiredBookmarks running')
   var expiryTimestamp = Date.now()
   pagesdb.db('pages')
     .where('dateCreated', '<', expiryTimestamp)
@@ -48,7 +42,6 @@ function checkForExpiredBookmarks() {
       this.where('checkedForExpiry', 0)
         .orWhere('checkedForExpiry', null)
     })
-    .orderBy('dateCreated', 'desc')
     .then( rows => {
       if(rows.length){
         return pagesdb.db('pages')
@@ -68,23 +61,18 @@ function checkForExpiredBookmarks() {
     })
 }
 
+//TODO need marksearch localhost/url dynamically
 function sendExpiredBookmarksEmail(rows) {
-  console.log('sendExpiredBookmarksEmail running')
   var emailHtml = `
-    <style>
-      .expiredBookmarkDetails {
-        display: flex;
-        flex-direction: column;
-      }
-    </style>
-  `
+      <div>The following are bookmarks from MarkSearch that are older than
+    ${appSettings.settings.bookmarkExpiryMonths} Months (and have not been checked before).</div>
+     <div>You can click this link to go to a page where you can remove some or all of them from MarkSearch:
+     <a href="http://localhost:3020/emailDeletePage">MarkSearch Bookmark Expiry Page</a>
+     </div>
+     <h3>Expired Bookmarks:</h3>`
 
   _.each(rows, row => {
-    emailHtml += `<p class="expiredBookmarkDetails">
-      <div class="pageTitle">${row.pageTitle}</div>
-      <div class="pageUrl">${row.pageUrl}</div>
-    </p>
-    `
+    emailHtml += `<p><div>${row.pageTitle}</div><div>${row.pageUrl}</div></p>`
   })
   //TODO change from to 'expiry@'+ host and get host dynamically
   mailGun.sendEmail({
@@ -99,7 +87,6 @@ function sendExpiredBookmarksEmail(rows) {
 }
 
 bookmarkExpiry.init = () => {
-  console.log('bookmarkExpiry.init')
   bookmarkExpiry.stopBookmarksExpiry()
   if(appSettings.settings.bookmarkExpiryEnabled){
     /****
@@ -107,7 +94,6 @@ bookmarkExpiry.init = () => {
      * run straight away.
      */
     if(shouldWeRunBookmarkExpiryCheck()){
-      console.log('shouldWeRunBookmarkExpiryCheck true')
       checkForExpiredBookmarks()
     }
     /****
@@ -115,7 +101,6 @@ bookmarkExpiry.init = () => {
      */
     setTimeoutRef = setTimeout(() => {
       if(shouldWeRunBookmarkExpiryCheck()){
-        console.log('setTimeout shouldWeRunBookmarkExpiryCheck true')
         checkForExpiredBookmarks()
       }
     }, checkInterval)
@@ -123,7 +108,6 @@ bookmarkExpiry.init = () => {
 }
 
 bookmarkExpiry.stopBookmarksExpiry = () => {
-  console.log('bookmarkExpiry.stopBookmarksExpiry running')
   if(setTimeoutRef){
     clearTimeout(setTimeoutRef)
     setTimeoutRef = null

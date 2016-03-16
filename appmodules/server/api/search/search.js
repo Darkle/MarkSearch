@@ -13,7 +13,7 @@ function search(req, res, next){
   var knexSQL = null
 
   /****
-   * note: knex will automatically convert additional WHERE's to AND WHERE
+   * note: knex will automatically convert additional WHERE's to AND
    */
   if(!searchTerms.length){
     /****
@@ -22,15 +22,9 @@ function search(req, res, next){
     if(domainToSearchFor){
       knexSQL = pagesdb.db('pages').where({pageDomain: domainToSearchFor})
       if(dateFilter){
-        /****
-         * http://knexjs.org/#Builder-where - Grouped Chain
-         *
-         * note: the ".where(function() {}" needs to be a regular function or the "this" context is wrong
-         */
-        knexSQL = knexSQL.where(function() {
-          this.where('dateCreated', '>=', dateFilter.dateFilterStartDate)
-            .orWhere('dateCreated', '<=', dateFilter.dateFilterEndDate)
-        })
+        knexSQL = knexSQL
+          .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
+          .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
       }
       knexSQL = knexSQL.orderBy('dateCreated', 'desc')
     }
@@ -66,13 +60,9 @@ function search(req, res, next){
       knexSQL = knexSQL.where({pageDomain: domainToSearchFor})
     }
     if(dateFilter){
-      /****
-       * note: the ".where(function() {}" needs to be a regular function or the "this" context is wrong
-       */
-      knexSQL = knexSQL.where(function() {
-          this.where('dateCreated', '>=', dateFilter.dateFilterStartDate)
-            .orWhere('dateCreated', '<=', dateFilter.dateFilterEndDate)
-        })
+      knexSQL = knexSQL
+        .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
+        .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
     }
     /****
      * https://sqlite.org/fts5.html#section_5_1_1
@@ -89,7 +79,7 @@ function search(req, res, next){
   /****
    * Examples of the SQL statements created in search.js: http://bit.ly/1TxvdZa
    */
-  //console.log(knexSQL.toString())
+  console.log(knexSQL.toString())
 
   knexSQL
     .then( rows => {

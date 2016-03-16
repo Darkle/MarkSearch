@@ -185,18 +185,16 @@ pagesdb.updateColumns = (columnsDataObj) => {
     console.error(errMessage)
     return Promise.reject(errMessage)
   }
-  else{
-    return pagesdb
-            .db('pages')
-            .where('pageUrl', pageUrlPrimaryKey)
-            .update(coercedColumnsDataObjNoPageUrl)
-            .then(() =>
-              pagesdb
-                .db('fts')
-                .where('pageUrl', pageUrlPrimaryKey)
-                .update(coercedColumnsDataObjNoPageUrl)
-            )
-  }
+  return pagesdb
+    .db('pages')
+    .where('pageUrl', pageUrlPrimaryKey)
+    .update(coercedColumnsDataObjNoPageUrl)
+    .then(() =>
+      pagesdb
+        .db('fts')
+        .where('pageUrl', pageUrlPrimaryKey)
+        .update(coercedColumnsDataObjNoPageUrl)
+    )
 }
 
 pagesdb.upsertRow = (rowDataObj) => {
@@ -277,50 +275,48 @@ pagesdb.deleteRow = pageUrl => {
   if(!_.isString(pageUrl)){
     return Promise.reject(`pageUrl passed to pagesdb.deleteRow was not a string`)
   }
-  else{
-    /****
-     * note: gotta do the fts delete first as it relies on the rowid from the pages table.
-     */
-    return pagesdb
-      .db
-      .select(
-        'rowid',
-        'pageUrl',
-        'dateCreated',
-        'pageDomain',
-        'pageTitle',
-        'pageText',
-        'pageDescription',
-        'archiveLink',
-        'safeBrowsing',
-        'checkedForExpiry'
-      )
-      .from('pages')
-      .where('pageUrl', pageUrl)
-      .then(rows =>
-        pagesdb
-          .db('fts')
-          .insert({
-            fts: 'delete',
-            rowid: rows[0].rowid,
-            pageUrl: rows[0].pageUrl,
-            dateCreated: rows[0].dateCreated,
-            pageDomain: rows[0].pageDomain,
-            pageTitle: rows[0].pageTitle,
-            pageText: rows[0].pageText,
-            pageDescription: rows[0].pageDescription,
-            archiveLink: rows[0].archiveLink,
-            safeBrowsing: rows[0].safeBrowsing,
-            checkedForExpiry: rows[0].checkedForExpiry
-          })
-      )
-      .then(() =>
-        pagesdb
-          .db('pages')
-          .where('pageUrl', pageUrl)
-          .del()
-      )
-  }
+  /****
+   * note: gotta do the fts delete first as it relies on the rowid from the pages table.
+   */
+  return pagesdb
+    .db
+    .select(
+      'rowid',
+      'pageUrl',
+      'dateCreated',
+      'pageDomain',
+      'pageTitle',
+      'pageText',
+      'pageDescription',
+      'archiveLink',
+      'safeBrowsing',
+      'checkedForExpiry'
+    )
+    .from('pages')
+    .where('pageUrl', pageUrl)
+    .then(rows =>
+      pagesdb
+        .db('fts')
+        .insert({
+          fts: 'delete',
+          rowid: rows[0].rowid,
+          pageUrl: rows[0].pageUrl,
+          dateCreated: rows[0].dateCreated,
+          pageDomain: rows[0].pageDomain,
+          pageTitle: rows[0].pageTitle,
+          pageText: rows[0].pageText,
+          pageDescription: rows[0].pageDescription,
+          archiveLink: rows[0].archiveLink,
+          safeBrowsing: rows[0].safeBrowsing,
+          checkedForExpiry: rows[0].checkedForExpiry
+        })
+    )
+    .then(() =>
+      pagesdb
+        .db('pages')
+        .where('pageUrl', pageUrl)
+        .del()
+    )
 
 }
 

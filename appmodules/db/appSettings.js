@@ -20,7 +20,8 @@ var appSettingsValidation = {
     'alwaysDisableTooltips',
     'bookmarkExpiryEnabled',
     'bookmarkExpiryEmail',
-    'bookmarkExpiryMonths'
+    'bookmarkExpiryMonths',
+    'bookmarkExpiryLastCheck'
   ],
   properties: {
     pagesDBFilePath: {
@@ -134,9 +135,7 @@ appSettings.init = (appDataPath) => {
     if(!rows[0]){
       return appSettings.db('appSettings').where('id', 'appSettings')
     }
-    else{
-      return rows
-    }
+    return rows
   })
   .then( rows => {
     if(!rows[0]){
@@ -161,15 +160,13 @@ appSettings.update = (settingsKeyValObj) => {
     console.error(errMessage)
     return Promise.reject(errMessage)
   }
-  else{
-    return appSettings.db('appSettings')
-        .where('id', 'appSettings')
-        .update(coercedSettingsKeyValObj)
-        .return(appSettings.db('appSettings').where('id', 'appSettings'))
-        .then( rows => {
-          appSettings.settings = coerceSettingsValuesInAndOut(rows[0])
-        })
-  }
+  return appSettings.db('appSettings')
+    .where('id', 'appSettings')
+    .update(coercedSettingsKeyValObj)
+    .return(appSettings.db('appSettings').where('id', 'appSettings'))
+    .then( rows => {
+      appSettings.settings = coerceSettingsValuesInAndOut(rows[0])
+    })
 }
 
 
