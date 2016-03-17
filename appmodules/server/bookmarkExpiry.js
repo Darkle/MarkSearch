@@ -17,9 +17,9 @@ var mailGun = new MailGun({
   domainName: 'mailgun.coopcoding.com'
 })
 
-
 function shouldWeRunBookmarkExpiryCheck() {
   var bookmarkExpiryLastCheck = appSettings.settings.bookmarkExpiryLastCheck
+  var bookmarkExpiryLastCheck = 1
   var bookmarkExpiryMonths = appSettings.settings.bookmarkExpiryMonths
   var timestampMonthsFromLastCheck = moment(bookmarkExpiryLastCheck).add(bookmarkExpiryMonths, 'months').valueOf()
   return timestampMonthsFromLastCheck < Date.now()
@@ -64,15 +64,19 @@ function checkForExpiredBookmarks() {
 //TODO need marksearch localhost/url dynamically
 function sendExpiredBookmarksEmail(rows) {
   var emailHtml = `
-      <div>The following are bookmarks from MarkSearch that are older than
+      <div style="font-size: 1rem; margin-bottom: 1rem;">The following are bookmarks from MarkSearch that are older than
     ${appSettings.settings.bookmarkExpiryMonths} Months (and have not been checked before).</div>
-     <div>You can click this link to go to a page where you can remove some or all of them from MarkSearch:
-     <a href="http://localhost:3020/emailDeletePage">MarkSearch Bookmark Expiry Page</a>
+     <div style="font-size: 1rem">You can click this link to go to a page where you can remove some or all of them from MarkSearch:
      </div>
-     <h3>Expired Bookmarks:</h3>`
+     <a style="font-size: 1rem" href="http://localhost:3020/emailDeletePage">MarkSearch Bookmark Expiry Page</a>
+     <h3 style="margin-top: 3rem;">Bookmarks:</h3>`
 
   _.each(rows, row => {
-    emailHtml += `<p><div>${row.pageTitle}</div><div>${row.pageUrl}</div></p>`
+    emailHtml += `<p>
+        <div style="font-size: 1rem">${row.pageTitle}</div>
+        <div style="font-size: 1rem;margin: 0.2rem 0;">${row.pageUrl}</div>
+        <div style="font-size: 0.9rem;opacity: 0.6;color: #7A7A7A;">Date Created: ${moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")}</div>
+      </p>`
   })
   //TODO change from to 'expiry@'+ host and get host dynamically
   mailGun.sendEmail({

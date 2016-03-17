@@ -27,7 +27,11 @@ function emailBookmarklet(req, res, next){
         to: [email],
         from: 'bookmarklet@marksearch.local',
         subject: 'MarkSearch Bookmarklet',
-        html: `Open this page in your mobile device, then bookmark the link shown on that page: <a href="${protocolIpandPort}/bookmarklet">${protocolIpandPort}/bookmarklet</a>`
+        html: `<div style="font-size: 1rem; margin-bottom: 1rem;">
+                Open the page below in your mobile device, then bookmark the link shown on that page:
+               </div>
+              <a style="font-size: 1rem;" href="${protocolIpandPort}/bookmarklet">${protocolIpandPort}/bookmarklet</a>
+                `
       })
     }
   })
