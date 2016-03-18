@@ -12,6 +12,7 @@ var appSettings = require('../../db/appSettings')
 var generateBookmarkletJS = require('../generateBookmarkletJS')
 var generateProtocolIpAndPort = require('../../utils/generateProtocolIpAndPort')
 var generateJWTtoken = require('../../utils/generateJWTtoken')
+var getAllExpiredBookmarks = require('../bookmarkExpiry').getAllExpiredBookmarks
 
 var router = express.Router()
 
@@ -33,7 +34,7 @@ router.get('/', (req, res, next) => {
   )
 })
 
-router.get('/aboutPage', (req, res, next) => {
+router.get('/about', (req, res, next) => {
   res.render('aboutPage',
       {
         title: 'MarkSearch About'
@@ -41,7 +42,7 @@ router.get('/aboutPage', (req, res, next) => {
   )
 })
 
-router.get('/helpPage', (req, res, next) => {
+router.get('/help', (req, res, next) => {
   res.render('helpPage',
       {
         title: 'MarkSearch Help'
@@ -49,7 +50,7 @@ router.get('/helpPage', (req, res, next) => {
   )
 })
 
-router.get('/settingsPage', (req, res, next) => {
+router.get('/settings', (req, res, next) => {
   res.render('settingsPage',
       {
         title: 'MarkSearch Settings',
@@ -79,6 +80,22 @@ router.get('/bookmarklet', (req, res, next) => {
         bookmarkletHref: `javascript:${encodeURIComponent(bookmarkletJS)}`
       }
   )
+})
+
+router.get('/removeOldBookmarks', (req, res, next) => {
+  getAllExpiredBookmarks()
+    .then(rows => {
+      res.render('removeOldBookmarksPage',
+        {
+          title: 'MarkSearch - Remove Old Bookmarks',
+          csrfToken: req.csrfToken(),
+          rows: JSON.stringify(rows)
+        }
+      )
+    })
+    .catch(err => {
+      console.error(err)
+    })
 })
 
 /****

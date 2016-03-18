@@ -9,6 +9,7 @@ var checkScreenSize = require('./checkScreenSize')
 var electronApp = electron.app
 var Menu = electron.Menu
 var Tray = electron.Tray
+var shell = electron.shell
 var settingsWindow = null
 var helpWindow = null
 var aboutWindow = null
@@ -45,7 +46,7 @@ function trayMenu(){
               }
           )
           //TODO - get address dynamically
-          settingsWindow.loadURL(`http://localhost:3020/settingsPage`)
+          settingsWindow.loadURL(`http://localhost:3020/settings`)
           if(devMode){
             settingsWindow.openDevTools()
           }
@@ -59,62 +60,13 @@ function trayMenu(){
     {
       label: 'Help',
       click: function() {
-        if(helpWindow){
-          helpWindow.show()
-        }
-        else{
-          var windowSize = checkScreenSize()
-
-          helpWindow = new BrowserWindow(
-              {
-                width: windowSize.width,
-                height: windowSize.height,
-                title: 'MarkSearch Help',
-                webPreferences: {
-                  nodeIntegration: false
-                }
-              }
-          )
-
-          helpWindow.loadURL(`http://localhost:3020/help`)
-          if(devMode){
-            helpWindow.openDevTools()
-          }
-
-          helpWindow.on('closed', () =>{
-            helpWindow = null
-          })
-        }
+        shell.openExternal(`http://localhost:3020/help`)
       }
     },
     {
       label: 'About',
       click: function() {
-        if(aboutWindow){
-          aboutWindow.show()
-        }
-        else{
-          var windowSize = checkScreenSize()
-
-          aboutWindow = new BrowserWindow(
-              {
-                width: windowSize.width,
-                height: windowSize.height,
-                title: 'MarkSearch About',
-                webPreferences: {
-                  nodeIntegration: false
-                }
-              }
-          )
-          aboutWindow.loadURL(`http://localhost:3020/about`)
-          if(devMode){
-            aboutWindow.openDevTools()
-          }
-
-          aboutWindow.on('closed', () =>{
-            aboutWindow = null
-          })
-        }
+        shell.openExternal(`http://localhost:3020/about`)
       }
     },
     {

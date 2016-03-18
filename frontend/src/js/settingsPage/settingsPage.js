@@ -70,7 +70,7 @@ function settingsPageInit(event){
   errorOKbutton$ = $('.errorOKbutton')
 
   var csrfToken = $('#csrfInput').val()
-  $('.brandLogo').removeAttr()
+  $('.brandLogo a').removeAttr('href')
   new Clipboard('.clipBoardButton')
   xhrHeaders = {
     'X-CSRF-Token': csrfToken
@@ -86,7 +86,12 @@ function settingsPageInit(event){
    */
   $('.externalLink').click(event => {
     event.preventDefault()
+    console.log(`$(event.currentTarget).attr('href')`)
+    console.log($(event.currentTarget).attr('href'))
     var urlToOpen = encodeURIComponent($(event.currentTarget).attr('href'))
+
+    console.log(`urlToOpen`)
+    console.log(urlToOpen)
     got.post(`/frontendapi/openUrlInBrowser/${urlToOpen}`, {headers: xhrHeaders})
       .catch( err => {
         console.error(err)

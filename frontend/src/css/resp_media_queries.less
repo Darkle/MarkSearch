@@ -99,10 +99,32 @@
   .searchPage .metaIcons a{
     font-size: 2.4rem;
   }
+  .removeOldBookmarksPage .removeBookmarksContainer {
+    font-size: 1.4rem;
+  }
+  .removeOldBookmarksPage .removeBookmarksContainer .deleteBookmarkButton {
+    height: 2.8rem;
+    ont-size: 1.2rem;
+  }
 }
 
 /*****
-35em width and less
+40em width and less
+*****/
+@media (max-width: 40em) {
+  .searchPage .navHeader .brandLogo .brandLogoSmall {
+    display: flex;
+  }
+  .searchPage .navHeader .brandLogo .brandLogoLarge {
+    display: none;
+  }
+  .removeOldBookmarksPage .removeBookmarksContainer #rowsUl {
+    max-width: none;
+  }
+}
+
+/*****
+36em width and less
 *****/
 @media (max-width: 36em) {
   .searchPage .navHeader  .addPageUrls .progressInfo {
@@ -120,19 +142,6 @@
 }
 
 /*****
-40em width and less
-*****/
-@media (max-width: 40em) {
-  .searchPage .navHeader .brandLogo .brandLogoSmall {
-    display: flex;
-  }
-  .searchPage .navHeader .brandLogo .brandLogoLarge {
-    display: none;
-  }
-}
-
-
-/*****
 35.8em width and less
 *****/
 @media (max-width: 35.8em) {
@@ -147,6 +156,9 @@
 @media (max-width: 32.1em) {
   .searchPage .searchPage #resultsContainer {
     margin: 0 2rem;
+  }
+  .removeOldBookmarksPage .navHeader .brandLogo a h1 {
+    font-size: 1.8rem;
   }
 }
 
@@ -199,6 +211,9 @@
   }
   .searchPage .metaIcons a{
     font-size: 1.8rem;
+  }
+  .removeOldBookmarksPage .navHeader .brandLogo a h1 {
+    font-size: 1.6rem;
   }
 }
 

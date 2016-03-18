@@ -19,7 +19,6 @@ var mailGun = new MailGun({
 
 function shouldWeRunBookmarkExpiryCheck() {
   var bookmarkExpiryLastCheck = appSettings.settings.bookmarkExpiryLastCheck
-  var bookmarkExpiryLastCheck = 1
   var bookmarkExpiryMonths = appSettings.settings.bookmarkExpiryMonths
   var timestampMonthsFromLastCheck = moment(bookmarkExpiryLastCheck).add(bookmarkExpiryMonths, 'months').valueOf()
   return timestampMonthsFromLastCheck < Date.now()
@@ -35,17 +34,12 @@ function shouldWeRunBookmarkExpiryCheck() {
  * note: the ".where(function() {}" needs to be a regular function or the "this" context is wrong
  */
 function checkForExpiredBookmarks() {
-  var expiryTimestamp = Date.now()
-  pagesdb.db('pages')
-    .where('dateCreated', '<', expiryTimestamp)
-    .where(function() {
-      this.where('checkedForExpiry', 0)
-        .orWhere('checkedForExpiry', null)
-    })
+  var now = Date.now()
+  bookmarkExpiry.getAllExpiredBookmarks()
     .then( rows => {
       if(rows.length){
         return pagesdb.db('pages')
-          .where('dateCreated', '<', expiryTimestamp)
+          .where('dateCreated', '<', now)
           .where(function() {
             this.where('checkedForExpiry', 0)
               .orWhere('checkedForExpiry', null)
@@ -60,15 +54,15 @@ function checkForExpiredBookmarks() {
       }
     })
 }
-
+ 
 //TODO need marksearch localhost/url dynamically
 function sendExpiredBookmarksEmail(rows) {
   var emailHtml = `
       <div style="font-size: 1rem; margin-bottom: 1rem;">The following are bookmarks from MarkSearch that are older than
     ${appSettings.settings.bookmarkExpiryMonths} Months (and have not been checked before).</div>
-     <div style="font-size: 1rem">You can click this link to go to a page where you can remove some or all of them from MarkSearch:
+     <div style="font-size: 1rem">You can click this link to go to a page where you can remove them from MarkSearch:
      </div>
-     <a style="font-size: 1rem" href="http://localhost:3020/emailDeletePage">MarkSearch Bookmark Expiry Page</a>
+     <a style="font-size: 1rem" href="http://localhost:3020/removeOldBookmarks">MarkSearch Bookmark Expiry Page</a>
      <h3 style="margin-top: 3rem;">Bookmarks:</h3>`
 
   _.each(rows, row => {
@@ -116,6 +110,21 @@ bookmarkExpiry.stopBookmarksExpiry = () => {
     clearTimeout(setTimeoutRef)
     setTimeoutRef = null
   }
+}
+
+/****
+ * .orderBy('dateCreated', 'desc') is for when the removeOldBookmarks calls
+ * bookmarkExpiry.getAllExpiredBookmarks.
+ */
+bookmarkExpiry.getAllExpiredBookmarks = () => {
+  var now = Date.now()
+  return pagesdb.db('pages')
+    .where('dateCreated', '<', now)
+    .where(function() {
+      this.where('checkedForExpiry', 0)
+        .orWhere('checkedForExpiry', null)
+    })
+    .orderBy('dateCreated', 'desc')
 }
 
 module.exports = bookmarkExpiry

@@ -14,6 +14,8 @@ html
     link(rel='stylesheet', href='/stylesheets/formplate.css')
     if bodyClass === 'settingsPage'
       link(rel='stylesheet', href='/bower_components/buttonplate/css/buttonplate.css')
+    if bodyClass === 'removeOldBookmarksPage'
+      link(rel='stylesheet', href='/bower_components/buttonplate/css/buttonplate.css')
     link(rel='stylesheet', href='/stylesheets/styles.css')
   body(class='#{bodyClass}')
     include ./nav.jade

@@ -106,10 +106,10 @@ function renderResults(resultsChunk, searchTerms){
         //  mainDetails.appendChild(resultRank)
         //}
         //
-        var resultDateCreated = document.createElement('div')
+        // var resultDateCreated = document.createElement('div')
         //resultDateCreated.textContent = row.dateCreated
-        resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
-        mainDetails.appendChild(resultDateCreated)
+        // resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
+        // mainDetails.appendChild(resultDateCreated)
 
         /*****
          * SafeBrowsing

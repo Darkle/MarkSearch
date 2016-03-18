@@ -1,8 +1,5 @@
 header.navHeader
   nav(role='banner')
-    .helpPageBackButtonContainer
-        a#helpPageBackButton(href='#')
-          i.material-icons arrow_back
     .brandLogo
       a(href='/', title="MarkSearch Home Page")
         if bodyClass === 'settingsPage'
@@ -13,6 +10,8 @@ header.navHeader
           h1.brandLogoLarge About MarkSearch
         else if bodyClass === 'bookmarkletPage'
           h1.brandLogoLarge MarkSearch Bookmarklet
+        else if bodyClass === 'removeOldBookmarksPage'
+          h1.brandLogoLarge MarkSearch - Remove Old Bookmarks
         else
           h1.brandLogoLarge MarkSearch
         h1.brandLogoSmall MS

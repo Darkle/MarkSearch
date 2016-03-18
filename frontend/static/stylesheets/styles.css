@@ -1512,15 +1512,24 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 .helpPage .navHeader .rightContainer {
   display: none;
 }
-.helpPage .navHeader .brandLogo a:hover {
-  color: #77BBEB;
-}
 .helpPage .navHeader .brandLogo h1 {
   -webkit-box-pack: center;
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
-  cursor: default;
+  font-weight: bold;
+}
+.aboutPage .navHeader .searchContainer {
+  display: none;
+}
+.aboutPage .navHeader .rightContainer {
+  display: none;
+}
+.aboutPage .navHeader .brandLogo h1 {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   font-weight: bold;
 }
 .errorPage .navHeader .searchContainer {
@@ -1575,6 +1584,117 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
+}
+.removeOldBookmarksPage {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  min-height: 100vh;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding-bottom: 40px;
+}
+.removeOldBookmarksPage .navHeader .searchContainer {
+  display: none;
+}
+.removeOldBookmarksPage .navHeader .rightContainer {
+  display: none;
+}
+.removeOldBookmarksPage .navHeader .brandLogo a:hover {
+  color: #77BBEB;
+}
+.removeOldBookmarksPage .navHeader .brandLogo h1 {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-weight: bold;
+}
+.removeOldBookmarksPage .navHeader .brandLogo .brandLogoSmall {
+  display: none;
+}
+.removeOldBookmarksPage .removeBookmarksContainer {
+  margin-top: 6.5rem;
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+.removeOldBookmarksPage #rowsUl {
+  list-style-type: none;
+  max-width: 80%;
+}
+.removeOldBookmarksPage #rowsUl li {
+  margin-bottom: 1.5rem;
+}
+.removeOldBookmarksPage .bookmarkDetailsContainer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.removeOldBookmarksPage .bookmarkDetails {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.removeOldBookmarksPage .bookmarkDetails a {
+  text-decoration: none;
+  color: #3498DB;
+}
+.removeOldBookmarksPage .bookmarkDetails a:hover {
+  color: #2670A2;
+  text-decoration: none;
+}
+.removeOldBookmarksPage .bookmarkPageUrl {
+  color: #92C8EF;
+  font-size: 0.7rem;
+}
+.removeOldBookmarksPage .deleteBookmarkButtonContainer {
+  margin-right: 1rem;
+  margin-top: 0.3rem;
+}
+.removeOldBookmarksPage .deleteBookmarkButtonContainer .deleteBookmarkButton {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #666;
+}
+.removeOldBookmarksPage .deleteBookmarkButtonContainer .deleteBookmarkButton:hover {
+  background-color: #383838;
 }
 /****
 * Global
@@ -1684,9 +1804,33 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   .searchPage .metaIcons a {
     font-size: 2.4rem;
   }
+  .removeOldBookmarksPage .removeBookmarksContainer {
+    font-size: 1.4rem;
+  }
+  .removeOldBookmarksPage .removeBookmarksContainer .deleteBookmarkButton {
+    height: 2.8rem;
+    ont-size: 1.2rem;
+  }
 }
 /*****
-35em width and less
+40em width and less
+*****/
+@media (max-width: 40em) {
+  .searchPage .navHeader .brandLogo .brandLogoSmall {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .searchPage .navHeader .brandLogo .brandLogoLarge {
+    display: none;
+  }
+  .removeOldBookmarksPage .removeBookmarksContainer #rowsUl {
+    max-width: none;
+  }
+}
+/*****
+36em width and less
 *****/
 @media (max-width: 36em) {
   .searchPage .navHeader .addPageUrls .progressInfo {
@@ -1707,20 +1851,6 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   }
 }
 /*****
-40em width and less
-*****/
-@media (max-width: 40em) {
-  .searchPage .navHeader .brandLogo .brandLogoSmall {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-  }
-  .searchPage .navHeader .brandLogo .brandLogoLarge {
-    display: none;
-  }
-}
-/*****
 35.8em width and less
 *****/
 @media (max-width: 35.8em) {
@@ -1734,6 +1864,9 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
 @media (max-width: 32.1em) {
   .searchPage .searchPage #resultsContainer {
     margin: 0 2rem;
+  }
+  .removeOldBookmarksPage .navHeader .brandLogo a h1 {
+    font-size: 1.8rem;
   }
 }
 /*****
@@ -1776,6 +1909,9 @@ http://yui.yahooapis.com/pure/0.6.0/forms.css
   }
   .searchPage .metaIcons a {
     font-size: 1.8rem;
+  }
+  .removeOldBookmarksPage .navHeader .brandLogo a h1 {
+    font-size: 1.6rem;
   }
 }
 /*****

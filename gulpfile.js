@@ -110,6 +110,7 @@ gulp.task('browserify', () => {
   var files = [
     path.join(__dirname, 'frontend', 'src', 'js', 'searchPage.js'),
     path.join(__dirname, 'frontend', 'src', 'js', 'settingsPage', 'settingsPage.js'),
+    path.join(__dirname, 'frontend', 'src', 'js', 'removeOldBookmarksPage', 'removeOldBookmarksPage.js'),
     path.join(__dirname, 'frontend', 'src', 'js', 'helpPage.js'),
     path.join(__dirname, 'frontend', 'src', 'js', 'aboutPage.js')
   ]
