@@ -18,6 +18,7 @@
     "combs": "0.0.1",
     "compression": "^1.6.0",
     "cookie-parser": "~1.4.0",
+    "crashreporter": "0.0.4",
     "csurf": "^1.8.3",
     "domain-parser": "0.0.5",
     "dompurify": "^0.7.4",

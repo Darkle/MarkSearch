@@ -14,6 +14,12 @@ var initBookmarkExpiry = require('./appmodules/server/bookmarkExpiry').init
 var electronInit = require('./appmodules/electron/electronInit')
 var initElectronTrayMenu = require('./appmodules/electron/initTrayMenu')
 
+require('crashreporter').configure({
+  outDir: path.join(__dirname, 'logs'),
+  exitOnCrash: false,
+  maxCrashFile: 5
+})
+
 var expressApp = express()
 ////TODO port/domain selection
 var serverPort = '3000'

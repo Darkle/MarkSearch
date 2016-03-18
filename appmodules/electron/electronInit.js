@@ -10,12 +10,12 @@ var electronApp = electron.app
 
 function electronInit(){
     return new Promise((resolve, reject) => {
-      electron.crashReporter.start({
-        productName: 'MarkSearch',
-        companyName: 'CoopCoding',
-        submitURL: 'http://localhost:3020/api/crashreport',
-        autoSubmit: true
-      })
+      // electron.crashReporter.start({
+      //   productName: 'MarkSearch',
+      //   companyName: 'CoopCoding',
+      //   submitURL: 'http://localhost:3020/api/crashreport',
+      //   autoSubmit: true
+      // })
 
       process.on('uncaughtException', appErrorHandler)
       //process.once('loaded', function() {})
