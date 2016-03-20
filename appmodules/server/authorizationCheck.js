@@ -3,6 +3,7 @@
 var jwt = require('jsonwebtoken')
 
 var appSettings = require('../db/appSettings')
+var appLogger = require('../utils/appLogger')
 
 function authorizationCheck(req, res, next){
   var token = req.get('Authorization') || req.body.JWT
@@ -17,6 +18,7 @@ function authorizationCheck(req, res, next){
     if(err) {
       console.log('Failed to authenticate token.')
       console.error(err)
+      appLogger.log.error(err)
       return res.status(403).end()
     }
     else{

@@ -7,7 +7,6 @@ function initSearchPlaceholder(searchInput$){
    * box
    */
   if(window.matchMedia("(max-width: 28.6em)").matches) {
-    console.log( "(max-width: 28.6em)" )
     searchInput$.attr('placeholder', 'Search MarkSearch')
   }
   else{
@@ -15,7 +14,6 @@ function initSearchPlaceholder(searchInput$){
   }
   window.addEventListener("orientationchange", () => {
     if(window.matchMedia("(max-width: 28.6em)").matches) {
-      console.log( "(max-width: 28.6em)" )
       searchInput$.attr('placeholder', 'Search MarkSearch')
     }
     else{

@@ -4,10 +4,14 @@ var _ = require('lodash')
 
 var STOPWORDS = require('../../lunrStopwordFilter.json')
 
+var devMode = process.env.NODE_ENV === 'development'
+
 function processSearchTerms(searchTerms){
 
-  console.log(`searchTerms before process`)
-  console.log(searchTerms)
+  if(devMode){
+    console.log(`searchTerms before process`)
+    console.log(searchTerms)
+  }
   /****
    * Filter out search terms less than 1 character.
    *
@@ -74,8 +78,6 @@ function processSearchTerms(searchTerms){
           if(!searchTermItselfIsEnclosedInQuotes){
             var searchTermIsInsideLargerQuotedPhrase = false
             var matchQuotes = lowercaseSearchTerms.match(/[^"]+(?=(" ")|"$)/g)
-            console.log(`matchQuotes`)
-            console.log(matchQuotes)
             if(_.get(matchQuotes, 'length')){
               /****
                * If the search term is at trailing end of a quoted phrase then
@@ -114,9 +116,11 @@ function processSearchTerms(searchTerms){
     })
     .join(' ')
 
-  console.log(`searchTerms after process`)
-  console.log(processedSearchTerms)
-  console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${domainToSearchFor}`)
+  if(devMode){
+    console.log(`searchTerms after process`)
+    console.log(processedSearchTerms)
+    console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${domainToSearchFor}`)
+  }
 
   return {
     processedSearchTerms,

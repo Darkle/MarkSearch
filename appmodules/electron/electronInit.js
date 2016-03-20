@@ -2,7 +2,6 @@
 
 var electron = require('electron')
 
-var appErrorHandler = require('../appErrorHandler')
 var pagesdb = require('../db/pagesdb')
 var appSettings = require('../db/appSettings')
 
@@ -10,23 +9,10 @@ var electronApp = electron.app
 
 function electronInit(){
     return new Promise((resolve, reject) => {
-      // electron.crashReporter.start({
-      //   productName: 'MarkSearch',
-      //   companyName: 'CoopCoding',
-      //   submitURL: 'http://localhost:3020/api/crashreport',
-      //   autoSubmit: true
-      // })
-
-      process.on('uncaughtException', appErrorHandler)
-      //process.once('loaded', function() {})
 
       if(electronApp.makeSingleInstance(() => true)){
         console.log('Marksearch Is Already Running')
         electronApp.quit()
-        /****
-         * Don't think I need this, but here it is
-         */
-        reject()
       }
       /****
        * Electron seems to quit if 'window-all-closed' has no
@@ -39,8 +25,12 @@ function electronInit(){
         /****
          * Disconnect knex sqlite connection
          */
-        pagesdb.db.destroy()
-        appSettings.db.destroy()
+        if(pagesdb.db){
+          pagesdb.db.destroy()
+        }
+        if(appSettings.db){
+          appSettings.db.destroy()
+        }
       })
 
       electronApp.on('ready', () => {

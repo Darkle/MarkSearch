@@ -9,6 +9,7 @@ var BrowserWindow = electron.BrowserWindow
 var ipcMain = electron.ipcMain
 
 var addPage = require('../addPage')
+var appLogger = require('../../../utils/appLogger')
 
 /****
  * A generator on the front end is calling scrapeAndAddPage, so
@@ -75,6 +76,7 @@ function scrapeAndAddPage(req, res, next) {
       validatedURL: ${validatedURL}
       req.params.pageUrl: ${req.params.pageUrl}
     `
+    appLogger.log.error({event, errorCode, errorDescription, validatedURL})
     logErrorDestroyBrowserAndRespond(errMessage, res)
   })
 
@@ -108,6 +110,8 @@ function scrapeAndAddPage(req, res, next) {
 
 function logErrorDestroyBrowserAndRespond(errorMessage, res){
   console.error(`An Error Occurred: ${errorMessage}`)
+  appLogger.log.error(`An Error Occurred: ${errorMessage}`)
+  appLogger.log.error(res)
   res.status(500).json({errorMessage: errorMessage})
   browserWindow.destroy()
 }

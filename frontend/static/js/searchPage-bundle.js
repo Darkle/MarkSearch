@@ -128,6 +128,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.addUrlsInit = undefined;
 
+var _searchPage = require('./searchPage');
+
+var _queryServerAndRender = require('./queryServerAndRender');
+
+var _dateFilter = require('./dateFilter');
+
 var _velocityAnimate = require('velocity-animate');
 
 var _velocityAnimate2 = _interopRequireDefault(_velocityAnimate);
@@ -144,11 +150,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _searchPage = require('./searchPage');
+var _validUrl = require('valid-url');
 
-var _queryServerAndRender = require('./queryServerAndRender');
-
-var _dateFilter = require('./dateFilter');
+var _validUrl2 = _interopRequireDefault(_validUrl);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -175,7 +179,6 @@ function hideShowAddPageSubbar(refreshResults) {
       progressInfo$.css('overflow-y', 'visible');
       errorOKbutton$.addClass('hide');
       addUrlsTextArea$.val('');
-      console.log("slideUp end");
       addPageMaterialIcon$.removeClass('navBar-materialIcon-selected');
       if (refreshResults) {
         (0, _queryServerAndRender.queryServerAndRender)();
@@ -268,7 +271,7 @@ function addUrlsInit() {
     var textAreaText = addUrlsTextArea$.val();
     var linesOfTextArray = textAreaText.split(/\r?\n/);
     var trimmedUrlsArray = linesOfTextArray.filter(function (lineOfText) {
-      return $.trim(lineOfText).length;
+      return _validUrl2.default.isWebUri(_lodash2.default.trim(lineOfText));
     });
     if (trimmedUrlsArray.length < 1) {
       return;
@@ -444,7 +447,7 @@ function addUrlsInit() {
  */
 exports.addUrlsInit = addUrlsInit;
 
-},{"./dateFilter":6,"./queryServerAndRender":11,"./searchPage":17,"got":318,"lodash":329,"suspend":367,"velocity-animate":374}],3:[function(require,module,exports){
+},{"./dateFilter":6,"./queryServerAndRender":11,"./searchPage":17,"got":318,"lodash":329,"suspend":367,"valid-url":374,"velocity-animate":375}],3:[function(require,module,exports){
 'use strict';
 /****
  * Hear me out Bro! We're not aiming for perfection here, just trying to have the search
@@ -857,7 +860,7 @@ exports.getDateFilterParameters = getDateFilterParameters;
 exports.dateFilterIsSet = dateFilterIsSet;
 exports.checkMatchMediaForResultsContainerMarginTop = checkMatchMediaForResultsContainerMarginTop;
 
-},{"./queryServerAndRender":11,"lodash":329,"moment":331,"velocity-animate":374}],7:[function(require,module,exports){
+},{"./queryServerAndRender":11,"lodash":329,"moment":331,"velocity-animate":375}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -978,14 +981,12 @@ function initSearchPlaceholder(searchInput$) {
    * box
    */
   if (window.matchMedia("(max-width: 28.6em)").matches) {
-    console.log("(max-width: 28.6em)");
     searchInput$.attr('placeholder', 'Search MarkSearch');
   } else {
     searchInput$.removeAttr('placeholder');
   }
   window.addEventListener("orientationchange", function () {
     if (window.matchMedia("(max-width: 28.6em)").matches) {
-      console.log("(max-width: 28.6em)");
       searchInput$.attr('placeholder', 'Search MarkSearch');
     } else {
       searchInput$.removeAttr('placeholder');
@@ -1098,12 +1099,12 @@ function queryServerAndRender() {
       return (0, _renderResults.renderResults)(_resultsObject.resultsObject.results.chunk_0, this.unencodedSearchTerms);
     }
   }).catch(function (err) {
+    console.error(err);
     var parsedresponseBody;
     try {
       parsedresponseBody = JSON.parse(err.response.body);
     } catch (e) {}
     (0, _updateResultsCountDiv.updateResultsCountDiv)(parsedresponseBody);
-    console.error(err);
   });
 }
 /****
@@ -43644,6 +43645,161 @@ function config (name) {
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
 },{}],374:[function(require,module,exports){
+(function(module) {
+    'use strict';
+
+    module.exports.is_uri = is_iri;
+    module.exports.is_http_uri = is_http_iri;
+    module.exports.is_https_uri = is_https_iri;
+    module.exports.is_web_uri = is_web_iri;
+    // Create aliases
+    module.exports.isUri = is_iri;
+    module.exports.isHttpUri = is_http_iri;
+    module.exports.isHttpsUri = is_https_iri;
+    module.exports.isWebUri = is_web_iri;
+
+
+    // private function
+    // internal URI spitter method - direct from RFC 3986
+    var splitUri = function(uri) {
+        var splitted = uri.match(/(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?/);
+        return splitted;
+    };
+
+    function is_iri(value) {
+        if (!value) {
+            return;
+        }
+
+        // check for illegal characters
+        if (/[^a-z0-9\:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\.\-\_\~\%]/i.test(value)) return;
+
+        // check for hex escapes that aren't complete
+        if (/%[^0-9a-f]/i.test(value)) return;
+        if (/%[0-9a-f](:?[^0-9a-f]|$)/i.test(value)) return;
+
+        var splitted = [];
+        var scheme = '';
+        var authority = '';
+        var path = '';
+        var query = '';
+        var fragment = '';
+        var out = '';
+
+        // from RFC 3986
+        splitted = splitUri(value);
+        scheme = splitted[1]; 
+        authority = splitted[2];
+        path = splitted[3];
+        query = splitted[4];
+        fragment = splitted[5];
+
+        // scheme and path are required, though the path can be empty
+        if (!(scheme && scheme.length && path.length >= 0)) return;
+
+        // if authority is present, the path must be empty or begin with a /
+        if (authority && authority.length) {
+            if (!(path.length === 0 || /^\//.test(path))) return;
+        } else {
+            // if authority is not present, the path must not start with //
+            if (/^\/\//.test(path)) return;
+        }
+
+        // scheme must begin with a letter, then consist of letters, digits, +, ., or -
+        if (!/^[a-z][a-z0-9\+\-\.]*$/.test(scheme.toLowerCase()))  return;
+
+        // re-assemble the URL per section 5.3 in RFC 3986
+        out += scheme + ':';
+        if (authority && authority.length) {
+            out += '//' + authority;
+        }
+
+        out += path;
+
+        if (query && query.length) {
+            out += '?' + query;
+        }
+
+        if (fragment && fragment.length) {
+            out += '#' + fragment;
+        }
+
+        return out;
+    }
+
+    function is_http_iri(value, allowHttps) {
+        if (!is_iri(value)) {
+            return;
+        }
+
+        var splitted = [];
+        var scheme = '';
+        var authority = '';
+        var path = '';
+        var port = '';
+        var query = '';
+        var fragment = '';
+        var out = '';
+
+        // from RFC 3986
+        splitted = splitUri(value);
+        scheme = splitted[1]; 
+        authority = splitted[2];
+        path = splitted[3];
+        query = splitted[4];
+        fragment = splitted[5];
+
+        if (!scheme)  return;
+
+        if(allowHttps) {
+            if (scheme.toLowerCase() != 'https') return;
+        } else {
+            if (scheme.toLowerCase() != 'http') return;
+        }
+
+        // fully-qualified URIs must have an authority section that is
+        // a valid host
+        if (!authority) {
+            return;
+        }
+
+        // enable port component
+        if (/:(\d+)$/.test(authority)) {
+            port = authority.match(/:(\d+)$/)[0];
+            authority = authority.replace(/:\d+$/, '');
+        }
+
+        out += scheme + ':';
+        out += '//' + authority;
+        
+        if (port) {
+            out += port;
+        }
+        
+        out += path;
+        
+        if(query && query.length){
+            out += '?' + query;
+        }
+
+        if(fragment && fragment.length){
+            out += '#' + fragment;
+        }
+        
+        return out;
+    }
+
+    function is_https_iri(value) {
+        return is_http_iri(value, true);
+    }
+
+    function is_web_iri(value) {
+        return (is_http_iri(value) || is_https_iri(value));
+    }
+
+})(module);
+
+},{}],375:[function(require,module,exports){
 /*! VelocityJS.org (1.2.3). (C) 2014 Julian Shapiro. MIT @license: en.wikipedia.org/wiki/MIT_License */
 
 /*************************

@@ -3,6 +3,7 @@
 var Crypto = require('crypto')
 
 var appSettings = require('../../db/appSettings')
+var appLogger = require('../../utils/appLogger')
 
 function resetJWTsecret(req, res, next){
   appSettings.db('appSettings')
@@ -16,6 +17,8 @@ function resetJWTsecret(req, res, next){
       res.status(200).end()
     })
     .catch(err => {
+      console.error(err)
+      appLogger.log.error(err)
       res.status(500).json({
         errorMessage: 'There was an error resetting JWT secret.'
       })

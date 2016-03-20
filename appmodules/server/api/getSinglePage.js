@@ -1,6 +1,7 @@
 'use strict';
 
 var pagesdb = require('../../db/pagesdb')
+var appLogger = require('../../utils/appLogger')
 
 function getSinglePage(req, res, next) {
   //TODO - validate req.params.pageUrl
@@ -17,6 +18,7 @@ function getSinglePage(req, res, next) {
       })
       .catch( err => {
         console.error(err)
+        appLogger.log.error(err)
         res.status(500).end()
       })
 

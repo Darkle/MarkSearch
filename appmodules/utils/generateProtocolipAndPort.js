@@ -2,6 +2,7 @@
 
 var internalIp = require('internal-ip')
 
+//TODO - do i still need this? double check and if not, remove it and fix up all calls to it
 function generateProtocolIpAndPort(req){
   var port = req.app.get('port') || ''
   /****

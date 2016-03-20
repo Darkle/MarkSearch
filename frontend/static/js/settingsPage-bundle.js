@@ -299,7 +299,7 @@ function importUrls(event) {
         urlsArray = fileText.split(/\r?\n/);
       }
       urlsToSave = _lodash2.default.filter(urlsArray, function (url) {
-        return _validUrl2.default.isWebUri(url);
+        return _validUrl2.default.isWebUri(_lodash2.default.trim(url));
       });
       if (!urlsToSave.length) {
         (0, _showNotie.showNotie)(3, 'Error: No URLs Were Found In The File.', 6);
@@ -683,12 +683,7 @@ function settingsPageInit(event) {
    */
   $('.externalLink').click(function (event) {
     event.preventDefault();
-    console.log('$(event.currentTarget).attr(\'href\')');
-    console.log($(event.currentTarget).attr('href'));
     var urlToOpen = encodeURIComponent($(event.currentTarget).attr('href'));
-
-    console.log('urlToOpen');
-    console.log(urlToOpen);
     _got2.default.post('/frontendapi/openUrlInBrowser/' + urlToOpen, { headers: xhrHeaders }).catch(function (err) {
       console.error(err);
     });

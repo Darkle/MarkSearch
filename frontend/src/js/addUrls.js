@@ -1,13 +1,14 @@
 'use strict';
 
+import { csrfToken } from './searchPage'
+import { queryServerAndRender } from './queryServerAndRender'
+import { dateFilterResetAll, checkMatchMediaForResultsContainerMarginTop } from './dateFilter'
+
 import velocity from 'velocity-animate'
 import suspend from 'suspend'
 import got from 'got'
 import _ from 'lodash'
-
-import { csrfToken } from './searchPage'
-import { queryServerAndRender } from './queryServerAndRender'
-import { dateFilterResetAll, checkMatchMediaForResultsContainerMarginTop } from './dateFilter'
+import validUrl from 'valid-url'
 
 var addPageUrlsDiv$
 var addPageMaterialIcon$
@@ -33,7 +34,6 @@ function hideShowAddPageSubbar(refreshResults){
           progressInfo$.css('overflow-y', 'visible')
           errorOKbutton$.addClass('hide')
           addUrlsTextArea$.val('')
-          console.log("slideUp end")
           addPageMaterialIcon$.removeClass('navBar-materialIcon-selected')
           if(refreshResults){
             queryServerAndRender()
@@ -129,7 +129,7 @@ function addUrlsInit(){
            */
           var textAreaText = addUrlsTextArea$.val()
           var linesOfTextArray = textAreaText.split(/\r?\n/)
-          var trimmedUrlsArray = linesOfTextArray.filter(lineOfText => $.trim(lineOfText).length)
+          var trimmedUrlsArray = linesOfTextArray.filter(lineOfText => validUrl.isWebUri(_.trim(lineOfText)))
           if(trimmedUrlsArray.length < 1) {
             return
           }

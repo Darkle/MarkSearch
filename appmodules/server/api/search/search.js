@@ -3,6 +3,9 @@
 var pagesdb = require('../../../db/pagesdb')
 var checkAndCoerceDateFilterParams = require('../../../utils/checkAndCoerceDateFilterParams')
 var processSearchTerms = require('./processSearchTerms')
+var appLogger = require('../../../utils/appLogger')
+
+var devMode = process.env.NODE_ENV === 'development'
 
 function search(req, res, next){
 
@@ -79,7 +82,9 @@ function search(req, res, next){
   /****
    * Examples of the SQL statements created in search.js: http://bit.ly/1TxvdZa
    */
-  console.log(knexSQL.toString())
+  if(devMode){
+    console.log(knexSQL.toString())
+  }
 
   knexSQL
     .then( rows => {
@@ -87,6 +92,9 @@ function search(req, res, next){
     })
     .catch( err => {
       console.error(err)
+      appLogger.log.error(res)
+      appLogger.log.error(req)
+      appLogger.log.error(err)
       res
         .status(500)
         .json({

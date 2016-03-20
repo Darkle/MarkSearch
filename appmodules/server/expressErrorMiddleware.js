@@ -1,5 +1,7 @@
 'use strict';
 
+var appLogger = require('../utils/appLogger')
+
 /****
  * Error middlewares
  */
@@ -26,6 +28,9 @@ function errorMiddleware(app){
       console.error(err)
       errObjectToShow = err
     }
+    appLogger.log.error(req)
+    appLogger.log.error(res)
+    appLogger.log.error(err)
     res.status(err.status || 500)
     res.render('error', {
       message: err.message,

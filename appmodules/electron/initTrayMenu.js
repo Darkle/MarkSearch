@@ -11,10 +11,9 @@ var Menu = electron.Menu
 var Tray = electron.Tray
 var shell = electron.shell
 var settingsWindow = null
-var helpWindow = null
-var aboutWindow = null
 var appTrayMenu = null
 var devMode = process.env.NODE_ENV === 'development'
+var logsFolder = path.join(electronApp.getPath('appData'), 'MarkSearch', 'logs')
 
 function trayMenu(){
   var BrowserWindow = electron.BrowserWindow
@@ -22,6 +21,13 @@ function trayMenu(){
   appTrayMenu = new Tray(path.join(__dirname, 'icons', 'MS-iconTemplate.png'))
 
   var contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Search',
+      click: function() {
+        //TODO - get address dynamically
+        shell.openExternal(`http://localhost:3020/`)
+      }
+    },
     {
       label: 'Settings',
       click: function() {
@@ -60,13 +66,21 @@ function trayMenu(){
     {
       label: 'Help',
       click: function() {
+        //TODO - get address dynamically
         shell.openExternal(`http://localhost:3020/help`)
       }
     },
     {
       label: 'About',
       click: function() {
+        //TODO - get address dynamically
         shell.openExternal(`http://localhost:3020/about`)
+      }
+    },
+    {
+      label: 'Logs',
+      click: function() {
+        shell.showItemInFolder(logsFolder)
       }
     },
     {

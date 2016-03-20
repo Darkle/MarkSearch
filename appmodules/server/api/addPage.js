@@ -9,6 +9,7 @@ var pagesdb = require('../../db/pagesdb')
 var archiveUrl = require('../archive.is')
 var safeBrowsingCheck = require('../safeBrowsing')
 var collapseWhiteSpace = require('../../utils/collapseWhiteSpace')
+var appLogger = require('../../utils/appLogger')
 
 function addPage(req, res, next) {
   /****
@@ -78,6 +79,9 @@ function addPage(req, res, next) {
       .catch(function(err){
         console.log(`There was an error saving the page to the database`)
         console.error(err)
+        appLogger.log.error(req)
+        appLogger.log.error(res)
+        appLogger.log.error(err)
         this.res.status(500).end()
         /****
          * Rethrow the error to make it skip archiveUrl and safeBrowsing. No
@@ -100,6 +104,9 @@ function addPage(req, res, next) {
       })
       .catch(err => {
         console.error(err)
+        appLogger.log.error(req)
+        appLogger.log.error(res)
+        appLogger.log.error(err)
       })
 
 }

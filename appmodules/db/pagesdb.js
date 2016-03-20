@@ -3,6 +3,7 @@
 var inspector = require('schema-inspector')
 var _ = require('lodash')
 
+var appLogger = require('../utils/appLogger')
 var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 
 /****
@@ -183,6 +184,7 @@ pagesdb.updateColumns = (columnsDataObj) => {
     var errMessage = `Error, passed in column data did not pass validation.
                       Error(s): ${validatedColumnsDataObj.format()}`
     console.error(errMessage)
+    appLogger.log.error(errMessage)
     return Promise.reject(errMessage)
   }
   return pagesdb
@@ -205,6 +207,7 @@ pagesdb.upsertRow = (rowDataObj) => {
     var errMessage = `Error, passed in row data did not pass validation.
                       Error(s): ${validatedPageDataObj.format()}`
     console.error(errMessage)
+    appLogger.log.error(errMessage)
     return Promise.reject(errMessage)
   }
   return pagesdb

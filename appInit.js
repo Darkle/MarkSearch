@@ -6,41 +6,51 @@ var electron = require('electron')
 var express = require('express')
 var Server = require('hyperbole')
 var existent = require('existent')
+var jetpack = require('fs-jetpack')
 
-var appErrorHandler = require('./appmodules/appErrorHandler')
-var initializeDBs = require('./appmodules/db/initializeDBs')
+var appLogger = require('./appmodules/utils/appLogger')
 var expressInit = require('./appmodules/server/expressInit')
 var initBookmarkExpiry = require('./appmodules/server/bookmarkExpiry').init
 var electronInit = require('./appmodules/electron/electronInit')
 var initElectronTrayMenu = require('./appmodules/electron/initTrayMenu')
-
-require('crashreporter').configure({
-  outDir: path.join(__dirname, 'logs'),
-  exitOnCrash: false,
-  maxCrashFile: 5
-})
+var appSettings = require('./appmodules/db/appSettings')
+var pagesdb = require('./appmodules/db/pagesdb')
 
 var expressApp = express()
 ////TODO port/domain selection
 var serverPort = '3000'
-var firstRun = !existent.sync(path.join(electron.app.getPath('appData'), 'MarkSearch'))
+var appDataPath = path.join(electron.app.getPath('appData'), 'MarkSearch')
+var firstRun = !existent.sync(appDataPath)
+
+/****
+ * jetpack.dir() will make sure the <appData>/MarkSearch folder is there,
+ * as well as the <appData>/MarkSearch/logs folder.
+ */
+jetpack.dir(path.join(appDataPath, 'logs'))
+
+appLogger.init(appDataPath)
 
 electronInit()
-    .then(initializeDBs)
-    .then(() => {
-      var server = new Server(expressApp, serverPort)
-      return server.start()
-    })
-    .then(() => expressInit(expressApp, serverPort))
-    .then(initElectronTrayMenu)
-    .then(initBookmarkExpiry)
-    .then(() => {
-      if(firstRun){
-        console.log('first run')
-        electron.shell.openExternal(`http://localhost:3020/`)
-      }
-    })
-    .catch(appErrorHandler)
+  .then(() => appSettings.init(appDataPath))
+  .then(pagesDBFilePath => pagesdb.init(pagesDBFilePath))
+  .then(() => {
+    var server = new Server(expressApp, serverPort)
+    return server.start()
+  })
+  .then(() => expressInit(expressApp, serverPort))
+  .then(initElectronTrayMenu)
+  .then(initBookmarkExpiry)
+  .then(() => {
+    if(firstRun){
+      console.info('first run')
+      //TODO make dynamic hostdomainportthingo
+      electron.shell.openExternal(`http://localhost:3020/`)
+    }
+  })
+  .catch(err => {
+    console.error(err)
+    appLogger.log.error(err)
+  })
 
 
 

@@ -4,6 +4,7 @@ var MailGun = require('mailgun-es6')
 
 var generateProtocolIpAndPort = require('../../utils/generateProtocolIpAndPort')
 var APIKEYS = require('../../../config/apikeys.json')
+var appLogger = require('../../utils/appLogger')
 
 var mailGun = new MailGun({
   privateApi: APIKEYS.mailgunPrivateApiKey,
@@ -41,6 +42,7 @@ function emailBookmarklet(req, res, next){
   })
   .catch(err => {
     console.error(err)
+    appLogger.log.error(err)
     res.status(500).json(
       {
         errorMessage: JSON.stringify(err.message)

@@ -43,7 +43,7 @@ function importUrls(event){
       else{
         urlsArray = fileText.split(/\r?\n/)
       }
-      urlsToSave = _.filter(urlsArray, url => validUrl.isWebUri(url))
+      urlsToSave = _.filter(urlsArray, url => validUrl.isWebUri(_.trim(url)))
       if(!urlsToSave.length){
         showNotie(3, `Error: No URLs Were Found In The File.`, 6)
       }

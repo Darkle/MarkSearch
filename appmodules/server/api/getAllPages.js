@@ -2,6 +2,7 @@
 
 var pagesdb = require('../../db/pagesdb')
 var checkAndCoerceDateFilterParams = require('../../utils/checkAndCoerceDateFilterParams')
+var appLogger = require('../../utils/appLogger')
 
 function getAllPages(req, res, next) {
 
@@ -21,6 +22,7 @@ function getAllPages(req, res, next) {
     })
     .catch( err => {
       console.error(err)
+      appLogger.log.error(err)
       res.status(500).end()
     })
 

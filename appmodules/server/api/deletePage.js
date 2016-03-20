@@ -1,6 +1,7 @@
 'use strict';
 
 var pagesdb = require('../../db/pagesdb')
+var appLogger = require('../../utils/appLogger')
 
 function deletePage(req, res, next) {
   //TODO - validation on req.params.pageUrl
@@ -12,6 +13,7 @@ function deletePage(req, res, next) {
         })
         .catch( err => {
           console.error(err)
+          appLogger.log.error(err)
           res.status(500).end()
         })
 }

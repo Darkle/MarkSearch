@@ -3,6 +3,7 @@
 var _ = require('lodash')
 
 var appSettings = require('../../db/appSettings')
+var appLogger = require('../../utils/appLogger')
 
 function updateMarkSearchSettings(req, res, next){
 
@@ -17,6 +18,7 @@ function updateMarkSearchSettings(req, res, next){
     })
     .catch( err => {
       console.error(err)
+      appLogger.log.error(err)
       var errorMessage = err
       if(!_.isString(errorMessage)){
         errorMessage = JSON.stringify(err.message)

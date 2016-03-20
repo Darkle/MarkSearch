@@ -13,6 +13,7 @@ var generateBookmarkletJS = require('../generateBookmarkletJS')
 var generateProtocolIpAndPort = require('../../utils/generateProtocolIpAndPort')
 var generateJWTtoken = require('../../utils/generateJWTtoken')
 var getAllExpiredBookmarks = require('../bookmarkExpiry').getAllExpiredBookmarks
+var appLogger = require('../../utils/appLogger')
 
 var router = express.Router()
 
@@ -95,6 +96,7 @@ router.get('/removeOldBookmarks', (req, res, next) => {
     })
     .catch(err => {
       console.error(err)
+      appLogger.log.error(err)
     })
 })
 

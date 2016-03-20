@@ -7,6 +7,7 @@ var _ = require('lodash')
 var appSettings = require('../db/appSettings')
 var pagesdb = require('../db/pagesdb')
 var APIKEYS = require('../../config/apikeys.json')
+var appLogger = require('../utils/appLogger')
 
 var bookmarkExpiry = {}
 var setTimeoutRef = null
@@ -47,11 +48,15 @@ function checkForExpiredBookmarks() {
           .update({
             checkedForExpiry: true
           })
-          .then(() => appSettings.update({bookmarkExpiryLastCheck: expiryTimestamp}))
+          .then(() => appSettings.update({bookmarkExpiryLastCheck: now}))
           .then(() => {
             sendExpiredBookmarksEmail(rows)
           })
       }
+    })
+    .catch(err => {
+      console.error(err)
+      appLogger.log.error(err)
     })
 }
  
@@ -81,6 +86,7 @@ function sendExpiredBookmarksEmail(rows) {
   })
   .catch(err => {
     console.error(err)
+    appLogger.log.error(err)
   })
 }
 
