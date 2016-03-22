@@ -125,11 +125,13 @@ gulp.task('browserify', () => {
           sourceMaps: true
         })
         .on('error', function(err){
+          console.log('error with browserify')
           gutil.log(err.message)
           this.emit('end')
         })
         .bundle()
         .on('error', function(err){
+          console.log('error with browserify')
           gutil.log(err.message)
           this.emit('end')
         })
