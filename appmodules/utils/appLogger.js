@@ -30,9 +30,14 @@ logger.init = (markSearchAppDataPath) => {
     maxCrashFile: 5
   })
 
-  process.on('uncaughtException', err => {
+/****
+ * Throw so electron doesn't keep running - we
+ * probably want to bail on these.
+ */
+  process.on('uncaughtException', function handleUncaughtException(err) {
     console.error(err)
     logger.log.error(err)
+    throw err
   })
 
 }
