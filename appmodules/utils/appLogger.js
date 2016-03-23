@@ -36,6 +36,7 @@ logger.init = (markSearchAppDataPath) => {
  */
   process.on('uncaughtException', function handleUncaughtException(err) {
     console.error(err)
+    console.error(err.stack)
     logger.log.error(err)
     throw err
   })
