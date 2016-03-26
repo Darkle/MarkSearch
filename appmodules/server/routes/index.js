@@ -17,9 +17,6 @@ var appLogger = require('../../utils/appLogger')
 
 var router = express.Router()
 
-/****
- * sqlite's Boolean's are integers 0 or 1, so convert with Boolean()
- */
 router.get('/', (req, res, next) => {
   res.render('searchPage',
       {

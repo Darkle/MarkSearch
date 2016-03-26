@@ -26,7 +26,7 @@ logger.init = (markSearchAppDataPath) => {
 
   require('crashreporter').configure({
     outDir: logsFolder,
-    exitOnCrash: false,
+    exitOnCrash: true,
     maxCrashFile: 5
   })
 

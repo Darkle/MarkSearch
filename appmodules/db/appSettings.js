@@ -108,7 +108,7 @@ appSettings.init = (appDataPath) => {
     }
   })
   .return(
-      appSettings.db('appSettings').where('id', 'appSettings')
+    appSettings.db('appSettings').where('id', 'appSettings')
   )
   .tap( rows => {
     if(!rows[0]){

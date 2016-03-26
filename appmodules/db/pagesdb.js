@@ -237,7 +237,7 @@ pagesdb.insertRow = rowData =>
    pagesdb
     .db('pages')
     .insert(rowData)
-    .then(numRowsUpdated =>
+    .then(() =>
       pagesdb
         .db
         .select(
@@ -254,23 +254,23 @@ pagesdb.insertRow = rowData =>
         )
         .from('pages')
         .where('pageUrl', rowData.pageUrl)
-        .then(rows =>
-          pagesdb
-            .db('fts')
-            .insert({
-              rowid: rows[0].rowid,
-              pageUrl: rows[0].pageUrl,
-              dateCreated: rows[0].dateCreated,
-              pageDomain: rows[0].pageDomain,
-              pageTitle: rows[0].pageTitle,
-              pageText: rows[0].pageText,
-              pageDescription: rows[0].pageDescription,
-              archiveLink: rows[0].archiveLink,
-              safeBrowsing: rows[0].safeBrowsing,
-              checkedForExpiry: rows[0].checkedForExpiry
-            })
+    )
+    .then(rows =>
+      pagesdb
+        .db('fts')
+        .insert({
+          rowid: rows[0].rowid,
+          pageUrl: rows[0].pageUrl,
+          dateCreated: rows[0].dateCreated,
+          pageDomain: rows[0].pageDomain,
+          pageTitle: rows[0].pageTitle,
+          pageText: rows[0].pageText,
+          pageDescription: rows[0].pageDescription,
+          archiveLink: rows[0].archiveLink,
+          safeBrowsing: rows[0].safeBrowsing,
+          checkedForExpiry: rows[0].checkedForExpiry
+        })
 
-        )
     )
 
 
