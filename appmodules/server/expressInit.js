@@ -7,12 +7,10 @@ var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var csurf = require('csurf')
-var expressValidator = require('express-validator')
 var compression = require('compression')
 
 var authorizationCheck = require('./authorizationCheck')
 var expressErrorMiddleware = require('./expressErrorMiddleware')
-var paramsPageUrlToLowercase = require('./../utils/paramsPageUrlToLowerCase')
 var routes = require('./routes/index')
 var api = require('./routes/api')
 
@@ -32,18 +30,14 @@ function expressInit(express, expressApp){
    */
   expressApp.use(bodyParser.json({limit: '1mb'}))
   expressApp.use(bodyParser.urlencoded({ limit: '1mb', extended: false }))
-  expressApp.use(expressValidator())
   expressApp.use(cookieParser())
   expressApp.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'static')))
   expressApp.use('/bower_components',  express.static(path.join(__dirname, '..', '..', 'bower_components')))
-  expressApp.use(paramsPageUrlToLowercase)
   /****
    * Routes
    */
   expressApp.use('/api', authorizationCheck, api)
-  //expressApp.use('/api', api)
   expressApp.use('/', csurf({ cookie: true, httpOnly: true }), routes)
-  //expressApp.use('/', routes)
 
   expressErrorMiddleware(expressApp)
 

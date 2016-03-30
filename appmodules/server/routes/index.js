@@ -6,13 +6,15 @@ var express = require('express')
 var requireDir = require('require-dir')
 
 var apiModules = requireDir('../api')
-var searchApi = require('../api/search/search')
+var search = require('../api/search/search')
 var scrapeAndAddPage = require('../api/scrape/scrapeAndAddPage')
 var appSettings = require('../../db/appSettings')
 var generateBookmarkletJS = require('../generateBookmarkletJS')
 var generateJWTtoken = require('../../utils/generateJWTtoken')
 var getAllExpiredBookmarks = require('../bookmarkExpiry').getAllExpiredBookmarks
 var appLogger = require('../../utils/appLogger')
+var requestDataValidation = require('../../utils/requestDataValidation')
+
 
 var router = express.Router()
 
@@ -101,10 +103,18 @@ router.get('/removeOldBookmarks', (req, res, next) => {
  * the api from the frontend. (OWASP seems to recommend making them into POST so I guess do that)
  */
 router.post('/frontendapi/getall/', apiModules.getAllPages)
-router.post('/frontendapi/search/:searchTerms', searchApi)
-router.post('/frontendapi/scrapeAndAdd/:pageUrl', scrapeAndAddPage)
-router.delete('/frontendapi/remove/:pageUrl', apiModules.deletePage)
-router.post('/frontendapi/openUrlInBrowser/:urlToOpen', apiModules.openUrlInBrowser)
+router.post('/frontendapi/search/:searchTerms', (req, res, next) => {
+  search(requestDataValidation(req), res, next)
+})
+router.post('/frontendapi/scrapeAndAdd/:pageUrl', (req, res, next) => {
+  scrapeAndAddPage(requestDataValidation(req), res, next)
+})
+router.delete('/frontendapi/remove/:pageUrl', (req, res, next) => {
+  apiModules.deletePage(requestDataValidation(req), res, next)
+})
+router.post('/frontendapi/openUrlInBrowser/:pageUrl', (req, res, next) => {
+  apiModules.openUrlInBrowser(requestDataValidation(req), res, next)
+})
 router.post('/frontendapi/settings/update/', apiModules.updateMarkSearchSettings)
 router.post('/frontendapi/settings/changePagesDBlocation/', apiModules.changePagesDBlocation)
 router.post('/frontendapi/settings/generateExtToken/', apiModules.generateExtToken)

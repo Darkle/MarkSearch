@@ -25,7 +25,6 @@ var expressApp = express()
  * as well as the <appData>/MarkSearch/logs folder.
  */
 jetpack.dir(path.join(appDataPath, 'logs'))
-
 appLogger.init(appDataPath)
 
 electronInit()

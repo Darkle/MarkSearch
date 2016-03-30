@@ -34,9 +34,13 @@ function search(req, res, next){
     else{
       /****
        * If there are no search terms and they are not searching for domain
-       * results, then send back zero results as an empty array.
+       * results, then send back zero results as an empty array and also return so
+       * we dont continue with the rest of the function under the 'else{}'.
+       * Could also do a nothing sql statment like knexSQL = pagesdb.db('pages').where({1: 0})
+       * i guess.
        */
       res.json([])
+      return
     }
   }
   else{
@@ -76,7 +80,7 @@ function search(req, res, next){
      */
     knexSQL = knexSQL
       //.whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${searchTerms}" OR NEAR(${searchTerms})`)
-      .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `${searchTerms}`)
+      .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, searchTerms)
   }
 
   /****

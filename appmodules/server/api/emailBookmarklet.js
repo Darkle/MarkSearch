@@ -12,8 +12,8 @@ var mailGun = new MailGun({
 })
 
 function emailBookmarklet(req, res, next){
-  //TODO validation
   var email = JSON.parse(req.body.email)
+  
   mailGun.validateEmail(email)
   .then(res => {
     if(!res.is_valid){

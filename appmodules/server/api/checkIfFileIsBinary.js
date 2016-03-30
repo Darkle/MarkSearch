@@ -1,10 +1,12 @@
 'use strict';
 
 var isBinaryFile = require("isbinaryfile")
+var parsePath = require('parse-filepath')
 
 function checkIfFileIsBinary(req, res, next){
-  //TODO validation
-  var filePath = req.params.filePath
+
+  var filePath = parsePath(req.params.filePath).path
+
   isBinaryFile(filePath, function(err, result) {
     if(err || result){
       var errorMessage = 'File Is Binary'

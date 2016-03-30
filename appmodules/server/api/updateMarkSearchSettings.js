@@ -7,12 +7,7 @@ var appLogger = require('../../utils/appLogger')
 
 function updateMarkSearchSettings(req, res, next){
 
-  console.log('updateMarkSearchSettings')
-  console.log(req.body)
-
-  //TODO - validate req.body
-  var reqBody = req.body
-  appSettings.update(reqBody)
+  appSettings.update(req.body)
     .then( () => {
       res.status(200).end()
     })
