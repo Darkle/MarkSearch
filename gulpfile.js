@@ -59,7 +59,7 @@ gulp.task('nodemon', cb => {
 
 gulp.task('browser-sync', () =>
   browserSync.init({
-    proxy: "localhost:3000",
+    proxy: "localhost:8080",
     files: [
       //path.join('appmodules', '**', '*.*')
       path.join(__dirname, 'appmodules', 'server', 'views', '*.jade')

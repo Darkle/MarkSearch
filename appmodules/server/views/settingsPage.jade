@@ -35,11 +35,14 @@ block content
           a#emailBookmarkletButton.button.black.square(href="#") Email Bookmarklet
           .formplate
             input#bookmarkletEmail.square(type="text", name="bookmarkletEmail")
-        .settingDetail.
-          You can use the bookmarklet to save pages from browsers that cant run extensions (e.g. mobile
-          browsers). You can either generate the bookmarklet text and copy & paste, or you can have the
-          bookmarklet emailed to you. More info info
-          is available on the <a class='externalLink' href="/help#bookmarklet">Help Page</a>
+        .settingDetail
+          p.
+            You can use the bookmarklet to save pages from browsers that cant run extensions (e.g. mobile
+            browsers). You can either generate the bookmarklet text and copy & paste, or you can have the
+            bookmarklet emailed to you. More info info
+            is available on the <a class='externalLink' href="/help#bookmarklet">Help Page</a>
+          p.
+            Note: unfortunately the bookmarklet will not work on https pages.
       .prebrowsingSettingContainer
         .formplate
           input#prebrowsingCheckbox(type="checkbox", name="prebrowsingCheckbox")

@@ -10,8 +10,7 @@ function openUrlInBrowser(req, res, next){
     shell.openExternal(urlToOpen)
   }
   else if(urlToOpen.startsWith('/help#')){
-    //TODO get domainhostport dynamically
-    shell.openExternal(`http://localhost:3020${urlToOpen}`)
+    shell.openExternal(`${global.msServerAddr.combined}${urlToOpen}`)
   }
 }
 

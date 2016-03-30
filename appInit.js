@@ -38,8 +38,7 @@ electronInit()
   .then(() => {
     if(firstRun){
       console.info('first run')
-      //TODO make dynamic hostdomainportthingo
-      electron.shell.openExternal(`http://localhost:3020/`)
+      electron.shell.openExternal(global.msServerAddr.combined)
     }
   })
   .catch(err => {

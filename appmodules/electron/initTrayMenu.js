@@ -24,8 +24,7 @@ function trayMenu(){
     {
       label: 'Search',
       click: function() {
-        //TODO - get address dynamically
-        shell.openExternal(`http://localhost:3020/`)
+        shell.openExternal(global.msServerAddr.combined)
       }
     },
     {
@@ -51,8 +50,7 @@ function trayMenu(){
                 }
               }
           )
-          //TODO - get address dynamically
-          settingsWindow.loadURL(`http://localhost:3020/settings`)
+          settingsWindow.loadURL(`${global.msServerAddr.combined}/settings`)
           if(devMode){
             settingsWindow.openDevTools()
           }
@@ -66,15 +64,13 @@ function trayMenu(){
     {
       label: 'Help',
       click: function() {
-        //TODO - get address dynamically
-        shell.openExternal(`http://localhost:3020/help`)
+        shell.openExternal(`${global.msServerAddr.combined}/help`)
       }
     },
     {
       label: 'About',
       click: function() {
-        //TODO - get address dynamically
-        shell.openExternal(`http://localhost:3020/about`)
+        shell.openExternal(`${global.msServerAddr.combined}/about`)
       }
     },
     {

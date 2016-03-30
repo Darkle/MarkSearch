@@ -68,10 +68,6 @@ router.get('/settings', (req, res, next) => {
 
 router.get('/bookmarklet', (req, res, next) => {
   var token = generateJWTtoken()
-  global.msServerAddr = {
-    hostAddress: serverAddressDetails.address,
-    port: appSettings.settings.serverPort
-  }
   var bookmarkletJS = generateBookmarkletJS(global.msServerAddr.combined, token)
   res.render('bookmarkletPage',
       {

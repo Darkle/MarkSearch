@@ -20,8 +20,6 @@ function emailBookmarklet(req, res, next){
       throw new Error('not a valid email address')
     }
     else {
-      //TODO change from to 'bookmarklet@'+ host
-      //TODO for link in html get host/location dynamically - make sure its https
       return mailGun.sendEmail({
         to: [email],
         from: 'bookmarklet@marksearch.local',
