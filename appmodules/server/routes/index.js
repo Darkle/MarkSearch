@@ -10,7 +10,6 @@ var searchApi = require('../api/search/search')
 var scrapeAndAddPage = require('../api/scrape/scrapeAndAddPage')
 var appSettings = require('../../db/appSettings')
 var generateBookmarkletJS = require('../generateBookmarkletJS')
-var generateProtocolIpAndPort = require('../../utils/generateProtocolIpAndPort')
 var generateJWTtoken = require('../../utils/generateJWTtoken')
 var getAllExpiredBookmarks = require('../bookmarkExpiry').getAllExpiredBookmarks
 var appLogger = require('../../utils/appLogger')
@@ -69,8 +68,11 @@ router.get('/settings', (req, res, next) => {
 
 router.get('/bookmarklet', (req, res, next) => {
   var token = generateJWTtoken()
-  var protocolIpandPort = generateProtocolIpAndPort(req)
-  var bookmarkletJS = generateBookmarkletJS(protocolIpandPort, token)
+  global.msServerAddr = {
+    hostAddress: serverAddressDetails.address,
+    port: appSettings.settings.serverPort
+  }
+  var bookmarkletJS = generateBookmarkletJS(global.msServerAddr.combined, token)
   res.render('bookmarkletPage',
       {
         title: 'MarkSearch Bookmarklet',

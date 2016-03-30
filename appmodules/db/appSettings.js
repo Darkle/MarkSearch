@@ -22,7 +22,8 @@ var appSettingsValidation = {
     'bookmarkExpiryEnabled',
     'bookmarkExpiryEmail',
     'bookmarkExpiryMonths',
-    'bookmarkExpiryLastCheck'
+    'bookmarkExpiryLastCheck',
+    'serverPort'
   ],
   properties: {
     pagesDBFilePath: {
@@ -56,6 +57,12 @@ var appSettingsValidation = {
       gt: 0,
       error: 'bookmarkExpiryLastCheck must be a valid integer and larger than 0',
       optional: true
+    },
+    serverPort: {
+      type: 'integer',
+      gt: 0,
+      error: 'serverPort must be a valid integer and larger than 0',
+      optional: true
     }
   }
 }
@@ -78,7 +85,7 @@ function coerceSettingsValuesInAndOut(dataObj){
     if(key === 'prebrowsing' || key === 'alwaysDisableTooltips' || key === 'bookmarkExpiryEnabled'){
       val = Boolean(val)
     }
-    if(key === 'bookmarkExpiryMonths'){
+    if(key === 'bookmarkExpiryMonths' || key === 'bookmarkExpiryLastCheck' || key === 'serverPort'){
       val = _.toInteger(val)
     }
     return val
@@ -104,6 +111,7 @@ appSettings.init = (appDataPath) => {
         table.text('bookmarkExpiryEmail').notNullable()
         table.integer('bookmarkExpiryMonths').notNullable()
         table.integer('bookmarkExpiryLastCheck').notNullable()
+        table.integer('serverPort').notNullable()
       })
     }
   })
@@ -126,7 +134,8 @@ appSettings.init = (appDataPath) => {
                 bookmarkExpiryEnabled: false,
                 bookmarkExpiryEmail: '',
                 bookmarkExpiryMonths: 3,
-                bookmarkExpiryLastCheck: Date.now()
+                bookmarkExpiryLastCheck: Date.now(),
+                serverPort: 8080
               }
           )
     }

@@ -1,6 +1,7 @@
 'use strict';
 
 var electron = require('electron')
+var Promise = require('bluebird')
 
 var pagesdb = require('../db/pagesdb')
 var appSettings = require('../db/appSettings')

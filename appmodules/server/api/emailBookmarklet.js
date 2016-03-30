@@ -2,7 +2,6 @@
 
 var MailGun = require('mailgun-es6')
 
-var generateProtocolIpAndPort = require('../../utils/generateProtocolIpAndPort')
 var APIKEYS = require('../../../config/apikeys.json')
 var appLogger = require('../../utils/appLogger')
 
@@ -13,7 +12,6 @@ var mailGun = new MailGun({
 })
 
 function emailBookmarklet(req, res, next){
-  var protocolIpandPort = generateProtocolIpAndPort(req)
   //TODO validation
   var email = JSON.parse(req.body.email)
   mailGun.validateEmail(email)
@@ -31,7 +29,7 @@ function emailBookmarklet(req, res, next){
         html: `<div style="font-size: 1rem; margin-bottom: 1rem;">
                 Open the page below in your mobile device, then bookmark the link shown on that page:
                </div>
-              <a style="font-size: 1rem;" href="${protocolIpandPort}/bookmarklet">${protocolIpandPort}/bookmarklet</a>
+              <a style="font-size: 1rem;" href="${global.msServerAddr.combined}/bookmarklet">${global.msServerAddr.combined}/bookmarklet</a>
                 `
       })
     }

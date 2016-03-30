@@ -2,7 +2,6 @@
 
 var path = require('path')
 
-var express = require('express')
 var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
@@ -18,8 +17,7 @@ var routes = require('./routes/index')
 var api = require('./routes/api')
 
 
-function expressInit(expressApp, serverPort){
-  expressApp.set('port', serverPort)
+function expressInit(express, expressApp){
   expressApp.use(compression())
   expressApp.set('views', path.join(__dirname, 'views'))
   expressApp.set('view engine', 'jade')

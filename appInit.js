@@ -3,10 +3,9 @@
 var path = require('path')
 
 var electron = require('electron')
-var express = require('express')
-var Server = require('hyperbole')
 var existent = require('existent')
 var jetpack = require('fs-jetpack')
+var express = require('express')
 
 var appLogger = require('./appmodules/utils/appLogger')
 var expressInit = require('./appmodules/server/expressInit')
@@ -15,12 +14,11 @@ var electronInit = require('./appmodules/electron/electronInit')
 var initElectronTrayMenu = require('./appmodules/electron/initTrayMenu')
 var appSettings = require('./appmodules/db/appSettings')
 var pagesdb = require('./appmodules/db/pagesdb')
+var initServer = require('./appmodules/server/initServer')
 
-var expressApp = express()
-////TODO port/domain selection
-var serverPort = '3000'
 var appDataPath = path.join(electron.app.getPath('appData'), 'MarkSearch')
 var firstRun = !existent.sync(appDataPath)
+var expressApp = express()
 
 /****
  * jetpack.dir() will make sure the <appData>/MarkSearch folder is there,
@@ -33,11 +31,8 @@ appLogger.init(appDataPath)
 electronInit()
   .then(() => appSettings.init(appDataPath))
   .then(pagesDBFilePath => pagesdb.init(pagesDBFilePath))
-  .then(() => {
-    var server = new Server(expressApp, serverPort)
-    return server.start()
-  })
-  .then(() => expressInit(expressApp, serverPort))
+  .then(() => initServer(expressApp))
+  .then(() => expressInit(express, expressApp))
   .then(initElectronTrayMenu)
   .then(initBookmarkExpiry)
   .then(() => {
