@@ -12,7 +12,7 @@ function isStringCheck(string){
 
 function checkIfValidUrl(url){
   if(!validUrl.isWebUri(url)){
-    throw new Error('requestDataValidation error: req.params.pageUrl not a valid url')
+    throw new Error('requestDataValidation error: not a valid url')
   }
 }
 

@@ -175,7 +175,7 @@ gulp.task('build-sqlite3-osx-x86-64', () => {
   )
 })
 
-gulp.task('osx-selfsign-electron-for-dev', () => {
+gulp.task('selfsign', () => {
   var electronAppPath = path.join(__dirname, 'node_modules', 'electron-prebuilt', 'dist', 'Electron.app')
   var shellTask = `codesign -s - -f ${electronAppPath}`
   /****

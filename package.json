@@ -25,7 +25,7 @@
     "csurf": "^1.8.3",
     "domain-parser": "0.0.5",
     "dompurify": "^0.7.4",
-    "electron-prebuilt": "^0.37.2",
+    "electron-prebuilt": "^0.37.3",
     "existent": "^1.0.1",
     "express": "^4.13.4",
     "fs-extra": "^0.26.7",

@@ -8,6 +8,10 @@ var isPortInUse = require('../utils/isPortInUse')
 var appSettings = require('../db/appSettings')
 
 function initServer(expressApp){
+  /****
+   * A port could be available for the ipv4 address but be in use on the loopback
+   * address, so check all loopback addresses as well as the ipv4 address.
+   */
   return Promise.all([
       isPortInUse(appSettings.settings.serverPort, '::1'),
       isPortInUse(appSettings.settings.serverPort, '127.0.0.1'),
