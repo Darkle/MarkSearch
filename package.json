@@ -32,6 +32,7 @@
     "fs-jetpack": "^0.7.3",
     "get-port": "^2.1.0",
     "got": "^6.2.0",
+    "internal-ip": "^1.2.0",
     "isbinaryfile": "^3.0.0",
     "jade": "~1.11.0",
     "jquery": "^2.2.2",

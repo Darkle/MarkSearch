@@ -59,15 +59,26 @@ function requestDataValidation(req){
   if(_.get(req, 'body.email')){
     isStringCheck(req.body.email)
   }
-
   /****
    * addPage data from /api/add/:pageUrl route in api.js
-   * req.params.pageUrl
+   * req.params.pageUrl - checked above
    * req.body.pageTitle
    * req.body.pageText
    * req.body.pageDescription
+   * validator.escape() replaces <, >, &, ', " and / with HTML entities
    */
-
+  if(_.get(req, 'body.pageTitle')){
+    isStringCheck(req.body.pageTitle)
+    req.body.pageTitle = validator.escape(req.body.pageTitle)
+  }
+  if(_.get(req, 'body.pageText')){
+    isStringCheck(req.body.pageText)
+    req.body.pageText = validator.escape(req.body.pageText)
+  }
+  if(_.get(req, 'body.pageDescription')){
+    isStringCheck(req.body.pageDescription)
+    req.body.pageDescription = validator.escape(req.body.pageDescription)
+  }
 
   return req
 }
