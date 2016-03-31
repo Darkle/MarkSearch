@@ -18,26 +18,33 @@ var inspector = require('schema-inspector')
  * We lowercase the pageUrl just so an uppercase url isn't thought of
  * as a different url to a lowercase version of the same url.
  *
- * search data from /frontendapi/search/:searchTerms route in index.js
- * & from /api/search/:searchTerms route in api.js
- * req.params.searchTerms
- * knex does sql injection checks for bound values so I think I don't have
- * to do anything more with req.params.searchTerms
+ * req.params.searchTerms is used in index.js for:
+ *    search on route /frontendapi/search/:searchTerms
+ *
+ * req.params.searchTerms is used in api.js for:
+ *    search on route /api/search/:searchTerms
+ *
+ * (knex does sql injection checks for bound values so I think I don't have
+ * to do anything more with req.params.searchTerms)
+ *
+ * req.body.email is used in api.js for:
+ *    emailBookmarklet on route /frontendapi/settings/emailBookmarklet/
+ *
+ * (We use the mailgun api in emailBookmarklet to validate the email, so here just check that
+ * it's a string).
+ *
+ * req.body.pageTitle is used in api.js for:
+ *    addPage on route /api/add/:pageUrl
+ *
+ * req.body.pageText is used in api.js for:
+ *    addPage on route /api/add/:pageUrl
+ *
+ * req.body.pageDescription is used in api.js for:
+ *    addPage on route /api/add/:pageUrl
  *
  * the updateMarkSearchSettings validation is done in appSettings.js
  *
  * changePagesDBlocation & checkIfFileIsBinary use parse-filepath, so I think they're ok.
- *
- * emailBookmarklet data from /frontendapi/settings/emailBookmarklet/ route in api.js
- * req.body.email
- * We use the mailgun api in emailBookmarklet to validate the email, so here just check that
- * it's a string.
- *
- * addPage data from /api/add/:pageUrl route in api.js
- * req.params.pageUrl - checked above
- * req.body.pageTitle
- * req.body.pageText
- * req.body.pageDescription
  *
  */
 
