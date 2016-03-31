@@ -15,8 +15,8 @@ var inspector = require('schema-inspector')
  *    deletePage on route /frontendapi/remove/:pageUrl,
  *    openUrlInBrowser on route /frontendapi/openUrlInBrowser/:pageUrl
  *
- * We lowercase the pageUrl just so an uppercase url isn't thought of
- * as a different url to a lowercase version of the same url.
+ * (We lowercase the pageUrl just so an uppercase url isn't thought of
+ * as a different url to a lowercase version of the same url).
  *
  * req.params.searchTerms is used in index.js for:
  *    search on route /frontendapi/search/:searchTerms
