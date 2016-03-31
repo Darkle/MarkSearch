@@ -112,7 +112,7 @@ router.post('/frontendapi/scrapeAndAdd/:pageUrl', (req, res, next) => {
 router.delete('/frontendapi/remove/:pageUrl', (req, res, next) => {
   apiModules.deletePage(requestDataValidation(req), res, next)
 })
-router.post('/frontendapi/openUrlInBrowser/:pageUrl', (req, res, next) => {
+router.post('/frontendapi/openUrlInBrowser/:urlToOpen', (req, res, next) => {
   apiModules.openUrlInBrowser(requestDataValidation(req), res, next)
 })
 router.post('/frontendapi/settings/update/', apiModules.updateMarkSearchSettings)

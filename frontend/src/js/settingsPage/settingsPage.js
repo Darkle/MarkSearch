@@ -13,6 +13,7 @@ import { setSettingsElementValues } from './setSettingsElementValues'
 
 import got from 'got'
 import Promise from 'bluebird'
+import _ from 'lodash'
 
 var xhrHeaders
 var addPageUrlsDiv$
@@ -86,7 +87,11 @@ function settingsPageInit(event){
    */
   $('.externalLink').click(event => {
     event.preventDefault()
-    var urlToOpen = encodeURIComponent($(event.currentTarget).attr('href'))
+    var linkHref = $(event.currentTarget).attr('href')
+    if(_.startsWith(linkHref, '/')){
+      linkHref = 'http://' + window.location.host + linkHref
+    }
+    var urlToOpen = encodeURIComponent(linkHref)
     got.post(`/frontendapi/openUrlInBrowser/${urlToOpen}`, {headers: xhrHeaders})
       .catch( err => {
         console.error(err)
