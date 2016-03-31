@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash')
-var validator = require('validator')
 var validUrl = require('valid-url')
 var inspector = require('schema-inspector')
 
@@ -39,7 +38,7 @@ var inspector = require('schema-inspector')
  * req.body.pageTitle
  * req.body.pageText
  * req.body.pageDescription
- * validator.escape() replaces <, >, &, ', " and / with HTML entities
+ *
  */
 
 var reqParamsSanitization = {
@@ -80,18 +79,32 @@ var reqBodySanitization = {
     pageTitle: {
       type: 'string',
       optional: true,
-      exec: (schema, post) => validator.escape(post)
-
+      exec: function(schema, post) {
+        if(_.isString(post)){
+          post = post.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        }
+        return post
+      }
     },
     pageText: {
       type: 'string',
       optional: true,
-      exec: (schema, post) => validator.escape(post)
+      exec: function(schema, post) {
+        if(_.isString(post)){
+          post = post.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        }
+        return post
+      }
     },
     pageDescription: {
       type: 'string',
       optional: true,
-      exec: (schema, post) => validator.escape(post)
+      exec: function(schema, post) {
+        if(_.isString(post)){
+          post = post.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        }
+        return post
+      }
     }
   }
 }
@@ -123,19 +136,19 @@ function requestDataValidation(req){
   inspector.sanitize(reqParamsSanitization, req.params)
   inspector.sanitize(reqBodySanitization, req.body)
 
-  var validReqParams = inspector.validate(reqParamsValidation, req.params)
-  if(!validReqParams.valid){
-    let errMessage = `Error(s) with the req.params data in requestDataValidation : ${validReqParams.format()}`
-    console.error(errMessage)
-    throw new Error(errMessage)
-  }
-
-  var validReqBody = inspector.validate(reqBodyValidation, req.body)
-  if(!validReqBody.valid){
-    let errMessage = `Error(s) with the req.body data in requestDataValidation : ${validReqBody.format()}`
-    console.error(errMessage)
-    throw new Error(errMessage)
-  }
+  // var validReqParams = inspector.validate(reqParamsValidation, req.params)
+  // if(!validReqParams.valid){
+  //   let errMessage = `Error(s) with the req.params data in requestDataValidation : ${validReqParams.format()}`
+  //   console.error(errMessage)
+  //   throw new Error(errMessage)
+  // }
+  //
+  // var validReqBody = inspector.validate(reqBodyValidation, req.body)
+  // if(!validReqBody.valid){
+  //   let errMessage = `Error(s) with the req.body data in requestDataValidation : ${validReqBody.format()}`
+  //   console.error(errMessage)
+  //   throw new Error(errMessage)
+  // }
 
   return req
 }
