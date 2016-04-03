@@ -42,7 +42,7 @@ electronInit()
   })
   .catch(err => {
     console.error(err)
-    appLogger.log.error(err)
+    appLogger.log.error({err})
   })
 
 

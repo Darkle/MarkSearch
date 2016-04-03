@@ -3,6 +3,8 @@
 var _ = require('lodash')
 var validUrl = require('valid-url')
 var inspector = require('schema-inspector')
+var validator = require('validator')
+
 var appLogger = require('./appLogger')
 
 /****
@@ -48,6 +50,8 @@ var appLogger = require('./appLogger')
  * req.body.pageDescription is used in api.js for:
  *    addPage on route /api/add/:pageUrl
  *
+ * (validator.escape() - http://bit.ly/1TpNhUn )
+ * 
  * the updateMarkSearchSettings validation is done in appSettings.js
  *
  * changePagesDBlocation & checkIfFileIsBinary use parse-filepath, so I think they're ok.
@@ -113,7 +117,7 @@ var reqBodySanitization = {
       optional: true,
       exec: function(schema, post) {
         if(_.isString(post)){
-          post = post.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          post = validator.escape(post)
         }
         return post
       }
@@ -123,7 +127,7 @@ var reqBodySanitization = {
       optional: true,
       exec: function(schema, post) {
         if(_.isString(post)){
-          post = post.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          post = validator.escape(post)
         }
         return post
       }
@@ -133,7 +137,7 @@ var reqBodySanitization = {
       optional: true,
       exec: function(schema, post) {
         if(_.isString(post)){
-          post = post.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          post = validator.escape(post)
         }
         return post
       }
@@ -172,16 +176,18 @@ function requestDataValidation(req){
   if(!validReqParams.valid){
     let errMessage = `Error(s) with the req.params data in requestDataValidation : ${validReqParams.format()}`
     console.error(errMessage)
-    appLogger.log.error(errMessage)
-    throw new Error(errMessage)
+    let err = new Error(errMessage)
+    appLogger.log.error({err})
+    throw err
   }
 
   var validReqBody = inspector.validate(reqBodyValidation, req.body)
   if(!validReqBody.valid){
     let errMessage = `Error(s) with the req.body data in requestDataValidation : ${validReqBody.format()}`
     console.error(errMessage)
-    appLogger.log.error(errMessage)
-    throw new Error(errMessage)
+    let err = new Error(errMessage)
+    appLogger.log.error({err})
+    throw err
   }
 
   return req

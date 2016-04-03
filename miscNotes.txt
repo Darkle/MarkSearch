@@ -6,4 +6,7 @@
     `brew install sqlite3 --with-fts5`,
      then build sqlite3 node module using:
     `npm install sqlite3 --save --build-from-source --sqlite=/usr/local/Cellar/sqlite/versionWeAreUsing`
+* Combinations that I know work:
+  sqlite3@3.1.2 --save --build-from-source --sqlite=/usr/local/Cellar/sqlite/3.11.0/
+
 

@@ -19,7 +19,7 @@ function importUrls(event){
   var file = files[0]
   var reader = new FileReader()
   /****
-   * .path is available in Electron.
+   * file.path is available in Electron.
    * http://electron.atom.io/docs/all/#file-object
    */
     //TODO - also check file.path doesnt have a trailing slash on windows & linux
@@ -30,7 +30,7 @@ function importUrls(event){
         headers: xhrHeaders
       }
     )
-    .then( response => {
+    .then( () => {
       var urlsToSave
       var urlsArray
       var fileText = event.target.result

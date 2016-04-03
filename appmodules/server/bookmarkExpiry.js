@@ -56,7 +56,7 @@ function checkForExpiredBookmarks() {
     })
     .catch(err => {
       console.error(err)
-      appLogger.log.error(err)
+      appLogger.log.error({err})
     })
 }
  
@@ -84,7 +84,7 @@ function sendExpiredBookmarksEmail(rows) {
   })
   .catch(err => {
     console.error(err)
-    appLogger.log.error(err)
+    appLogger.log.error({err})
   })
 }
 

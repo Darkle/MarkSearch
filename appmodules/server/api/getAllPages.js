@@ -22,7 +22,7 @@ function getAllPages(req, res, next) {
     })
     .catch( err => {
       console.error(err)
-      appLogger.log.error(err)
+      appLogger.log.error({err})
       res.status(500).end()
     })
 

@@ -31,6 +31,14 @@ function addPage(req, res, next) {
    * site, which is not what we want, so use url.parse to
    * automatically add the trailing slash.
    */
+
+  if(!req.params.pageUrl || !req.body.pageTitle || !req.body.pageText || !req.body.pageDescription){
+    var errMessage = 'missing params or body data in addPage'
+    console.error(errMessage)
+    appLogger.log.error({err: errMessage, req, res})
+    return res.status(500).json({errMessage})
+  }
+
   var parsedUrl = url.parse(req.params.pageUrl)
   var pageUrl = parsedUrl.href
 
@@ -79,9 +87,7 @@ function addPage(req, res, next) {
       .catch(function(err){
         console.log(`There was an error saving the page to the database`)
         console.error(err)
-        appLogger.log.error(req)
-        appLogger.log.error(res)
-        appLogger.log.error(err)
+        appLogger.log.error({err, req, res})
         this.res.status(500).end()
         /****
          * Rethrow the error to make it skip archiveUrl and safeBrowsing. No
@@ -104,9 +110,7 @@ function addPage(req, res, next) {
       })
       .catch(err => {
         console.error(err)
-        appLogger.log.error(req)
-        appLogger.log.error(res)
-        appLogger.log.error(err)
+        appLogger.log.error({err, req, res})
       })
 
 }

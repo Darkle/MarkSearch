@@ -184,7 +184,7 @@ pagesdb.updateColumns = (columnsDataObj) => {
     var errMessage = `Error, passed in column data did not pass validation.
                       Error(s): ${validatedColumnsDataObj.format()}`
     console.error(errMessage)
-    appLogger.log.error(errMessage)
+    appLogger.log.error({err: errMessage})
     return Promise.reject(errMessage)
   }
   return pagesdb
@@ -207,7 +207,7 @@ pagesdb.upsertRow = (rowDataObj) => {
     var errMessage = `Error, passed in row data did not pass validation.
                       Error(s): ${validatedPageDataObj.format()}`
     console.error(errMessage)
-    appLogger.log.error(errMessage)
+    appLogger.log.error({err: errMessage})
     return Promise.reject(errMessage)
   }
   return pagesdb

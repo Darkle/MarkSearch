@@ -28,9 +28,7 @@ function errorMiddleware(app){
       console.error(err)
       errObjectToShow = err
     }
-    appLogger.log.error(req)
-    appLogger.log.error(res)
-    appLogger.log.error(err)
+    appLogger.log.error({err, req, res})
     res.status(err.status || 500)
     res.render('error', {
       message: err.message,

@@ -8,20 +8,25 @@ var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var csurf = require('csurf')
 var compression = require('compression')
+var addRequestId = require('express-request-id')()
 
 var authorizationCheck = require('./authorizationCheck')
 var expressErrorMiddleware = require('./expressErrorMiddleware')
 var routes = require('./routes/index')
 var api = require('./routes/api')
 
+var devMode = process.env.NODE_ENV === 'development'
 
 function expressInit(express, expressApp){
+  expressApp.use(addRequestId)
+  if(devMode){
+    expressApp.use(logger('dev'))
+  }
   expressApp.use(compression())
   expressApp.set('views', path.join(__dirname, 'views'))
   expressApp.set('view engine', 'jade')
   // uncomment after placing your favicon in /public
   //expressApp.use(favicon('../public/favicon.ico'))
-  expressApp.use(logger('dev'))
   /****
    * The api gets sent the text of the page, so in the off chance that it
    * encounters a page with a huge amount of text, increase the size limit that
@@ -41,7 +46,7 @@ function expressInit(express, expressApp){
 
   expressErrorMiddleware(expressApp)
 
-  if(expressApp.get('env') === 'development'){
+  if(devMode){
     /****
      * Pretty print html
      */

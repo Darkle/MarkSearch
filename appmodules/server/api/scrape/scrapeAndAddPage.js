@@ -76,7 +76,8 @@ function scrapeAndAddPage(req, res, next) {
       validatedURL: ${validatedURL}
       req.params.pageUrl: ${req.params.pageUrl}
     `
-    appLogger.log.error({event, errorCode, errorDescription, validatedURL})
+    var err = new Error(errMessage)
+    appLogger.log.error({err})
     logErrorDestroyBrowserAndRespond(errMessage, res)
   })
 
@@ -110,8 +111,8 @@ function scrapeAndAddPage(req, res, next) {
 
 function logErrorDestroyBrowserAndRespond(errorMessage, res){
   console.error(`An Error Occurred: ${errorMessage}`)
-  appLogger.log.error(`An Error Occurred: ${errorMessage}`)
-  appLogger.log.error(res)
+  var err = new Error(errorMessage)
+  appLogger.log.error({err, res})
   res.status(500).json({errorMessage: errorMessage})
   browserWindow.destroy()
 }

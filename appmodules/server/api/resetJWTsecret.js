@@ -18,7 +18,7 @@ function resetJWTsecret(req, res, next){
     })
     .catch(err => {
       console.error(err)
-      appLogger.log.error(err)
+      appLogger.log.error({err})
       res.status(500).json({
         errorMessage: 'There was an error resetting JWT secret.'
       })

@@ -168,7 +168,7 @@ appSettings.update = (settingsKeyValObj) => {
     var errMessage = `Error, passed in app settings did not pass validation.
                       Error(s): ${validatedSettingsKeyValObj.format()}`
     console.error(errMessage)
-    appLogger.log.error(errMessage)
+    appLogger.log.error({err: errMessage})
     return Promise.reject(errMessage)
   }
   return appSettings.db('appSettings')

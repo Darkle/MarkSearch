@@ -279,34 +279,34 @@ function settingsPageInit(event){
      */
 
     Promise.resolve(dbChangePromise)
-    .then( newPagesDBFilePath => {
-      var newSettings = {
-        prebrowsing: prebrowsingCheckbox$[0].checked,
-        alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked,
-        bookmarkExpiryEnabled: bookmarkExpiryCheckbox$[0].checked,
-        bookmarkExpiryMonths: parseInt(bookmarkExpirySelectMonths$.val()),
-        bookmarkExpiryEmail: bookmarkExpiryEmail$.val()
-      }
-      newSettings.pagesDBFilePath = newPagesDBFilePath || markSearchSettings.pagesDBFilePath
-      return newSettings
-    })
-    .tap( newSettings => got.post('/frontendapi/settings/update', {headers: xhrHeaders, body: newSettings})
-    )
-    .then( newSettings => {
-      showNotie(1, 'Settings Saved', 3)
-      dbLocationInfoTitle$.text('Current Database Location:')
-      markSearchSettings = newSettings
-    })
-    .catch(err => {
-      console.error(err)
-      var errorMessage = getErrorMessage(err)
-      /****
-       * Put the settings element values back to what they were before
-       * the user tried to save.
-       */
-      setSettingsElementValues()
-      showNotie(3,`There Was An Error Saving The Settings. Error: ${errorMessage}`, 6)
-    })
+      .then( newPagesDBFilePath => {
+        var newSettings = {
+          prebrowsing: prebrowsingCheckbox$[0].checked,
+          alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked,
+          bookmarkExpiryEnabled: bookmarkExpiryCheckbox$[0].checked,
+          bookmarkExpiryMonths: parseInt(bookmarkExpirySelectMonths$.val()),
+          bookmarkExpiryEmail: bookmarkExpiryEmail$.val()
+        }
+        newSettings.pagesDBFilePath = newPagesDBFilePath || markSearchSettings.pagesDBFilePath
+        return newSettings
+      })
+      .tap( newSettings => got.post('/frontendapi/settings/update', {headers: xhrHeaders, body: newSettings})
+      )
+      .then( newSettings => {
+        showNotie(1, 'Settings Saved', 3)
+        dbLocationInfoTitle$.text('Current Database Location:')
+        markSearchSettings = newSettings
+      })
+      .catch(err => {
+        console.error(err)
+        var errorMessage = getErrorMessage(err)
+        /****
+         * Put the settings element values back to what they were before
+         * the user tried to save.
+         */
+        setSettingsElementValues()
+        showNotie(3,`There Was An Error Saving The Settings. Error: ${errorMessage}`, 6)
+      })
   })
 
   cancelSettingsButton$.click( event => {

@@ -15,7 +15,6 @@ var getAllExpiredBookmarks = require('../bookmarkExpiry').getAllExpiredBookmarks
 var appLogger = require('../../utils/appLogger')
 var requestDataValidation = require('../../utils/requestDataValidation')
 
-
 var router = express.Router()
 
 router.get('/', (req, res, next) => {
@@ -93,7 +92,7 @@ router.get('/removeOldBookmarks', (req, res, next) => {
     })
     .catch(err => {
       console.error(err)
-      appLogger.log.error(err)
+      appLogger.log.error({err})
     })
 })
 

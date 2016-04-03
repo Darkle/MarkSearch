@@ -11,6 +11,7 @@ import _ from 'lodash'
 import DOMPurify from 'dompurify'
 import moment from 'moment'
 import stem from 'stem-porter'
+import validator from 'validator'
 
 /****
  * Exports
@@ -92,7 +93,7 @@ function renderResults(resultsChunk, searchTerms){
         if(row.pageTitle){
           pageTitle = _.trim(row.pageTitle)
         }
-        mainResultA.textContent = (pageTitle.length > 0) ? pageTitle : row.pageUrl
+        mainResultA.textContent = validator.unescape((pageTitle.length > 0) ? pageTitle : row.pageUrl)
         mainResultLink.appendChild(mainResultA)
 
         var resultUrlText = document.createElement('div')
@@ -199,10 +200,10 @@ function renderResults(resultsChunk, searchTerms){
                 row.snippet = row.snippet.replace(regex, replacement)
               })
           }
-          description.innerHTML = DOMPurify.sanitize(_.trim(row.snippet))
+          description.innerHTML = DOMPurify.sanitize(validator.unescape(_.trim(row.snippet)))
         }
         else if(row.pageDescription){
-          description.textContent = _.trim(row.pageDescription)
+          description.textContent = _.trim(validator.unescape(row.pageDescription))
         }
         mainDetails.appendChild(description)
 

@@ -157,7 +157,7 @@ gulp.task('browserify', () => {
   return eventStream.merge.apply(null, tasks)
 })
 
-gulp.task('build-sqlite3-osx-x86-64', () => {
+gulp.task('sqlite3', () => {
   //var osxSqliteBinaryDir = path.join(__dirname, 'sqliteBinaries', 'osx_x86_64', '3.10.2')
   var osxSqliteBinaryDir = '/usr/local/Cellar/sqlite/3.11.0/'
   shell.exec(
