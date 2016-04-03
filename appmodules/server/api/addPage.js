@@ -23,36 +23,20 @@ function addPage(req, res, next) {
    *  archiveLink - String - e.g. 'https://archive.is/pFvwT'
    *  safeBrowsing - String (JSON stringified)
    *
-   * Parsing the url to get the href from url.parse as that will
-   * add a trailing slash to the end of the href if it's just a url
-   * without a path. Doing this so that we dont accidentally save the
-   * same url twice - e.g. if they saved http://foo.com, and then later
-   * saved http://foo.com/, that would be intepreted as a seperate
-   * site, which is not what we want, so use url.parse to
-   * automatically add the trailing slash.
+   * requestDataValidation in the index.js and api.js does validation on the params
+   * and body data.
    */
+  var pageUrl = req.params.pageUrl
+  var pageUrlHostname = url.parse(req.params.pageUrl).hostname
 
-  if(!req.params.pageUrl || !req.body.pageTitle || !req.body.pageText || !req.body.pageDescription){
-    var errMessage = 'missing params or body data in addPage'
-    console.error(errMessage)
-    appLogger.log.error({err: errMessage, req, res})
-    return res.status(500).json({errMessage})
-  }
+  var pageTitle = _.get(req, 'body.pageTitle.length') ? collapseWhiteSpace(req.body.pageTitle) : null
+  var pageText = _.get(req, 'body.pageText.length') ? collapseWhiteSpace(req.body.pageText) : null
+  var pageDescription = _.get(req, 'body.pageDescription.length') ? collapseWhiteSpace(req.body.pageDescription) : null
 
-  var parsedUrl = url.parse(req.params.pageUrl)
-  var pageUrl = parsedUrl.href
-
-  var pageTitleCollapsed = collapseWhiteSpace(req.body.pageTitle)
-  var pageTextCollapsed = collapseWhiteSpace(req.body.pageText)
-  var pageDescriptionCollapsed = collapseWhiteSpace(req.body.pageDescription)
-
-  var pageTitle = pageTitleCollapsed.length ? pageTitleCollapsed : null
-  var pageText = pageTextCollapsed.length ? pageTextCollapsed : null
-  var pageDescription = pageDescriptionCollapsed.length ? pageDescriptionCollapsed : null
   /****
    * Get the domain from the parsedUrl.hostname and remove any subdomains
    */
-  var pageDomain = domainParser(parsedUrl.hostname).domainName
+  var pageDomain = domainParser(pageUrlHostname).domainName
 
   var pageData = {
     pageUrl: pageUrl,

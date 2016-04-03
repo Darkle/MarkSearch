@@ -1,5 +1,7 @@
 'use strict';
 
+var url = require('url')
+
 var _ = require('lodash')
 var validUrl = require('valid-url')
 var inspector = require('schema-inspector')
@@ -17,8 +19,17 @@ var appLogger = require('./appLogger')
  *    scrapeAndAddPage on route /frontendapi/scrapeAndAdd/:pageUrl,
  *    deletePage on route /frontendapi/remove/:pageUrl,
  *
- * (We lowercase the pageUrl just so an uppercase url isn't thought of
- * as a different url to a lowercase version of the same url).
+ * We parse the pageUrl to get the href from url.parse as that will
+ * add a trailing slash to the end of the href if it's just a url
+ * without a path. Doing this so that we dont accidentally save the
+ * same url twice - e.g. if they saved http://foo.com, and then later
+ * saved http://foo.com/, that would be intepreted as a seperate
+ * site, which is not what we want, so use url.parse to
+ * automatically add the trailing slash.
+ * Also, it will convert any domain text that might be accidentally in
+ * upper case to lower case - e.g. convert https://GOogle.com/FooBar
+ * to https://google.com/FooBar (note: it preserves the case for the path,
+ * which is what we want.)
  *
  * req.params.searchTerms is used in index.js for:
  *    search on route /frontendapi/search/:searchTerms
@@ -72,7 +83,12 @@ var reqParamsSanitization = {
     pageUrl: {
       type: 'string',
       optional: true,
-      rules: ['lower']
+      exec: function(schema, post) {
+        if(_.isString(post)){
+          post = url.parse(post).href
+        }
+        return post
+      }
     }
   }
 }

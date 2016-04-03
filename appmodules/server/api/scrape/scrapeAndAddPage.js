@@ -4,12 +4,13 @@ var fs = require('fs')
 var url = require('url')
 var path = require('path')
 
+var addPage = require('../addPage')
+var appLogger = require('../../../utils/appLogger')
+
 var electron = require('electron')
 var BrowserWindow = electron.BrowserWindow
 var ipcMain = electron.ipcMain
-
-var addPage = require('../addPage')
-var appLogger = require('../../../utils/appLogger')
+var devMode = process.env.NODE_ENV === 'development'
 
 /****
  * A generator on the front end is calling scrapeAndAddPage, so
@@ -28,18 +29,10 @@ var appLogger = require('../../../utils/appLogger')
 var browserWindow
 
 function scrapeAndAddPage(req, res, next) {
-  /****
-   * Using url.parse to put a trailing slash on the end of urls
-   * that have no path. This is to remain consistent, so dont end
-   * up saving http://foo.com and http://foo.com/ as different
-   * pages - we are also doing it in addPage for the times when
-   * we are not scraping (e.g. when addPage gets page data
-   * from a browser extension)
-   */
-  var urlToScrape = url.parse(req.params.pageUrl).href
-  var devMode = process.env.NODE_ENV === 'development'
 
-  //browserWindow = new BrowserWindow({show: devMode})
+  var urlToScrape = req.params.pageUrl
+
+  // browserWindow = new BrowserWindow({show: devMode})
   browserWindow = new BrowserWindow({show: false})
   browserWindow.loadURL(path.join('file://', __dirname, 'webviewContainerWindow.html'))
 
@@ -76,8 +69,6 @@ function scrapeAndAddPage(req, res, next) {
       validatedURL: ${validatedURL}
       req.params.pageUrl: ${req.params.pageUrl}
     `
-    var err = new Error(errMessage)
-    appLogger.log.error({err})
     logErrorDestroyBrowserAndRespond(errMessage, res)
   })
 
@@ -95,15 +86,12 @@ function scrapeAndAddPage(req, res, next) {
     var docDetails = JSON.parse(message)
     /****
      * Dont need to collapse whitespace here as doing that in addPage.js
-     * Put pageUrl to lowercase here just in case, as the new pageUrl wont go through
-     * the paramsPageUrlToLowerCase middleware from here.
      */
-    req.params.pageUrl = docDetails.pageUrl.toLowerCase()
     req.body.pageTitle = docDetails.documentTitle
     req.body.pageText = docDetails.documentText
     req.body.pageDescription = docDetails.documentDescription
     browserWindow.destroy()
-    //console.dir(req.body)
+    // console.dir(req.body)
     addPage(req, res, next)
   })
 

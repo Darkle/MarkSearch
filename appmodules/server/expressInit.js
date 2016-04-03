@@ -33,8 +33,8 @@ function expressInit(express, expressApp){
    * can be sent via post body. (the limit is '100kb')
    * https://github.com/expressjs/body-parser#limit-3
    */
-  expressApp.use(bodyParser.json({limit: '1mb'}))
-  expressApp.use(bodyParser.urlencoded({ limit: '1mb', extended: false }))
+  expressApp.use(bodyParser.json({limit: '3mb'}))
+  expressApp.use(bodyParser.urlencoded({ limit: '3mb', extended: false }))
   expressApp.use(cookieParser())
   expressApp.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'static')))
   expressApp.use('/bower_components',  express.static(path.join(__dirname, '..', '..', 'bower_components')))
