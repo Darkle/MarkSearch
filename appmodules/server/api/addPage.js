@@ -55,46 +55,47 @@ function addPage(req, res, next) {
    * url and the safe browsing details are not as important and can be saved to the
    * db later.
    *
-   * Binding pageUrl & res here in case addPage gets called again and pagesdb.upsertRow or
+   * Binding pageUrl & res/req here in case addPage gets called again and pagesdb.upsertRow or
    * archiveUrl/safeBrowsingData hasn't finished yet - don't want safeBrowsing or
    * archive.is to use overwritten pageData.pageUrl or res from the new addPage call.
    * Note: when using this.pageUrl or this.res/req, must use a regular function, as an arrow
    * function seems to mess up the 'this' context for bluebird.
    */
-  return pagesdb.upsertRow(pageData).bind({pageUrl: pageData.pageUrl, req: req, res: res})
-      .then(function(){
-        this.res.status(200).end()
-        return this.pageUrl
-      })
-      .catch(function(err){
-        console.log(`There was an error saving the page to the database`)
-        console.error(err)
-        this.res.status(500).end()
-        /****
-         * Rethrow the error to make it skip archiveUrl and safeBrowsing. No
-         * point doing them if the row hasn't made it into the database.
-         */
-        throw new Error(err)
-      })
+  pagesdb.upsertRow(pageData)
+    .bind({pageUrl: pageData.pageUrl, req: req, res: res})
+    .then(function(){
+      this.res.status(200).end()
+      return this.pageUrl
+    })
+    .catch(function(err){
+      console.log(`There was an error saving the page to the database`)
+      console.error(err)
+      this.res.status(500).end()
       /****
-       * Get archiveUrl & safeBrowsingCheck running in parallel
+       * Rethrow the error to make it skip archiveUrl and safeBrowsing. No
+       * point doing them if the row hasn't made it into the database.
        */
-      .then( pageUrl => [archiveUrl(pageUrl), safeBrowsingCheck(pageUrl)])
-      .spread(function(archiveIsUrl, safeBrowsingData) {
-        /****
-         * _.merge will remove any null values
-         */
-        var updateData = _.merge(archiveIsUrl, safeBrowsingData)
-        if(!_.isEmpty(updateData)){
-          return pagesdb.updateColumns(updateData)
-        }
-      })
-      .catch(function(err){
-        console.error(err)
-        var requestForError = this.req
-        var responseForError = this.res
-        appLogger.log.error({err, req: requestForError, res: responseForError})
-      })
+      throw new Error(err)
+    })
+    /****
+     * Get archiveUrl & safeBrowsingCheck running in parallel
+     */
+    .then( pageUrl => [archiveUrl(pageUrl), safeBrowsingCheck(pageUrl)])
+    .spread(function(archiveIsUrl, safeBrowsingData) {
+      /****
+       * _.merge will remove any null values
+       */
+      var updateData = _.merge(archiveIsUrl, safeBrowsingData)
+      if(!_.isEmpty(updateData)){
+        return pagesdb.updateColumns(updateData)
+      }
+    })
+    .catch(function(err){
+      console.error(err)
+      var requestForError = this.req
+      var responseForError = this.res
+      appLogger.log.error({err, req: requestForError, res: responseForError})
+    })
 
 }
 
