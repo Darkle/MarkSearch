@@ -8,5 +8,9 @@
     `npm install sqlite3 --save --build-from-source --sqlite=/usr/local/Cellar/sqlite/versionWeAreUsing`
 * Combinations that I know work:
   sqlite3@3.1.2 --save --build-from-source --sqlite=/usr/local/Cellar/sqlite/3.11.0/
+* for sqlite@3.1.3, if you get an error of "Cannot find module '/node_modules/sqlite3/lib/binding/
+    electron-v0.37-darwin-x64/node_sqlite3.node'", try using a symlink in the
+    "/node_modules/sqlite3/lib/binding/" folder. So create a symlink for the node-v47-darwin-x64
+    folder and name the symlink electron-v0.37-darwin-x64
 
 

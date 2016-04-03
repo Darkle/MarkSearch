@@ -2,7 +2,7 @@
 
 var url = require('url')
 
-var domainParser = require('domain-parser')
+var domainParser = require('domain-name-parser')
 var _ = require('lodash')
 
 var pagesdb = require('../../db/pagesdb')
@@ -27,24 +27,22 @@ function addPage(req, res, next) {
    * and body data.
    */
   var pageUrl = req.params.pageUrl
-  var pageUrlHostname = url.parse(req.params.pageUrl).hostname
-
   var pageTitle = _.get(req, 'body.pageTitle.length') ? collapseWhiteSpace(req.body.pageTitle) : null
   var pageText = _.get(req, 'body.pageText.length') ? collapseWhiteSpace(req.body.pageText) : null
   var pageDescription = _.get(req, 'body.pageDescription.length') ? collapseWhiteSpace(req.body.pageDescription) : null
-
+  var pageUrlHostname = url.parse(req.params.pageUrl).hostname
   /****
-   * Get the domain from the parsedUrl.hostname and remove any subdomains
+   * Get the domain from pageUrlHostname and remove any subdomains
    */
   var pageDomain = domainParser(pageUrlHostname).domainName
 
   var pageData = {
-    pageUrl: pageUrl,
+    pageUrl,
     dateCreated: Date.now(),
-    pageDomain: pageDomain,
-    pageTitle: pageTitle,
-    pageText: pageText,
-    pageDescription: pageDescription,
+    pageDomain,
+    pageTitle,
+    pageText,
+    pageDescription,
     archiveLink: null,
     safeBrowsing: null
   }

@@ -159,7 +159,7 @@ gulp.task('browserify', () => {
 
 gulp.task('sqlite3', () => {
   //var osxSqliteBinaryDir = path.join(__dirname, 'sqliteBinaries', 'osx_x86_64', '3.10.2')
-  var osxSqliteBinaryDir = '/usr/local/Cellar/sqlite/3.11.0/'
+  var osxSqliteBinaryDir = '/usr/local/Cellar/sqlite/3.12.0/'
   shell.exec(
       `npm install sqlite3 --save --build-from-source --sqlite=${osxSqliteBinaryDir}`,
       (exitCode, stdout, stderr) => {
@@ -208,7 +208,7 @@ gulp.task('selfsign', () => {
   })
 })
 
-gulp.task('change-random-pagesdb-dateCreated', () => {
+gulp.task('randomDates', () => {
   var pagesDBknex
   var appSettingsKnex = require('knex')({
     client: 'sqlite3',
