@@ -55,14 +55,14 @@ function addPage(req, res, next) {
    * url and the safe browsing details are not as important and can be saved to the
    * db later.
    *
-   * Binding pageUrl & res/req here in case addPage gets called again and pagesdb.upsertRow or
+   * Binding pageUrl, res, req here in case addPage gets called again and pagesdb.upsertRow or
    * archiveUrl/safeBrowsingData hasn't finished yet - don't want safeBrowsing or
    * archive.is to use overwritten pageData.pageUrl or res from the new addPage call.
    * Note: when using this.pageUrl or this.res/req, must use a regular function, as an arrow
    * function seems to mess up the 'this' context for bluebird.
    */
   pagesdb.upsertRow(pageData)
-    .bind({pageUrl: pageData.pageUrl, req: req, res: res})
+    .bind({pageUrl, req, res})
     .then(function(){
       this.res.status(200).end()
       return this.pageUrl
