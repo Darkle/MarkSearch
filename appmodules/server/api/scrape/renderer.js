@@ -58,9 +58,8 @@ function didStartLoadListener(){
  *
  * Sometimes the 'did-finish-load' (aka onload) below doesn't fire,
  * so using a setTimeout here in the 'dom-ready' (aka ondomcontentloaded)
- * event listener as a backup. I'm not sure why it doesn't fire sometimes,
- * it seems to happen when saving a bunch of sites at once. Maybe it happens
- * when an image/object takes forever to load.
+ * event listener as a backup. It could be it doesn't fire because of an
+ * image/object taking forever to load.
  */
 function domReadyListener(){
   domReadyFired = true
