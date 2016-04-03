@@ -58,10 +58,10 @@ function addPage(req, res, next) {
    * Binding pageUrl & res here in case addPage gets called again and pagesdb.upsertRow or
    * archiveUrl/safeBrowsingData hasn't finished yet - don't want safeBrowsing or
    * archive.is to use overwritten pageData.pageUrl or res from the new addPage call.
-   * Note: when using this.pageUrl or this.res, must use a regular function, as an arrow
+   * Note: when using this.pageUrl or this.res/req, must use a regular function, as an arrow
    * function seems to mess up the 'this' context for bluebird.
    */
-  return pagesdb.upsertRow(pageData).bind({pageUrl: pageData.pageUrl, res: res})
+  return pagesdb.upsertRow(pageData).bind({pageUrl: pageData.pageUrl, req: req, res: res})
       .then(function(){
         this.res.status(200).end()
         return this.pageUrl
@@ -69,7 +69,6 @@ function addPage(req, res, next) {
       .catch(function(err){
         console.log(`There was an error saving the page to the database`)
         console.error(err)
-        appLogger.log.error({err, req, res})
         this.res.status(500).end()
         /****
          * Rethrow the error to make it skip archiveUrl and safeBrowsing. No
@@ -90,9 +89,11 @@ function addPage(req, res, next) {
           return pagesdb.updateColumns(updateData)
         }
       })
-      .catch(err => {
+      .catch(function(err){
         console.error(err)
-        appLogger.log.error({err, req, res})
+        var requestForError = this.req
+        var responseForError = this.res
+        appLogger.log.error({err, req: requestForError, res: responseForError})
       })
 
 }
