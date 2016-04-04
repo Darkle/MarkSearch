@@ -22,14 +22,13 @@ var _ = require('lodash')
 var moment = require('moment')
 
 
-gulp.task('default', function(callback) {
+gulp.task('default', function() {
   runSequence(
       //'browserify',
       'nodemon',
       'browser-sync',
       'watch-less',
-      'watch-js',
-      callback
+      'watch-js'
   )
 })
 

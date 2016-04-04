@@ -64,7 +64,7 @@ logger.init = (markSearchAppDataPath) => {
       }
     }
   })
-
+ 
   require('crashreporter').configure({
     outDir: logsFolder,
     exitOnCrash: true,
