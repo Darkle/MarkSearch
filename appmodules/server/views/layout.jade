@@ -17,7 +17,7 @@ html
     if bodyClass === 'removeOldBookmarksPage'
       link(rel='stylesheet', href='/bower_components/buttonplate/css/buttonplate.css')
     link(rel='stylesheet', href='/stylesheets/styles.css')
-  body(class='#{bodyClass}')
+  body(class='#{bodyClass}', data-marksearch-settings='#{markSearchSettings}')
     include ./nav.jade
     block content
 

@@ -1637,6 +1637,7 @@ function searchPageInit(event) {
   exports.resultsContainer$ = resultsContainer$ = $('#resultsContainer');
   var isIOS7 = (0, _checkIfiOS.checkIfiOS7)(window);
   var body$ = $('body');
+  window.markSearchSettings = body$.data('marksearchSettings');
   if (!(0, _checkIfTouchDevice.checkIfTouchDevice)(window)) {
     searchInput$.focus();
   }

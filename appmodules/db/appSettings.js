@@ -127,7 +127,7 @@ appSettings.init = (appDataPath) => {
           .insert(
               {
                 id: 'appSettings',
-                JWTsecret: Crypto.randomBytes(128).toString('hex'),
+                JWTsecret: Crypto.randomBytes(256).toString('hex'),
                 pagesDBFilePath: path.join(appDataPath, 'MarkSearchPages.db'),
                 prebrowsing: true,
                 alwaysDisableTooltips: false,

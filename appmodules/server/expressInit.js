@@ -2,6 +2,7 @@
 
 var path = require('path')
 
+// var helmet = require('helmet')
 var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
@@ -27,6 +28,19 @@ function expressInit(express, expressApp){
   expressApp.set('view engine', 'jade')
   // uncomment after placing your favicon in /public
   //expressApp.use(favicon('../public/favicon.ico'))
+  /****
+   * Content Security Policy
+   */
+  // expressApp.use(helmet.csp({
+  //   directives: {
+  //     defaultSrc: ["'self'"],
+  //     styleSrc: ["'self'", "'unsafe-inline'"]
+  //   },
+  //   reportOnly: false,
+  //   setAllHeaders: false,
+  //   disableAndroid: false,
+  //   browserSniff: true
+  // }))
   /****
    * The api gets sent the text of the page, so in the off chance that it
    * encounters a page with a huge amount of text, increase the size limit that

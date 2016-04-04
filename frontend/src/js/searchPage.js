@@ -27,6 +27,7 @@ function searchPageInit(event){
   resultsContainer$ = $('#resultsContainer')
   var isIOS7 = checkIfiOS7(window)
   var body$ = $('body')
+  window.markSearchSettings = body$.data('marksearchSettings')
   if(!checkIfTouchDevice(window)){
     searchInput$.focus()
   }

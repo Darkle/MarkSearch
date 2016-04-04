@@ -37,7 +37,7 @@ var appLogger = require('./appLogger')
  * req.params.searchTerms is used in api.js for:
  *    search on route /api/search/:searchTerms
  *
- * (knex does sql injection checks for bound values so I think I don't have
+ * (knex in search.js does sql injection checks for bound values so I don't think I have
  * to do anything more with req.params.searchTerms)
  *
  * req.params.urlToOpen is used in index.js for:
@@ -191,8 +191,8 @@ function requestDataValidation(req, res, next){
   var validReqParams = inspector.validate(reqParamsValidation, req.params)
   if(!validReqParams.valid){
     let errMessage = `Error(s) with the req.params data in requestDataValidation : ${validReqParams.format()}`
-    console.error(errMessage)
     let err = new Error(errMessage)
+    console.error(errMessage)
     appLogger.log.error({err})
     res.status(500).json(errMessage)
   }
@@ -200,8 +200,8 @@ function requestDataValidation(req, res, next){
   var validReqBody = inspector.validate(reqBodyValidation, req.body)
   if(!validReqBody.valid){
     let errMessage = `Error(s) with the req.body data in requestDataValidation : ${validReqBody.format()}`
-    console.error(errMessage)
     let err = new Error(errMessage)
+    console.error(errMessage)
     appLogger.log.error({err})
     res.status(500).json(errMessage)
   }

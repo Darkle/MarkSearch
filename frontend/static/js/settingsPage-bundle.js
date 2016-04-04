@@ -633,7 +633,9 @@ var dbLocationText$;
 $(document).ready(settingsPageInit);
 
 function settingsPageInit(event) {
-  formplate($('body'));
+  var body$ = $('body');
+  window.markSearchSettings = body$.data('marksearchSettings');
+  formplate(body$);
   buttonplate($('.button'));
   /****
    * formplate moves things around, so grab elements only after its
