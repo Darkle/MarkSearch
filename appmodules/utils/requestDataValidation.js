@@ -183,7 +183,7 @@ var reqBodyValidation = {
   }
 }
 
-function requestDataValidation(req){
+function requestDataValidation(req, res, next){
 
   inspector.sanitize(reqParamsSanitization, req.params)
   inspector.sanitize(reqBodySanitization, req.body)
@@ -194,7 +194,7 @@ function requestDataValidation(req){
     console.error(errMessage)
     let err = new Error(errMessage)
     appLogger.log.error({err})
-    throw err
+    res.status(500).json(errMessage)
   }
 
   var validReqBody = inspector.validate(reqBodyValidation, req.body)
@@ -203,10 +203,13 @@ function requestDataValidation(req){
     console.error(errMessage)
     let err = new Error(errMessage)
     appLogger.log.error({err})
-    throw err
+    res.status(500).json(errMessage)
   }
 
-  return req
+  if(validReqParams.valid && validReqBody.valid){
+    next()
+  }
+
 }
 
 module.exports = requestDataValidation

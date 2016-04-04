@@ -101,24 +101,16 @@ router.get('/removeOldBookmarks', (req, res, next) => {
  * (the api routes are protected by the JWT) and also so need csrf token to be able to call
  * the api from the frontend. (OWASP seems to recommend making them into POST so I guess do that)
  */
-router.post('/frontendapi/getall/', apiModules.getAllPages)
-router.post('/frontendapi/search/:searchTerms', (req, res, next) => {
-  search(requestDataValidation(req), res, next)
-})
-router.post('/frontendapi/scrapeAndAdd/:pageUrl', (req, res, next) => {
-  scrapeAndAddPage(requestDataValidation(req), res, next)
-})
-router.delete('/frontendapi/remove/:pageUrl', (req, res, next) => {
-  apiModules.deletePage(requestDataValidation(req), res, next)
-})
-router.post('/frontendapi/openUrlInBrowser/:urlToOpen', (req, res, next) => {
-  apiModules.openUrlInBrowser(requestDataValidation(req), res, next)
-})
-router.post('/frontendapi/settings/update/', apiModules.updateMarkSearchSettings)
-router.post('/frontendapi/settings/changePagesDBlocation/', apiModules.changePagesDBlocation)
-router.post('/frontendapi/settings/generateExtToken/', apiModules.generateExtToken)
-router.post('/frontendapi/settings/emailBookmarklet/', apiModules.emailBookmarklet)
-router.post('/frontendapi/settings/checkIfFileIsBinary/:filePath', apiModules.checkIfFileIsBinary)
-router.post('/frontendapi/settings/revokeExtTokens/', apiModules.resetJWTsecret)
+router.post('/frontendapi/getall/', requestDataValidation, apiModules.getAllPages)
+router.post('/frontendapi/search/:searchTerms', requestDataValidation, search)
+router.post('/frontendapi/scrapeAndAdd/:pageUrl', requestDataValidation, scrapeAndAddPage)
+router.delete('/frontendapi/remove/:pageUrl', requestDataValidation, apiModules.deletePage)
+router.post('/frontendapi/openUrlInBrowser/:urlToOpen', requestDataValidation, apiModules.openUrlInBrowser)
+router.post('/frontendapi/settings/update/', requestDataValidation, apiModules.updateMarkSearchSettings)
+router.post('/frontendapi/settings/changePagesDBlocation/', requestDataValidation, apiModules.changePagesDBlocation)
+router.post('/frontendapi/settings/generateExtToken/', requestDataValidation, apiModules.generateExtToken)
+router.post('/frontendapi/settings/emailBookmarklet/', requestDataValidation, apiModules.emailBookmarklet)
+router.post('/frontendapi/settings/checkIfFileIsBinary/:filePath', requestDataValidation, apiModules.checkIfFileIsBinary)
+router.post('/frontendapi/settings/revokeExtTokens/', requestDataValidation, apiModules.resetJWTsecret)
 
 module.exports = router
