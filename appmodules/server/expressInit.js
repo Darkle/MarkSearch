@@ -40,7 +40,6 @@ function expressInit(express, expressApp){
   /****
    * xssFilter FWIW
    * https://github.com/helmetjs/helmet#xss-filter-xssfilter
-   *
    */
   expressApp.use(helmet.xssFilter())
   /****
@@ -58,11 +57,11 @@ function expressInit(express, expressApp){
    */
   expressApp.use(helmet.dnsPrefetchControl({ allow: true }))
 
-
   /****
    * The api gets sent the text of the page, so in the off chance that it
    * encounters a page with a huge amount of text, increase the size limit that
    * can be sent via post body. (the limit is '100kb')
+   * (some of wikipedias biggest articles can be over 1mb in size)
    * https://github.com/expressjs/body-parser#limit-3
    */
   expressApp.use(bodyParser.json({limit: '3mb'}))
