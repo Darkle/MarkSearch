@@ -2,8 +2,7 @@
 
 var path = require('path')
 
-// var helmet = require('helmet')
-var favicon = require('serve-favicon')
+var helmet = require('helmet')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
@@ -26,21 +25,41 @@ function expressInit(express, expressApp){
   expressApp.use(compression())
   expressApp.set('views', path.join(__dirname, 'views'))
   expressApp.set('view engine', 'jade')
-  // uncomment after placing your favicon in /public
-  //expressApp.use(favicon('../public/favicon.ico'))
   /****
    * Content Security Policy
    */
-  // expressApp.use(helmet.csp({
-  //   directives: {
-  //     defaultSrc: ["'self'"],
-  //     styleSrc: ["'self'", "'unsafe-inline'"]
-  //   },
-  //   reportOnly: false,
-  //   setAllHeaders: false,
-  //   disableAndroid: false,
-  //   browserSniff: true
-  // }))
+  expressApp.use(helmet.csp({
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'"]
+    },
+    reportOnly: false,
+    setAllHeaders: false,
+    disableAndroid: false,
+    browserSniff: true
+  }))
+  /****
+   * xssFilter FWIW
+   * https://github.com/helmetjs/helmet#xss-filter-xssfilter
+   *
+   */
+  expressApp.use(helmet.xssFilter())
+  /****
+   * Frameguard stops the page being put in a <frame> or <iframe> without your consent.
+   */
+  expressApp.use(helmet.frameguard({action: 'deny'}))
+  expressApp.use(helmet.hidePoweredBy())
+  /****
+   * https://github.com/helmetjs/helmet#dont-infer-the-mime-type-nosniff
+   */
+  expressApp.use(helmet.noSniff())
+  /****
+   * Prefetching is one of the features for search page, so need to enable this.
+   * https://github.com/helmetjs/helmet#prevent-dns-prefetching-dnsprefetchcontrol
+   */
+  expressApp.use(helmet.dnsPrefetchControl({ allow: true }))
+
+
   /****
    * The api gets sent the text of the page, so in the off chance that it
    * encounters a page with a huge amount of text, increase the size limit that

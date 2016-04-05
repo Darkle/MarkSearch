@@ -1,17 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-/* globals rows, buttonplate  */
+/* globals rows, buttonplate notie */
 
 require('babel-polyfill');
 
 var _got = require('got');
 
 var _got2 = _interopRequireDefault(_got);
-
-var _notie = require('notie');
-
-var _notie2 = _interopRequireDefault(_notie);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49,12 +45,12 @@ function settingsPageInit(event) {
     }).catch(function (err) {
       console.error(err);
       $('#notie-alert-outer').addClass('notie-alert-error');
-      _notie2.default.alert(3, 'There Was An Error Deleting The Bookmark\n           Error: ' + err.message, 5);
+      notie.alert(3, 'There Was An Error Deleting The Bookmark\n           Error: ' + err.message, 5);
     });
   });
 }
 
-},{"babel-polyfill":2,"got":294,"notie":307}],2:[function(require,module,exports){
+},{"babel-polyfill":2,"got":294}],2:[function(require,module,exports){
 (function (global){
 /* eslint max-len: 0 */
 
@@ -752,7 +748,7 @@ define(String.prototype, "padRight", "".padEnd);
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"_process":310}],4:[function(require,module,exports){
+},{"_process":309}],4:[function(require,module,exports){
 'use strict'
 
 exports.toByteArray = toByteArray
@@ -869,6 +865,7 @@ function fromByteArray (uint8) {
 }
 
 },{}],5:[function(require,module,exports){
+"use strict";
 
 },{}],6:[function(require,module,exports){
 (function (global){
@@ -8283,7 +8280,7 @@ module.exports = function duplex2(options, writable, readable) {
 
 module.exports.DuplexWrapper = DuplexWrapper;
 
-},{"stream":315}],292:[function(require,module,exports){
+},{"stream":314}],292:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -8647,38 +8644,40 @@ module.exports.buffer = function (stream) {
 (function (Buffer){
 'use strict';
 
-const EventEmitter = require('events').EventEmitter;
-const http = require('http');
-const https = require('https');
-const PassThrough = require('stream').PassThrough;
-const duplexer3 = require('duplexer3');
-const urlLib = require('url');
-const querystring = require('querystring');
-const isStream = require('is-stream');
-const getStream = require('get-stream');
-const timedOut = require('timed-out');
-const urlParseLax = require('url-parse-lax');
-const lowercaseKeys = require('lowercase-keys');
-const isRedirect = require('is-redirect');
-const unzipResponse = require('unzip-response');
-const createErrorClass = require('create-error-class');
-const nodeStatusCodes = require('node-status-codes');
-const isPlainObj = require('is-plain-obj');
-const isRetryAllowed = require('is-retry-allowed');
-const pkg = require('./package.json');
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+var EventEmitter = require('events').EventEmitter;
+var http = require('http');
+var https = require('https');
+var PassThrough = require('stream').PassThrough;
+var duplexer3 = require('duplexer3');
+var urlLib = require('url');
+var querystring = require('querystring');
+var isStream = require('is-stream');
+var getStream = require('get-stream');
+var timedOut = require('timed-out');
+var urlParseLax = require('url-parse-lax');
+var lowercaseKeys = require('lowercase-keys');
+var isRedirect = require('is-redirect');
+var unzipResponse = require('unzip-response');
+var createErrorClass = require('create-error-class');
+var nodeStatusCodes = require('node-status-codes');
+var isPlainObj = require('is-plain-obj');
+var isRetryAllowed = require('is-retry-allowed');
+var pkg = require('./package.json');
 
 function requestAsEventEmitter(opts) {
 	opts = opts || {};
 
-	const ee = new EventEmitter();
-	let redirectCount = 0;
-	let retryCount = 0;
+	var ee = new EventEmitter();
+	var redirectCount = 0;
+	var retryCount = 0;
 
-	const get = opts => {
-		const fn = opts.protocol === 'https:' ? https : http;
+	var get = function get(opts) {
+		var fn = opts.protocol === 'https:' ? https : http;
 
-		const req = fn.request(opts, res => {
-			const statusCode = res.statusCode;
+		var req = fn.request(opts, function (res) {
+			var statusCode = res.statusCode;
 
 			if (isRedirect(statusCode) && 'location' in res.headers && (opts.method === 'GET' || opts.method === 'HEAD')) {
 				res.resume();
@@ -8688,8 +8687,8 @@ function requestAsEventEmitter(opts) {
 					return;
 				}
 
-				const redirectUrl = urlLib.resolve(urlLib.format(opts), res.headers.location);
-				const redirectOpts = Object.assign({}, opts, urlLib.parse(redirectUrl));
+				var redirectUrl = urlLib.resolve(urlLib.format(opts), res.headers.location);
+				var redirectOpts = Object.assign({}, opts, urlLib.parse(redirectUrl));
 
 				ee.emit('redirect', res, redirectOpts);
 
@@ -8697,13 +8696,13 @@ function requestAsEventEmitter(opts) {
 				return;
 			}
 
-			setImmediate(() => {
+			setImmediate(function () {
 				ee.emit('response', typeof unzipResponse === 'function' && req.method !== 'HEAD' ? unzipResponse(res) : res);
 			});
 		});
 
-		req.once('error', err => {
-			const backoff = opts.retries(++retryCount, err);
+		req.once('error', function (err) {
+			var backoff = opts.retries(++retryCount, err);
 
 			if (backoff) {
 				setTimeout(get, backoff, opts);
@@ -8717,7 +8716,9 @@ function requestAsEventEmitter(opts) {
 			timedOut(req, opts.timeout);
 		}
 
-		setImmediate(() => ee.emit('request', req));
+		setImmediate(function () {
+			return ee.emit('request', req);
+		});
 	};
 
 	get(opts);
@@ -8725,10 +8726,10 @@ function requestAsEventEmitter(opts) {
 }
 
 function asPromise(opts) {
-	return new Promise((resolve, reject) => {
-		const ee = requestAsEventEmitter(opts);
+	return new Promise(function (resolve, reject) {
+		var ee = requestAsEventEmitter(opts);
 
-		ee.on('request', req => {
+		ee.on('request', function (req) {
 			if (isStream(opts.body)) {
 				opts.body.pipe(req);
 				opts.body = undefined;
@@ -8738,34 +8739,33 @@ function asPromise(opts) {
 			req.end(opts.body);
 		});
 
-		ee.on('response', res => {
-			const stream = opts.encoding === null ? getStream.buffer(res) : getStream(res, opts);
+		ee.on('response', function (res) {
+			var stream = opts.encoding === null ? getStream.buffer(res) : getStream(res, opts);
 
-			stream
-				.catch(err => reject(new got.ReadError(err, opts)))
-				.then(data => {
-					const statusCode = res.statusCode;
+			stream.catch(function (err) {
+				return reject(new got.ReadError(err, opts));
+			}).then(function (data) {
+				var statusCode = res.statusCode;
 
-					res.body = data;
+				res.body = data;
 
-					if (opts.json && res.body) {
-						try {
-							res.body = JSON.parse(res.body);
-						} catch (e) {
-							throw new got.ParseError(e, statusCode, opts, data);
-						}
+				if (opts.json && res.body) {
+					try {
+						res.body = JSON.parse(res.body);
+					} catch (e) {
+						throw new got.ParseError(e, statusCode, opts, data);
 					}
+				}
 
-					if (statusCode < 200 || statusCode > 299) {
-						throw new got.HTTPError(statusCode, opts);
-					}
+				if (statusCode < 200 || statusCode > 299) {
+					throw new got.HTTPError(statusCode, opts);
+				}
 
-					resolve(res);
-				})
-				.catch(err => {
-					Object.defineProperty(err, 'response', {value: res});
-					reject(err);
-				});
+				resolve(res);
+			}).catch(function (err) {
+				Object.defineProperty(err, 'response', { value: res });
+				reject(err);
+			});
 		});
 
 		ee.on('error', reject);
@@ -8773,23 +8773,23 @@ function asPromise(opts) {
 }
 
 function asStream(opts) {
-	const input = new PassThrough();
-	const output = new PassThrough();
-	const proxy = duplexer3(input, output);
+	var input = new PassThrough();
+	var output = new PassThrough();
+	var proxy = duplexer3(input, output);
 
 	if (opts.json) {
 		throw new Error('got can not be used as stream when options.json is used');
 	}
 
 	if (opts.body) {
-		proxy.write = () => {
+		proxy.write = function () {
 			throw new Error('got\'s stream is not writable when options.body is used');
 		};
 	}
 
-	const ee = requestAsEventEmitter(opts);
+	var ee = requestAsEventEmitter(opts);
 
-	ee.on('request', req => {
+	ee.on('request', function (req) {
 		proxy.emit('request', req);
 
 		if (isStream(opts.body)) {
@@ -8810,8 +8810,8 @@ function asStream(opts) {
 		req.end();
 	});
 
-	ee.on('response', res => {
-		const statusCode = res.statusCode;
+	ee.on('response', function (res) {
+		var statusCode = res.statusCode;
 
 		res.pipe(output);
 
@@ -8831,8 +8831,8 @@ function asStream(opts) {
 }
 
 function normalizeArguments(url, opts) {
-	if (typeof url !== 'string' && typeof url !== 'object') {
-		throw new Error(`Parameter \`url\` must be a string or object, not ${typeof url}`);
+	if (typeof url !== 'string' && (typeof url === 'undefined' ? 'undefined' : _typeof(url)) !== 'object') {
+		throw new Error('Parameter `url` must be a string or object, not ' + (typeof url === 'undefined' ? 'undefined' : _typeof(url)));
 	}
 
 	if (typeof url === 'string') {
@@ -8843,25 +8843,21 @@ function normalizeArguments(url, opts) {
 		}
 	}
 
-	opts = Object.assign(
-		{protocol: 'http:', path: '', retries: 5},
-		url,
-		opts
-	);
+	opts = Object.assign({ protocol: 'http:', path: '', retries: 5 }, url, opts);
 
 	opts.headers = Object.assign({
-		'user-agent': `${pkg.name}/${pkg.version} (https://github.com/sindresorhus/got)`,
+		'user-agent': pkg.name + '/' + pkg.version + ' (https://github.com/sindresorhus/got)',
 		'accept-encoding': 'gzip,deflate'
 	}, lowercaseKeys(opts.headers));
 
-	const query = opts.query;
+	var query = opts.query;
 
 	if (query) {
 		if (typeof query !== 'string') {
 			opts.query = querystring.stringify(query);
 		}
 
-		opts.path = `${opts.path.split('?')[0]}?${opts.query}`;
+		opts.path = opts.path.split('?')[0] + '?' + opts.query;
 		delete opts.query;
 	}
 
@@ -8869,7 +8865,7 @@ function normalizeArguments(url, opts) {
 		opts.headers.accept = 'application/json';
 	}
 
-	let body = opts.body;
+	var body = opts.body;
 
 	if (body) {
 		if (typeof body !== 'string' && !Buffer.isBuffer(body) && !isStream(body) && !isPlainObj(body)) {
@@ -8884,7 +8880,7 @@ function normalizeArguments(url, opts) {
 		}
 
 		if (opts.headers['content-length'] === undefined && opts.headers['transfer-encoding'] === undefined && !isStream(body)) {
-			const length = typeof body === 'string' ? Buffer.byteLength(body) : body.length;
+			var length = typeof body === 'string' ? Buffer.byteLength(body) : body.length;
 			opts.headers['content-length'] = length;
 		}
 	}
@@ -8894,7 +8890,7 @@ function normalizeArguments(url, opts) {
 	opts.method = opts.method.toUpperCase();
 
 	if (opts.hostname === 'unix') {
-		const matches = /(.+)\:(.+)/.exec(opts.path);
+		var matches = /(.+)\:(.+)/.exec(opts.path);
 
 		if (matches) {
 			opts.socketPath = matches[1];
@@ -8904,15 +8900,17 @@ function normalizeArguments(url, opts) {
 	}
 
 	if (typeof opts.retries !== 'function') {
-		const retries = opts.retries;
-		opts.retries = function backoff(iter, err) {
-			if (iter > retries || !isRetryAllowed(err)) {
-				return 0;
-			}
+		(function () {
+			var retries = opts.retries;
+			opts.retries = function backoff(iter, err) {
+				if (iter > retries || !isRetryAllowed(err)) {
+					return 0;
+				}
 
-			const noise = Math.random() * 100;
-			return (1 << iter) * 1000 + noise;
-		};
+				var noise = Math.random() * 100;
+				return (1 << iter) * 1000 + noise;
+			};
+		})();
 	}
 
 	return opts;
@@ -8926,26 +8924,21 @@ function got(url, opts) {
 	}
 }
 
-const helpers = [
-	'get',
-	'post',
-	'put',
-	'patch',
-	'head',
-	'delete'
-];
+var helpers = ['get', 'post', 'put', 'patch', 'head', 'delete'];
 
-helpers.forEach(el => {
-	got[el] = (url, opts) => got(url, Object.assign({}, opts, {method: el}));
+helpers.forEach(function (el) {
+	got[el] = function (url, opts) {
+		return got(url, Object.assign({}, opts, { method: el }));
+	};
 });
 
 got.stream = function (url, opts) {
 	return asStream(normalizeArguments(url, opts));
 };
 
-helpers.forEach(el => {
+helpers.forEach(function (el) {
 	got.stream[el] = function (url, opts) {
-		return got.stream(url, Object.assign({}, opts, {method: el}));
+		return got.stream(url, Object.assign({}, opts, { method: el }));
 	};
 });
 
@@ -8969,14 +8962,14 @@ got.ParseError = createErrorClass('ParseError', function (e, statusCode, opts, d
 	stdError.call(this, e, opts);
 	this.statusCode = statusCode;
 	this.statusMessage = nodeStatusCodes[this.statusCode];
-	this.message = `${e.message} in "${urlLib.format(opts)}": \n${data.slice(0, 77)}...`;
+	this.message = e.message + ' in "' + urlLib.format(opts) + '": \n' + data.slice(0, 77) + '...';
 });
 
 got.HTTPError = createErrorClass('HTTPError', function (statusCode, opts) {
 	stdError.call(this, {}, opts);
 	this.statusCode = statusCode;
 	this.statusMessage = nodeStatusCodes[this.statusCode];
-	this.message = `Response code ${this.statusCode} (${this.statusMessage})`;
+	this.message = 'Response code ' + this.statusCode + ' (' + this.statusMessage + ')';
 });
 
 got.MaxRedirectsError = createErrorClass('MaxRedirectsError', function (statusCode, opts) {
@@ -8990,7 +8983,7 @@ module.exports = got;
 
 }).call(this,require("buffer").Buffer)
 
-},{"./package.json":295,"buffer":6,"create-error-class":290,"duplexer3":291,"events":292,"get-stream":293,"http":326,"https":296,"is-plain-obj":300,"is-redirect":301,"is-retry-allowed":302,"is-stream":303,"lowercase-keys":305,"node-status-codes":306,"querystring":314,"stream":315,"timed-out":332,"unzip-response":5,"url":335,"url-parse-lax":334}],295:[function(require,module,exports){
+},{"./package.json":295,"buffer":6,"create-error-class":290,"duplexer3":291,"events":292,"get-stream":293,"http":325,"https":296,"is-plain-obj":300,"is-redirect":301,"is-retry-allowed":302,"is-stream":303,"lowercase-keys":305,"node-status-codes":306,"querystring":313,"stream":314,"timed-out":331,"unzip-response":5,"url":334,"url-parse-lax":333}],295:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -9065,7 +9058,7 @@ module.exports={
   "directories": {},
   "dist": {
     "shasum": "eab52adb8b44fad77430ed828d0d531264afb2d7",
-    "tarball": "http://registry.npmjs.org/got/-/got-6.2.0.tgz"
+    "tarball": "https://registry.npmjs.org/got/-/got-6.2.0.tgz"
   },
   "engines": {
     "node": ">=4"
@@ -9119,9 +9112,20 @@ module.exports={
   "version": "6.2.0",
   "xo": {
     "esnext": true
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
   }
 }
-
 },{}],296:[function(require,module,exports){
 var http = require('http');
 
@@ -9138,7 +9142,7 @@ https.request = function (params, cb) {
     return http.request.call(this, params, cb);
 }
 
-},{"http":326}],297:[function(require,module,exports){
+},{"http":325}],297:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -9433,785 +9437,6 @@ module.exports = {
 };
 
 },{}],307:[function(require,module,exports){
-/*
- * notie.js - A clean and simple notification plugin (alert/growl style) for javascript, with no dependencies.
- *
- * Copyright (c) 2015 Jared Reich
- *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/mit-license.php
- *
- * Project home:
- * https://jaredreich.com/projects/notie.js
- *
- * Version:  2.1.0
- *
-*/
-
-var notie = function(){
-
-    // SETTINGS
-    // *********************************************
-    
-    // General
-    var shadow = true;
-    var font_size_small = '18px';
-    var font_size_big = '24px';
-    var font_change_screen_width = 600;
-    var animation_delay = 0.3;
-    var background_click_dismiss = true;
-    
-    // notie.alert colors
-    var alert_color_success_background = '#57BF57';
-    var alert_color_warning_background = '#E3B771';
-    var alert_color_error_background = '#E1715B';
-    var alert_color_info_background = '#4D82D6';
-    var alert_color_text = '#FFF';
-
-    // notie.confirm colors
-    var confirm_and_input_color_background = '#4D82D6';
-    var confirm_and_input_color_yes_background = '#57BF57';
-    var confirm_and_input_color_no_background = '#E1715B';
-    var confirm_and_input_color_text = '#FFF';
-    var confirm_and_input_color_yes_text = '#FFF';
-    var confirm_and_input_color_no_text = '#FFF';
-    
-    // ID's for use within your own .css file (OPTIONAL)
-    // (Be sure to use !important to override the javascript)
-    // Example: #notie-alert-inner { padding: 30px !important; }
-    var alert_outer_id = 'notie-alert-outer';
-    var alert_inner_id = 'notie-alert-inner';
-    var alert_text_id = 'notie-alert-text';
-    var confirm_outer_id = 'notie-confirm-outer';
-    var confirm_inner_id = 'notie-confirm-inner';
-    var confirm_background_id = 'notie-confirm-background';
-    var confirm_yes_id = 'notie-confirm-yes';
-    var confirm_no_id = 'notie-confirm-no';
-    var confirm_text_id = 'notie-confirm-text';
-    var confirm_yes_text_id = 'notie-confirm-yes-text';
-    var confirm_no_text_id = 'notie-confirm-no-text';
-    var input_outer_id = 'notie-input-outer';
-    var input_inner_id = 'notie-input-inner';
-    var input_background_id = 'notie-input-background';
-    var input_div_id = 'notie-input-div';
-    var input_field_id = 'notie-input-field';
-    var input_yes_id = 'notie-input-yes';
-    var input_no_id = 'notie-input-no';
-    var input_text_id = 'notie-input-text';
-    var input_yes_text_id = 'notie-input-yes-text';
-    var input_no_text_id = 'notie-input-no-text';
-    
-    // *********************************************
-    
-    
-    
-    
-    
-    // HELPERS
-    // *********************************************
-    
-    // Function for resize listeners for font-size
-    var resizeListener = function resizeListener(ele) {
-        if (window.innerWidth <= font_change_screen_width) { ele.style.fontSize = font_size_small; }
-        else { ele.style.fontSize = font_size_big; }
-    };
-    
-    
-    // Debounce function (credit to Underscore.js)
-    var debounce_time = 500;
-    var debounce = function debounce(func, wait, immediate) {
-        var timeout;
-        return function() {
-            var context = this, args = arguments;
-            var later = function() {
-                timeout = null;
-                if (!immediate) func.apply(context, args);
-            };
-            var callNow = immediate && !timeout;
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-            if (callNow) func.apply(context, args);
-        };
-    }
-    
-    
-    // Event listener for enter and escape keys
-    window.addEventListener('keydown', function(event) {
-        var enter_clicked = (event.which == 13 || event.keyCode == 13);
-        var escape_clicked = (event.which == 27 || event.keyCode == 27);
-        if (alert_is_showing) {
-            if (enter_clicked || escape_clicked) {
-                clearTimeout(alert_timeout_1);
-                clearTimeout(alert_timeout_2);
-                alert_hide();
-            }
-        }
-        else if (confirm_is_showing) {
-            if (enter_clicked) {
-                confirm_yes.click();
-            }
-            else if (escape_clicked) {
-                confirm_no.click();
-            }
-        }
-        else if (input_is_showing) {
-            if (enter_clicked) {
-                input_yes.click();
-            }
-            else if (escape_clicked) {
-                input_no.click();
-            }
-        }
-    });
-    
-    
-    // addEventListener polyfill, fixes a style.height issue for IE8
-    if (typeof Element.prototype.addEventListener === 'undefined') {
-        Element.prototype.addEventListener = Window.prototype.addEventListener = function (e, callback) {
-            e = 'on' + e;
-            return this.attachEvent(e, callback);
-        };
-    }
-
-
-    // Scroll disable and enable for notie.confirm and notie.input
-    var original_body_height, original_body_overflow;
-    function scroll_disable() {
-        original_body_height = document.body.style.height;
-        original_body_overflow = document.body.style.overflow;
-        document.body.style.height = '100%';
-        document.body.style.overflow = 'hidden';
-    }
-    function scroll_enable() {
-        document.body.style.height = original_body_height;
-        document.body.style.overflow = original_body_overflow;
-    }
-    // *********************************************
-    
-    
-    
-    // NOTIE.ALERT
-    // *********************************************
-
-    // notie elements and styling
-    var alert_outer = document.createElement('div');
-    alert_outer.id = alert_outer_id;
-    alert_outer.style.position = 'fixed';
-    alert_outer.style.top = '0';
-    alert_outer.style.left = '0';
-    alert_outer.style.zIndex = '999999999';
-    alert_outer.style.height = 'auto';
-    alert_outer.style.width = '100%';
-    alert_outer.style.display = 'none';
-    alert_outer.style.textAlign = 'center';
-    alert_outer.style.cursor = 'default';
-    alert_outer.style.MozTransition = '';
-    alert_outer.style.WebkitTransition = '';
-    alert_outer.style.transition = '';
-    alert_outer.style.cursor = 'pointer';
-    
-    // Hide alert on click
-    alert_outer.onclick = function() {
-        clearTimeout(alert_timeout_1);
-        clearTimeout(alert_timeout_2);
-        alert_hide();
-    };
-    
-    var alert_inner = document.createElement('div');
-    alert_inner.id = alert_inner_id;
-    alert_inner.style.padding = '20px';
-    alert_inner.style.display = 'table-cell';
-    alert_inner.style.verticalAlign = 'middle';
-    alert_outer.appendChild(alert_inner);
-    
-    // Initialize notie text
-    var alert_text = document.createElement('span');
-    alert_text.id = alert_text_id;
-    alert_text.style.color = alert_color_text;
-    if (window.innerWidth <= font_change_screen_width) { alert_text.style.fontSize = font_size_small; }
-    else { alert_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, alert_text), debounce_time), true);
-    alert_inner.appendChild(alert_text);
-
-    // Attach notie to the body element
-    document.body.appendChild(alert_outer);
-
-    // Declare variables
-    var height = 0;
-    var alert_is_showing = false;
-    var alert_timeout_1;
-    var alert_timeout_2;
-    var was_clicked_counter = 0;
-
-    function alert(type, message, seconds) {
-        
-        // Blur active element for use of enter key, focus input
-        document.activeElement.blur();
-
-        was_clicked_counter++;
-
-        setTimeout(function() {
-            was_clicked_counter--;
-        }, (animation_delay * 1000 + 10));
-
-        if (was_clicked_counter == 1) {
-
-            if (alert_is_showing) {
-
-                clearTimeout(alert_timeout_1);
-                clearTimeout(alert_timeout_2);
-
-                alert_hide(function() {
-                    alert_show(type, message, seconds);
-                });
-
-            }
-            else {
-                alert_show(type, message, seconds);
-            }
-
-        }
-
-    }
-
-    function alert_show(type, message, seconds) {
-
-        alert_is_showing = true;
-
-        var duration = 0;
-        if (typeof seconds == 'undefined') {
-            var duration = 3000;
-        }
-        else if (seconds < 1) {
-            duration = 1000;
-        }
-        else {
-            duration = seconds * 1000;
-        }
-
-        // Set notie type (background color)
-        switch(type) {
-            case 1:
-                alert_outer.style.backgroundColor = alert_color_success_background;
-                break;
-            case 2:
-                alert_outer.style.backgroundColor = alert_color_warning_background;
-                break;
-            case 3:
-                alert_outer.style.backgroundColor = alert_color_error_background;
-                break;
-            case 4:
-                alert_outer.style.backgroundColor = alert_color_info_background;
-                break;
-        }
-
-        // Set notie text
-        alert_text.innerHTML = message;
-
-        // Get notie's height
-        alert_outer.style.top = '-10000px';
-        alert_outer.style.display = 'table';
-        alert_outer.style.top = '-' + alert_outer.offsetHeight - 5 + 'px';
-
-        alert_timeout_1 = setTimeout(function() {
-
-            if (shadow) { alert_outer.style.boxShadow = '0px 0px 10px 0px rgba(0,0,0,0.5)'; }
-            alert_outer.style.MozTransition = 'all ' + animation_delay + 's ease';
-            alert_outer.style.WebkitTransition = 'all ' + animation_delay + 's ease';
-            alert_outer.style.transition = 'all ' + animation_delay + 's ease';
-
-            alert_outer.style.top = 0;
-
-            alert_timeout_2 = setTimeout(function() {
-
-                alert_hide(function() {
-                    // Nothing
-                });
-
-            }, duration);
-
-        }, 20);
-
-    }
-
-    function alert_hide(callback) {
-
-        alert_outer.style.top = '-' + alert_outer.offsetHeight - 5 + 'px';
-
-        setTimeout(function() {
-
-            if (shadow) { alert_outer.style.boxShadow = ''; }
-            alert_outer.style.MozTransition = '';
-            alert_outer.style.WebkitTransition = '';
-            alert_outer.style.transition = '';
-            
-            alert_outer.style.top = '-10000px';
-
-            alert_is_showing = false;
-
-            if (callback) { callback(); }
-
-        }, (animation_delay * 1000 + 10));
-
-    }
-
-
-
-    // NOTIE.CONFIRM
-    // *********************************************
-
-    // confirm elements and styling
-    var confirm_outer = document.createElement('div');
-    confirm_outer.id = confirm_outer_id;
-    confirm_outer.style.position = 'fixed';
-    confirm_outer.style.top = '0';
-    confirm_outer.style.left = '0';
-    confirm_outer.style.zIndex = '999999998';
-    confirm_outer.style.height = 'auto';
-    confirm_outer.style.width = '100%';
-    confirm_outer.style.display = 'none';
-    confirm_outer.style.textAlign = 'center';
-    confirm_outer.style.MozTransition = '';
-    confirm_outer.style.WebkitTransition = '';
-    confirm_outer.style.transition = '';
-
-    var confirm_background = document.createElement('div');
-    confirm_background.id = confirm_background_id;
-    confirm_background.style.position = 'fixed';
-    confirm_background.style.top = '0';
-    confirm_background.style.left = '0';
-    confirm_background.style.zIndex = '999999997';
-    confirm_background.style.height = '100%';
-    confirm_background.style.width = '100%';
-    confirm_background.style.display = 'none';
-    confirm_background.style.backgroundColor = 'white';
-    confirm_background.style.MozTransition = 'all ' + animation_delay + 's ease';
-    confirm_background.style.WebkitTransition = 'all ' + animation_delay + 's ease';
-    confirm_background.style.transition = 'all ' + animation_delay + 's ease';
-    confirm_background.style.opacity = '0';
-    
-    // Hide notie.confirm on background click
-    confirm_background.onclick = function() {
-        if (background_click_dismiss) {
-            confirm_hide();
-        }
-    };
-
-    var confirm_inner = document.createElement('div');
-    confirm_inner.id = confirm_inner_id;
-    confirm_inner.style.boxSizing = 'border-box';
-    confirm_inner.style.width = '100%';
-    confirm_inner.style.padding = '20px';
-    confirm_inner.style.display = 'block';
-    confirm_inner.style.cursor = 'default';
-    confirm_inner.style.backgroundColor = confirm_and_input_color_background;
-    confirm_outer.appendChild(confirm_inner);
-
-    var confirm_yes = document.createElement('div');
-    confirm_yes.id = confirm_yes_id;
-    confirm_yes.style.cssFloat = 'left';
-    confirm_yes.style.height = '50px';
-    confirm_yes.style.lineHeight = '50px';
-    confirm_yes.style.width = '50%';
-    confirm_yes.style.cursor = 'pointer';
-    confirm_yes.style.backgroundColor = confirm_and_input_color_yes_background;
-    confirm_outer.appendChild(confirm_yes);
-
-    var confirm_no = document.createElement('div');
-    confirm_no.id = confirm_no_id;
-    confirm_no.style.cssFloat = 'right';
-    confirm_no.style.height = '50px';
-    confirm_no.style.lineHeight = '50px';
-    confirm_no.style.width = '50%';
-    confirm_no.style.cursor = 'pointer';
-    confirm_no.style.backgroundColor = confirm_and_input_color_no_background;
-    confirm_no.onclick = function() { confirm_hide(); }
-    confirm_outer.appendChild(confirm_no);
-
-    // Initialize confirm text
-    var confirm_text = document.createElement('span');
-    confirm_text.id = confirm_text_id;
-    confirm_text.style.color = confirm_and_input_color_text;
-    if (window.innerWidth <= font_change_screen_width) { confirm_text.style.fontSize = font_size_small; }
-    else { confirm_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, confirm_text), debounce_time), true);
-    confirm_inner.appendChild(confirm_text);
-
-    var confirm_yes_text = document.createElement('span');
-    confirm_yes_text.id = confirm_yes_text_id;
-    confirm_yes_text.style.color = confirm_and_input_color_yes_text;
-    if (window.innerWidth <= font_change_screen_width) { confirm_yes_text.style.fontSize = font_size_small; }
-    else { confirm_yes_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, confirm_yes_text), debounce_time), true);
-    confirm_yes.appendChild(confirm_yes_text);
-
-    var confirm_no_text = document.createElement('span');
-    confirm_no_text.id = confirm_no_text_id;
-    confirm_no_text.style.color = confirm_and_input_color_no_text;
-    if (window.innerWidth <= font_change_screen_width) { confirm_no_text.style.fontSize = font_size_small; }
-    else { confirm_no_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, confirm_no_text), debounce_time), true);
-    confirm_no.appendChild(confirm_no_text);
-
-    // Attach confirm elements to the body element
-    document.body.appendChild(confirm_outer);
-    document.body.appendChild(confirm_background);
-
-    // Declare variables
-    var confirm_height = 0;
-    var confirm_is_showing = false;
-
-    function confirm(title, yes_text, no_text, yes_callback) {
-        
-        // Blur active element for use of enter key
-        document.activeElement.blur();
-        
-        if (alert_is_showing) {
-            // Hide notie.alert
-            clearTimeout(alert_timeout_1);
-            clearTimeout(alert_timeout_2);
-            alert_hide(function() {
-                confirm_show(title, yes_text, no_text, yes_callback);
-            });
-        }
-        else {
-            confirm_show(title, yes_text, no_text, yes_callback);
-        }
-        
-
-    }
-    function confirm_show(title, yes_text, no_text, yes_callback) {
-
-        scroll_disable();
-
-        // Yes callback function
-        confirm_yes.onclick = function() {
-            confirm_hide();
-            setTimeout(function() {
-                yes_callback();
-            }, (animation_delay * 1000 + 10));
-        }
-
-        function confirm_show_inner() {
-
-            // Set confirm text
-            confirm_text.innerHTML = title;
-            confirm_yes_text.innerHTML = yes_text;
-            confirm_no_text.innerHTML = no_text;
-
-            // Get confirm's height
-            confirm_outer.style.top = '-10000px';
-            confirm_outer.style.display = 'table';
-            confirm_outer.style.top = '-' + confirm_outer.offsetHeight - 5 + 'px';
-            confirm_background.style.display = 'block';
-
-            setTimeout(function() {
-
-                if (shadow) { confirm_outer.style.boxShadow = '0px 0px 10px 0px rgba(0,0,0,0.5)'; }
-                confirm_outer.style.MozTransition = 'all ' + animation_delay + 's ease';
-                confirm_outer.style.WebkitTransition = 'all ' + animation_delay + 's ease';
-                confirm_outer.style.transition = 'all ' + animation_delay + 's ease';
-
-                confirm_outer.style.top = 0;
-                confirm_background.style.opacity = '0.75';
-
-                setTimeout(function() {
-                    confirm_is_showing = true;
-                }, (animation_delay * 1000 + 10));
-
-            }, 20);
-
-        }
-
-        if (confirm_is_showing) {
-            confirm_hide();
-            setTimeout(function() {
-                confirm_show_inner();
-            }, (animation_delay * 1000 + 10));
-        }
-        else {
-            confirm_show_inner();
-        }
-
-    }
-
-    function confirm_hide() {
-
-        confirm_outer.style.top = '-' + confirm_outer.offsetHeight - 5 + 'px';
-        confirm_background.style.opacity = '0';
-
-        setTimeout(function() {
-
-            if (shadow) { confirm_outer.style.boxShadow = ''; }
-            confirm_outer.style.MozTransition = '';
-            confirm_outer.style.WebkitTransition = '';
-            confirm_outer.style.transition = '';
-            confirm_background.style.display = 'none';
-            
-            confirm_outer.style.top = '-10000px';
-
-            scroll_enable();
-
-            confirm_is_showing = false;
-
-        }, (animation_delay * 1000 + 10));
-
-    }
-    
-    
-    
-    
-    // NOTIE.INPUT
-    // *********************************************
-
-    // input elements and styling
-    var input_outer = document.createElement('div');
-    input_outer.id = input_outer_id;
-    input_outer.style.position = 'fixed';
-    input_outer.style.top = '0';
-    input_outer.style.left = '0';
-    input_outer.style.zIndex = '999999998';
-    input_outer.style.height = 'auto';
-    input_outer.style.width = '100%';
-    input_outer.style.display = 'none';
-    input_outer.style.textAlign = 'center';
-    input_outer.style.MozTransition = '';
-    input_outer.style.WebkitTransition = '';
-    input_outer.style.transition = '';
-
-    var input_background = document.createElement('div');
-    input_background.id = input_background_id;
-    input_background.style.position = 'fixed';
-    input_background.style.top = '0';
-    input_background.style.left = '0';
-    input_background.style.zIndex = '999999997';
-    input_background.style.height = '100%';
-    input_background.style.width = '100%';
-    input_background.style.display = 'none';
-    input_background.style.backgroundColor = 'white';
-    input_background.style.MozTransition = 'all ' + animation_delay + 's ease';
-    input_background.style.WebkitTransition = 'all ' + animation_delay + 's ease';
-    input_background.style.transition = 'all ' + animation_delay + 's ease';
-    input_background.style.opacity = '0';
-    
-    // Hide notie.input on background click
-    input_background.onclick = function() {
-        if (background_click_dismiss) {
-            input_hide();
-        }
-    };
-
-    var input_inner = document.createElement('div');
-    input_inner.id = input_inner_id;
-    input_inner.style.boxSizing = 'border-box';
-    input_inner.style.width = '100%';
-    input_inner.style.padding = '20px';
-    input_inner.style.display = 'block';
-    input_inner.style.cursor = 'default';
-    input_inner.style.backgroundColor = confirm_and_input_color_background;
-    input_outer.appendChild(input_inner);
-    
-    var input_div = document.createElement('div');
-    input_div.id = input_div_id;
-    input_div.style.boxSizing = 'border-box';
-    input_div.style.height = '55px';
-    input_div.style.width = '100%';
-    input_div.style.display = 'block';
-    input_div.style.cursor = 'default';
-    input_div.style.backgroundColor = '#FFF';
-    input_outer.appendChild(input_div);
-    
-    var input_field = document.createElement('input');
-    input_field.id = input_field_id;    
-    input_field.setAttribute('autocomplete', 'off');
-    input_field.setAttribute('autocorrect', 'off');
-    input_field.setAttribute('autocapitalize', 'off');
-    input_field.setAttribute('spellcheck', 'false');
-    input_field.style.boxSizing = 'border-box';
-    input_field.style.height = '55px';
-    input_field.style.width = '100%';
-    input_field.style.textAlign = 'center';
-    input_field.style.textIndent = '10px';
-    input_field.style.paddingRight = '10px';
-    input_field.style.outline = '0';
-    input_field.style.border = '0';
-    input_field.style.fontFamily = 'inherit';
-    input_field.style.fontSize = font_size_big;
-    if (window.innerWidth <= font_change_screen_width) { input_field.style.fontSize = font_size_small; }
-    else { input_field.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, input_field), debounce_time), true);
-    input_div.appendChild(input_field);
-
-    var input_yes = document.createElement('div');
-    input_yes.id = input_yes_id;
-    input_yes.style.cssFloat = 'left';
-    input_yes.style.height = '50px';
-    input_yes.style.lineHeight = '50px';
-    input_yes.style.width = '50%';
-    input_yes.style.cursor = 'pointer';
-    input_yes.style.backgroundColor = confirm_and_input_color_yes_background;
-    input_outer.appendChild(input_yes);
-
-    var input_no = document.createElement('div');
-    input_no.id = input_no_id;
-    input_no.style.cssFloat = 'right';
-    input_no.style.height = '50px';
-    input_no.style.lineHeight = '50px';
-    input_no.style.width = '50%';
-    input_no.style.cursor = 'pointer';
-    input_no.style.backgroundColor = confirm_and_input_color_no_background;
-    input_no.onclick = function() { input_hide(); }
-    input_outer.appendChild(input_no);
-
-    // Initialize input text
-    var input_text = document.createElement('span');
-    input_text.id = input_text_id;
-    input_text.style.color = confirm_and_input_color_text;
-    if (window.innerWidth <= font_change_screen_width) { input_text.style.fontSize = font_size_small; }
-    else { input_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, input_text), debounce_time), true);
-    input_inner.appendChild(input_text);
-
-    var input_yes_text = document.createElement('span');
-    input_yes_text.id = input_yes_text_id;
-    input_yes_text.style.color = confirm_and_input_color_yes_text;
-    if (window.innerWidth <= font_change_screen_width) { input_yes_text.style.fontSize = font_size_small; }
-    else { input_yes_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, input_yes_text), debounce_time), true);
-    input_yes.appendChild(input_yes_text);
-
-    var input_no_text = document.createElement('span');
-    input_no_text.id = input_no_text_id;
-    input_no_text.style.color = confirm_and_input_color_no_text;
-    if (window.innerWidth <= font_change_screen_width) { input_no_text.style.fontSize = font_size_small; }
-    else { input_no_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, input_no_text), debounce_time), true);
-    input_no.appendChild(input_no_text);
-
-    // Attach input elements to the body element
-    document.body.appendChild(input_outer);
-    document.body.appendChild(input_background);
-
-    // Declare variables
-    var input_height = 0;
-    var input_is_showing = false;
-
-    function input(title, submit_text, cancel_text, type, placeholder, submit_callback, prefilled_value_optional) {
-        
-        // Blur active element for use of enter key, focus input
-        document.activeElement.blur();
-        setTimeout(function() { input_field.focus(); }, (animation_delay * 1000));
-        
-        input_field.setAttribute('type', type);
-        input_field.setAttribute('placeholder', placeholder);
-        input_field.value = '';
-        if (typeof prefilled_value_optional !== 'undefined' && prefilled_value_optional.length > 0) { input_field.value = prefilled_value_optional }
-        
-        if (alert_is_showing) {
-            // Hide notie.alert
-            clearTimeout(alert_timeout_1);
-            clearTimeout(alert_timeout_2);
-            alert_hide(function() {
-                input_show(title, submit_text, cancel_text, submit_callback);
-            });
-        }
-        else {
-            input_show(title, submit_text, cancel_text, submit_callback);
-        }
-
-    }
-    function input_show(title, submit_text, cancel_text, submit_callback) {
-
-        scroll_disable();
-
-        // Yes callback function
-        input_yes.onclick = function() {
-            input_hide();
-            setTimeout(function() {
-                submit_callback(input_field.value);
-            }, (animation_delay * 1000 + 10));
-        }
-
-        function input_show_inner() {
-
-            // Set input text
-            input_text.innerHTML = title;
-            input_yes_text.innerHTML = submit_text;
-            input_no_text.innerHTML = cancel_text;
-
-            // Get input's height
-            input_outer.style.top = '-10000px';
-            input_outer.style.display = 'table';
-            input_outer.style.top = '-' + input_outer.offsetHeight - 5 + 'px';
-            input_background.style.display = 'block';
-
-            setTimeout(function() {
-
-                if (shadow) { input_outer.style.boxShadow = '0px 0px 10px 0px rgba(0,0,0,0.5)'; }
-                input_outer.style.MozTransition = 'all ' + animation_delay + 's ease';
-                input_outer.style.WebkitTransition = 'all ' + animation_delay + 's ease';
-                input_outer.style.transition = 'all ' + animation_delay + 's ease';
-
-                input_outer.style.top = 0;
-                input_background.style.opacity = '0.75';
-
-                setTimeout(function() {
-                    input_is_showing = true;
-                }, (animation_delay * 1000 + 10));
-
-            }, 20);
-
-        }
-
-        if (input_is_showing) {
-            input_hide();
-            setTimeout(function() {
-                input_show_inner();
-            }, (animation_delay * 1000 + 10));
-        }
-        else {
-            input_show_inner();
-        }
-
-    }
-
-    function input_hide() {
-
-        input_outer.style.top = '-' + input_outer.offsetHeight - 5 + 'px';
-        input_background.style.opacity = '0';
-
-        setTimeout(function() {
-
-            if (shadow) { input_outer.style.boxShadow = ''; }
-            input_outer.style.MozTransition = '';
-            input_outer.style.WebkitTransition = '';
-            input_outer.style.transition = '';
-            input_background.style.display = 'none';
-            
-            input_outer.style.top = '-10000px';
-
-            scroll_enable();
-
-            input_is_showing = false;
-
-        }, (animation_delay * 1000 + 10));
-
-    }
-    
-    
-    
-    return {
-        alert: alert,
-        confirm: confirm,
-        input: input
-    };
-
-}();
-
-if (typeof module !== 'undefined' && module) {
-    module.exports = notie;
-}
-},{}],308:[function(require,module,exports){
 'use strict';
 module.exports = function (url) {
 	if (typeof url !== 'string') {
@@ -10227,7 +9452,7 @@ module.exports = function (url) {
 	return url.replace(/^(?!(?:\w+:)?\/\/)/, 'http://');
 };
 
-},{}],309:[function(require,module,exports){
+},{}],308:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -10252,7 +9477,7 @@ function nextTick(fn) {
 
 }).call(this,require('_process'))
 
-},{"_process":310}],310:[function(require,module,exports){
+},{"_process":309}],309:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -10345,7 +9570,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],311:[function(require,module,exports){
+},{}],310:[function(require,module,exports){
 (function (global){
 /*! https://mths.be/punycode v1.4.0 by @mathias */
 ;(function(root) {
@@ -10883,7 +10108,7 @@ process.umask = function() { return 0; };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],312:[function(require,module,exports){
+},{}],311:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -10969,7 +10194,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],313:[function(require,module,exports){
+},{}],312:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -11056,13 +10281,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],314:[function(require,module,exports){
+},{}],313:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":312,"./encode":313}],315:[function(require,module,exports){
+},{"./decode":311,"./encode":312}],314:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -11191,10 +10416,10 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":292,"inherits":298,"readable-stream/duplex.js":316,"readable-stream/passthrough.js":322,"readable-stream/readable.js":323,"readable-stream/transform.js":324,"readable-stream/writable.js":325}],316:[function(require,module,exports){
+},{"events":292,"inherits":298,"readable-stream/duplex.js":315,"readable-stream/passthrough.js":321,"readable-stream/readable.js":322,"readable-stream/transform.js":323,"readable-stream/writable.js":324}],315:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":317}],317:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":316}],316:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -11278,7 +10503,7 @@ function forEach (xs, f) {
   }
 }
 
-},{"./_stream_readable":319,"./_stream_writable":321,"core-util-is":289,"inherits":298,"process-nextick-args":309}],318:[function(require,module,exports){
+},{"./_stream_readable":318,"./_stream_writable":320,"core-util-is":289,"inherits":298,"process-nextick-args":308}],317:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -11307,7 +10532,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":320,"core-util-is":289,"inherits":298}],319:[function(require,module,exports){
+},{"./_stream_transform":319,"core-util-is":289,"inherits":298}],318:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12287,7 +11512,7 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":317,"_process":310,"buffer":6,"core-util-is":289,"events":292,"inherits":298,"isarray":304,"process-nextick-args":309,"string_decoder/":331,"util":5}],320:[function(require,module,exports){
+},{"./_stream_duplex":316,"_process":309,"buffer":6,"core-util-is":289,"events":292,"inherits":298,"isarray":304,"process-nextick-args":308,"string_decoder/":330,"util":5}],319:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -12486,7 +11711,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":317,"core-util-is":289,"inherits":298}],321:[function(require,module,exports){
+},{"./_stream_duplex":316,"core-util-is":289,"inherits":298}],320:[function(require,module,exports){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
 // the drain event emission and buffering.
@@ -13017,10 +12242,10 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"./_stream_duplex":317,"buffer":6,"core-util-is":289,"events":292,"inherits":298,"process-nextick-args":309,"util-deprecate":337}],322:[function(require,module,exports){
+},{"./_stream_duplex":316,"buffer":6,"core-util-is":289,"events":292,"inherits":298,"process-nextick-args":308,"util-deprecate":336}],321:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":318}],323:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":317}],322:[function(require,module,exports){
 var Stream = (function (){
   try {
     return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
@@ -13034,13 +12259,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":317,"./lib/_stream_passthrough.js":318,"./lib/_stream_readable.js":319,"./lib/_stream_transform.js":320,"./lib/_stream_writable.js":321}],324:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":316,"./lib/_stream_passthrough.js":317,"./lib/_stream_readable.js":318,"./lib/_stream_transform.js":319,"./lib/_stream_writable.js":320}],323:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":320}],325:[function(require,module,exports){
+},{"./lib/_stream_transform.js":319}],324:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":321}],326:[function(require,module,exports){
+},{"./lib/_stream_writable.js":320}],325:[function(require,module,exports){
 (function (global){
 var ClientRequest = require('./lib/request')
 var extend = require('xtend')
@@ -13123,7 +12348,7 @@ http.METHODS = [
 ]
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./lib/request":328,"builtin-status-codes":8,"url":335,"xtend":330}],327:[function(require,module,exports){
+},{"./lib/request":327,"builtin-status-codes":8,"url":334,"xtend":329}],326:[function(require,module,exports){
 (function (global){
 exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableByteStream)
 
@@ -13168,7 +12393,7 @@ xhr = null // Help gc
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],328:[function(require,module,exports){
+},{}],327:[function(require,module,exports){
 (function (process,global,Buffer){
 // var Base64 = require('Base64')
 var capability = require('./capability')
@@ -13451,7 +12676,7 @@ var unsafeHeaders = [
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
 
-},{"./capability":327,"./response":329,"_process":310,"buffer":6,"inherits":298,"stream":315,"to-arraybuffer":333}],329:[function(require,module,exports){
+},{"./capability":326,"./response":328,"_process":309,"buffer":6,"inherits":298,"stream":314,"to-arraybuffer":332}],328:[function(require,module,exports){
 (function (process,global,Buffer){
 var capability = require('./capability')
 var inherits = require('inherits')
@@ -13634,7 +12859,7 @@ IncomingMessage.prototype._onXHRProgress = function () {
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
 
-},{"./capability":327,"_process":310,"buffer":6,"inherits":298,"stream":315}],330:[function(require,module,exports){
+},{"./capability":326,"_process":309,"buffer":6,"inherits":298,"stream":314}],329:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -13655,7 +12880,7 @@ function extend() {
     return target
 }
 
-},{}],331:[function(require,module,exports){
+},{}],330:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -13878,7 +13103,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":6}],332:[function(require,module,exports){
+},{"buffer":6}],331:[function(require,module,exports){
 'use strict';
 
 module.exports = function (req, time) {
@@ -13914,7 +13139,7 @@ module.exports = function (req, time) {
 		.on('error', clear);
 };
 
-},{}],333:[function(require,module,exports){
+},{}],332:[function(require,module,exports){
 var Buffer = require('buffer').Buffer
 
 module.exports = function (buf) {
@@ -13943,7 +13168,7 @@ module.exports = function (buf) {
 	}
 }
 
-},{"buffer":6}],334:[function(require,module,exports){
+},{"buffer":6}],333:[function(require,module,exports){
 'use strict';
 var url = require('url');
 var prependHttp = require('prepend-http');
@@ -13959,7 +13184,7 @@ module.exports = function (x) {
 	return parsed;
 };
 
-},{"prepend-http":308,"url":335}],335:[function(require,module,exports){
+},{"prepend-http":307,"url":334}],334:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -14693,7 +13918,7 @@ Url.prototype.parseHost = function() {
   if (host) this.hostname = host;
 };
 
-},{"./util":336,"punycode":311,"querystring":314}],336:[function(require,module,exports){
+},{"./util":335,"punycode":310,"querystring":313}],335:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -14711,7 +13936,7 @@ module.exports = {
   }
 };
 
-},{}],337:[function(require,module,exports){
+},{}],336:[function(require,module,exports){
 (function (global){
 
 /**

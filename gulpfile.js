@@ -20,6 +20,7 @@ var coForEach = require('co-foreach')
 var username = require('username')
 var _ = require('lodash')
 var moment = require('moment')
+var jetpack = require('fs-jetpack')
 
 
 gulp.task('default', function() {
@@ -58,7 +59,7 @@ gulp.task('nodemon', cb => {
 
 gulp.task('browser-sync', () =>
   browserSync.init({
-    proxy: "localhost:8080",
+    proxy: "192.168.1.10:8080",
     files: [
       //path.join('appmodules', '**', '*.*')
       path.join(__dirname, 'appmodules', 'server', 'views', '*.jade')
@@ -119,38 +120,38 @@ gulp.task('browserify', () => {
       entries: [entry],
       debug: true
     })
-        .transform("babelify", {
-          presets: ["es2015"],
-          sourceMaps: true
-        })
-        .on('error', function(err){
-          console.log('error with browserify')
-          gutil.log(err.message)
-          this.emit('end')
-        })
-        .bundle()
-        .on('error', function(err){
-          console.log('error with browserify')
-          gutil.log(err.message)
-          this.emit('end')
-        })
-        .pipe(source(entry))
-        .pipe(rename({
-          dirname: 'js',
-          extname: '-bundle.js'
-        }))
-        .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(path.join(__dirname, 'frontend', 'static')))
-        /****
-         * browserSync.stream messes up here - I think it's becuase we're mapping, so we're
-         * calling it 4 times instead of once. Could individually get around it by using
-         * {match:}, but its easier to just call reload from the 'watch-js' task
-         * after the whole 'browserify' task has finished.
-         */
-        //.pipe(browserSync.stream({match: '**/settingsPage-bundle.js'}))
-        //.pipe(browserSync.stream())
+    .transform("babelify", {
+      presets: ["es2015"],
+      sourceMaps: true
+    })
+    .on('error', function(err){
+      console.log('error with browserify')
+      gutil.log(err.message)
+      this.emit('end')
+    })
+    .bundle()
+    .on('error', function(err){
+      console.log('error with browserify')
+      gutil.log(err.message)
+      this.emit('end')
+    })
+    .pipe(source(entry))
+    .pipe(rename({
+      dirname: 'js',
+      extname: '-bundle.js'
+    }))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest(path.join(__dirname, 'frontend', 'static')))
+    /****
+     * browserSync.stream messes up here - I think it's becuase we're mapping, so we're
+     * calling it 4 times instead of once. Could individually get around it by using
+     * {match:}, but its easier to just call reload from the 'watch-js' task
+     * after the whole 'browserify' task has finished.
+     */
+    //.pipe(browserSync.stream({match: '**/settingsPage-bundle.js'}))
+    //.pipe(browserSync.stream())
   })
   // create a merged stream
   return eventStream.merge.apply(null, tasks)
@@ -347,4 +348,29 @@ gulp.task('modulesize', () => {
           `)
     }
   })
+})
+
+gulp.task('alterGotPackageJson', () => {
+  /****
+   * details in miscNotes.txt
+   */
+  var gotPackageJsonFilePath = path.join(__dirname, 'node_modules', 'got', 'package.json')
+  jetpack.readAsync(gotPackageJsonFilePath, 'json')
+    .then(jsonData => {
+      jsonData.browserify = {
+        transform: [
+          [
+            "babelify",
+            {
+              "presets": [
+                "es2015"
+              ]
+            }
+          ]
+        ]
+      }
+      return jetpack.writeAsync(gotPackageJsonFilePath, jsonData, 'json')
+    })
+    .then(() => console.log(`got's package.json successfully altered`))
+    .catch(err => console.error(`there was an error altering got's package.json`, err))
 })

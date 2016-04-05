@@ -5,7 +5,6 @@ import { updateResults } from './resultsObject'
 import { chunkResults } from './chunkResults'
 
 import got from 'got'
-import _ from 'lodash'
 import Promise from 'bluebird'
 
 /****

@@ -25,6 +25,7 @@
     "modernizer": "~2.8.2",
     "jquery": "~2.2.0",
     "clipboard": "~1.5.5",
-    "buttonplate": "~2.0.3"
+    "buttonplate": "~2.0.3",
+    "notie": "*"
   }
 }

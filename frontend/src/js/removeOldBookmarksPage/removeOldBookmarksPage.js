@@ -1,9 +1,8 @@
 'use strict';
 
-/* globals rows, buttonplate  */
+/* globals rows, buttonplate notie */
 import "babel-polyfill"
 import got from 'got'
-import notie from 'notie'
 
 $(document).ready(settingsPageInit)
 

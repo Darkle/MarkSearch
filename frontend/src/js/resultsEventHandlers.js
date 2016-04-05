@@ -1,11 +1,12 @@
 'use strict';
 
+/* globals notie  */
+
 import { csrfToken } from './searchPage'
 import { queryServerAndRender } from './queryServerAndRender'
 
 import got from 'got'
 import _ from 'lodash'
-import notie from 'notie'
 
 /****
  * Exporting and showSafeBrowsingDetails & deletePageFromMarksearch so

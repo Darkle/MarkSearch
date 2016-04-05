@@ -134,7 +134,7 @@ function searchPageInit(event){
     )
 
   addUrlsInit()
-  
+
 }
 /****
  * Exports

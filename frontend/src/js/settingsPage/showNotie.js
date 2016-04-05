@@ -1,8 +1,8 @@
 'use strict';
 
-import { notieAlert$ } from './settingsPage'
+/* globals notie  */
 
-import notie from 'notie'
+import { notieAlert$ } from './settingsPage'
 
 function showNotie(alertType, alertMessage, duration){
   var classToAdd = alertType === 3 ? 'notie-alert-error' : 'notie-alert-success'
