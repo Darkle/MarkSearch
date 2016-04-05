@@ -76,7 +76,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",
-    "ndu": "^1.1.1",
+    "ndu": "^1.1.2",
     "run-sequence": "^1.1.5",
     "shelljs": "^0.6.0",
     "snyk": "^1.13.2",
