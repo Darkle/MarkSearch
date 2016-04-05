@@ -12,12 +12,7 @@
     electron-v0.37-darwin-x64/node_sqlite3.node'", try using a symlink in the
     "/node_modules/sqlite3/lib/binding/" folder. So create a symlink for the node-v47-darwin-x64
     folder and name the symlink electron-v0.37-darwin-x64
-* got needs to be transformed on the frontend with browserify & babelify (modules in node_modules folder
-    are not transformed by default: https://github.com/babel/babelify#why-arent-files-in-node_modules-being-transformed
-    so remember to add:
-    +  "browserify": {
-     +    "transform": [["babelify", { "presets": ["es2015"] }]]
-     +  }
-     to got's package.json
-     more details: https://github.com/sindresorhus/got/pull/192/files
+* stick with got version 5 so it works in the browser (if there is a need to upgrade, info here: http://bit.ly/1Xe6sPZ)
+    but may as well stick with got version 5
+
 

@@ -30,8 +30,7 @@ function expressInit(express, expressApp){
    */
   expressApp.use(helmet.csp({
     directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'"]
+      defaultSrc: ["'self'"]
     },
     reportOnly: false,
     setAllHeaders: false,

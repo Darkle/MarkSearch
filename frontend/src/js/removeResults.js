@@ -36,7 +36,12 @@ function removeResults(){
    * this time too because the 0 from last time is still showing, so hide it.
    */
   resultsCountDiv$.addClass('visibilityHidden')
-  //$(window).scrollTop(0)
+  /****
+   * The scrollTop(0) is for ios7 safari - if using the date filter, sometimes the
+   * results are obscured at the top by the date filter box (almost as if the browser scrolls
+   * down a bit). Setting it to scrollTop(0) makes sure that the top results are visable.
+   */
+  $(window).scrollTop(0)
 }
 /****
  * Exports
