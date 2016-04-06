@@ -5,6 +5,12 @@ var Crypto = require('crypto')
 
 var inspector = require('schema-inspector')
 var _ = require('lodash')
+/****
+ * Note: use blubird promises because if we were to return a Promise.reject() and 
+ * the caller of appSettings.update uses .bind(), that would cause an
+ * uncaughtException as native promise bind is a bit different.
+ */
+var Promise = require('bluebird')
 
 var appLogger = require('../utils/appLogger')
 var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
@@ -169,6 +175,13 @@ appSettings.update = (settingsKeyValObj) => {
                       Error(s): ${validatedSettingsKeyValObj.format()}`
     console.error(errMessage)
     appLogger.log.error({err: errMessage})
+    /****
+     * Note: we need to return a blubird promise here, in case we use bluebird's
+     * bind method when calling appSettings.update. Returning a native promise
+     * would cause an uncaughtException error as native promise bind is a bit different.
+     * Also, throwing an error here would also cause an uncaughtException error
+     * because we wouldn't be returning a bluebird promise.
+     */
     return Promise.reject(errMessage)
   }
   return appSettings.db('appSettings')

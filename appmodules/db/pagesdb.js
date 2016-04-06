@@ -2,116 +2,15 @@
 
 var inspector = require('schema-inspector')
 var _ = require('lodash')
+/****
+ * Note: we need blubird promises (info in comments below).
+ */
+var Promise = require('bluebird')
 
 var appLogger = require('../utils/appLogger')
 var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
+var schemas = require('./pagesdbSanitizationAndValidationSchemas')
 
-/****
- * Pages DB Validation Schemas
- */
-var upsertRowValidation = {
-  type: 'object',
-  strict: true,
-  properties: {
-    pageUrl: {
-      type: 'string'
-    },
-    dateCreated: {
-      type: 'integer',
-      gt: 0,
-      error: 'dateCreated must be a valid integer and larger than 0'
-    },
-    pageDomain: {
-      type: ['string']
-    },
-    pageTitle: {
-      type: ['string', 'null']
-    },
-    pageText: {
-      type: ['string', 'null']
-    },
-    pageDescription: {
-      type: ['string', 'null']
-    },
-    archiveLink: {
-      type: ['string', 'null']
-    },
-    safeBrowsing: {
-      type: ['string', 'null']
-    }
-  }
-}
-/****
- * The updateColumnValidation is slightly different as it doesn't
- * always have data for every column.
- */
-var updateColumnValidation = {
-  type: 'object',
-  strict: true,
-  someKeys: [
-    'dateCreated',
-    'pageDomain',
-    'pageTitle',
-    'pageText',
-    'pageDescription',
-    'archiveLink',
-    'safeBrowsing',
-    'checkedForExpiry'
-  ],
-  properties: {
-    dateCreated: {
-      type: 'integer',
-      optional: true,
-      gt: 0,
-      error: 'dateCreated must be a valid integer and larger than 0'
-    },
-    pageDomain: {
-      type: ['string'],
-      optional: true
-    },
-    pageTitle: {
-      type: ['string', 'null'],
-      optional: true
-    },
-    pageText: {
-      type: ['string', 'null'],
-      optional: true
-    },
-    pageDescription: {
-      type: ['string', 'null'],
-      optional: true
-    },
-    archiveLink: {
-      type: ['string', 'null'],
-      optional: true
-    },
-    safeBrowsing: {
-      type: ['string', 'null'],
-      optional: true
-    },
-    checkedForExpiry: {
-      type: 'boolean',
-      optional: true
-    },
-  }
-}
-
-function coerceIncomingColumnData(dataObj){
-  if(dataObj.pageUrl){
-    dataObj.pageUrl = _.toLower(dataObj.pageUrl)
-  }
-  if(dataObj.dateCreated){
-    dataObj.dateCreated = _.toInteger(dataObj.dateCreated)
-  }
-  /****
-   * _.isObject(dataObj.safeBrowsing) will also return false if
-   * dataObj.safeBrowsing does not exist
-   */
-  if(_.isObject(dataObj.safeBrowsing)){
-    dataObj.safeBrowsing = JSON.stringify(dataObj.safeBrowsing)
-  }
-  return dataObj
-}
 
 var pagesdb = {}
 
@@ -175,52 +74,68 @@ pagesdb.init = (pagesDBFilePath) => {
 }
 
 pagesdb.updateColumns = (columnsDataObj) => {
-  var coercedColumnsDataObj = coerceIncomingColumnData(columnsDataObj)
-  var pageUrlPrimaryKey = coercedColumnsDataObj.pageUrl
-  var coercedColumnsDataObjNoPageUrl = _.omit(coercedColumnsDataObj, ['pageUrl'])
-  var validatedColumnsDataObj = inspector.validate(updateColumnValidation, coercedColumnsDataObjNoPageUrl)
 
+  inspector.sanitize(schemas.updateColumnSanitization, columnsDataObj)
+
+  var validatedColumnsDataObj = inspector.validate(schemas.updateColumnValidation, columnsDataObj)
   if(!validatedColumnsDataObj.valid){
     var errMessage = `Error, passed in column data did not pass validation.
                       Error(s): ${validatedColumnsDataObj.format()}`
     console.error(errMessage)
     appLogger.log.error({err: errMessage})
+    /****
+     * Note: we need to return a blubird promise here, because we use bluebird's
+     * bind method in addPage.js and returning a native promise would cause an
+     * uncaughtException error as native promise bind is a bit different.
+     * Also, throwing an error here would also cause an uncaughtException error
+     * because we wouldn't be returning a bluebird promise.
+     */
     return Promise.reject(errMessage)
   }
+
+  var pageUrlPrimaryKey = columnsDataObj.pageUrl
+  var columnsDataObjNoPageUrl = _.omit(columnsDataObj, ['pageUrl'])
+
   return pagesdb
     .db('pages')
     .where('pageUrl', pageUrlPrimaryKey)
-    .update(coercedColumnsDataObjNoPageUrl)
+    .update(columnsDataObjNoPageUrl)
     .then(() =>
       pagesdb
         .db('fts')
         .where('pageUrl', pageUrlPrimaryKey)
-        .update(coercedColumnsDataObjNoPageUrl)
+        .update(columnsDataObjNoPageUrl)
     )
 }
 
 pagesdb.upsertRow = (rowDataObj) => {
-  var coercedPageDataObj = coerceIncomingColumnData(rowDataObj)
-  var validatedPageDataObj = inspector.validate(upsertRowValidation, coercedPageDataObj)
 
+  inspector.sanitize(schemas.upsertRowSanitization, rowDataObj)
+
+  var validatedPageDataObj = inspector.validate(schemas.upsertRowValidation, rowDataObj)
   if(!validatedPageDataObj.valid){
     var errMessage = `Error, passed in row data did not pass validation.
                       Error(s): ${validatedPageDataObj.format()}`
     console.error(errMessage)
     appLogger.log.error({err: errMessage})
+    /****
+     * Note: we need to return a blubird promise here, because we use bluebird's
+     * bind method in addPage.js and returning a native promise would cause an
+     * uncaughtException error as native promise bind is a bit different.
+     * Also, throwing an error here would also cause an uncaughtException error
+     * because we wouldn't be returning a bluebird promise.
+     */
     return Promise.reject(errMessage)
   }
   return pagesdb
     .db('pages')
-    .where({
-      pageUrl: coercedPageDataObj.pageUrl
-    })
+    .where('pageUrl', rowDataObj.pageUrl)
     .then( rows => {
       if(rows.length){
-        return pagesdb.updateColumns(coercedPageDataObj)
+        return pagesdb.updateColumns(rowDataObj)
       }
       else{
-        return pagesdb.insertRow(coercedPageDataObj)
+        return pagesdb.insertRow(rowDataObj)
       }
     })
 }
