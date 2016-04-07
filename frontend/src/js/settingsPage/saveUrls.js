@@ -32,9 +32,20 @@ function saveUrls(urlsToSave){
       catch(err){
         console.error(err)
         error = err
-        var errMessage = _.get(error, 'response.body') || ''
-        if(errMessage){
-          errMessage = JSON.parse(errMessage).errorMessage
+        var errMessage = ''
+        var responseBody = _.get(error, 'response.body')
+        var parsedResponseBody
+        if(responseBody.length){
+          try{
+            parsedResponseBody = JSON.parse(responseBody)
+          }
+          catch(e){}
+        }
+        if(_.get(parsedResponseBody, 'errorMessage')){
+          errMessage = parsedResponseBody.errorMessage
+        }
+        else if(_.get(parsedResponseBody, 'errMessage')){
+          errMessage = parsedResponseBody.errMessage
         }
         urlsThatErrored.push({
           url: url,

@@ -301,7 +301,7 @@ function addUrlsInit() {
     $.Velocity.animate(progressBar$[0], { width: progressStepAmount * 0.25 }, 3000, 'easeOutExpo');
 
     (0, _suspend2.default)(regeneratorRuntime.mark(function _callee() {
-      var error, urlsThatErrored, i, encodedUrl, errMessage, ul$, errorTextBeginning, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, errUrl;
+      var error, urlsThatErrored, i, encodedUrl, errMessage, responseBody, parsedResponseBody, ul$, errorTextBeginning, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, errUrl;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
@@ -312,7 +312,7 @@ function addUrlsInit() {
 
             case 2:
               if (!(i < trimmedUrlsArray.length)) {
-                _context.next = 21;
+                _context.next = 23;
                 break;
               }
 
@@ -324,7 +324,7 @@ function addUrlsInit() {
               return _got2.default.post('/frontendapi/scrapeAndAdd/' + encodedUrl, { headers: { 'X-CSRF-Token': _searchPage.csrfToken } });
 
             case 9:
-              _context.next = 18;
+              _context.next = 20;
               break;
 
             case 11:
@@ -333,26 +333,32 @@ function addUrlsInit() {
 
               console.error(_context.t0);
               error = _context.t0;
-              errMessage = _lodash2.default.get(error, 'response.body');
+              errMessage = '';
+              responseBody = _lodash2.default.get(error, 'response.body');
 
-              if (errMessage) {
-                errMessage = JSON.parse(errMessage).errorMessage;
-              } else {
-                errMessage = '';
+              if (responseBody.length) {
+                try {
+                  parsedResponseBody = JSON.parse(responseBody);
+                } catch (e) {}
+              }
+              if (_lodash2.default.get(parsedResponseBody, 'errorMessage')) {
+                errMessage = parsedResponseBody.errorMessage;
+              } else if (_lodash2.default.get(parsedResponseBody, 'errMessage')) {
+                errMessage = parsedResponseBody.errMessage;
               }
               urlsThatErrored.push({
                 url: trimmedUrlsArray[i],
                 errMessage: errMessage
               });
 
-            case 18:
+            case 20:
               i++;
               _context.next = 2;
               break;
 
-            case 21:
+            case 23:
               if (!error) {
-                _context.next = 55;
+                _context.next = 57;
                 break;
               }
 
@@ -373,51 +379,51 @@ function addUrlsInit() {
               _iteratorNormalCompletion = true;
               _didIteratorError = false;
               _iteratorError = undefined;
-              _context.prev = 36;
+              _context.prev = 38;
               for (_iterator = urlsThatErrored[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 errUrl = _step.value;
 
                 $('<li>' + errUrl.url + ' - reason: ' + errUrl.errMessage + '</li>').appendTo(ul$);
               }
-              _context.next = 44;
+              _context.next = 46;
               break;
 
-            case 40:
-              _context.prev = 40;
-              _context.t1 = _context['catch'](36);
+            case 42:
+              _context.prev = 42;
+              _context.t1 = _context['catch'](38);
               _didIteratorError = true;
               _iteratorError = _context.t1;
 
-            case 44:
-              _context.prev = 44;
-              _context.prev = 45;
+            case 46:
+              _context.prev = 46;
+              _context.prev = 47;
 
               if (!_iteratorNormalCompletion && _iterator.return) {
                 _iterator.return();
               }
 
-            case 47:
-              _context.prev = 47;
+            case 49:
+              _context.prev = 49;
 
               if (!_didIteratorError) {
-                _context.next = 50;
+                _context.next = 52;
                 break;
               }
 
               throw _iteratorError;
 
-            case 50:
-              return _context.finish(47);
-
-            case 51:
-              return _context.finish(44);
-
             case 52:
+              return _context.finish(49);
+
+            case 53:
+              return _context.finish(46);
+
+            case 54:
               progressInfo$.append(ul$);
-              _context.next = 59;
+              _context.next = 61;
               break;
 
-            case 55:
+            case 57:
               progressBar$.velocity("stop");
               $.Velocity.animate(progressBar$[0], { width: progressBarContainerWidth }, 10, 'easeOutExpo');
               progressInfo$.text('All URLs Saved');
@@ -426,12 +432,12 @@ function addUrlsInit() {
                 hideShowAddPageSubbar(refreshResults);
               }, 2500);
 
-            case 59:
+            case 61:
             case 'end':
               return _context.stop();
           }
         }
-      }, _callee, this, [[6, 11], [36, 40, 44, 52], [45,, 47, 51]]);
+      }, _callee, this, [[6, 11], [38, 42, 46, 54], [47,, 49, 53]]);
     }))();
   }, 3000, {
     'leading': true,

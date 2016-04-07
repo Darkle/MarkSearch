@@ -194,6 +194,8 @@ function getErrorMessage(err) {
   }
   if (_lodash2.default.get(parsedResponseBody, 'errorMessage')) {
     errorMessage = parsedResponseBody.errorMessage;
+  } else if (_lodash2.default.get(parsedResponseBody, 'errMessage')) {
+    errorMessage = parsedResponseBody.errMessage;
   }
   return errorMessage;
 }
@@ -359,7 +361,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 function saveUrls(urlsToSave) {
   (0, _suspend2.default)(regeneratorRuntime.mark(function _callee(urlsToSave) {
-    var progressBarContainerWidth, urlsThatErrored, progressStepAmount, error, index, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, url, encodedUrl, errMessage, ul$, errorTextBeginning, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, errUrl;
+    var progressBarContainerWidth, urlsThatErrored, progressStepAmount, error, index, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, url, encodedUrl, errMessage, responseBody, parsedResponseBody, ul$, errorTextBeginning, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, errUrl;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -382,7 +384,7 @@ function saveUrls(urlsToSave) {
 
           case 12:
             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context.next = 33;
+              _context.next = 35;
               break;
             }
 
@@ -397,7 +399,7 @@ function saveUrls(urlsToSave) {
             return _got2.default.post('/frontendapi/scrapeAndAdd/' + encodedUrl, { headers: _settingsPage.xhrHeaders });
 
           case 21:
-            _context.next = 30;
+            _context.next = 32;
             break;
 
           case 23:
@@ -406,58 +408,66 @@ function saveUrls(urlsToSave) {
 
             console.error(_context.t0);
             error = _context.t0;
-            errMessage = _lodash2.default.get(error, 'response.body') || '';
+            errMessage = '';
+            responseBody = _lodash2.default.get(error, 'response.body');
 
-            if (errMessage) {
-              errMessage = JSON.parse(errMessage).errorMessage;
+            if (responseBody.length) {
+              try {
+                parsedResponseBody = JSON.parse(responseBody);
+              } catch (e) {}
+            }
+            if (_lodash2.default.get(parsedResponseBody, 'errorMessage')) {
+              errMessage = parsedResponseBody.errorMessage;
+            } else if (_lodash2.default.get(parsedResponseBody, 'errMessage')) {
+              errMessage = parsedResponseBody.errMessage;
             }
             urlsThatErrored.push({
               url: url,
               errMessage: errMessage
             });
 
-          case 30:
+          case 32:
             _iteratorNormalCompletion = true;
             _context.next = 12;
             break;
 
-          case 33:
-            _context.next = 39;
+          case 35:
+            _context.next = 41;
             break;
 
-          case 35:
-            _context.prev = 35;
+          case 37:
+            _context.prev = 37;
             _context.t1 = _context['catch'](10);
             _didIteratorError = true;
             _iteratorError = _context.t1;
 
-          case 39:
-            _context.prev = 39;
-            _context.prev = 40;
+          case 41:
+            _context.prev = 41;
+            _context.prev = 42;
 
             if (!_iteratorNormalCompletion && _iterator.return) {
               _iterator.return();
             }
 
-          case 42:
-            _context.prev = 42;
+          case 44:
+            _context.prev = 44;
 
             if (!_didIteratorError) {
-              _context.next = 45;
+              _context.next = 47;
               break;
             }
 
             throw _iteratorError;
 
-          case 45:
-            return _context.finish(42);
-
-          case 46:
-            return _context.finish(39);
-
           case 47:
+            return _context.finish(44);
+
+          case 48:
+            return _context.finish(41);
+
+          case 49:
             if (!error) {
-              _context.next = 81;
+              _context.next = 83;
               break;
             }
 
@@ -478,51 +488,51 @@ function saveUrls(urlsToSave) {
             _iteratorNormalCompletion2 = true;
             _didIteratorError2 = false;
             _iteratorError2 = undefined;
-            _context.prev = 62;
+            _context.prev = 64;
             for (_iterator2 = urlsThatErrored[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
               errUrl = _step2.value;
 
               $('<li>' + errUrl.url + ' - reason: ' + errUrl.errMessage + '</li>').appendTo(ul$);
             }
-            _context.next = 70;
+            _context.next = 72;
             break;
 
-          case 66:
-            _context.prev = 66;
-            _context.t2 = _context['catch'](62);
+          case 68:
+            _context.prev = 68;
+            _context.t2 = _context['catch'](64);
             _didIteratorError2 = true;
             _iteratorError2 = _context.t2;
 
-          case 70:
-            _context.prev = 70;
-            _context.prev = 71;
+          case 72:
+            _context.prev = 72;
+            _context.prev = 73;
 
             if (!_iteratorNormalCompletion2 && _iterator2.return) {
               _iterator2.return();
             }
 
-          case 73:
-            _context.prev = 73;
+          case 75:
+            _context.prev = 75;
 
             if (!_didIteratorError2) {
-              _context.next = 76;
+              _context.next = 78;
               break;
             }
 
             throw _iteratorError2;
 
-          case 76:
-            return _context.finish(73);
-
-          case 77:
-            return _context.finish(70);
-
           case 78:
+            return _context.finish(75);
+
+          case 79:
+            return _context.finish(72);
+
+          case 80:
             _settingsPage.progressInfo$.append(ul$);
-            _context.next = 85;
+            _context.next = 87;
             break;
 
-          case 81:
+          case 83:
             _settingsPage.progressBar$.velocity("stop");
             $.Velocity.animate(_settingsPage.progressBar$[0], { width: progressBarContainerWidth }, 10, 'easeOutExpo');
             _settingsPage.progressInfo$.text('All URLs Saved');
@@ -530,12 +540,12 @@ function saveUrls(urlsToSave) {
               (0, _hideShowAddPageSubbar.hidePageSubbarAndReset)();
             }, 3500);
 
-          case 85:
+          case 87:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[10, 35, 39, 47], [18, 23], [40,, 42, 46], [62, 66, 70, 78], [71,, 73, 77]]);
+    }, _callee, this, [[10, 37, 41, 49], [18, 23], [42,, 44, 48], [64, 68, 72, 80], [73,, 75, 79]]);
   }))(urlsToSave);
 }
 

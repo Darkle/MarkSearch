@@ -15,7 +15,7 @@ function getErrorMessage(err){
   if(_.get(parsedResponseBody, 'errorMessage')){
     errorMessage = parsedResponseBody.errorMessage
   }
-  if(_.get(parsedResponseBody, 'errMessage')){
+  else if(_.get(parsedResponseBody, 'errMessage')){
     errorMessage = parsedResponseBody.errMessage
   }
   return errorMessage
