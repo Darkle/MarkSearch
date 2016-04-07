@@ -3,7 +3,7 @@
 var inspector = require('schema-inspector')
 
 var appLogger = require('./../utils/appLogger')
-var schemas = require('./requestDataValidationSchema')
+var schemas = require('./requestDataValidationAndSanitizationSchema')
 
 function requestDataValidation(req, res, next){
 

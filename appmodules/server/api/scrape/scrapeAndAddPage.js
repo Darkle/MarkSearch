@@ -8,7 +8,7 @@ var inspector = require('schema-inspector')
 
 var addPage = require('../addPage')
 var appLogger = require('../../../utils/appLogger')
-var schemas = require('../../requestDataValidationSchema')
+var schemas = require('../../requestDataValidationAndSanitizationSchema')
 
 var electron = require('electron')
 var BrowserWindow = electron.BrowserWindow
