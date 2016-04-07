@@ -14,89 +14,7 @@ var Promise = require('bluebird')
 
 var appLogger = require('../utils/appLogger')
 var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
-
-/****
- * App Settings Validation Schema
- */
-var appSettingsValidation = {
-  type: 'object',
-  strict: true,
-  someKeys: [
-    'pagesDBFilePath',
-    'prebrowsing',
-    'alwaysDisableTooltips',
-    'bookmarkExpiryEnabled',
-    'bookmarkExpiryEmail',
-    'bookmarkExpiryMonths',
-    'bookmarkExpiryLastCheck',
-    'serverPort'
-  ],
-  properties: {
-    pagesDBFilePath: {
-      type: 'string',
-      optional: true
-    },
-    prebrowsing: {
-      type: 'boolean',
-      optional: true
-    },
-    alwaysDisableTooltips: {
-      type: 'boolean',
-      optional: true
-    },
-    bookmarkExpiryEnabled: {
-      type: 'boolean',
-      optional: true
-    },
-    bookmarkExpiryEmail: {
-      type: 'string',
-      optional: true
-    },
-    bookmarkExpiryMonths: {
-      type: 'integer',
-      eq: [3, 6],
-      error: 'bookmarkExpiryMonths must be a an integer of 3 or 6',
-      optional: true
-    },
-    bookmarkExpiryLastCheck: {
-      type: 'integer',
-      gt: 0,
-      error: 'bookmarkExpiryLastCheck must be a valid integer and larger than 0',
-      optional: true
-    },
-    serverPort: {
-      type: 'integer',
-      gt: 0,
-      error: 'serverPort must be a valid integer and larger than 0',
-      optional: true
-    }
-  }
-}
-
-/****
- * Coerce the true/false/Integer values might get back from frontend as when they send
- * settings via ajax, they are converted to string, so convert back to their proper type.
- *
- * Also, SQLite stores Boolean values as a 0 for false or 1 for true, so convert them to
- * boolean when getting settings from the db, so they are slightly easier to work with.
- */
-function coerceSettingsValuesInAndOut(dataObj){
-  return _.mapValues(dataObj, (val, key) => {
-    if(val === 'false'){
-      val = false
-    }
-    if(val === 'true'){
-      val = true
-    }
-    if(key === 'prebrowsing' || key === 'alwaysDisableTooltips' || key === 'bookmarkExpiryEnabled'){
-      val = Boolean(val)
-    }
-    if(key === 'bookmarkExpiryMonths' || key === 'bookmarkExpiryLastCheck' || key === 'serverPort'){
-      val = _.toInteger(val)
-    }
-    return val
-  })
-}
+var schemas = require('./appSettingsSanitizationAndValidationSchemas')
 
 var appSettings = {}
 
@@ -160,16 +78,22 @@ appSettings.init = (appDataPath) => {
      * Gonna cache the settings to make them slightly easier to access
      * (as a js object) and slightly faster (e.g. for settings router.get('/')
      * uses et.al.)
+     *
+     * We sanitize on the way out too for converting the SQLite boolean values
+     * from 1/0 to true/false for easier use.
      */
-    appSettings.settings = coerceSettingsValuesInAndOut(rows[0])
+    inspector.sanitize(schemas.appSettingsSanitization, rows[0])
+    appSettings.settings = rows[0]
     return rows[0].pagesDBFilePath
   })
 }
 
 appSettings.update = (settingsKeyValObj) => {
-  var coercedSettingsKeyValObj = _.omit(coerceSettingsValuesInAndOut(settingsKeyValObj), ['JWTsecret', 'id'])
-  var validatedSettingsKeyValObj = inspector.validate(appSettingsValidation, coercedSettingsKeyValObj)
+  var settingsKeyValObjSansJWTsecret = _.omit(settingsKeyValObj, ['JWTsecret', 'id'])
 
+  inspector.sanitize(schemas.appSettingsSanitization, settingsKeyValObjSansJWTsecret)
+
+  var validatedSettingsKeyValObj = inspector.validate(schemas.appSettingsValidation, settingsKeyValObjSansJWTsecret)
   if(!validatedSettingsKeyValObj.valid){
     var errMessage = `Error, passed in app settings did not pass validation.
                       Error(s): ${validatedSettingsKeyValObj.format()}`
@@ -186,14 +110,17 @@ appSettings.update = (settingsKeyValObj) => {
   }
   return appSettings.db('appSettings')
     .where('id', 'appSettings')
-    .update(coercedSettingsKeyValObj)
+    .update(settingsKeyValObjSansJWTsecret)
     .return(appSettings.db('appSettings').where('id', 'appSettings'))
     .then( rows => {
-      appSettings.settings = coerceSettingsValuesInAndOut(rows[0])
+      /****
+       * We sanitize on the way out too for converting the SQLite boolean values
+       * from 1/0 to true/false for easier use.
+       */
+      inspector.sanitize(schemas.appSettingsSanitization, rows[0])
+      appSettings.settings = rows[0]
     })
 }
-
-
 
 
 module.exports = appSettings

@@ -12,26 +12,19 @@ var mailGun = new MailGun({
 })
 
 function emailBookmarklet(req, res, next){
-  var email = JSON.parse(req.body.email)
-  
-  mailGun.validateEmail(email)
-  .then(res => {
-    if(!res.is_valid){
-      throw new Error('not a valid email address')
-    }
-    else {
-      return mailGun.sendEmail({
-        to: [email],
-        from: 'bookmarklet@marksearch.local',
-        subject: 'MarkSearch Bookmarklet',
-        html: `<div style="font-size: 1rem; margin-bottom: 1rem;">
+  /****
+   * req.body.email is validated in requestDataValidation.js
+   */
+  mailGun.sendEmail({
+      to: [req.body.email],
+      from: 'bookmarklet@marksearch.local',
+      subject: 'MarkSearch Bookmarklet',
+      html: `<div style="font-size: 1rem; margin-bottom: 1rem;">
                 Open the page below in your mobile device, then bookmark the link shown on that page:
                </div>
               <a style="font-size: 1rem;" href="${global.msServerAddr.combined}/bookmarklet">${global.msServerAddr.combined}/bookmarklet</a>
                 `
-      })
-    }
-  })
+    })
   .then(mailgunResponse => {
     console.log(`emailBookmarklet mailgun response: ${mailgunResponse.message}`)
     res.status(200).end()

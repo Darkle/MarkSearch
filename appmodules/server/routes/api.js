@@ -5,7 +5,7 @@ var requireDir = require('require-dir')
 var _ = require('lodash')
 
 var router = express.Router()
-var requestDataValidation = require('../../utils/requestDataValidation')
+var requestDataValidation = require('../requestDataValidation')
 var apiModules = requireDir('../api')
 var search = require('../api/search/search')
 

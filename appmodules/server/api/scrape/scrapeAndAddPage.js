@@ -4,8 +4,11 @@ var fs = require('fs')
 var url = require('url')
 var path = require('path')
 
+var inspector = require('schema-inspector')
+
 var addPage = require('../addPage')
 var appLogger = require('../../../utils/appLogger')
+var schemas = require('../../requestDataValidationSchema')
 
 var electron = require('electron')
 var BrowserWindow = electron.BrowserWindow
@@ -24,12 +27,16 @@ var devMode = process.env.NODE_ENV === 'development'
  * via ipcMain.on('returnDocDetails'.
  * Doing it this way as using a webview tag is a bit more secure than a regular
  * BrowserWindow. http://bit.ly/218pBce
+ *
  */
 
 var browserWindow
 
 function scrapeAndAddPage(req, res, next) {
 
+  /****
+   * req.params.pageUrl is validated in requestDataValidation.js
+   */
   var urlToScrape = req.params.pageUrl
 
   // browserWindow = new BrowserWindow({show: devMode})
@@ -92,7 +99,24 @@ function scrapeAndAddPage(req, res, next) {
     req.body.pageDescription = docDetails.documentDescription
     browserWindow.destroy()
     // console.dir(req.body)
-    addPage(req, res, next)
+    /*
+    * We need to do req.body sanitization & validate here as scrapeAndAddPage only gets passed
+    * the req.params.pageUrl and we make the req.body.pageTitle etc. here from
+    * the scrape, so need to validate the new req.body stuff in here.
+    */ 
+    inspector.sanitize(schemas.reqBodySanitization, req.body)
+
+    var validReqBody = inspector.validate(schemas.reqBodyValidation, req.body)
+    if(!validReqBody.valid){
+      let errMessage = `Error(s) with the req.body data in scrapeAndAddPage : ${validReqBody.format()}`
+      let err = new Error(errMessage)
+      console.error(errMessage)
+      appLogger.log.error({err})
+      res.status(500).json(errMessage)
+    }
+    else{
+      addPage(req, res, next)
+    }
   })
 
 }

@@ -11,7 +11,6 @@ import _ from 'lodash'
 import DOMPurify from 'dompurify'
 import moment from 'moment'
 import stem from 'stem-porter'
-import validator from 'validator'
 
 /****
  * Exports
@@ -93,7 +92,7 @@ function renderResults(resultsChunk, searchTerms){
         if(row.pageTitle){
           pageTitle = _.trim(row.pageTitle)
         }
-        mainResultA.textContent = validator.unescape((pageTitle.length > 0) ? pageTitle : row.pageUrl)
+        mainResultA.textContent = (pageTitle.length > 0) ? pageTitle : row.pageUrl
         mainResultLink.appendChild(mainResultA)
 
         var resultUrlText = document.createElement('div')
@@ -175,13 +174,13 @@ function renderResults(resultsChunk, searchTerms){
         }
         var description = document.createElement('p')
         description.className = 'description'
-
+        var resultDescription = ''
         if(row.snippet){
           /****
-           * The snippet is set to -1 (in server side search.js) which means it chooses
+           * The snippet is set to -1 (on server side in search.js) which means it chooses
            * the column automatically and it usually picks a pageText snippet, however
            * the bm25 is set to boost the pageTitle & pageDescription, so if those are
-           * selected, then the pageText snippet ends up having no highlighting applied
+           * selected, then the snippet ends up having no highlighting applied
            * to the tokens (search terms), so gonna manually add them if not already there
            * in the snippet.
            */
@@ -200,11 +199,16 @@ function renderResults(resultsChunk, searchTerms){
                 row.snippet = row.snippet.replace(regex, replacement)
               })
           }
-          description.innerHTML = DOMPurify.sanitize(validator.unescape(_.trim(row.snippet)))
+          resultDescription = row.snippet
         }
+        /****
+         * Fall back to showing the pageDescription in case a snippet isn't
+         * generated.
+         */
         else if(row.pageDescription){
-          description.textContent = _.trim(validator.unescape(row.pageDescription))
+          resultDescription = row.pageDescription
         }
+        description.innerHTML = DOMPurify.sanitize(_.trim(resultDescription))
         mainDetails.appendChild(description)
 
         var metaIconsContainer = document.createElement('div')

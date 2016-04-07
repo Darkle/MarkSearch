@@ -140,6 +140,8 @@ function settingsPageInit(event){
   })
   /****
    * Email bookmarklet
+   *
+   * (we do validation of the email server side)
    */
   emailBookmarkletButton$.click( event => {
     event.preventDefault()
@@ -153,7 +155,7 @@ function settingsPageInit(event){
           {
             headers: xhrHeaders,
             body: {
-              email: JSON.stringify(bookmarkletEmail),
+              email: bookmarkletEmail,
               bookmarkletText: generatedBookmarkletText
             }
           }

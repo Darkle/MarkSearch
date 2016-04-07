@@ -38,7 +38,7 @@ function expressInit(express, expressApp){
     browserSniff: true
   }))
   /****
-   * xssFilter FWIW
+   * xssFilter header FWIW
    * https://github.com/helmetjs/helmet#xss-filter-xssfilter
    */
   expressApp.use(helmet.xssFilter())

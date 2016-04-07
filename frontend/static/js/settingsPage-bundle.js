@@ -735,6 +735,8 @@ function settingsPageInit(event) {
   });
   /****
    * Email bookmarklet
+   *
+   * (we do validation of the email server side)
    */
   emailBookmarkletButton$.click(function (event) {
     event.preventDefault();
@@ -746,7 +748,7 @@ function settingsPageInit(event) {
       return _got2.default.post('/frontendapi/settings/emailBookmarklet', {
         headers: xhrHeaders,
         body: {
-          email: JSON.stringify(bookmarkletEmail),
+          email: bookmarkletEmail,
           bookmarkletText: generatedBookmarkletText
         }
       });

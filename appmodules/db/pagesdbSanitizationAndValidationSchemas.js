@@ -25,6 +25,9 @@ var _ = require('lodash')
  *
  * note: we dont use 'strict: true' for the upsertRowSanitization as we are
  * not sanitizing every object key.
+ * 
+ * note: remember if adding anything new, that 'post' in the exec functions can be undefined, so may need
+ * to check against that.
  */
 
 module.exports = {

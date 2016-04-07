@@ -13,7 +13,7 @@ var generateBookmarkletJS = require('../generateBookmarkletJS')
 var generateJWTtoken = require('../../utils/generateJWTtoken')
 var getAllExpiredBookmarks = require('../bookmarkExpiry').getAllExpiredBookmarks
 var appLogger = require('../../utils/appLogger')
-var requestDataValidation = require('../../utils/requestDataValidation')
+var requestDataValidation = require('../requestDataValidation')
 
 var router = express.Router()
 
