@@ -73,7 +73,7 @@ function expressInit(express, expressApp){
    * Routes
    */
   expressApp.use('/api', authorizationCheck, api)
-  expressApp.use('/', csurf({ cookie: true, httpOnly: true }), routes)
+  expressApp.use('/', csurf({ cookie: {httpOnly: true} }), routes)
 
   expressErrorMiddleware(expressApp)
 
