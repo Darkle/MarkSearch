@@ -18,7 +18,7 @@ function updateMarkSearchSettings(req, res, next){
       if(!_.isString(errorMessage)){
         errorMessage = JSON.stringify(err.message)
       }
-      res.status(500).json({errorMessage: errorMessage})
+      res.status(500).json({errorMessage})
     })
 
 }

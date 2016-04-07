@@ -13,7 +13,7 @@ function checkIfFileIsBinary(req, res, next){
       if(err){
         errorMessage = err.message
       }
-      res.status(500).json({errorMessage: errorMessage})
+      res.status(500).json({errorMessage})
     }
     else{
       res.status(200).end()

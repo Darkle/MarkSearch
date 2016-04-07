@@ -112,7 +112,7 @@ function scrapeAndAddPage(req, res, next) {
       let err = new Error(errMessage)
       console.error(errMessage)
       appLogger.log.error({err})
-      res.status(500).json(errMessage)
+      res.status(500).json({errorMessage: errMessage})
     }
     else{
       addPage(req, res, next)

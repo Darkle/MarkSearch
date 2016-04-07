@@ -8,7 +8,7 @@ var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var csurf = require('csurf')
 var compression = require('compression')
-var addRequestId = require('express-request-id')()
+var addRequestId = require('express-request-id')({setHeader: false})
 
 var authorizationCheck = require('./authorizationCheck')
 var expressErrorMiddleware = require('./expressErrorMiddleware')
@@ -60,7 +60,7 @@ function expressInit(express, expressApp){
   /****
    * The api gets sent the text of the page, so in the off chance that it
    * encounters a page with a huge amount of text, increase the size limit that
-   * can be sent via post body. (the limit is '100kb')
+   * can be sent via post body. (the default is '100kb')
    * (some of wikipedias biggest articles can be over 1mb in size)
    * https://github.com/expressjs/body-parser#limit-3
    */
