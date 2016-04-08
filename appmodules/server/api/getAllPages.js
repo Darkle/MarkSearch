@@ -7,7 +7,22 @@ var appLogger = require('../../utils/appLogger')
 function getAllPages(req, res, next) {
 
   var dateFilter = checkAndCoerceDateFilterParams(req.body)
-  var pagesdbSelect = pagesdb.db('pages')
+  /****
+   * Omiting the pageText as that will be fairly large and we don't need that
+   * for getAllPages request.
+   * Also don't need checkedForExpiry or pageDomain.
+   */
+  var pagesdbSelect = pagesdb
+                        .db
+                        .select(
+                          'pageUrl',
+                          'pageTitle',
+                          'pageDescription',
+                          'dateCreated',
+                          'archiveLink',
+                          'safeBrowsing'
+                        )
+                        .from('pages')
 
   if(dateFilter){
     pagesdbSelect = pagesdbSelect

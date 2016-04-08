@@ -21,7 +21,6 @@ var username = require('username')
 var _ = require('lodash')
 var moment = require('moment')
 var jetpack = require('fs-jetpack')
-var uglify = require('gulp-uglify')
 var symlink = require('fs-symlink')
 var replace = require('gulp-replace')
 
@@ -123,13 +122,13 @@ gulp.task('browserify', () => {
   var tasks = files.map(function(entry){
     return browserify({
       entries: [entry],
-      // debug: true,
+      debug: true,
       // fullPaths: true  //only enable this for if want to run discify below
     })
     .transform("babelify",
       {
         presets: ["es2015"],
-        // sourceMaps: true
+        sourceMaps: true
       }
     )
     .on('error', function(err){
@@ -149,9 +148,12 @@ gulp.task('browserify', () => {
       extname: '-bundle.js'
     }))
     .pipe(buffer())
-    // .pipe(sourcemaps.init({loadMaps: true}))
-    // .pipe(sourcemaps.write('./'))
-    .pipe(uglify())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.write('./'))
+    /****
+     * uglify seemed to have some issue with es2015 stuff
+     */
+    // .pipe(uglify())
     /****
      * For some reason browserify is including details from the
      * package.json from the got module which includes path username,

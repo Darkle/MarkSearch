@@ -28,11 +28,10 @@ function exportUrls(typeOfExport){
         }
         _.each(rows, pageData => {
           /****
-           * If there's no pageTitle, then use the pageDomain with a random number
-           * string attached to make it unique.
+           * If there's no pageTitle, then use the pageUrl as the title.
            */
           if(!pageData.pageTitle || !_.trim(pageData.pageTitle).length){
-            pageData.pageTitle = pageData.pageDomain + _.random(0, 1000000)
+            pageData.pageTitle = pageData.pageUrl
           }
           bookmarks["MarkSearch Bookmarks"].contents[pageData.pageTitle] = pageData.pageUrl
         })

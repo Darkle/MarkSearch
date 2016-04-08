@@ -21,9 +21,24 @@ function search(req, res, next){
   if(!searchTerms.length){
     /****
      * If user just wants to list all saved pages by a domain (with no text search)
+     *
      */
     if(domainToSearchFor){
-      knexSQL = pagesdb.db('pages').where({pageDomain: domainToSearchFor})
+      /****
+       * Omiting the pageText as that will be fairly large and we don't need that.
+       * Also don't need checkedForExpiry.
+       */
+      knexSQL = pagesdb.db.select(
+                  'pageUrl',
+                  'pageDomain',
+                  'pageTitle',
+                  'pageDescription',
+                  'dateCreated',
+                  'archiveLink',
+                  'safeBrowsing'
+                )
+                .from('pages')
+                .where({pageDomain: domainToSearchFor})
       if(dateFilter){
         knexSQL = knexSQL
           .where('dateCreated', '>=', dateFilter.dateFilterStartDate)

@@ -76,7 +76,6 @@
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
     "ndu": "^1.1.2",
     "nsp": "^2.3.0",
