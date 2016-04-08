@@ -22,6 +22,8 @@ var _ = require('lodash')
 var moment = require('moment')
 var jetpack = require('fs-jetpack')
 var uglify = require('gulp-uglify')
+var symlink = require('fs-symlink')
+var replace = require('gulp-replace')
 
 
 gulp.task('default', function() {
@@ -108,6 +110,8 @@ gulp.task('less', () =>
  * http://fettblog.eu/gulp-browserify-multiple-bundles/
  */
 gulp.task('browserify', () => {
+  var uName = username.sync()
+  var regexForReplace = new RegExp(uName,'gi')
   var files = [
     path.join(__dirname, 'frontend', 'src', 'js', 'searchPage.js'),
     path.join(__dirname, 'frontend', 'src', 'js', 'settingsPage', 'settingsPage.js'),
@@ -119,15 +123,14 @@ gulp.task('browserify', () => {
   var tasks = files.map(function(entry){
     return browserify({
       entries: [entry],
-      debug: true,
+      // debug: true,
       // fullPaths: true  //only enable this for if want to run discify below
     })
     .transform("babelify",
       {
         presets: ["es2015"],
-        sourceMaps: true
-      },
-      'uglifyify'
+        // sourceMaps: true
+      }
     )
     .on('error', function(err){
       console.log('error with browserify')
@@ -146,9 +149,15 @@ gulp.task('browserify', () => {
       extname: '-bundle.js'
     }))
     .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(sourcemaps.write('./'))
-    // .pipe(uglify())
+    // .pipe(sourcemaps.init({loadMaps: true}))
+    // .pipe(sourcemaps.write('./'))
+    .pipe(uglify())
+    /****
+     * For some reason browserify is including details from the
+     * package.json from the got module which includes path username,
+     * so remove that.
+     */
+    .pipe(replace(regexForReplace, ''))
     .pipe(gulp.dest(path.join(__dirname, 'frontend', 'static')))
     /****
      * browserSync.stream messes up here - I think it's becuase we're mapping, so we're
@@ -166,7 +175,7 @@ gulp.task('browserify', () => {
 gulp.task('sqlite3', () => {
   //var osxSqliteBinaryDir = path.join(__dirname, 'sqliteBinaries', 'osx_x86_64', '3.10.2')
   var osxSqliteBinaryDir = '/usr/local/Cellar/sqlite/3.12.0/'
-  shell.exec(
+  return shell.exec(
       `npm install sqlite3 --save --build-from-source --sqlite=${osxSqliteBinaryDir}`,
       (exitCode, stdout, stderr) => {
         if(exitCode !== 0){
@@ -176,6 +185,21 @@ gulp.task('sqlite3', () => {
             Program output: ${stdout}
             Program stderr: ${stderr}
           `)
+        }
+        else{
+          /****
+           * Details on why need this in miscNotes.txt
+           */
+          console.log('Successfully compiled sqlite3')
+          var nodeBindingDefaultFolder = path.join(__dirname, 'node_modules', 'sqlite3', 'lib', 'binding', 'node-v47-darwin-x64')
+          var nodeBindingSymlink = path.join(__dirname, 'node_modules', 'sqlite3', 'lib', 'binding', 'electron-v0.37-darwin-x64')
+          return symlink(nodeBindingDefaultFolder, nodeBindingSymlink, 'dir')
+                  .then(() => {
+                    console.log('Successfully created symlink')
+                  })
+                  .catch(err => {
+                    console.error(`error creating symlink`, err)
+                  })
         }
       }
   )
@@ -190,7 +214,7 @@ gulp.task('selfsign', () => {
    * second time without --deep seems to work. ¯\_(ツ)_/¯
    * (note: may still need to confirm the accept incomming connections dialog once).
    */
-  shell.exec(`${shellTask} --deep`, (exitCode, stdout, stderr) => {
+  return shell.exec(`${shellTask} --deep`, (exitCode, stdout, stderr) => {
     if(exitCode === 0){
       shell.exec(shellTask, (exitCode, stdout, stderr) => {
         if(exitCode !== 0){
@@ -328,7 +352,7 @@ gulp.task('servermodulesize', () => {
    */
   var nduAppPath = path.join(__dirname, 'node_modules', '.bin', 'ndu')
   var nduOutputFilePath = path.join('/Users', username.sync(), 'Desktop', 'nduAppNpmModuleSizes.html')
-  shell.exec(`${nduAppPath} > ${nduOutputFilePath}`, (exitCode, stdout, stderr) => {
+  return shell.exec(`${nduAppPath} > ${nduOutputFilePath}`, (exitCode, stdout, stderr) => {
     if(exitCode === 0){
       console.log('modulesize exec completed successfully')
       shell.exec(`open -a "Google Chrome" ${nduOutputFilePath}`, (exitCode, stdout, stderr) => {
@@ -406,7 +430,7 @@ gulp.task('frontendmodulesize', () => {
 //    * details in miscNotes.txt
 //    */
 //   var gotPackageJsonFilePath = path.join(__dirname, 'node_modules', 'got', 'package.json')
-//   jetpack.readAsync(gotPackageJsonFilePath, 'json')
+//   return jetpack.readAsync(gotPackageJsonFilePath, 'json')
 //     .then(jsonData => {
 //       jsonData.browserify = {
 //         transform: [

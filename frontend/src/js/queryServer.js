@@ -22,22 +22,22 @@ function queryServer(searchTerms, dateFilter){
   return Promise
           .resolve(
             got.post(
-                  postUrl,
-                  {
-                    headers: {
-                      'X-CSRF-Token': csrfToken
-                    },
-                    body: dateFilter
-                  }
-                )
-                .then( response => {
-                  var rows = JSON.parse(response.body)
-                  /****
-                   * chunkResults returns an empty object if responseData.rows is empty
-                   */
-                  updateResults(chunkResults(rows))
-                  return rows
-                })
+              postUrl,
+              {
+                headers: {
+                  'X-CSRF-Token': csrfToken
+                },
+                body: dateFilter
+              }
+            )
+            .then( response => {
+              var rows = JSON.parse(response.body)
+              /****
+               * chunkResults returns an empty object if responseData.rows is empty
+               */
+              updateResults(chunkResults(rows))
+              return rows
+            })
           )
 }
 
