@@ -21,6 +21,7 @@ var username = require('username')
 var _ = require('lodash')
 var moment = require('moment')
 var jetpack = require('fs-jetpack')
+var uglify = require('gulp-uglify')
 
 
 gulp.task('default', function() {
@@ -121,10 +122,13 @@ gulp.task('browserify', () => {
       debug: true,
       // fullPaths: true  //only enable this for if want to run discify below
     })
-    .transform("babelify", {
-      presets: ["es2015"],
-      sourceMaps: true
-    })
+    .transform("babelify",
+      {
+        presets: ["es2015"],
+        sourceMaps: true
+      },
+      'uglifyify'
+    )
     .on('error', function(err){
       console.log('error with browserify')
       gutil.log(err.message)
@@ -144,6 +148,7 @@ gulp.task('browserify', () => {
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(sourcemaps.write('./'))
+    // .pipe(uglify())
     .pipe(gulp.dest(path.join(__dirname, 'frontend', 'static')))
     /****
      * browserSync.stream messes up here - I think it's becuase we're mapping, so we're
