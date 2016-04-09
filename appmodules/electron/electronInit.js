@@ -24,7 +24,7 @@ function electronInit(){
 
       electronApp.on('will-quit', () => {
         /****
-         * Disconnect knex sqlite connection
+         * Disconnect knex sqlite connections
          */
         if(pagesdb.db){
           pagesdb.db.destroy()

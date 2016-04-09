@@ -63,8 +63,6 @@ function safeBrowsingCheck(pageUrl){
        * We're not doing a reject here as we want to continue on to the
        * next promise. It's not the end of the world if
        * we dont get a safe browsing check for the page.
-       * Also, we dont want to send an error back to the calling "then" as
-       * we are saving that for database errors on the
        */
       if(error){
         console.error("Couldn't get safebrowsing details :", error)

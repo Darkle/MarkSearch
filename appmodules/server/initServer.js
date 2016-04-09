@@ -16,7 +16,7 @@ function initServer(expressApp){
       if(portInUse){
         /****
          * Get a new port if the one we were going to use is already in use,
-         * and save the new one to the appSettings db.
+         * and save the new port number to the appSettings db.
          */
         return getPort()
                 .then(newServerPort => appSettings.update({serverPort: newServerPort}))
@@ -27,7 +27,7 @@ function initServer(expressApp){
         var server = http.createServer(expressApp)
         /****
          * Need to specify the ipv4 address, otherwise it may use a
-         * loopback address, which may not be accessable by other
+         * loopback address, which wont make it accessable by other
          * devices on the network.
          * http://bit.ly/1SnIpu2
          */

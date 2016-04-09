@@ -18,8 +18,6 @@ function generateArchiveOfPage(pageUrl){
              * We're not doing a reject here as we want to continue on to the
              * next promise (safeBrowsing). It's not the end of the world if
              * we dont get an archive link for the page.
-             * Also, we dont want to send an error back to the calling "then" as
-             * we are saving that for database errors on the
              */
           }
           else{

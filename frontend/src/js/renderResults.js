@@ -11,6 +11,7 @@ import _ from 'lodash'
 import DOMPurify from 'dompurify'
 import moment from 'moment'
 import stem from 'stem-porter'
+import validator from 'validator'
 
 /****
  * Exports
@@ -92,7 +93,10 @@ function renderResults(resultsChunk, searchTerms){
         if(row.pageTitle){
           pageTitle = _.trim(row.pageTitle)
         }
-        mainResultA.textContent = (pageTitle.length > 0) ? pageTitle : row.pageUrl
+        /****
+         * unescape should be ok here as we are using textContent and not innerHTML
+         */
+        mainResultA.textContent = validator.unescape((pageTitle.length > 0) ? pageTitle : row.pageUrl)
         mainResultLink.appendChild(mainResultA)
 
         var resultUrlText = document.createElement('div')
@@ -175,7 +179,7 @@ function renderResults(resultsChunk, searchTerms){
         var description = document.createElement('p')
         description.className = 'description'
         var resultDescription = ''
-        if(row.snippet){
+        if(row.snippet && row.snippet.length){
           /****
            * The snippet is set to -1 (on server side in search.js) which means it chooses
            * the column automatically and it usually picks a pageText snippet, however

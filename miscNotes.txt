@@ -14,5 +14,6 @@
     folder and name the symlink electron-v0.37-darwin-x64
 * stick with got version 5 so it works in the browser (if there is a need to upgrade, info here: http://bit.ly/1Xe6sPZ)
     but may as well stick with got version 5
-
+* maybe the sqlite corruption occurs when I'm ading stuff to pages db and i also have it open in the
+    sqlite browser?
 
