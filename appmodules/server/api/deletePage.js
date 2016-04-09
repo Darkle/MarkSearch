@@ -4,8 +4,6 @@ var pagesdb = require('../../db/pagesdb')
 var appLogger = require('../../utils/appLogger')
 
 function deletePage(req, res, next) {
-  //TODO - validation on req.params.pageUrl
-
       pagesdb
         .deleteRow(req.params.pageUrl)
         .then( numRowsAffected => {
