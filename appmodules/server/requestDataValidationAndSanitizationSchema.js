@@ -60,6 +60,19 @@ var validator = require('validator')
  *
  * (validator.escape() - http://bit.ly/1TpNhUn )
  *
+ * req.body.dateFilterStartDate is used in api.js for:
+ *    getAllPages on route /api/getall/
+ *
+ * req.body.dateFilterEndDate is used in api.js for:
+ *    search on route /api/search/:searchTerms
+ *
+ * req.body.dateFilterStartDate is used in index.js for:
+ *    getAllPages on route /frontendapi/getall/
+ *
+ * req.body.dateFilterEndDate is used in index.js for:
+ *    search on route /frontendapi/search/:searchTerms
+ *
+ *
  * the updateMarkSearchSettings validation is done in appSettings.js
  *
  * changePagesDBlocation & checkIfFileIsBinary use parse-filepath, so I think they're ok.
@@ -171,6 +184,26 @@ module.exports = {
           }
           return post
         }
+      },
+      dateFilterStartDate: {
+        type: 'integer',
+        optional: true,
+        exec: function(schema, post){
+          if(!_.isUndefined(post) && !_.isInteger(post)){
+            post = _.toInteger(post)
+          }
+          return post
+        }
+      },
+      dateFilterEndDate: {
+        type: 'integer',
+        optional: true,
+        exec: function(schema, post){
+          if(!_.isUndefined(post) && !_.isInteger(post)){
+            post = _.toInteger(post)
+          }
+          return post
+        }
       }
     }
   },
@@ -200,6 +233,14 @@ module.exports = {
       },
       pageDescription: {
         type: 'string',
+        optional: true
+      },
+      dateFilterStartDate: {
+        type: 'integer',
+        optional: true
+      },
+      dateFilterEndDate: {
+        type: 'integer',
         optional: true
       }
     }

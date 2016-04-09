@@ -1,7 +1,6 @@
 'use strict';
 
 var pagesdb = require('../../../db/pagesdb')
-var checkAndCoerceDateFilterParams = require('../../../utils/checkAndCoerceDateFilterParams')
 var processSearchTerms = require('./processSearchTerms')
 var appLogger = require('../../../utils/appLogger')
 
@@ -12,7 +11,12 @@ function search(req, res, next){
   var processedSearchTerms = processSearchTerms(req.params.searchTerms)
   var domainToSearchFor = processedSearchTerms.domainToSearchFor
   var searchTerms = processedSearchTerms.processedSearchTerms
-  var dateFilter = checkAndCoerceDateFilterParams(req.body)
+  var dateFilter = {
+      dateFilterStartDate: req.body.dateFilterStartDate,
+      dateFilterEndDate: req.body.dateFilterEndDate
+  }
+  var usingDateFilter = (dateFilter.dateFilterStartDate && dateFilter.dateFilterEndDate)
+  debugger
   var knexSQL = null
 
   /****
@@ -39,7 +43,7 @@ function search(req, res, next){
                 )
                 .from('pages')
                 .where({pageDomain: domainToSearchFor})
-      if(dateFilter){
+      if(usingDateFilter){
         knexSQL = knexSQL
           .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
           .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
@@ -81,7 +85,7 @@ function search(req, res, next){
     if(domainToSearchFor){
       knexSQL = knexSQL.where({pageDomain: domainToSearchFor})
     }
-    if(dateFilter){
+    if(usingDateFilter){
       knexSQL = knexSQL
         .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
         .where('dateCreated', '<=', dateFilter.dateFilterEndDate)

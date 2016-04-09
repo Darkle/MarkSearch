@@ -1,12 +1,16 @@
 'use strict';
 
 var pagesdb = require('../../db/pagesdb')
-var checkAndCoerceDateFilterParams = require('../../utils/checkAndCoerceDateFilterParams')
 var appLogger = require('../../utils/appLogger')
 
 function getAllPages(req, res, next) {
 
-  var dateFilter = checkAndCoerceDateFilterParams(req.body)
+  var dateFilter = {
+    dateFilterStartDate: req.body.dateFilterStartDate,
+    dateFilterEndDate: req.body.dateFilterEndDate
+  }
+  var usingDateFilter = (dateFilter.dateFilterStartDate && dateFilter.dateFilterEndDate)
+  debugger
   /****
    * Omiting the pageText as that will be fairly large and we don't need that
    * for getAllPages request.
@@ -24,7 +28,7 @@ function getAllPages(req, res, next) {
                         )
                         .from('pages')
 
-  if(dateFilter){
+  if(usingDateFilter){
     pagesdbSelect = pagesdbSelect
         .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
         .where('dateCreated', '<=', dateFilter.dateFilterEndDate)
