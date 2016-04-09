@@ -111,7 +111,7 @@ function scrapeAndAddPage(req, res, next) {
       let errMessage = `Error(s) with the req.body data in scrapeAndAddPage : ${validReqBody.format()}`
       let err = new Error(errMessage)
       console.error(errMessage)
-      appLogger.log.error({err})
+      appLogger.log.error({err, req, res})
       res.status(500).json({errorMessage: errMessage})
     }
     else{

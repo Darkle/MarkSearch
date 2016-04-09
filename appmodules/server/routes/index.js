@@ -92,7 +92,7 @@ router.get('/removeOldBookmarks', (req, res, next) => {
     })
     .catch(err => {
       console.error(err)
-      appLogger.log.error({err})
+      appLogger.log.error({err, req, res})
     })
 })
 

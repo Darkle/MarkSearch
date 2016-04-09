@@ -15,7 +15,7 @@ function requestDataValidation(req, res, next){
     let errMessage = `Error(s) with the req.params data in requestDataValidation : ${validReqParams.format()}`
     let err = new Error(errMessage)
     console.error(errMessage)
-    appLogger.log.error({err})
+    appLogger.log.error({err, req, res})
     res.status(500).json({errMessage})
   }
 
@@ -24,7 +24,7 @@ function requestDataValidation(req, res, next){
     let errMessage = `Error(s) with the req.body data in requestDataValidation : ${validReqBody.format()}`
     let err = new Error(errMessage)
     console.error(errMessage)
-    appLogger.log.error({err})
+    appLogger.log.error({err, req, res})
     res.status(500).json({errMessage})
   }
 

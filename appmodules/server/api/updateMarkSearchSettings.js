@@ -13,7 +13,7 @@ function updateMarkSearchSettings(req, res, next){
     })
     .catch( err => {
       console.error(err)
-      appLogger.log.error({err})
+      appLogger.log.error({err, req, res})
       var errorMessage = err
       if(!_.isString(errorMessage)){
         errorMessage = JSON.stringify(err.message)

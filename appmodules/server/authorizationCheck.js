@@ -18,7 +18,7 @@ function authorizationCheck(req, res, next){
     if(err) {
       console.log('Failed to authenticate token.')
       console.error(err)
-      appLogger.log.error({err})
+      appLogger.log.error({err, req, res})
       return res.status(403).end()
     }
     else{
