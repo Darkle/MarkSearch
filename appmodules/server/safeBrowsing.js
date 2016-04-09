@@ -60,9 +60,9 @@ function safeBrowsingCheck(pageUrl){
 
     request(safeBrowsingUrl, (error, response, responseBody) =>{
       /****
-       * We're not doing a reject here as we want to continue on to the
-       * next promise. It's not the end of the world if
-       * we dont get a safe browsing check for the page.
+       * We're not doing a reject here as the archive.is request may have succeded and
+       * we want to check in the next .then() if there is any data to save and then save
+       * it to the db.
        */
       if(error){
         console.error("Couldn't get safebrowsing details :", error)

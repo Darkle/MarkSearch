@@ -5,7 +5,7 @@
 import { resultsContainer$ } from './searchPage'
 import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEventHandlers'
 import { updateChunkShownValue } from './resultsObject'
-var STOPWORDS = require('../../../appmodules/server/lunrStopwordFilter.json')
+var STOPWORDS = require('../../../appmodules/server/api/search/lunrStopwordFilter.json')
 
 import _ from 'lodash'
 import DOMPurify from 'dompurify'

@@ -2,7 +2,7 @@
 
 var _ = require('lodash')
 
-var STOPWORDS = require('../../lunrStopwordFilter.json')
+var STOPWORDS = require('./lunrStopwordFilter.json')
 
 var devMode = process.env.NODE_ENV === 'development'
 

@@ -1213,7 +1213,7 @@ var _validator2 = _interopRequireDefault(_validator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var STOPWORDS = require('../../../appmodules/server/lunrStopwordFilter.json');
+var STOPWORDS = require('../../../appmodules/server/api/search/lunrStopwordFilter.json');
 
 /****
  * Exports
@@ -1483,7 +1483,7 @@ function renderResults(resultsChunk, searchTerms) {
  */
 exports.renderResults = renderResults;
 
-},{"../../../appmodules/server/lunrStopwordFilter.json":1,"./resultsEventHandlers":14,"./resultsObject":15,"./searchPage":17,"dompurify":320,"lodash":343,"moment":345,"stem-porter":369,"validator":403}],14:[function(require,module,exports){
+},{"../../../appmodules/server/api/search/lunrStopwordFilter.json":1,"./resultsEventHandlers":14,"./resultsObject":15,"./searchPage":17,"dompurify":320,"lodash":343,"moment":345,"stem-porter":369,"validator":403}],14:[function(require,module,exports){
 'use strict';
 
 /* globals notie  */

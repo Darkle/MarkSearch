@@ -62,6 +62,12 @@ function search(req, res, next){
     }
   }
   else{
+    /****
+     * Omiting the pageText as that will be fairly large and we don't need that, the
+     * fts match ? order by bm25... below seems to still work and search pageText even
+     * if it is not selected and returned.
+     * Also don't need checkedForExpiry.
+     */
     knexSQL = pagesdb
       .db
       .select(
@@ -70,7 +76,7 @@ function search(req, res, next){
         `dateCreated`,
         `pageDomain`,
         `pageTitle`,
-        `pageText`,
+        // `pageText`,
         `pageDescription`,
         `archiveLink`,
         `safeBrowsing`,
