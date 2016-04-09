@@ -15,8 +15,7 @@ function search(req, res, next){
       dateFilterStartDate: req.body.dateFilterStartDate,
       dateFilterEndDate: req.body.dateFilterEndDate
   }
-  var usingDateFilter = (dateFilter.dateFilterStartDate && dateFilter.dateFilterEndDate)
-  debugger
+  var usingDateFilter = !!(dateFilter.dateFilterStartDate && dateFilter.dateFilterEndDate)
   var knexSQL = null
 
   /****

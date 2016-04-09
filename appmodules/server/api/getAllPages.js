@@ -9,8 +9,7 @@ function getAllPages(req, res, next) {
     dateFilterStartDate: req.body.dateFilterStartDate,
     dateFilterEndDate: req.body.dateFilterEndDate
   }
-  var usingDateFilter = (dateFilter.dateFilterStartDate && dateFilter.dateFilterEndDate)
-  debugger
+  var usingDateFilter = !!(dateFilter.dateFilterStartDate && dateFilter.dateFilterEndDate)
   /****
    * Omiting the pageText as that will be fairly large and we don't need that
    * for getAllPages request.
