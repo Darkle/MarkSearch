@@ -13,7 +13,7 @@ function deletePage(req, res, next) {
         })
         .catch( err => {
           console.error(err)
-          appLogger.log.error({err})
+          appLogger.log.error({err, req, res})
           res.status(500).end()
         })
 }
