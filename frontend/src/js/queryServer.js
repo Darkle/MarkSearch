@@ -17,10 +17,11 @@ function queryServer(searchTerms, dateFilter){
   }
   /****
    * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax,
-   * Converting got to bluebird promise so I can bind stuff in queryServerAndRender
+   * Converting got to bluebird promise so I can bind stuff in queryServerAndRender.
+   * Using Promise.try rather than Promise.resolve to guard against exceptions.
    */
   return Promise
-          .resolve(
+          .try(
             got.post(
               postUrl,
               {

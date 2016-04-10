@@ -34,8 +34,7 @@ var validator = require('validator')
  * req.params.searchTerms is used in api.js for:
  *    search on route /api/search/:searchTerms
  *
- * (don't want to escape the double quotes for the searchTerms as we use them for searching
- * note: knex in search.js also does sql injection checks for bound values )
+ * (note: knex in search.js also does sql injection checks for bound values )
  *
  * req.params.urlToOpen is used in index.js for:
  *    openUrlInBrowser on route /frontendapi/openUrlInBrowser/:urlToOpen
@@ -106,21 +105,21 @@ module.exports = {
           return post
         }
       },
-      searchTerms: {
-        type: 'string',
-        optional: true,
-        exec: function(schema, post){
-          if(_.isString(post)){
-            post = post.replace(/&/g, '&amp;')
-              .replace(/'/g, '&#x27;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-              .replace(/\//g, '&#x2F;')
-              .replace(/\`/g, '&#96;')
-          }
-          return post
-        }
-      }
+      // searchTerms: {
+      //   type: 'string',
+      //   optional: true,
+      //   exec: function(schema, post){
+      //     if(_.isString(post)){
+      //       post = post.replace(/&/g, '&amp;')
+      //         .replace(/'/g, '&#x27;')
+      //         .replace(/</g, '&lt;')
+      //         .replace(/>/g, '&gt;')
+      //         .replace(/\//g, '&#x2F;')
+      //         .replace(/\`/g, '&#96;')
+      //     }
+      //     return post
+      //   }
+      // }
     }
   },
   reqParamsValidation: {

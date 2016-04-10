@@ -269,9 +269,11 @@ function settingsPageInit(event){
      * note: for the bookmark expiry, the bookmarkExpiry.init minimal check is always running,
      * so don't need to init/change anything, it will just check the settings every 3 hours
      * and if enabled, run, and then get the email/months dynamically from the appSettings.settings.
+     *
+     * Using Promise.try rather than Promise.resolve to guard against exceptions.
      */
 
-    Promise.resolve(dbChangePromise)
+    Promise.try(dbChangePromise)
       .then( newPagesDBFilePath => {
         var newSettings = {
           prebrowsing: prebrowsingCheckbox$[0].checked,

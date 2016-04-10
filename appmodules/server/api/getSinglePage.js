@@ -6,12 +6,13 @@ var appLogger = require('../../utils/appLogger')
 function getSinglePage(req, res, next) {
   pagesdb.db('pages')
       .where('pageUrl', req.params.pageUrl)
-      .then( rows => {
-        if(!rows[0]){
+      .first()
+      .then( row => {
+        if(!row){
           res.status(404).end()
         }
         else{
-          res.json(rows[0])
+          res.json(row)
         }
       })
       .catch( err => {
