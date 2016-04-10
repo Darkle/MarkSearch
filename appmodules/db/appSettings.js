@@ -42,9 +42,10 @@ appSettings.init = (appDataPath) => {
   .return(
     appSettings.db('appSettings').where('id', 'appSettings').first()
   )
-  .tap(row => {
+  .then(row => {
     if(!row){
       /***
+       * If the row isn't there yet, insert it, then get it and return it.
        * .toString('hex') for the Jason Web Token to make it url safe (just in case)
        */
       return appSettings.db('appSettings')
@@ -62,13 +63,11 @@ appSettings.init = (appDataPath) => {
                 serverPort: 8080
               }
           )
+        .return(appSettings.db('appSettings').where('id', 'appSettings').first())
     }
-  })
-  .then(row => {
-    if(!row){
-      return appSettings.db('appSettings').where('id', 'appSettings').first()
+    else{
+      return row
     }
-    return row
   })
   .then(row => {
     if(!row){

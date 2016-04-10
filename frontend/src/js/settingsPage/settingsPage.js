@@ -271,12 +271,12 @@ function settingsPageInit(event){
      * and if enabled, run, and then get the email/months dynamically from the appSettings.settings.
      *
      * Using Promise.try rather than Promise.resolve to guard against exceptions.
-     * note: Promise.try(got.post()) doesn't seem to work, so return got.post() inside a
-     * function in the .try().
+     * note: Promise.try(got.post()) aka Promise.try(dbChangePromise) doesn't seem to work, so
+     * return got.post() aka dbChangePromise inside a function in the .try().
      */
 
     Promise
-      .try(() => dbChangePromise())
+      .try(() => dbChangePromise)
       .then( newPagesDBFilePath => {
         var newSettings = {
           prebrowsing: prebrowsingCheckbox$[0].checked,
