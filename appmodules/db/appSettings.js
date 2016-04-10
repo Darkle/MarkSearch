@@ -40,10 +40,10 @@ appSettings.init = (appDataPath) => {
     }
   })
   .return(
-    appSettings.db('appSettings').where('id', 'appSettings')
+    appSettings.db('appSettings').where('id', 'appSettings').first()
   )
-  .tap( rows => {
-    if(!rows[0]){
+  .tap(row => {
+    if(!row){
       /***
        * .toString('hex') for the Jason Web Token to make it url safe (just in case)
        */
@@ -64,14 +64,14 @@ appSettings.init = (appDataPath) => {
           )
     }
   })
-  .then( rows => {
-    if(!rows[0]){
-      return appSettings.db('appSettings').where('id', 'appSettings')
+  .then( row => {
+    if(!row){
+      return appSettings.db('appSettings').where('id', 'appSettings').first()
     }
-    return rows
+    return row
   })
-  .then( rows => {
-    if(!rows[0]){
+  .then( row => {
+    if(!row){
       throw new Error('unable to get appSettings from sqlite db')
     }
     /****
@@ -82,9 +82,9 @@ appSettings.init = (appDataPath) => {
      * We sanitize on the way out too for converting the SQLite boolean values
      * from 1/0 to true/false for easier use.
      */
-    inspector.sanitize(schemas.appSettingsSanitization, rows[0])
-    appSettings.settings = rows[0]
-    return rows[0].pagesDBFilePath
+    inspector.sanitize(schemas.appSettingsSanitization, row)
+    appSettings.settings = row
+    return row.pagesDBFilePath
   })
 }
 
@@ -111,14 +111,14 @@ appSettings.update = (settingsKeyValObj) => {
   return appSettings.db('appSettings')
     .where('id', 'appSettings')
     .update(settingsKeyValObjSansJWTsecret)
-    .return(appSettings.db('appSettings').where('id', 'appSettings'))
-    .then( rows => {
+    .return(appSettings.db('appSettings').where('id', 'appSettings').first())
+    .then( row => {
       /****
        * We sanitize on the way out too for converting the SQLite boolean values
        * from 1/0 to true/false for easier use.
        */
-      inspector.sanitize(schemas.appSettingsSanitization, rows[0])
-      appSettings.settings = rows[0]
+      inspector.sanitize(schemas.appSettingsSanitization, row)
+      appSettings.settings = row
     })
 }
 
