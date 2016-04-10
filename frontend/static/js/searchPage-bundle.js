@@ -1038,13 +1038,18 @@ function queryServer(searchTerms, dateFilter) {
   }
   /****
    * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax,
-   * Converting got to bluebird promise so I can bind stuff in queryServerAndRender
+   * Converting got to bluebird promise so I can bind stuff in queryServerAndRender.
+   * Using Promise.try rather than Promise.resolve to guard against exceptions.
+   * note: Promise.try(got.post()) doesn't seem to work, so return got.post() inside a 
+   * function in the .try().
    */
-  return _bluebird2.default.resolve(_got2.default.post(postUrl, {
-    headers: {
-      'X-CSRF-Token': _searchPage.csrfToken
-    },
-    body: dateFilter
+  return _bluebird2.default.try(function () {
+    return _got2.default.post(postUrl, {
+      headers: {
+        'X-CSRF-Token': _searchPage.csrfToken
+      },
+      body: dateFilter
+    });
   }).then(function (response) {
     var rows = JSON.parse(response.body);
     /****
@@ -1052,7 +1057,7 @@ function queryServer(searchTerms, dateFilter) {
      */
     (0, _resultsObject.updateResults)((0, _chunkResults.chunkResults)(rows));
     return rows;
-  }));
+  });
 }
 
 exports.queryServer = queryServer;

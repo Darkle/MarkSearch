@@ -130,8 +130,9 @@ pagesdb.upsertRow = (rowDataObj) => {
   return pagesdb
     .db('pages')
     .where('pageUrl', rowDataObj.pageUrl)
-    .then( rows => {
-      if(rows.length){
+    .first()
+    .then( row => {
+      if(row){
         return pagesdb.updateColumns(rowDataObj)
       }
       else{

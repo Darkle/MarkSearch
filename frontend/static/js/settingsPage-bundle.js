@@ -896,9 +896,15 @@ function settingsPageInit(event) {
      * note: for the bookmark expiry, the bookmarkExpiry.init minimal check is always running,
      * so don't need to init/change anything, it will just check the settings every 3 hours
      * and if enabled, run, and then get the email/months dynamically from the appSettings.settings.
+     *
+     * Using Promise.try rather than Promise.resolve to guard against exceptions.
+     * note: Promise.try(got.post()) doesn't seem to work, so return got.post() inside a
+     * function in the .try().
      */
 
-    _bluebird2.default.resolve(dbChangePromise).then(function (newPagesDBFilePath) {
+    _bluebird2.default.try(function () {
+      return dbChangePromise();
+    }).then(function (newPagesDBFilePath) {
       var newSettings = {
         prebrowsing: prebrowsingCheckbox$[0].checked,
         alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked,
