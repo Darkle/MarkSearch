@@ -64,13 +64,13 @@ appSettings.init = (appDataPath) => {
           )
     }
   })
-  .then( row => {
+  .then(row => {
     if(!row){
       return appSettings.db('appSettings').where('id', 'appSettings').first()
     }
     return row
   })
-  .then( row => {
+  .then(row => {
     if(!row){
       throw new Error('unable to get appSettings from sqlite db')
     }
