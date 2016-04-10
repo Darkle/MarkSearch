@@ -1037,8 +1037,10 @@ function queryServer(searchTerms, dateFilter) {
     postUrl = '/frontendapi/search/' + searchTerms;
   }
   /****
-   * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax,
+   * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax.
+   *
    * Converting got to bluebird promise so I can bind stuff in queryServerAndRender.
+   *
    * Using Promise.try rather than Promise.resolve to guard against exceptions.
    * note: Promise.try(got.post()) doesn't seem to work, so return got.post() inside a 
    * function in the .try().
