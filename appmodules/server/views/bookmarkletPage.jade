@@ -5,5 +5,7 @@ block content
   #bookmarkletPageContainer
     //a(href=#{bookmarkletHref})
     p Bookmark the link below
-    a(href=bookmarkletHref) Save To MarkSearch
+    a#bookmarkletLink(href="") Save To MarkSearch
 
+  script(src='/bower_components/jquery/dist/jquery.min.js')
+  script(src='/js/bookmarkletPage-bundle.js')

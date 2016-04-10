@@ -20,7 +20,7 @@ function emailBookmarklet(req, res, next){
       from: 'bookmarklet@marksearch.local',
       subject: 'MarkSearch Bookmarklet',
       html: `<div style="font-size: 1rem; margin-bottom: 1rem;">
-                Open the page below in your mobile device, then bookmark the link shown on that page:
+                Open the page below on your mobile device, then bookmark the link shown on that page:
                </div>
               <a style="font-size: 1rem;" href="${global.msServerAddr.combined}/bookmarklet">${global.msServerAddr.combined}/bookmarklet</a>
                 `

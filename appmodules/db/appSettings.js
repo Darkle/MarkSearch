@@ -63,7 +63,7 @@ appSettings.init = (appDataPath) => {
                 serverPort: 8080
               }
           )
-        .return(appSettings.db('appSettings').where('id', 'appSettings').first())
+          .return(appSettings.db('appSettings').where('id', 'appSettings').first())
     }
     else{
       return row

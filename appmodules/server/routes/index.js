@@ -67,14 +67,19 @@ router.get('/settings', (req, res, next) => {
   )
 })
 
+/****
+ * Don't load the bookmarklet code directly on load as it includes the token.
+ * Load the boookmarklet code and token via the frontend api so you need to include
+ * the csrf token
+ */
 router.get('/bookmarklet', (req, res, next) => {
-  var token = generateJWTtoken()
-  var bookmarkletJS = generateBookmarkletJS(global.msServerAddr.combined, token)
+  // var token = generateJWTtoken()
+  // var bookmarkletJS = generateBookmarkletJS(global.msServerAddr.combined, token)
   res.render('bookmarkletPage',
       {
         title: 'MarkSearch Bookmarklet',
         csrfToken: req.csrfToken(),
-        bookmarkletHref: `javascript:${encodeURIComponent(bookmarkletJS)}`
+        // bookmarkletHref: `javascript:${encodeURIComponent(bookmarkletJS)}`
       }
   )
 })
