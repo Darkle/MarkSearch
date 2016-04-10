@@ -3,6 +3,7 @@
 var pagesdb = require('../../../db/pagesdb')
 var processSearchTerms = require('./processSearchTerms')
 var appLogger = require('../../../utils/appLogger')
+var printSearchSQL = require('./printSearchSQL')
 
 var devMode = process.env.NODE_ENV === 'development'
 
@@ -106,12 +107,9 @@ function search(req, res, next){
       //.whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${searchTerms}" OR NEAR(${searchTerms})`)
       .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, searchTerms)
   }
-
-  /****
-   * Examples of the SQL statements created in search.js: http://bit.ly/1TxvdZa
-   */
+  
   if(devMode){
-    console.log(knexSQL.toString())
+    printSearchSQL(knexSQL)
   }
 
   knexSQL
