@@ -207,7 +207,7 @@ function addUrlsInit(){
               }
               $(`<li>${errorTextBeginning}Errors Occured While Saving The Following URLs:</li>`).appendTo(ul$)
               for(var errUrl of urlsThatErrored){
-                $(`<li>${errUrl.url} - reason: ${errUrl.errMessage}</li>`).appendTo(ul$)
+                $(`<li class="failedUrlInfo">${errUrl.url} - reason: ${errUrl.errMessage}</li>`).appendTo(ul$)
               }
               progressInfo$.append(ul$)
             }

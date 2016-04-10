@@ -10,8 +10,27 @@ var pagesdb = require('../../db/pagesdb')
 var appLogger = require('../../utils/appLogger')
 
 function changePagesDBlocation(req, res, next){
-  var parsedNewPagesDBFileFolder = parsePath(req.body.newPagesDBFileFolder).path
-  var parsedOldPagesDBFilePath = parsePath(req.body.oldPagesDBFilePath).path
+
+  var parsedNewPagesDBFileFolder
+  var parsedOldPagesDBFilePath
+
+  try{
+    parsedNewPagesDBFileFolder = parsePath(req.body.newPagesDBFileFolder).path
+    parsedOldPagesDBFilePath = parsePath(req.body.oldPagesDBFilePath).path
+  }
+  catch(err){
+    console.error(err)
+    appLogger.log.error({err, req, res})
+    res
+      .status(500)
+      .json(
+        {
+          errorMessage: 'There was an error parsing the newPagesDBFileFolder/oldPagesDBFilePath path'
+        }
+      )
+    return
+  }
+
   var newPagesDBFilePath = path.join(parsedNewPagesDBFileFolder, 'MarkSearchPages.db')
   var oldPagesDBFilePath = parsedOldPagesDBFilePath
 

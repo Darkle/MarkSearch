@@ -2,6 +2,7 @@
 
 import { xhrHeaders, progressBar$, addUrlsProgress$, progressInfo$, errorOKbutton$ } from './settingsPage'
 import { hidePageSubbarAndReset } from './hideShowAddPageSubbar'
+import { externalLinks } from './externalLinks'
 
 import suspend from 'suspend'
 import _ from 'lodash'
@@ -68,9 +69,11 @@ function saveUrls(urlsToSave){
       }
       $(`<li>${errorTextBeginning}Errors Occured While Saving The Following URLs:</li>`).appendTo(ul$)
       for(var errUrl of urlsThatErrored){
-        $(`<li>${errUrl.url} - reason: ${errUrl.errMessage}</li>`).appendTo(ul$)
+        $(`<li class="failedUrlInfo">${errUrl.url} - reason: ${errUrl.errMessage}</li>`).appendTo(ul$)
       }
+      $(`<li>You can try to import these URLs manually from the <a class="externalLink" href="${'http://' + window.location.host}">MarkSearch search page</a>.</li>`).appendTo(ul$)
       progressInfo$.append(ul$)
+      $('.externalLink').click(externalLinks)
     }
     else{
       progressBar$.velocity("stop")

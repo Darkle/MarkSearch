@@ -10,15 +10,9 @@ var logger = {}
 logger.init = (markSearchAppDataPath) => {
   
   var logsFolder = path.join(markSearchAppDataPath, 'logs')
-  /****
-   * Setting the hostname to a set string as the hostname may leak personal
-   * info about the user - e.g. some people use their full name for the
-   * account name on their desktop pc, which (on a Mac at least), would
-   * result in JohnSmiths-iMac.local being logged as the hostname.
-   */
+
   logger.log = bunyan.createLogger({
     name: 'MarkSearchApp',
-    hostname: 'MarkSearch',
     streams: [
       {
         type: 'rotating-file',

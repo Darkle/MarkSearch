@@ -3,9 +3,21 @@
 var isBinaryFile = require("isbinaryfile")
 var parsePath = require('parse-filepath')
 
+var appLogger = require('../../utils/appLogger')
+
 function checkIfFileIsBinary(req, res, next){
 
-  var filePath = parsePath(req.params.filePath).path
+  var filePath
+
+  try{
+    filePath = parsePath(req.params.filePath).path
+  }
+  catch(err){
+    console.error(err)
+    appLogger.log.error({err, req, res})
+    res.status(500).json({errorMessage: 'There was an error parsing the file path'})
+    return
+  }
 
   isBinaryFile(filePath, function(err, result) {
     if(err || result){
@@ -13,6 +25,8 @@ function checkIfFileIsBinary(req, res, next){
       if(err){
         errorMessage = err.message
       }
+      console.error(err)
+      appLogger.log.error({err, req, res})
       res.status(500).json({errorMessage})
     }
     else{

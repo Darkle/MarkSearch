@@ -17,6 +17,7 @@ function requestDataValidation(req, res, next){
     console.error(errMessage)
     appLogger.log.error({err, req, res})
     res.status(500).json({errMessage})
+    return
   }
 
   var validReqBody = inspector.validate(schemas.reqBodyValidation, req.body)
@@ -26,6 +27,7 @@ function requestDataValidation(req, res, next){
     console.error(errMessage)
     appLogger.log.error({err, req, res})
     res.status(500).json({errMessage})
+    return
   }
 
   if(validReqParams.valid && validReqBody.valid){

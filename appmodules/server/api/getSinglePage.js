@@ -4,8 +4,6 @@ var pagesdb = require('../../db/pagesdb')
 var appLogger = require('../../utils/appLogger')
 
 function getSinglePage(req, res, next) {
-  //TODO - validate req.params.pageUrl
-
   pagesdb.db('pages')
       .where('pageUrl', req.params.pageUrl)
       .then( rows => {

@@ -52,7 +52,7 @@ function scrapeAndAddPage(req, res, next) {
   })
 
   browserWindow.on('unresponsive', () =>
-      logErrorDestroyBrowserAndRespond('BrowserWindow: unresponsive', res)
+      logErrorDestroyBrowserAndRespond('BrowserWindow: unresponsive', req, res)
   )
 
   var webContents = browserWindow.webContents
@@ -76,17 +76,17 @@ function scrapeAndAddPage(req, res, next) {
       validatedURL: ${validatedURL}
       req.params.pageUrl: ${req.params.pageUrl}
     `
-    logErrorDestroyBrowserAndRespond(errMessage, res)
+    logErrorDestroyBrowserAndRespond(errMessage, req, res)
   })
 
   webContents.once('crashed', event => {
-    logErrorDestroyBrowserAndRespond('BrowserWindow webContents: crashed', res)
+    logErrorDestroyBrowserAndRespond('BrowserWindow webContents: crashed', req, res)
   })
 
   ipcMain.on('webview-log', (event, logMessage) => console.log(logMessage))
 
   ipcMain.once('webview-error', (event, errorMessage) =>
-    logErrorDestroyBrowserAndRespond(errorMessage, res)
+    logErrorDestroyBrowserAndRespond(errorMessage, req, res)
   )
 
   ipcMain.once('returnDocDetails', (event, message) => {
@@ -121,12 +121,12 @@ function scrapeAndAddPage(req, res, next) {
 
 }
 
-function logErrorDestroyBrowserAndRespond(errorMessage, res){
+function logErrorDestroyBrowserAndRespond(errorMessage, req, res){
   console.error(`An Error Occurred: ${errorMessage}`)
   var err = new Error(errorMessage)
-  appLogger.log.error({err, res})
-  res.status(500).json({errorMessage: errorMessage})
+  appLogger.log.error({err, req, res})
   browserWindow.destroy()
+  res.status(500).json({errorMessage: errorMessage})
 }
 
 module.exports = scrapeAndAddPage

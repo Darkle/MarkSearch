@@ -33,6 +33,7 @@ function removeWebview(){
 }
 
 function sendErrorToMainProcess(data){
+  removeWebview()
   ipcRenderer.send('webview-error', JSON.stringify(data))
 }
 
@@ -119,7 +120,7 @@ function didGetRedirectRequestListener(){
      */
     numTimesRedirected = numTimesRedirected + 1
     if(numTimesRedirected > 5){
-      sendErrorToMainProcess('webview: infinite redirect loop')
+      sendErrorToMainProcess('webview: possible infinite redirect loop')
       removeWebview()
     }
   }

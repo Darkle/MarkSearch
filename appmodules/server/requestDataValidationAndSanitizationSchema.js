@@ -84,6 +84,8 @@ var validator = require('validator')
 function allowedToOpenUrl(url){
   return [
       'http://blog.cloudimage.io/2015/10/19/what-is-prebrowsing-and-how-it-can-drastically-improve-your-page-loading-time/',
+      `${global.msServerAddr.combined}`,
+      `${global.msServerAddr.combined}/`,
       `${global.msServerAddr.combined}/help#`,
       `${global.msServerAddr.combined}/help#browserAddon`,
       `${global.msServerAddr.combined}/help#bookmarklet`

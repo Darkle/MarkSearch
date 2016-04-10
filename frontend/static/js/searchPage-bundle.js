@@ -383,7 +383,7 @@ function addUrlsInit() {
               for (_iterator = urlsThatErrored[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 errUrl = _step.value;
 
-                $('<li>' + errUrl.url + ' - reason: ' + errUrl.errMessage + '</li>').appendTo(ul$);
+                $('<li class="failedUrlInfo">' + errUrl.url + ' - reason: ' + errUrl.errMessage + '</li>').appendTo(ul$);
               }
               _context.next = 46;
               break;

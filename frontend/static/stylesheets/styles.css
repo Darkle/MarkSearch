@@ -567,6 +567,9 @@ body {
           justify-content: center;
   font-size: 1.1rem;
 }
+.navHeader .addPageUrls .failedUrlInfo {
+  opacity: 0.6;
+}
 .navHeader .addPageUrls .progressInfo ul {
   list-style: none;
   padding: 0;
@@ -935,6 +938,17 @@ body {
 }
 .settingsPage .subBar .addPageUrls textarea {
   display: none;
+}
+.settingsPage .subBar .addPageUrls .progressInfo a {
+  text-decoration: none;
+  color: #3498DB;
+}
+.settingsPage .subBar .addPageUrls .progressInfo a:hover {
+  color: #2670A2;
+  text-decoration: none;
+}
+.settingsPage .subBar .addPageUrls .progressInfo .failedUrlInfo {
+  opacity: 0.6;
 }
 .settingsPage .formplate * {
   border-radius: 0 !important;

@@ -10,10 +10,10 @@ import { importUrls } from './importUrls'
 import { exportUrls } from './exportUrls'
 import { hidePageSubbarAndReset } from './hideShowAddPageSubbar'
 import { setSettingsElementValues } from './setSettingsElementValues'
+import { externalLinks } from './externalLinks'
 
 import got from 'got'
 import Promise from 'bluebird'
-import _ from 'lodash'
 
 var xhrHeaders
 var addPageUrlsDiv$
@@ -87,18 +87,7 @@ function settingsPageInit(event){
   /****
    * External links
    */
-  $('.externalLink').click(event => {
-    event.preventDefault()
-    var linkHref = $(event.currentTarget).attr('href')
-    if(_.startsWith(linkHref, '/')){
-      linkHref = 'http://' + window.location.host + linkHref
-    }
-    var urlToOpen = encodeURIComponent(linkHref)
-    got.post(`/frontendapi/openUrlInBrowser/${urlToOpen}`, {headers: xhrHeaders})
-      .catch( err => {
-        console.error(err)
-      })
-  })
+  $('.externalLink').click(externalLinks)
 
   /****
    * Generate browser addon token
