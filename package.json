@@ -10,7 +10,9 @@
     "start": "electron appInit.js",
     "ban": "ban",
     "dev": "DEBUG='MarkSearch:*' electron appInit.js",
-    "test": "snyk test"
+    "test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "babel-polyfill": "^6.7.4",
@@ -49,6 +51,7 @@
     "request": "^2.70.0",
     "require-dir": "^0.3.0",
     "schema-inspector": "^1.6.4",
+    "snyk": "^1.13.2",
     "sqlite3": "^3.1.3",
     "stem-porter": "0.0.1",
     "string": "^3.3.1",
@@ -85,5 +88,6 @@
     "username": "^2.1.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
-  }
+  },
+  "snyk": true
 }

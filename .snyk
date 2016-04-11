@@ -1,3 +1,9 @@
 ignore: {}
-patch: {}
+patch:
+  'npm:uglify-js:20150824':
+    - 'jade > transformers > uglify-js':
+        patched: '2016-04-11T04:26:41.497Z'
+  'npm:uglify-js:20151024':
+    - 'jade > transformers > uglify-js':
+        patched: '2016-04-11T04:26:41.497Z'
 version: v1
