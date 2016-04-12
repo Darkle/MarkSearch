@@ -7,6 +7,7 @@ var Positioner = require('electron-positioner')
 var _ = require('lodash')
 
 var appSettings = require('../../db/appSettings')
+var appLogger = require('../../utils/appLogger')
 
 var ipcMain = electron.ipcMain
 var BrowserWindow = electron.BrowserWindow
@@ -49,7 +50,7 @@ function showUpdateNotification(latestUpdateVersion){
   notificationWindow.on('closed', function() {
     notificationWindow = null
   })
- 
+
   ipcMain.on('openUpdatePage', function(event, arg) {
     notificationWindow.close()
     electronShell.openExternal('https://github.com/Darkle/MarkSearch-Updates')
@@ -63,7 +64,13 @@ function showUpdateNotification(latestUpdateVersion){
        */
       versionToSkip = latestUpdateVersion
     }
-    appSettings.update({skipUpdateVersion: versionToSkip})
+    appSettings
+      .update({skipUpdateVersion: versionToSkip})
+      .catch(err => {
+        console.error(err)
+        appLogger.log.error({err})
+      })
+
   })
 
 }

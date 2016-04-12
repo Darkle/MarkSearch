@@ -29,7 +29,6 @@
     "dompurify": "^0.7.4",
     "electron-positioner": "^2.0.3",
     "electron-prebuilt": "^0.37.5",
-    "electron-toaster": "^2.0.1",
     "existent": "^1.0.1",
     "express": "^4.13.4",
     "express-request-id": "^1.1.0",
