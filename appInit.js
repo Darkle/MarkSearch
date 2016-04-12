@@ -35,13 +35,13 @@ electronInit()
   .then(() => expressInit(express, expressApp))
   .then(initElectronTrayMenu)
   .then(initBookmarkExpiry)
+  .then(initUpdatesCheck)
   .then(() => {
     if(firstRun){
       console.info('first run')
       electron.shell.openExternal(global.msServerAddr.combined)
     }
   })
-  .then(initUpdatesCheck)
   .catch(err => {
     console.error(err)
     appLogger.log.error({err})
