@@ -35,6 +35,7 @@ appSettings.init = (appDataPath) => {
         table.text('bookmarkExpiryEmail').notNullable()
         table.integer('bookmarkExpiryMonths').notNullable()
         table.integer('bookmarkExpiryLastCheck').notNullable()
+        table.text('skipUpdateVersion').notNullable()
         table.integer('serverPort').notNullable()
       })
     }
@@ -60,6 +61,7 @@ appSettings.init = (appDataPath) => {
                 bookmarkExpiryEmail: '',
                 bookmarkExpiryMonths: 3,
                 bookmarkExpiryLastCheck: Date.now(),
+                skipUpdateVersion: '1',
                 serverPort: 8080
               }
           )

@@ -3,6 +3,7 @@
 var moment = require('moment')
 var MailGun = require('mailgun-es6')
 var _ = require('lodash')
+var ms = require('ms')
 
 var appSettings = require('../db/appSettings')
 var pagesdb = require('../db/pagesdb')
@@ -11,7 +12,7 @@ var appLogger = require('../utils/appLogger')
 
 var bookmarkExpiry = {}
 var setTimeoutRef = null
-var checkInterval = moment().add(3, 'hours') - moment()
+var checkInterval = ms('3h')
 var mailGun = new MailGun({
   privateApi: APIKEYS.mailgunPrivateApiKey,
   publicApi: APIKEYS.mailgunPublicApiKey,

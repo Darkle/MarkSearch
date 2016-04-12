@@ -110,6 +110,7 @@ module.exports = {
       'bookmarkExpiryEmail',
       'bookmarkExpiryMonths',
       'bookmarkExpiryLastCheck',
+      'skipUpdateVersion',
       'serverPort'
     ],
     properties: {
@@ -148,6 +149,10 @@ module.exports = {
         type: 'integer',
         gt: 0,
         error: 'bookmarkExpiryLastCheck must be a valid integer and larger than 0',
+        optional: true
+      },
+      skipUpdateVersion: {
+        type: 'string',
         optional: true
       },
       serverPort: {

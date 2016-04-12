@@ -15,6 +15,7 @@ var initElectronTrayMenu = require('./appmodules/electron/initTrayMenu')
 var appSettings = require('./appmodules/db/appSettings')
 var pagesdb = require('./appmodules/db/pagesdb')
 var initServer = require('./appmodules/server/initServer')
+var initUpdatesCheck = require('./appmodules/electron/updates/checkForUpdates')
 
 var appDataPath = path.join(electron.app.getPath('appData'), 'MarkSearch')
 var firstRun = !existent.sync(appDataPath)
@@ -40,6 +41,7 @@ electronInit()
       electron.shell.openExternal(global.msServerAddr.combined)
     }
   })
+  .then(initUpdatesCheck)
   .catch(err => {
     console.error(err)
     appLogger.log.error({err})
