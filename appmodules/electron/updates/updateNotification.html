@@ -100,7 +100,6 @@
     var downloadPageButton = document.body.querySelector('#updatePage')
     downloadPageButton.addEventListener('mouseup', function(event){
       event.preventDefault()
-      var ipcRenderer = require('electron').ipcRenderer
       ipcRenderer.send('openUpdatePage', '')
     }, false)
 
