@@ -44,7 +44,7 @@
     "jquery": "^2.2.3",
     "jsonwebtoken": "^5.7.0",
     "knex": "^0.10.0",
-    "lodash": "^4.9.0",
+    "lodash": "^4.11.0",
     "mailgun-es6": "^1.1.4",
     "moment": "^2.10.6",
     "morgan": "~1.7.0",
