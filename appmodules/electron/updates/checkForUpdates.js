@@ -18,22 +18,35 @@ var updateUrlToCheck= 'https://raw.githubusercontent.com/Darkle/MarkSearch-Updat
  * package.json directly.
  */
 var appVersion = devMode ? require('../../../package.json').version : electron.app.getVersion()
+/****
+ * Send some info in the user agent to make it easy to block/contact if needed.
+ * This is the default user agent for Electron: http://bit.ly/1S5sOQ9
+ * note: request doesn't send a user agent by default.
+ */
+var uAgent = `Mozilla/5.0 AppleWebKit (KHTML, like Gecko) Chrome/${process.versions['chrome']} Electron/${process.versions['electron']} Safari MarkSearch App https://github.com/Darkle/MarkSearch`
 
 function initUpdatesCheck(){
   setTimeout(() => {
-    got(updateUrlToCheck)
-      .then(response => {
-        var updateData = JSON.parse(response.body)
-        if(_.get(updateData, 'latestUpdateVersion.length') &&
-          appVersion !== updateData.latestUpdateVersion &&
-          updateData.latestUpdateVersion !== appSettings.settings.skipUpdateVersion){
-            showUpdateNotification(updateData.latestUpdateVersion)
+    got(
+      updateUrlToCheck,
+      {
+        headers: {
+          'user-agent': uAgent
         }
-      })
-      .catch(err => {
-        console.error(err)
-        appLogger({err})
-      })
+      }
+    )
+    .then(response => {
+      var updateData = JSON.parse(response.body)
+      if(_.get(updateData, 'latestUpdateVersion.length') &&
+        appVersion !== updateData.latestUpdateVersion &&
+        updateData.latestUpdateVersion !== appSettings.settings.skipUpdateVersion){
+          showUpdateNotification(updateData.latestUpdateVersion)
+      }
+    })
+    .catch(err => {
+      console.error(err)
+      appLogger({err})
+    })
   }, checkInterval)
 }
 
