@@ -12,15 +12,12 @@ var appSettings = require('../../db/appSettings')
 var devMode = process.env.NODE_ENV === 'development'
 var checkInterval = ms('7 days')
 var updateUrlToCheck= 'https://raw.githubusercontent.com/Darkle/MarkSearch-Updates/master/updateInfo.json'
-var appVersion = electron.app.getVersion()
 /****
  * When running electron in dev, it reports its own package.json version,
  * so when in devMode, get the version number from the MarkSearch
  * package.json directly.
  */
-if(devMode){
-  appVersion = require('../../../package.json').version
-}
+var appVersion = devMode ? require('../../../package.json').version : electron.app.getVersion()
 
 function initUpdatesCheck(){
   setTimeout(() => {

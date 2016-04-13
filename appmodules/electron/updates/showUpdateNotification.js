@@ -61,6 +61,8 @@ function showUpdateNotification(latestUpdateVersion){
     if(!_.isString(versionToSkip) || !versionToSkip.length){
       /****
        * Fall back if there was an issue passing it back.
+       * Passing data back and forth in the off chance that more than
+       * one notification is shown.
        */
       versionToSkip = latestUpdateVersion
     }

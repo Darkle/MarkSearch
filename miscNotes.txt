@@ -17,3 +17,11 @@
 * maybe the sqlite corruption occurs when I'm ading stuff to pages db and i also have it open in the
     sqlite browser?
 
+* Scripts/Gulp Tasks to run:
+  'npm nsp' - runs nsp check which runs https://www.npmjs.com/package/nsp
+  'npm test' - runks synk test https://snyk.io/project/1a7ece78-9528-4e3a-9590-afc3d23c20fb/
+  'npm ban' - checks for sensitive files in repo https://github.com/bahmutov/ban-sensitive-files
+  Gulp:
+    serverModuleSizes - uses ndu https://github.com/groupon/ndu
+    frontendModuleSize - uses discify https://github.com/hughsk/disc
+    randomDates - sets random dates to the pages saved in pagesdb
