@@ -76,6 +76,15 @@ logger.init = (markSearchAppDataPath) => {
     throw err
   })
 
+  /****
+   * For any Promises that are rejected and have no error handler (within a turn of the event loop).
+   * https://nodejs.org/api/process.html#process_event_unhandledrejection
+   */
+  process.on('unhandledRejection', (reason, p) => {
+    var unhandledRejectionError = new Error("Unhandled Rejection at: Promise ", p, " reason: ", reason)
+    console.error(unhandledRejectionError)
+    logger.log.error({err: unhandledRejectionError})
+  })
 }
 
 module.exports = logger
