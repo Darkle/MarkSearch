@@ -6,14 +6,12 @@ var electron = require('electron')
 var APIKEYS = require('../../config/apikeys.json')
 
 var electronApp = electron.app
-
 /***
  * Using https://developers.google.com/safe-browsing/lookup_guide
  * 'unwanted' is unwanted software (e.g. sourceforge)
  * Can test with http://malware.testing.google.test/testing/malware/
  * http://bit.ly/1le7vTb
  */
-
 var safeBrowsingPossibilities = ['phishing', 'malware', 'unwanted']
 var safeBrowsingDetails = {
   phishing: {
@@ -47,13 +45,11 @@ var safeBrowsingDetails = {
                  - <a href='https://code.google.com/apis/safebrowsing/safebrowsing_faq.html#whyAdvisory'>Advisory provided by Google</a>`
   }
 }
-
 /****
  * Send some info in the user agent to make it easy to block/contact if needed.
  * This is the default user agent for Electron: http://bit.ly/1S5sOQ9
  * note: request doesn't send a user agent by default.
  */
-
 var uAgent = `Mozilla/5.0 AppleWebKit (KHTML, like Gecko) Chrome/${process.versions['chrome']} Electron/${process.versions['electron']} Safari MarkSearch App https://github.com/Darkle/MarkSearch`
 
 function safeBrowsingCheck(pageUrl){

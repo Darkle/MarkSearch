@@ -2,13 +2,11 @@
 
 var request = require('request')
 var _ = require('lodash')
-
 /****
  * Send some info in the user agent to make it easy to block/contact if needed.
  * This is the default user agent for Electron: http://bit.ly/1S5sOQ9
  * note: request doesn't send a user agent by default.
  */
-
 var uAgent = `Mozilla/5.0 AppleWebKit (KHTML, like Gecko) Chrome/${process.versions['chrome']} Electron/${process.versions['electron']} Safari MarkSearch App https://github.com/Darkle/MarkSearch`
 
 function generateArchiveOfPage(pageUrl){
