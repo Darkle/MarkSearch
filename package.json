@@ -19,7 +19,7 @@
     "babel-polyfill": "^6.7.4",
     "bluebird": "^3.3.5",
     "body-parser": "^1.15.0",
-    "browser-sync": "^2.12.1",
+    "browser-sync": "^2.12.2",
     "bunyan": "^1.8.0",
     "co-foreach": "^1.1.1",
     "compression": "^1.6.0",
