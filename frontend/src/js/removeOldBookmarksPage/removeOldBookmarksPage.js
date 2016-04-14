@@ -5,6 +5,7 @@ import "babel-polyfill"
 import got from 'got'
 import DOMPurify from 'dompurify'
 import moment from 'moment'
+import _ from 'lodash'
 
 $(document).ready(settingsPageInit)
 
@@ -21,8 +22,7 @@ function settingsPageInit(event){
         /*****
          * If there's no pageTitle text, then just use the page url
          */
-        var pageTitle = row.pageTitle ? row.pageTitle.trim() : ''
-        pageTitle = (pageTitle.length > 0) ? pageTitle : row.pageUrl
+        var pageTitle = _.trim(_.get(row, 'pageTitle.length') ? row.pageTitle : row.pageUrl)
         rowsUl$.append(`
           <li class="bookmarkDetailsContainer">
             <div class="deleteBookmarkButtonContainer">
