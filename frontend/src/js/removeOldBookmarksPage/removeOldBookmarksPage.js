@@ -26,10 +26,10 @@ function removeOldBookmarksPageInit(event){
         rowsUl$.append(`
           <li class="bookmarkDetailsContainer">
             <div class="deleteBookmarkButtonContainer">
-              <a href="${row.pageUrl}" class="deleteBookmarkButton button black square">Delete</a>
+              <a href="${DOMPurify.sanitize(row.pageUrl)}" class="deleteBookmarkButton button black square">Delete</a>
             </div>
             <div class="bookmarkDetails">
-              <a href="${row.pageUrl}" target="_blank">${DOMPurify.sanitize(pageTitle)}</a>
+              <a href="${DOMPurify.sanitize(row.pageUrl)}" target="_blank">${DOMPurify.sanitize(pageTitle)}</a>
               <div class="bookmarkPageUrl">${DOMPurify.sanitize(row.pageUrl)}</div>
               <div class="dateCreated">Date Created: ${DOMPurify.sanitize(moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a"))}</div>
             </div>
