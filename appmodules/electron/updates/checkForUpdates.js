@@ -25,28 +25,37 @@ var appVersion = devMode ? require('../../../package.json').version : electron.a
 var uAgent = `Mozilla/5.0 AppleWebKit (KHTML, like Gecko) Chrome/${process.versions['chrome']} Electron/${process.versions['electron']} Safari MarkSearch App https://github.com/Darkle/MarkSearch`
 
 function initUpdatesCheck(){
+  /****
+   * Do a check straight away on startup in case they don't leave
+   * MarkSearch running for a week.
+   */
+  checkForUpdate()
   setTimeout(() => {
-    got(
-      updateUrlToCheck,
-      {
-        headers: {
-          'user-agent': uAgent
-        }
-      }
-    )
-    .then(response => {
-      var updateData = JSON.parse(response.body)
-      if(_.get(updateData, 'latestUpdateVersion.length') &&
-        appVersion !== updateData.latestUpdateVersion &&
-        updateData.latestUpdateVersion !== appSettings.settings.skipUpdateVersion){
-          showUpdateNotification(updateData.latestUpdateVersion)
-      }
-    })
-    .catch(err => {
-      console.error(err)
-      appLogger({err})
-    })
+    checkForUpdate()
   }, checkInterval)
+}
+
+function checkForUpdate(){
+  got(
+    updateUrlToCheck,
+    {
+      headers: {
+        'user-agent': uAgent
+      }
+    }
+  )
+  .then(response => {
+    var updateData = JSON.parse(response.body)
+    if(_.get(updateData, 'latestUpdateVersion.length') &&
+      appVersion !== updateData.latestUpdateVersion &&
+      updateData.latestUpdateVersion !== appSettings.settings.skipUpdateVersion){
+      showUpdateNotification(updateData.latestUpdateVersion)
+    }
+  })
+  .catch(err => {
+    console.error(err)
+    appLogger({err})
+  })
 }
 
 module.exports = initUpdatesCheck
