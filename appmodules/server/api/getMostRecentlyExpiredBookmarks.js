@@ -3,8 +3,8 @@
 var bookmarkExpiry = require('../bookmarkExpiry')
 var appLogger = require('../../utils/appLogger')
 
-function getExpiredBookmarksForFrontend(req, res, next){
+function getMostRecentlyExpiredBookmarks(req, res, next){
   res.json(bookmarkExpiry.mostRecentlyExpiredBookmarks)
 }
 
-module.exports = getExpiredBookmarksForFrontend
+module.exports = getMostRecentlyExpiredBookmarks

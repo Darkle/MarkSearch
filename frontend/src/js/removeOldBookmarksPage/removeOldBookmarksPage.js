@@ -14,7 +14,7 @@ function removeOldBookmarksPageInit(event){
   var rowsUl$ = $('#rowsUl')
   // buttonplate($('.deleteBookmark'))
 
-  got.post('/frontendapi/getExpiredBookmarks/', {headers: {'X-CSRF-Token': csrfToken}})
+  got.post('/frontendapi/getMostRecentlyExpiredBookmarks/', {headers: {'X-CSRF-Token': csrfToken}})
     .then( response => {
       var rows = JSON.parse(response.body)
 

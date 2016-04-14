@@ -30,7 +30,7 @@ function removeOldBookmarksPageInit(event) {
   var rowsUl$ = $('#rowsUl');
   // buttonplate($('.deleteBookmark'))
 
-  _got2.default.post('/frontendapi/getExpiredBookmarks/', { headers: { 'X-CSRF-Token': csrfToken } }).then(function (response) {
+  _got2.default.post('/frontendapi/getMostRecentlyExpiredBookmarks/', { headers: { 'X-CSRF-Token': csrfToken } }).then(function (response) {
     var rows = JSON.parse(response.body);
 
     rows.forEach(function (row) {

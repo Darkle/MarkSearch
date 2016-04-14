@@ -134,7 +134,9 @@ bookmarkExpiry.stopBookmarksExpiry = () => {
 }
 
 /****
- * .orderBy('dateCreated', 'desc') is for router.post('/frontendapi/getExpiredBookmarks/'.
+ * .orderBy('dateCreated', 'asc') is for router.post('/frontendapi/getMostRecentlyExpiredBookmarks/' -
+ * oldest to newest.
+ *
  */
 bookmarkExpiry.getAllExpiredBookmarks = () => {
   var now = Date.now()
@@ -144,7 +146,7 @@ bookmarkExpiry.getAllExpiredBookmarks = () => {
       this.where('checkedForExpiry', 0)
         .orWhere('checkedForExpiry', null)
     })
-    .orderBy('dateCreated', 'desc')
+    .orderBy('dateCreated', 'asc')
 }
 
 bookmarkExpiry.removeBookmarkFromMostRecentlyExpiredBookmarks = (bookmarkUrl) => {
