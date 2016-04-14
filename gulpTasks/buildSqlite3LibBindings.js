@@ -6,15 +6,40 @@ var gulp = require('gulp')
 var shell = require('shelljs')
 var symlink = require('fs-symlink')
 var runSequence = require('run-sequence')
+var jetpack = require('fs-jetpack')
+var semver = require('semver')
 
 var basePath = path.resolve('')
 
 gulp.task('sqlite', () => {
   // TODO - make this work on Windows & Linux
-  //var osxSqliteBinaryDir = path.join(basePath, 'sqliteBinaries', 'osx_x86_64', '3.10.2')
-  var osxSqliteBinaryDir = '/usr/local/Cellar/sqlite/3.12.0/'
+  var sqliteBinaryFullDir
+
+  /****
+   * OSX - go through the '/usr/local/Cellar/sqlite/' folder
+   * and use semver to get the most up to date version installed
+   * (homebrew doesn't usually uninstall the old versions).
+   */
+  var osxSqliteBinaryBaseDir = '/usr/local/Cellar/sqlite/'
+  try{
+    var sqliteVersions = jetpack.list('/usr/local/Cellar/sqlite/')
+    console.log('OSX sqlite versions available')
+    console.log(sqliteVersions)
+    var osxVersionToUse = '0.0.0'
+    sqliteVersions.forEach(version => {
+      if(semver.gt(version, osxVersionToUse)){
+        osxVersionToUse = version
+      }
+    })
+    console.log('osxVersionToUse')
+    console.log(osxVersionToUse)
+    sqliteBinaryFullDir = osxSqliteBinaryBaseDir + osxVersionToUse
+  }
+  catch(err){
+    console.error(`There was an error getting the osxSqliteBinaryFullDir`, err)
+  }
   return shell.exec(
-    `npm install sqlite3 --save --build-from-source --sqlite=${osxSqliteBinaryDir}`,
+    `npm install sqlite3 --save --build-from-source --sqlite=${sqliteBinaryFullDir}`,
     (exitCode, stdout, stderr) => {
       if(exitCode !== 0){
         console.error(`
