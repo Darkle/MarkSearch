@@ -1,12 +1,21 @@
 'use strict';
 
+var path = require('path')
+
+var gulp = require('gulp')
+var _ = require('lodash')
+var shell = require('shelljs')
+var username = require('username')
+
+var basePath = path.resolve('')
+
 gulp.task('frontendModuleSize', () => {
   /****
    * https://www.npmjs.com/package/disc
    */
-  var discAppPath = path.join(__dirname, 'node_modules', '.bin', 'discify')
+  var discAppPath = path.join(basePath, 'node_modules', '.bin', 'discify')
   var desktopPath = path.join('/Users', username.sync(), 'Desktop')
-  var bundleFilePaths = path.join(__dirname, 'frontend', 'static', 'js')
+  var bundleFilePaths = path.join(basePath, 'frontend', 'static', 'js')
   var bundleFiles = [
     'aboutPage-bundle.js',
     'helpPage-bundle.js',

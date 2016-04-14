@@ -11,7 +11,6 @@ var scrapeAndAddPage = require('../api/scrape/scrapeAndAddPage')
 var appSettings = require('../../db/appSettings')
 var generateBookmarkletJS = require('../generateBookmarkletJS')
 var generateJWTtoken = require('../../utils/generateJWTtoken')
-var getAllExpiredBookmarks = require('../bookmarkExpiry').getAllExpiredBookmarks
 var appLogger = require('../../utils/appLogger')
 var requestDataValidation = require('../requestDataValidation')
 
@@ -85,20 +84,12 @@ router.get('/bookmarklet', (req, res, next) => {
 })
 
 router.get('/removeOldBookmarks', (req, res, next) => {
-  getAllExpiredBookmarks()
-    .then(rows => {
-      res.render('removeOldBookmarksPage',
-        {
-          title: 'MarkSearch - Remove Old Bookmarks',
-          csrfToken: req.csrfToken(),
-          rows: JSON.stringify(rows)
-        }
-      )
-    })
-    .catch(err => {
-      console.error(err)
-      appLogger.log.error({err, req, res})
-    })
+  res.render('removeOldBookmarksPage',
+    {
+      title: 'MarkSearch - Remove Old Bookmarks',
+      csrfToken: req.csrfToken()
+    }
+  )
 })
 
 /****
@@ -111,6 +102,7 @@ router.post('/frontendapi/search/:searchTerms', requestDataValidation, search)
 router.post('/frontendapi/scrapeAndAdd/:pageUrl', requestDataValidation, scrapeAndAddPage)
 router.delete('/frontendapi/remove/:pageUrl', requestDataValidation, apiModules.deletePage)
 router.post('/frontendapi/openUrlInBrowser/:urlToOpen', requestDataValidation, apiModules.openUrlInBrowser)
+router.post('/frontendapi/getExpiredBookmarks/', requestDataValidation, apiModules.getExpiredBookmarksForFrontend)
 router.post('/frontendapi/settings/update/', requestDataValidation, apiModules.updateMarkSearchSettings)
 router.post('/frontendapi/settings/changePagesDBlocation/', requestDataValidation, apiModules.changePagesDBlocation)
 router.post('/frontendapi/settings/generateExtToken/', requestDataValidation, apiModules.generateExtToken)

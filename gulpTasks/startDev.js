@@ -15,14 +15,10 @@ var autoprefixer = require('gulp-autoprefixer')
 var less = require('gulp-less')
 var rename = require('gulp-rename')
 var eventStream = require('event-stream')
-var shell = require('shelljs')
-var coForEach = require('co-foreach')
 var username = require('username')
-var _ = require('lodash')
-var moment = require('moment')
-var jetpack = require('fs-jetpack')
-var symlink = require('fs-symlink')
 var replace = require('gulp-replace')
+
+var basePath = path.resolve('')
 
 gulp.task('default', function() {
   runSequence(
@@ -40,20 +36,20 @@ gulp.task('nodemon', cb => {
   env.NODE_ENV = 'development'
 
   return nodemon({
-    script: 'appInit.js',
+    script: path.join(basePath, 'appInit.js'),
     watch: [
-      'appInit.js',
-      path.join(__dirname, 'appmodules', '**', '*.*')
+      path.join(basePath, 'appInit.js'),
+      path.join(basePath, 'appmodules', '**', '*.*')
     ],
     env: env,
     execMap: {
-      js: path.join('node_modules', '.bin', 'electron')
+      js: path.join(basePath, 'node_modules', '.bin', 'electron')
     },
     //verbose: true,
     ignore: [
-      path.join(__dirname, 'frontend', 'static', '**', '*.*'),
-      path.join(__dirname, 'frontend', 'src', '**', '*.*'),
-      path.join(__dirname, 'appmodules', 'server', 'views', '*.jade')
+      path.join(basePath, 'frontend', 'static', '**', '*.*'),
+      path.join(basePath, 'frontend', 'src', '**', '*.*'),
+      path.join(basePath, 'appmodules', 'server', 'views', '*.jade')
     ]
   }).once('start', cb)
 })
@@ -62,8 +58,8 @@ gulp.task('browser-sync', () =>
   browserSync.init({
     proxy: "192.168.1.10:8080",
     files: [
-      //path.join('appmodules', '**', '*.*')
-      path.join(__dirname, 'appmodules', 'server', 'views', '*.jade')
+      //path.join(basePath, 'appmodules', '**', '*.*')
+      path.join(basePath, 'appmodules', 'server', 'views', '*.jade')
     ],
     port: 3020,
     open: false, // Stop the browser from automatically opening
@@ -74,14 +70,14 @@ gulp.task('browser-sync', () =>
 )
 
 gulp.task('watch-less', () =>
-  gulp.watch(path.join(__dirname, 'frontend', 'src', 'css', '*.less'), ['less'])
+  gulp.watch(path.join(basePath, 'frontend', 'src', 'css', '*.less'), ['less'])
 )
 
 gulp.task('watch-js', () =>
   /****
    * Doing it this way because of the map issue in browser-sync task below
    */
-  gulp.watch(path.join(__dirname, 'frontend', 'src', 'js', '**', '*.*'), () => {
+  gulp.watch(path.join(basePath, 'frontend', 'src', 'js', '**', '*.*'), () => {
     runSequence('browserify', 'browsersync-reload')
   })
 )
@@ -91,7 +87,7 @@ gulp.task('browsersync-reload', () => {
 })
 
 gulp.task('less', () =>
-  gulp.src(path.join(__dirname, 'frontend', 'src', 'css', 'styles.less'))
+  gulp.src(path.join(basePath, 'frontend', 'src', 'css', 'styles.less'))
     .pipe(sourcemaps.init())
     .pipe(less().on('error', function(err) {
       gutil.log(err)
@@ -99,7 +95,7 @@ gulp.task('less', () =>
     }))
     .pipe(autoprefixer())
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(path.join(__dirname, 'frontend', 'static', 'stylesheets')))
+    .pipe(gulp.dest(path.join(basePath, 'frontend', 'static', 'stylesheets')))
     .pipe(browserSync.stream())
 )
 
@@ -111,12 +107,12 @@ gulp.task('browserify', () => {
   var uName = username.sync()
   var regexForReplace = new RegExp(uName,'gi')
   var files = [
-    path.join(__dirname, 'frontend', 'src', 'js', 'searchPage.js'),
-    path.join(__dirname, 'frontend', 'src', 'js', 'settingsPage', 'settingsPage.js'),
-    path.join(__dirname, 'frontend', 'src', 'js', 'removeOldBookmarksPage', 'removeOldBookmarksPage.js'),
-    path.join(__dirname, 'frontend', 'src', 'js', 'bookmarkletPage', 'bookmarkletPage.js'),
-    path.join(__dirname, 'frontend', 'src', 'js', 'helpPage.js'),
-    path.join(__dirname, 'frontend', 'src', 'js', 'aboutPage.js')
+    path.join(basePath, 'frontend', 'src', 'js', 'searchPage.js'),
+    path.join(basePath, 'frontend', 'src', 'js', 'settingsPage', 'settingsPage.js'),
+    path.join(basePath, 'frontend', 'src', 'js', 'removeOldBookmarksPage', 'removeOldBookmarksPage.js'),
+    path.join(basePath, 'frontend', 'src', 'js', 'bookmarkletPage', 'bookmarkletPage.js'),
+    path.join(basePath, 'frontend', 'src', 'js', 'helpPage.js'),
+    path.join(basePath, 'frontend', 'src', 'js', 'aboutPage.js')
   ]
   // map them to our stream function
   var tasks = files.map(function(entry){
@@ -160,7 +156,7 @@ gulp.task('browserify', () => {
        * so remove that.
        */
       .pipe(replace(regexForReplace, ''))
-      .pipe(gulp.dest(path.join(__dirname, 'frontend', 'static')))
+      .pipe(gulp.dest(path.join(basePath, 'frontend', 'static')))
     /****
      * browserSync.stream messes up here - I think it's becuase we're mapping, so we're
      * calling it 4 times instead of once. Could individually get around it by using

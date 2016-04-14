@@ -1,13 +1,19 @@
 'use strict';
 
+var path = require('path')
+
+var gulp = require('gulp')
+var shell = require('shelljs')
+
+var basePath = path.resolve('')
+
 gulp.task('selfsign', () => {
-  var electronAppPath = path.join(__dirname, 'node_modules', 'electron-prebuilt', 'dist', 'Electron.app')
+  var electronAppPath = path.join(basePath, 'node_modules', 'electron-prebuilt', 'dist', 'Electron.app')
   var shellTask = `codesign -s - -f ${electronAppPath}`
   /****
    * I'm not sure why, but signing it with or without --deep on it's own doesn't
    * seem to work, however signing it with --deep first and then signing it a
    * second time without --deep seems to work. ¯\_(ツ)_/¯
-   * (note: may still need to confirm the accept incomming connections dialog once).
    */
   return shell.exec(`${shellTask} --deep`, (exitCode, stdout, stderr) => {
     if(exitCode === 0){

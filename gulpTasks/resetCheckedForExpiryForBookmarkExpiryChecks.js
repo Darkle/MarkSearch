@@ -1,5 +1,9 @@
 'use strict';
 
+var path = require('path')
+
+var gulp = require('gulp')
+var username = require('username')
 
 gulp.task('resetCheckedForExpiry', () => {
   var pagesDBknex

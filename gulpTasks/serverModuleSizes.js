@@ -1,10 +1,18 @@
 'use strict';
 
+var path = require('path')
+
+var gulp = require('gulp')
+var username = require('username')
+var shell = require('shelljs')
+
+var basePath = path.resolve('')
+
 gulp.task('serverModuleSizes', () => {
   /****
    * https://github.com/groupon/ndu
    */
-  var nduAppPath = path.join(__dirname, 'node_modules', '.bin', 'ndu')
+  var nduAppPath = path.join(basePath, 'node_modules', '.bin', 'ndu')
   var nduOutputFilePath = path.join('/Users', username.sync(), 'Desktop', 'nduAppNpmModuleSizes.html')
   return shell.exec(`${nduAppPath} > ${nduOutputFilePath}`, (exitCode, stdout, stderr) => {
     if(exitCode === 0){

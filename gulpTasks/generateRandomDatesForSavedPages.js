@@ -1,5 +1,12 @@
 'use strict';
 
+var path = require('path')
+
+var gulp = require('gulp')
+var username = require('username')
+var _ = require('lodash')
+var moment = require('moment')
+var coForEach = require('co-foreach')
 
 gulp.task('randomDates', () => {
   var pagesDBknex
