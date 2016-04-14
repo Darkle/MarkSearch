@@ -47,8 +47,8 @@ function checkForUpdate(){
   .then(response => {
     var updateData = JSON.parse(response.body)
     if(_.get(updateData, 'latestUpdateVersion.length') &&
-      appVersion !== updateData.latestUpdateVersion &&
-      updateData.latestUpdateVersion !== appSettings.settings.skipUpdateVersion){
+        appVersion !== updateData.latestUpdateVersion &&
+        updateData.latestUpdateVersion !== appSettings.settings.skipUpdateVersion){
       showUpdateNotification(updateData.latestUpdateVersion)
     }
   })
