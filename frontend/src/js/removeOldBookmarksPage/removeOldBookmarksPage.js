@@ -21,10 +21,7 @@ function settingsPageInit(event){
         /*****
          * If there's no pageTitle text, then just use the page url
          */
-        var pageTitle = ''
-        if(row.pageTitle){
-          pageTitle = row.pageTitle.trim()
-        }
+        var pageTitle = row.pageTitle ? row.pageTitle.trim() : ''
         pageTitle = (pageTitle.length > 0) ? pageTitle : row.pageUrl
         rowsUl$.append(`
           <li class="bookmarkDetailsContainer">
