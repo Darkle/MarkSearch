@@ -12,7 +12,7 @@ $(document).ready(removeOldBookmarksPageInit)
 function removeOldBookmarksPageInit(event){
   var csrfToken = $('#csrfInput').val()
   var rowsUl$ = $('#rowsUl')
-  buttonplate($('.deleteBookmark'))
+  // buttonplate($('.deleteBookmark'))
 
   got.post('/frontendapi/getExpiredBookmarks/', {headers: {'X-CSRF-Token': csrfToken}})
     .then( response => {
