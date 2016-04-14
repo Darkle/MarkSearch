@@ -7,9 +7,9 @@ import DOMPurify from 'dompurify'
 import moment from 'moment'
 import _ from 'lodash'
 
-$(document).ready(settingsPageInit)
+$(document).ready(removeOldBookmarksPageInit)
 
-function settingsPageInit(event){
+function removeOldBookmarksPageInit(event){
   var csrfToken = $('#csrfInput').val()
   var rowsUl$ = $('#rowsUl')
   buttonplate($('.deleteBookmark'))
