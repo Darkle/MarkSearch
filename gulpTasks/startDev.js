@@ -125,50 +125,50 @@ gulp.task('browserify', () => {
        */
       // fullPaths: true
     })
-      .transform("babelify",
-        {
-          presets: ["es2015"],
-          sourceMaps: true
-        }
-      )
-      .on('error', function(err){
-        console.log('error with browserify')
-        gutil.log(err.message)
-        this.emit('end')
-      })
-      .bundle()
-      .on('error', function(err){
-        console.log('error with browserify')
-        gutil.log(err.message)
-        this.emit('end')
-      })
-      .pipe(source(entry))
-      .pipe(rename({
-        dirname: 'js',
-        extname: '-bundle.js'
-      }))
-      .pipe(buffer())
-      .pipe(sourcemaps.init({loadMaps: true}))
-      .pipe(sourcemaps.write('./'))
-      /****
-       * uglify seemed to have some issue with es2015 stuff
-       */
-      // .pipe(uglify())
-      /****
-       * For some reason browserify is including details from the
-       * package.json from the got module which includes path username,
-       * so remove that.
-       */
-      .pipe(replace(regexForReplace, ''))
-      .pipe(gulp.dest(path.join(basePath, 'frontend', 'static')))
+    .transform("babelify",
+      {
+        presets: ["es2015"],
+        sourceMaps: true
+      }
+    )
+    .on('error', function(err){
+      console.log('error with browserify')
+      gutil.log(err.message)
+      this.emit('end')
+    })
+    .bundle()
+    .on('error', function(err){
+      console.log('error with browserify')
+      gutil.log(err.message)
+      this.emit('end')
+    })
+    .pipe(source(entry))
+    .pipe(rename({
+      dirname: 'js',
+      extname: '-bundle.js'
+    }))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.write('./'))
     /****
-     * browserSync.stream messes up here - I think it's becuase we're mapping, so we're
-     * calling it 4 times instead of once. Could individually get around it by using
-     * {match:}, but its easier to just call reload from the 'watch-js' task
-     * after the whole 'browserify' task has finished.
+     * uglify seemed to have some issues with es2015 stuff
      */
-    //.pipe(browserSync.stream({match: '**/settingsPage-bundle.js'}))
-    //.pipe(browserSync.stream())
+    // .pipe(uglify())
+    /****
+     * For some reason browserify is including details from the
+     * package.json from the got module which includes path username,
+     * so remove that.
+     */
+    .pipe(replace(regexForReplace, ''))
+    .pipe(gulp.dest(path.join(basePath, 'frontend', 'static')))
+  /****
+   * browserSync.stream messes up here - I think it's becuase we're mapping, so we're
+   * calling it 4 times instead of once. Could individually get around it by using
+   * {match:}, but its easier to just call reload from the 'watch-js' task
+   * after the whole 'browserify' task has finished.
+   */
+  //.pipe(browserSync.stream({match: '**/settingsPage-bundle.js'}))
+  //.pipe(browserSync.stream())
   })
   // create a merged stream
   return eventStream.merge.apply(null, tasks)

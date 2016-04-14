@@ -10,6 +10,7 @@ var runSequence = require('run-sequence')
 var basePath = path.resolve('')
 
 gulp.task('sqlite', () => {
+  // TODO - make this work on Windows & Linux
   //var osxSqliteBinaryDir = path.join(basePath, 'sqliteBinaries', 'osx_x86_64', '3.10.2')
   var osxSqliteBinaryDir = '/usr/local/Cellar/sqlite/3.12.0/'
   return shell.exec(
