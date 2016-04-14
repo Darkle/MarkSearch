@@ -11,7 +11,7 @@ require('./gulpTasks/startDev')
 /****
 * buildSqlite3LibBindings ('sqlite', 'sqliteSymlink')
 * https://github.com/mapbox/node-sqlite3
-* Need to build sqlite3 js library binding libsqlite3 from source as the default one
+* Need to build sqlite3 js library binding (libsqlite3) from source as the default one
 * that comes with the sqlite3 js library does not include support for the full text
 * search (fts5) in SQLite.
 *

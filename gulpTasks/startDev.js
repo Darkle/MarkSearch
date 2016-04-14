@@ -119,7 +119,11 @@ gulp.task('browserify', () => {
     return browserify({
       entries: [entry],
       debug: true,
-      // fullPaths: true  //only enable this for if want to run discify below
+      /****
+       * Uncomment 'fullPaths: true' if want to run discify below.
+       * Also comment out .pipe(replace(regexForReplace, '')) below.
+       */
+      // fullPaths: true
     })
       .transform("babelify",
         {
