@@ -10,6 +10,7 @@ var exeq = require('exeq')
 var basePath = path.resolve('')
 var platform = process.platform
 var desktopPath
+var openFileShell
 
 /****
  * https://github.com/s-a/user-appdata/blob/master/lib%2Findex.js
@@ -20,6 +21,7 @@ var desktopPath
 // TODO make it work on Linux & Windows
 if(platform === 'darwin'){
   desktopPath = path.join(os.homedir(), 'Desktop')
+  openFileShell = `open -a "Google Chrome"`
 }
 // else if(platform === 'darwin'){
 //
@@ -48,7 +50,7 @@ gulp.task('frontendModuleSize', () => {
 
     exeq(
       `${discAppPath} ${path.join(bundleFilePaths, value)} > ${outputFilePath}`,
-      `open -a "Google Chrome" ${outputFilePath}`
+      `${openFileShell} ${outputFilePath}`
     )
     .then(function() {
       console.log('frontendModuleSize (disc) completed successfully, now opening in browser');

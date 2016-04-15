@@ -43,7 +43,6 @@ gulp.task('sqlite', () =>{
       console.log(osxVersionToUse)
 
       sqliteBinaryFullDir = osxSqliteBinaryBaseDir + osxVersionToUse
-      
     }
     catch(err){
       console.error(`There was an error getting the osxSqliteBinaryFullDir`, err)

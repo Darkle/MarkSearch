@@ -9,6 +9,7 @@ var exeq = require('exeq')
 var basePath = path.resolve('')
 var platform = process.platform
 var desktopPath
+var openFileShell
 
 /****
  * https://github.com/s-a/user-appdata/blob/master/lib%2Findex.js
@@ -19,6 +20,7 @@ var desktopPath
 // TODO make it work on Linux & Windows
 if(platform === 'darwin'){
   desktopPath = path.join(os.homedir(), 'Desktop')
+  openFileShell = `open -a "Google Chrome"`
 }
 // else if(platform === 'darwin'){
 //
@@ -37,7 +39,7 @@ gulp.task('serverModuleSizes', () => {
 
   return exeq(
     `${nduAppPath} > ${nduOutputFilePath}`,
-    `open -a "Google Chrome" ${nduOutputFilePath}`
+    `${openFileShell} ${nduOutputFilePath}`
   )
   .then(function() {
     console.log('modulesize (ndu) completed successfully, now opening in browser');
