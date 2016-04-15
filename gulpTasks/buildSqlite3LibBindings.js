@@ -23,19 +23,27 @@ gulp.task('sqlite', () =>{
      * (homebrew doesn't usually uninstall the old versions).
      */
     var osxSqliteBinaryBaseDir = '/usr/local/Cellar/sqlite/'
+
     try{
+
       var sqliteVersions = jetpack.list('/usr/local/Cellar/sqlite/')
+
       console.log('OSX sqlite versions available')
       console.log(sqliteVersions)
+
       var osxVersionToUse = '0.0.0'
+
       sqliteVersions.forEach(version =>{
         if(semver.gt(version, osxVersionToUse)){
           osxVersionToUse = version
         }
       })
+
       console.log('osxVersionToUse')
       console.log(osxVersionToUse)
+
       sqliteBinaryFullDir = osxSqliteBinaryBaseDir + osxVersionToUse
+      
     }
     catch(err){
       console.error(`There was an error getting the osxSqliteBinaryFullDir`, err)
