@@ -1,14 +1,15 @@
-'use strict';
+'use strict'
 
+//noinspection Eslint
 import velocity from 'velocity-animate'
 
 import { addPageUrlsDiv$, progressBar$, errorOKbutton$, progressInfo$ } from './settingsPage'
 
-function showAddPageSubbar(){
+function showAddPageSubbar() {
   return $.Velocity(addPageUrlsDiv$[0], "slideDown", { duration: 500, display: 'flex' })
 }
 
-function hidePageSubbarAndReset(){
+function hidePageSubbarAndReset() {
   return $.Velocity(
     addPageUrlsDiv$[0],
     "slideUp",

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var electron = require('electron')
 var got = require('got')
@@ -22,20 +22,9 @@ var appVersion = devMode ? require('../../../package.json').version : electron.a
  * Send some info in the user agent to make it easy to block/contact if needed.
  * This is the default user agent for Electron: http://bit.ly/1S5sOQ9
  */
-var uAgent = `Mozilla/5.0 AppleWebKit (KHTML, like Gecko) Chrome/${process.versions['chrome']} Electron/${process.versions['electron']} Safari MarkSearch App https://github.com/Darkle/MarkSearch`
+var uAgent = `Mozilla/5.0 AppleWebKit (KHTML, like Gecko) Chrome/${ process.versions['chrome'] } Electron/${ process.versions['electron'] } Safari MarkSearch App https://github.com/Darkle/MarkSearch`
 
-function initUpdatesCheck(){
-  /****
-   * Do a check straight away on startup in case they don't leave
-   * MarkSearch running for a week.
-   */
-  checkForUpdate()
-  setTimeout(() => {
-    checkForUpdate()
-  }, checkInterval)
-}
-
-function checkForUpdate(){
+function checkForUpdate() {
   got(
     updateUrlToCheck,
     {
@@ -56,6 +45,17 @@ function checkForUpdate(){
     console.error(err)
     appLogger({err})
   })
+}
+
+function initUpdatesCheck(){
+  /****
+   * Do a check straight away on startup in case they don't leave
+   * MarkSearch running for a week.
+   */
+  checkForUpdate()
+  setTimeout(() => {
+    checkForUpdate()
+  }, checkInterval)
 }
 
 module.exports = initUpdatesCheck

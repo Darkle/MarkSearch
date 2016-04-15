@@ -1,9 +1,10 @@
-'use strict';
+'use strict'
 
 import { csrfToken } from './searchPage'
 import { queryServerAndRender } from './queryServerAndRender'
 import { dateFilterResetAll, checkMatchMediaForResultsContainerMarginTop } from './dateFilter'
 
+//noinspection Eslint
 import velocity from 'velocity-animate'
 import suspend from 'suspend'
 import got from 'got'
@@ -19,13 +20,13 @@ var addUrlsProgress$
 var addPageButtonsContainer$
 var errorOKbutton$
 
-function hideShowAddPageSubbar(refreshResults){
+function hideShowAddPageSubbar(refreshResults) {
   var dataIsShown = addPageUrlsDiv$.data('isShown')
   addUrlsTextArea$.css('overflow-y', 'hidden')
   if(dataIsShown === 'true'){
     addPageUrlsDiv$.data('isShown', 'false')
     $.Velocity(addPageUrlsDiv$[0], "slideUp", { duration: 500, display: 'none' })
-        .then(elements => {
+        .then(() => {
           progressBar$.width(0)
           addUrlsTextArea$.removeClass('hide')
           addUrlsProgress$.addClass('hide')
@@ -44,13 +45,13 @@ function hideShowAddPageSubbar(refreshResults){
     addPageUrlsDiv$.data('isShown', 'true')
     addPageMaterialIcon$.addClass('navBar-materialIcon-selected')
     $.Velocity(addPageUrlsDiv$[0], "slideDown", { duration: 500, display: 'flex' })
-        .then(elements => {
+        .then(() => {
           addUrlsTextArea$.css('overflow-y', '')
         })
   }
 }
 
-function addUrlsInit(){
+function addUrlsInit() {
   var subBar$ = $('.subBar')
   var nav$ = $('.navHeader nav')
   var resultsOuterContainer$ = $('#resultsOuterContainer')
@@ -90,8 +91,8 @@ function addUrlsInit(){
         $.Velocity(resultsOuterContainer$[0], { marginTop: checkMatchMediaForResultsContainerMarginTop() }, 500)
       }
       $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' })
-          .then(elems => {
-            currentlyShownSubBar$.data('isShown','false')
+          .then(() => {
+            currentlyShownSubBar$.data('isShown', 'false')
             otherNavMaterialIcons$.removeClass('navBar-materialIcon-selected navBar-materialIcon-hover')
             /****
              * If hiding the date filter subbar, reset the results and the settings in the date filter module
@@ -111,7 +112,7 @@ function addUrlsInit(){
       hideShowAddPageSubbar(refreshResults)
     }
   })
-  $('.urlCancelButton').click(event => {
+  $('.urlCancelButton').click(() => {
     var refreshResults = false
     hideShowAddPageSubbar(refreshResults)
   })
@@ -130,17 +131,17 @@ function addUrlsInit(){
           var textAreaText = addUrlsTextArea$.val()
           var linesOfTextArray = textAreaText.split(/\r?\n/)
           var trimmedUrlsArray = linesOfTextArray.filter(lineOfText => validUrl.isWebUri(_.trim(lineOfText)))
-          if(trimmedUrlsArray.length < 1) {
+          if(trimmedUrlsArray.length < 1){
             return
           }
           //addUrlsProgress$.height(addPageButtonsContainer$.height())
           addUrlsTextArea$.toggleClass('hide')
           addUrlsTextArea$.val('')
           progressInfo$.css('height', textAreaHeight)
-          setTimeout(event => {
+          setTimeout(() => {
             //progressInfo$.velocity({ height: 35 }, 500)
             $.Velocity.animate(progressInfo$[0], {height: 35}, 500)
-              .then(elements => {
+              .then(() => {
                 progressInfo$.css('height', '')
               })
           }, 10)
@@ -158,15 +159,15 @@ function addUrlsInit(){
            */
           $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*0.25)}, 3000, 'easeOutExpo')
 
-          suspend(function*() {
+          suspend(function* () {
             var error
             var urlsThatErrored = []
-            for(var i = 0; i < trimmedUrlsArray.length; i++) {
-              progressInfo$.text(`Saving ${trimmedUrlsArray[i]}`)
+            for(var i = 0; i < trimmedUrlsArray.length; i++){
+              progressInfo$.text(`Saving ${ trimmedUrlsArray[i] }`)
               $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 4000, 'easeOutSine')
               var encodedUrl = encodeURIComponent(trimmedUrlsArray[i])
               try{
-                yield got.post(`/frontendapi/scrapeAndAdd/${encodedUrl}`, {headers: {'X-CSRF-Token': csrfToken}})
+                yield got.post(`/frontendapi/scrapeAndAdd/${ encodedUrl }`, {headers: {'X-CSRF-Token': csrfToken}})
               }
               catch(err){
                 console.error(err)
@@ -178,7 +179,9 @@ function addUrlsInit(){
                   try{
                     parsedResponseBody = JSON.parse(responseBody)
                   }
-                  catch(e){}
+                  catch(e){
+                    // do nothing
+                  }
                 }
                 if(_.get(parsedResponseBody, 'errorMessage')){
                   errMessage = parsedResponseBody.errorMessage
@@ -205,9 +208,9 @@ function addUrlsInit(){
               if(urlsThatErrored.length !== trimmedUrlsArray.length){
                 errorTextBeginning = `Most URLs Saved, However `
               }
-              $(`<li>${errorTextBeginning}Errors Occured While Saving The Following URLs:</li>`).appendTo(ul$)
+              $(`<li>${ errorTextBeginning }Errors Occured While Saving The Following URLs:</li>`).appendTo(ul$)
               for(var errUrl of urlsThatErrored){
-                $(`<li class="failedUrlInfo">${errUrl.url} - reason: ${errUrl.errMessage}</li>`).appendTo(ul$)
+                $(`<li class="failedUrlInfo">${ errUrl.url } - reason: ${ errUrl.errMessage }</li>`).appendTo(ul$)
               }
               progressInfo$.append(ul$)
             }
@@ -215,7 +218,7 @@ function addUrlsInit(){
               progressBar$.velocity("stop")
               $.Velocity.animate(progressBar$[0], {width: progressBarContainerWidth}, 10, 'easeOutExpo')
               progressInfo$.text(`All URLs Saved`)
-              window.setTimeout(ev => {
+              window.setTimeout(() => {
                 var refreshResults = true
                 hideShowAddPageSubbar(refreshResults)
               }, 2500)
@@ -230,7 +233,7 @@ function addUrlsInit(){
         }
       )
   )
-  errorOKbutton$.click(event => {
+  errorOKbutton$.click(() => {
     var refreshResults = true
     hideShowAddPageSubbar(refreshResults)
   })

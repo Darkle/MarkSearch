@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-import { xhrHeaders, notieAlert$ } from './settingsPage'
+import { xhrHeaders } from './settingsPage'
 import { showNotie } from './showNotie'
 import { getErrorMessage } from './getErrorMessage'
 
@@ -8,7 +8,7 @@ import netscape from 'netscape-bookmarks'
 import got from 'got'
 import _ from 'lodash'
 
-function exportUrls(typeOfExport){
+function exportUrls(typeOfExport) {
   got.post('/frontendapi/getall/', {headers: xhrHeaders})
     .then( response => {
       var rows = JSON.parse(response.body)
@@ -43,18 +43,18 @@ function exportUrls(typeOfExport){
           blobData = blobData + pageData.pageUrl + '\n'
         })
       }
-      var blob = new Blob([blobData], {type : 'text/html'} )
+      var blob = new Blob([blobData], {type: 'text/html'} )
       downloadUrl = window.URL.createObjectURL(blob)
       downloadLink.href = downloadUrl
-      downloadLink.download = `MarkSearchExport.${fileExtension}`
+      downloadLink.download = `MarkSearchExport.${ fileExtension }`
       downloadLink.click()
       window.URL.revokeObjectURL(downloadUrl)
       document.body.removeChild(downloadLink)
     })
-    .catch(err =>{
+    .catch(err => {
       console.error(err)
       var errorMessage = getErrorMessage(err)
-      showNotie(3, `There Was An Error Exporting. Error: ${errorMessage}`, 6)
+      showNotie(3, `There Was An Error Exporting. Error: ${ errorMessage }`, 6)
     })
 }
 

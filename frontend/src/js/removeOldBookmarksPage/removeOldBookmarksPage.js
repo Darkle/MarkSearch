@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-/* globals rows, buttonplate, notie */
-import "babel-polyfill"
+/* global notie */
+import 'babel-polyfill'
 import got from 'got'
 import DOMPurify from 'dompurify'
 import moment from 'moment'
@@ -9,7 +9,7 @@ import _ from 'lodash'
 
 $(document).ready(removeOldBookmarksPageInit)
 
-function removeOldBookmarksPageInit(event){
+function removeOldBookmarksPageInit() {
   var csrfToken = $('#csrfInput').val()
   var rowsUl$ = $('#rowsUl')
   // buttonplate($('.deleteBookmark'))
@@ -26,12 +26,12 @@ function removeOldBookmarksPageInit(event){
         rowsUl$.append(`
           <li class="bookmarkDetailsContainer">
             <div class="deleteBookmarkButtonContainer">
-              <a href="${DOMPurify.sanitize(row.pageUrl)}" class="deleteBookmarkButton button black square">Delete</a>
+              <a href="${ DOMPurify.sanitize(row.pageUrl) }" class="deleteBookmarkButton button black square">Delete</a>
             </div>
             <div class="bookmarkDetails">
-              <a href="${DOMPurify.sanitize(row.pageUrl)}" target="_blank">${DOMPurify.sanitize(pageTitle)}</a>
-              <div class="bookmarkPageUrl">${DOMPurify.sanitize(row.pageUrl)}</div>
-              <div class="dateCreated">Date Created: ${DOMPurify.sanitize(moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a"))}</div>
+              <a href="${ DOMPurify.sanitize(row.pageUrl) }" target="_blank">${ DOMPurify.sanitize(pageTitle) }</a>
+              <div class="bookmarkPageUrl">${ DOMPurify.sanitize(row.pageUrl) }</div>
+              <div class="dateCreated">Date Created: ${ DOMPurify.sanitize(moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")) }</div>
             </div>
           </li>
         `)
@@ -42,14 +42,14 @@ function removeOldBookmarksPageInit(event){
         var currentElement = event.currentTarget
         var urlToDelete = encodeURIComponent($(currentElement).attr('href'))
         var elemBookmarkDetailsContainer = $(currentElement).parent().parent()
-        got.delete(`/frontendapi/remove/${urlToDelete}`,
+        got.delete(`/frontendapi/remove/${ urlToDelete }`,
           {
             headers:
             {
               'X-CSRF-Token': csrfToken
             }
           })
-          .then( response =>{
+          .then(() => {
             elemBookmarkDetailsContainer.animate({height: "toggle"}, 400, () => {
               elemBookmarkDetailsContainer.remove()
             })
@@ -60,7 +60,7 @@ function removeOldBookmarksPageInit(event){
             notie.alert(
               3,
               `There Was An Error Deleting The Bookmark
-           Error: ${err.message}`,
+           Error: ${ err.message }`,
               5
             )
           })

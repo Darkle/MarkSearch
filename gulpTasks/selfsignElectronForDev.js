@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 
@@ -9,21 +9,21 @@ var basePath = path.resolve('')
 
 gulp.task('selfsign', () => {
   var electronAppPath = path.join(basePath, 'node_modules', 'electron-prebuilt', 'dist', 'Electron.app')
-  var shellTask = `codesign -s - -f ${electronAppPath}`
+  var shellTask = `codesign -s - -f ${ electronAppPath }`
   /****
    * I'm not sure why, but signing it with or without --deep on it's own doesn't
    * seem to work, however signing it with --deep first and then signing it a
    * second time without --deep seems to work. ¯\_(ツ)_/¯
    */
   return exeq(
-    `${shellTask} --deep`,
+    `${ shellTask } --deep`,
     shellTask
   )
   .then(function() {
-    console.log('selfsign completed successfully');
+    console.log('selfsign completed successfully')
   })
   .catch(function(err) {
-    console.error('ther was an error self signing the electron app', err);
+    console.error('ther was an error self signing the electron app', err)
   })
 
 })

@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
 var shell = require('electron').shell
 
 var appLogger = require('../../utils/appLogger')
 
-function openUrlInBrowser(req, res, next){
+function openUrlInBrowser(req, res) {
   try{
     shell.openExternal(req.params.urlToOpen)
     res.status(200).end()

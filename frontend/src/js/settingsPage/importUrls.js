@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-import { xhrHeaders, notieAlert$ } from './settingsPage'
+import { xhrHeaders } from './settingsPage'
 import { showAddPageSubbar, hidePageSubbarAndReset } from './hideShowAddPageSubbar'
 import { showNotie } from './showNotie'
 import { saveUrls } from './saveUrls'
@@ -10,7 +10,7 @@ import got from 'got'
 import _ from 'lodash'
 import validUrl from 'valid-url'
 
-function importUrls(event){
+function importUrls(event) {
   var eventElement = event.target
   var files = eventElement.files
   if(!files.length){
@@ -23,9 +23,9 @@ function importUrls(event){
    * http://electron.atom.io/docs/all/#file-object
    */
     //TODO - also check file.path doesnt have a trailing slash on windows & linux
-  reader.onload = event => {
+  reader.onload = onloadEvent => {
     got.post(
-      `/frontendapi/settings/checkIfFileIsBinary/${encodeURIComponent(file.path)}`,
+      `/frontendapi/settings/checkIfFileIsBinary/${ encodeURIComponent(file.path) }`,
       {
         headers: xhrHeaders
       }
@@ -33,7 +33,7 @@ function importUrls(event){
     .then( () => {
       var urlsToSave
       var urlsArray
-      var fileText = event.target.result
+      var fileText = onloadEvent.target.result
       if(eventElement.dataset.importType === 'html'){
         var bookmarksDoc = document.implementation.createHTMLDocument('')
         bookmarksDoc.body.innerHTML = fileText
@@ -57,17 +57,19 @@ function importUrls(event){
       var errorMessage = getErrorMessage(err)
       hidePageSubbarAndReset()
         .then(() => {
-          showNotie(3, `There Was An Error Opening The File. Error: ${errorMessage}`, 6)
+          showNotie(3, `There Was An Error Opening The File. Error: ${ errorMessage }`, 6)
         })
     })
-    reader.onerror = event => {
-      console.error(event)
+    reader.onerror = errorEvent => {
+      console.error(errorEvent)
       console.error(reader.error)
-      showNotie(3, `There Was An Error Loading The File. Error: ${reader.error.name}`, 6)
+      showNotie(3, `There Was An Error Loading The File. Error: ${ reader.error.name }`, 6)
       reader.abort()
     }
   }
-  showAddPageSubbar().then(() => { reader.readAsText(file) })
+  showAddPageSubbar().then(() => {
+    reader.readAsText(file)
+  })
 }
 
 export { importUrls }

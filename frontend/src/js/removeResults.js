@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
 import { resultsContainer$, resultsCountDiv$ } from './searchPage'
 import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEventHandlers'
 
 import _ from 'lodash'
 
-function removeResults(){
+function removeResults() {
   /****
    * Remove the event listeners from the results elements before we remove
    * the elements themselves so we dont have any memory leaks.

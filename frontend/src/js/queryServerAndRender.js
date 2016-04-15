@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import { resultsObject } from './resultsObject'
 import { queryServer } from './queryServer'
@@ -7,7 +7,7 @@ import { removeResults } from './removeResults'
 import { getSearchTextAndDateFilterParams } from './getSearchTextAndDateFilterParams'
 import { updateResultsCountDiv } from './updateResultsCountDiv'
 
-function queryServerAndRender(){
+function queryServerAndRender() {
   removeResults()
   var {searchTerms, dateFilter, unencodedSearchTerms} = getSearchTextAndDateFilterParams()
   return queryServer(searchTerms, dateFilter)
@@ -16,7 +16,7 @@ function queryServerAndRender(){
            * again before queryServer finishes.
            */
           .bind({unencodedSearchTerms})
-          .then(function(rows){
+          .then(function(rows) {
             var rowsLength = rows.length
             updateResultsCountDiv(rowsLength)
             /****
@@ -32,7 +32,9 @@ function queryServerAndRender(){
             try {
               parsedresponseBody = JSON.parse(err.response.body)
             }
-            catch(e){}
+            catch(e){
+              // do nothing
+            }
             updateResultsCountDiv(parsedresponseBody)
           })
 }

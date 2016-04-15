@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-function checkIfiOS7(window){
+function checkIfiOS7(window) {
   /*****
    * old way
    */

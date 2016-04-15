@@ -1,6 +1,4 @@
-'use strict';
-
-var url = require('url')
+'use strict'
 
 var express = require('express')
 var requireDir = require('require-dir')
@@ -9,14 +7,11 @@ var apiModules = requireDir('../api')
 var search = require('../api/search/search')
 var scrapeAndAddPage = require('../api/scrape/scrapeAndAddPage')
 var appSettings = require('../../db/appSettings')
-var generateBookmarkletJS = require('../generateBookmarkletJS')
-var generateJWTtoken = require('../../utils/generateJWTtoken')
-var appLogger = require('../../utils/appLogger')
 var requestDataValidation = require('../requestDataValidation')
 
 var router = express.Router()
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   res.render('searchPage',
       {
         title: 'MarkSearch',
@@ -31,7 +26,7 @@ router.get('/', (req, res, next) => {
   )
 })
 
-router.get('/about', (req, res, next) => {
+router.get('/about', (req, res) => {
   res.render('aboutPage',
       {
         title: 'MarkSearch About'
@@ -39,7 +34,7 @@ router.get('/about', (req, res, next) => {
   )
 })
 
-router.get('/help', (req, res, next) => {
+router.get('/help', (req, res) => {
   res.render('helpPage',
       {
         title: 'MarkSearch Help'
@@ -47,7 +42,7 @@ router.get('/help', (req, res, next) => {
   )
 })
 
-router.get('/settings', (req, res, next) => {
+router.get('/settings', (req, res) => {
   res.render('settingsPage',
       {
         title: 'MarkSearch Settings',
@@ -71,7 +66,7 @@ router.get('/settings', (req, res, next) => {
  * Load the boookmarklet code and token via the frontend api so you need to include
  * the csrf token
  */
-router.get('/bookmarklet', (req, res, next) => {
+router.get('/bookmarklet', (req, res) => {
   // var token = generateJWTtoken()
   // var bookmarkletJS = generateBookmarkletJS(global.msServerAddr.combined, token)
   res.render('bookmarkletPage',
@@ -83,7 +78,7 @@ router.get('/bookmarklet', (req, res, next) => {
   )
 })
 
-router.get('/removeOldBookmarks', (req, res, next) => {
+router.get('/removeOldBookmarks', (req, res) => {
   res.render('removeOldBookmarksPage',
     {
       title: 'MarkSearch - Remove Old Bookmarks',

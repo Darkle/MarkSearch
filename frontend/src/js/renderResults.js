@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-/* globals markSearchSettings  */
+/* global markSearchSettings  */
 
 import { resultsContainer$ } from './searchPage'
 import { showSafeBrowsingDetails, deletePageFromMarksearch } from './resultsEventHandlers'
@@ -9,7 +9,7 @@ var STOPWORDS = require('../../../appmodules/server/api/search/lunrStopwordFilte
 
 import _ from 'lodash'
 import DOMPurify from 'dompurify'
-import moment from 'moment'
+//import moment from 'moment'
 import stem from 'stem-porter'
 import validator from 'validator'
 
@@ -17,8 +17,8 @@ import validator from 'validator'
  * Exports
  */
 
-function renderResults(resultsChunk, searchTerms){
-  return new Promise((resolve, reject) =>{
+function renderResults(resultsChunk, searchTerms) {
+  return new Promise((resolve, reject) => {
     try{
       updateChunkShownValue(resultsChunk.chunkIndex, true)
       /****
@@ -48,7 +48,7 @@ function renderResults(resultsChunk, searchTerms){
         addRemoveDiv = document.getElementById('addRemoveDiv')
       }
       _.each(resultsChunk.resultRows, row => {
-        resultItemNumber++
+        resultItemNumber += 1
         /****
          * prebrowsing for the first 2 results (if set in settings).
          * Preconnect for the first and dns-prefetch for the second.
@@ -72,7 +72,7 @@ function renderResults(resultsChunk, searchTerms){
         }
 
         var resultDiv = document.createElement('div')
-        resultDiv.setAttribute('id', `result_${resultItemNumber}`)
+        resultDiv.setAttribute('id', `result_${ resultItemNumber }`)
         resultDiv.className = 'result'
         addRemoveDiv.appendChild(resultDiv)
 
@@ -199,7 +199,7 @@ function renderResults(resultsChunk, searchTerms){
               .forEach( searchWord => {
                 var stemmedSearchWord = stem(searchWord)
                 var regex = new RegExp('(' + stemmedSearchWord + '[a-z]*)', 'gi')
-                var replacement = highlightOpeningSpan + '$1' + '</span>'
+                var replacement = highlightOpeningSpan + '$1</span>'
                 row.snippet = row.snippet.replace(regex, replacement)
               })
           }

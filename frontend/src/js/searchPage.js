@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import "babel-polyfill"
 
@@ -20,7 +20,7 @@ var searchInput$
 
 $(document).ready(searchPageInit)
 
-function searchPageInit(event){
+function searchPageInit() {
   searchInput$ = $('#searchInput')
   csrfToken = $('#csrfInput').val()
   resultsCountDiv$ = $('#resultsCount')
@@ -51,7 +51,9 @@ function searchPageInit(event){
          */
         $(window).on('scroll touchmove', initInfiniteScroll)
       })
-      .catch(err => {console.error(err)})
+      .catch(err => {
+        console.error(err)
+      })
 
   /****
    * Search
@@ -108,7 +110,7 @@ function searchPageInit(event){
   if(isIOS7){
     console.info("we may be on an iPhone 4")
     var navHeader$ = $('.navHeader')
-    navHeader$.on('touchstart', event => {
+    navHeader$.on('touchstart', () => {
       body$.scrollTop(0)
     })
   }

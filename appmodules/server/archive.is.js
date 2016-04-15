@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var request = require('request')
 var _ = require('lodash')
@@ -7,10 +7,10 @@ var _ = require('lodash')
  * This is the default user agent for Electron: http://bit.ly/1S5sOQ9
  * note: request doesn't send a user agent by default.
  */
-var uAgent = `Mozilla/5.0 AppleWebKit (KHTML, like Gecko) Chrome/${process.versions['chrome']} Electron/${process.versions['electron']} Safari MarkSearch App https://github.com/Darkle/MarkSearch`
+var uAgent = `Mozilla/5.0 AppleWebKit (KHTML, like Gecko) Chrome/${ process.versions['chrome'] } Electron/${ process.versions['electron'] } Safari MarkSearch App https://github.com/Darkle/MarkSearch`
 
-function generateArchiveOfPage(pageUrl){
-  return new Promise((resolve, reject) => {
+function generateArchiveOfPage(pageUrl) {
+  return new Promise(resolve => {
     var archiveLink = null
     request.post({
           url: 'https://archive.is/submit/',
@@ -21,7 +21,7 @@ function generateArchiveOfPage(pageUrl){
             'User-Agent': uAgent
           }
         },
-        (err, httpResponse, body) => {
+        (err, httpResponse) => {
           var locationHeader = _.get(httpResponse, 'headers.location')
           if(err || !locationHeader){
             console.error("Couldn't get an archive.is backup:", err)

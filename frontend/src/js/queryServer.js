@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import { csrfToken } from './searchPage'
 import { updateResults } from './resultsObject'
@@ -10,10 +10,10 @@ import Promise from 'bluebird'
 /****
  * Exports
  */
-function queryServer(searchTerms, dateFilter){
+function queryServer(searchTerms, dateFilter) {
   var postUrl = `/frontendapi/getall/`
   if(searchTerms){
-    postUrl =`/frontendapi/search/${searchTerms}`
+    postUrl =`/frontendapi/search/${ searchTerms }`
   }
   /****
    * jQuery doesn't use proper Promises (<3.0), so using "got" for ajax.

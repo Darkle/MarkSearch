@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
-/* globals markSearchSettings: true, Clipboard, formplate, buttonplate  */
+/* global markSearchSettings: true, Clipboard, formplate, buttonplate  */
 
-import "babel-polyfill"
+import 'babel-polyfill'
 import { generateBookmarkletJS } from '../bookmarkletTemplate'
 import { showNotie } from './showNotie'
 import { getErrorMessage } from './getErrorMessage'
@@ -32,7 +32,7 @@ var dbLocationText$
 
 $(document).ready(settingsPageInit)
 
-function settingsPageInit(event){
+function settingsPageInit() {
   var body$ = $('body')
   window.markSearchSettings = body$.data('marksearchSettings')
   formplate(body$)
@@ -74,6 +74,7 @@ function settingsPageInit(event){
 
   var csrfToken = $('#csrfInput').val()
   $('.brandLogo a').removeAttr('href')
+  //noinspection Eslint
   new Clipboard('.clipBoardButton')
   xhrHeaders = {
     'X-CSRF-Token': csrfToken
@@ -101,12 +102,12 @@ function settingsPageInit(event){
          * Include the url of MarkSearch so user doesn't have to copy & past that
          * into the extension as well
          */
-        browserAddonTokenText$.val(`${responseData.protocolIpandPort},${responseData.token}`)
+        browserAddonTokenText$.val(`${ responseData.protocolIpandPort },${ responseData.token }`)
       })
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
-        showNotie(3, `There Was An Error Generating The Browser Extension Token. Error: ${errorMessage}`, 6)
+        showNotie(3, `There Was An Error Generating The Browser Extension Token. Error: ${ errorMessage }`, 6)
       })
   })
 
@@ -119,12 +120,12 @@ function settingsPageInit(event){
       .then( response => {
         var responseData = JSON.parse(response.body)
         var bookmarkletJS = generateBookmarkletJS(responseData.protocolIpandPort, responseData.token)
-        bookmarkletText$.val(`javascript:${encodeURIComponent(bookmarkletJS)}`)
+        bookmarkletText$.val(`javascript:${ encodeURIComponent(bookmarkletJS) }`)
       })
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
-        showNotie(3, `There Was An Error Generating The Bookmarklet. Error: ${errorMessage}`, 6)
+        showNotie(3, `There Was An Error Generating The Bookmarklet. Error: ${ errorMessage }`, 6)
       })
   })
   /****
@@ -138,7 +139,7 @@ function settingsPageInit(event){
       .then( response => {
         var responseData = JSON.parse(response.body)
         var bookmarkletJS = generateBookmarkletJS(responseData.protocolIpandPort, responseData.token)
-        var generatedBookmarkletText = `javascript:${encodeURIComponent(bookmarkletJS)}`
+        var generatedBookmarkletText = `javascript:${ encodeURIComponent(bookmarkletJS) }`
         var bookmarkletEmail = bookmarkletEmail$.val()
         return got.post('/frontendapi/settings/emailBookmarklet',
           {
@@ -150,13 +151,13 @@ function settingsPageInit(event){
           }
         )
       })
-      .then(response => {
+      .then(() => {
         showNotie(1, 'Email Sent. (check your spam folder)', 5)
       })
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
-        showNotie(3, `There Was An Error Sending The Email. Error: ${errorMessage}`, 6)
+        showNotie(3, `There Was An Error Sending The Email. Error: ${ errorMessage }`, 6)
       })
   })
 
@@ -168,9 +169,9 @@ function settingsPageInit(event){
     changeDBLocInput$.click()
   })
 
-  changeDBLocInput$.change(event => {
+  changeDBLocInput$.change(() => {
     var files = changeDBLocInput$[0].files
-    if(!files.length) {
+    if(!files.length){
       return
     }
     dbLocationText$.text(files[0].path)
@@ -198,7 +199,7 @@ function settingsPageInit(event){
       .catch( err => {
         console.error(err)
         var errorMessage = getErrorMessage(err)
-        showNotie(3, `There Was An Error Revoking The Tokens. Error: ${errorMessage}`, 6)
+        showNotie(3, `There Was An Error Revoking The Tokens. Error: ${ errorMessage }`, 6)
       })
   })
 
@@ -220,7 +221,7 @@ function settingsPageInit(event){
   /****
    * OK Button On Importing Bookmarks Saving Error
    */
-  errorOKbutton$.click(event => {
+  errorOKbutton$.click(() => {
     hidePageSubbarAndReset()
   })
 
@@ -303,7 +304,7 @@ function settingsPageInit(event){
          * the user tried to save.
          */
         setSettingsElementValues()
-        showNotie(3,`There Was An Error Saving The Settings. Error: ${errorMessage}`, 6)
+        showNotie(3, `There Was An Error Saving The Settings. Error: ${ errorMessage }`, 6)
       })
   })
 

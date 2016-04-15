@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 var os = require('os')
@@ -45,18 +45,18 @@ gulp.task('frontendModuleSize', () => {
     'settingsPage-bundle.js'
   ]
   _.each(bundleFiles, value => {
-    let outputFilePath = `${path.join(desktopPath, `disc${value}ModuleSizes.html`)}`
+    let outputFilePath = `${ path.join(desktopPath, `disc${ value }ModuleSizes.html`) }`
     // console.log(`${discAppPath} ${path.join(bundleFilePaths, value)} > ${outputFilePath}`)
 
     exeq(
-      `${discAppPath} ${path.join(bundleFilePaths, value)} > ${outputFilePath}`,
-      `${openFileShell} ${outputFilePath}`
+      `${ discAppPath } ${ path.join(bundleFilePaths, value) } > ${ outputFilePath }`,
+      `${ openFileShell } ${ outputFilePath }`
     )
     .then(function() {
-      console.log('frontendModuleSize (disc) completed successfully, now opening in browser');
+      console.log('frontendModuleSize (disc) completed successfully, now opening in browser')
     })
     .catch(function(err) {
-      console.error('ther was an error with running frontendModuleSize (disc)', err);
+      console.error('ther was an error with running frontendModuleSize (disc)', err)
     })
   })
 })

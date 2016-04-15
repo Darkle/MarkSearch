@@ -1,22 +1,22 @@
-'use strict';
+'use strict'
 
 import $ from 'jquery'
 
-$(document).ready(event => {
+$(document).ready(() => {
   var helpPageBackButtonContainer = $('.helpPageBackButtonContainer')
   var backButtonIcon = $('#helpPageBackButton .material-icons')
   helpPageBackButtonContainer.addClass('showFlex')
   helpPageBackButtonContainer
     .hover(
-      (event) => {
+      () => {
         backButtonIcon.addClass('navBar-materialIcon-hover')
       },
-      (event) => {
+      () => {
         backButtonIcon.removeClass('navBar-materialIcon-hover')
       }
     )
     .on('touchend',
-      (event) => {
+      () => {
         backButtonIcon.removeClass('navBar-materialIcon-hover')
       }
     )

@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-/* globals markSearchSettings */
+/* global markSearchSettings */
 
 import { checkIfTouchDevice } from './checkIfTouchDevice'
 
@@ -11,7 +11,7 @@ import { checkIfTouchDevice } from './checkIfTouchDevice'
  * when there was also results displayed.
  */
 
-function tooltips(){
+function tooltips() {
 
   var tooltipsHaveBeenShownWithResults = Boolean(window.localStorage.tooltipsHaveBeenShownWithResults)
 

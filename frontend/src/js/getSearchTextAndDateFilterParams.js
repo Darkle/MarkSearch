@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import { searchInput$ } from './searchPage'
 import { dateFilterIsSet, getDateFilterParameters } from './dateFilter'
@@ -9,7 +9,7 @@ import { dateFilterIsSet, getDateFilterParameters } from './dateFilter'
  */
 var stringUtils = require('string')
 
-function getSearchTextAndDateFilterParams(){
+function getSearchTextAndDateFilterParams() {
   /****
    * Get the search box text (if there is any) and the date filter parameters (if there are any).
    */

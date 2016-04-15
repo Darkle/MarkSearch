@@ -80,15 +80,15 @@ var validator = require('validator')
  * to check against that. 
  */
 
-function allowedToOpenUrl(url){
+function allowedToOpenUrl(urlWantToOpen) {
   return [
       'http://blog.cloudimage.io/2015/10/19/what-is-prebrowsing-and-how-it-can-drastically-improve-your-page-loading-time/',
-      `${global.msServerAddr.combined}`,
-      `${global.msServerAddr.combined}/`,
-      `${global.msServerAddr.combined}/help#`,
-      `${global.msServerAddr.combined}/help#browserAddon`,
-      `${global.msServerAddr.combined}/help#bookmarklet`
-    ].indexOf(url) > -1
+      `${ global.msServerAddr.combined }`,
+      `${ global.msServerAddr.combined }/`,
+      `${ global.msServerAddr.combined }/help#`,
+      `${ global.msServerAddr.combined }/help#browserAddon`,
+      `${ global.msServerAddr.combined }/help#bookmarklet`
+    ].indexOf(urlWantToOpen) > -1
 }
 
 module.exports = {
@@ -98,7 +98,7 @@ module.exports = {
       pageUrl: {
         type: 'string',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(_.isString(post)){
             post = url.parse(post).href
           }
@@ -129,7 +129,7 @@ module.exports = {
         type: 'string',
         optional: true,
         maxLength: 2000,
-        exec: function(scheme, post){
+        exec: function(scheme, post) {
           if(_.isString(post) && !validUrl.isWebUri(post)){
             this.report('req.params.pageUrl is not a valid web url')
           }
@@ -143,7 +143,7 @@ module.exports = {
         type: 'string',
         maxLength: 2000,
         optional: true,
-        exec: function(scheme, post){
+        exec: function(scheme, post) {
           if(_.isString(post)){
             if(!validUrl.isWebUri(post) || !allowedToOpenUrl(post)){
               this.report('req.params.urlToOpen is not a valid web url or is not a url allowed to be opened')
@@ -159,7 +159,7 @@ module.exports = {
       pageTitle: {
         type: 'string',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(_.isString(post)){
             post = validator.escape(post)
           }
@@ -169,7 +169,7 @@ module.exports = {
       pageText: {
         type: 'string',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(_.isString(post)){
             post = validator.escape(post)
           }
@@ -179,7 +179,7 @@ module.exports = {
       pageDescription: {
         type: 'string',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(_.isString(post)){
             post = validator.escape(post)
           }
@@ -189,7 +189,7 @@ module.exports = {
       dateFilterStartDate: {
         type: 'integer',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(!_.isUndefined(post) && !_.isInteger(post)){
             post = _.toInteger(post)
           }
@@ -199,7 +199,7 @@ module.exports = {
       dateFilterEndDate: {
         type: 'integer',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(!_.isUndefined(post) && !_.isInteger(post)){
             post = _.toInteger(post)
           }
@@ -214,7 +214,7 @@ module.exports = {
       email: {
         type: 'string',
         optional: true,
-        exec: function(scheme, post){
+        exec: function(scheme, post) {
           if(_.isString(post) && post.length && !validator.isEmail(post)){
             this.report(`req.body.email doesn't seem to be a valid email address`)
           }

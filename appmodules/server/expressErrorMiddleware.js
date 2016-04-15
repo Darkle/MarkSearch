@@ -1,15 +1,15 @@
-'use strict';
+'use strict'
 
 var appLogger = require('../utils/appLogger')
 
 /****
  * Error middlewares
  */
-function errorMiddleware(app){
+function errorMiddleware(app) {
   /****
    * catch 404 and forward to error handler
    */
-  app.use((req, res, next) =>{
+  app.use((req, res, next) => {
     var err = new Error('Page Not Found')
     err.status = 404
     next(err)
@@ -17,7 +17,7 @@ function errorMiddleware(app){
   /****
    * error handlers
    */
-  app.use((err, req, res, next) =>{
+  app.use((err, req, res) => {
     /****
      * errObjectToShow = {} - no stacktraces leaked to user if in production
      */

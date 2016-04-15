@@ -1,15 +1,15 @@
-'use strict';
+'use strict'
 
 var resultsObject = {
   results: null
 }
 
-function updateResults(newResults){
+function updateResults(newResults) {
   resultsObject.results = newResults
 }
 
-function updateChunkShownValue(chunkIndex, shownYetVal){
-  resultsObject.results[`chunk_${chunkIndex}`].shownYet = shownYetVal
+function updateChunkShownValue(chunkIndex, shownYetVal) {
+  resultsObject.results[`chunk_${ chunkIndex }`].shownYet = shownYetVal
 }
 
 /****

@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
 var isBinaryFile = require("isbinaryfile")
 var parsePath = require('parse-filepath')
 
 var appLogger = require('../../utils/appLogger')
 
-function checkIfFileIsBinary(req, res, next){
+function checkIfFileIsBinary(req, res) {
 
   var filePath
 

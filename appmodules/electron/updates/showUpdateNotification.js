@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 
@@ -15,7 +15,7 @@ var electronShell = electron.shell
 var notificationWindow = null
 var devMode = process.env.NODE_ENV === 'development'
 
-function showUpdateNotification(latestUpdateVersion){
+function showUpdateNotification(latestUpdateVersion) {
 
   /****
    * http://electron.atom.io/docs/v0.37.5/api/browser-window/#new-browserwindowoptions
@@ -38,7 +38,7 @@ function showUpdateNotification(latestUpdateVersion){
   var positioner = new Positioner(notificationWindow)
   positioner.move('bottomRight')
 
-  notificationWindow.loadURL(`file://${path.join(__dirname, 'updateNotification.html')}`)
+  notificationWindow.loadURL(`file://${ path.join(__dirname, 'updateNotification.html') }`)
 
   notificationWindow.webContents.on('did-finish-load', function() {
     if(devMode){
@@ -51,7 +51,7 @@ function showUpdateNotification(latestUpdateVersion){
     notificationWindow = null
   })
 
-  ipcMain.on('openUpdatePage', function(event, arg) {
+  ipcMain.on('openUpdatePage', function() {
     notificationWindow.close()
     electronShell.openExternal('https://github.com/Darkle/MarkSearch-Updates')
   })

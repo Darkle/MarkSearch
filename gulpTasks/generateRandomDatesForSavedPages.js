@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 var os = require('os')
@@ -29,9 +29,6 @@ if(platform === 'darwin'){
 // }
 
 gulp.task('randomDates', () => {
-  var electron = require('electron-prebuilt')
-  console.log(electron)
-  var app = require('app')
   var pagesDBknex
   var appSettingsKnex = require('knex')({
     client: 'sqlite3',
@@ -73,7 +70,7 @@ gulp.task('randomDates', () => {
       })
     )
     .then(rows =>
-      coForEach(rows, function* (row, idx){
+      coForEach(rows, function* (row) {
         yield pagesDBknex('pages')
           .where('pageUrl', row.pageUrl)
           .update({dateCreated: row.newDateCreated})

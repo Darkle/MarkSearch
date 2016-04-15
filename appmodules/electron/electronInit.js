@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var electron = require('electron')
 var Promise = require('bluebird')
@@ -8,8 +8,8 @@ var appSettings = require('../db/appSettings')
 
 var electronApp = electron.app
 
-function electronInit(){
-    return new Promise((resolve, reject) => {
+function electronInit() {
+    return new Promise(resolve => {
 
       if(electronApp.makeSingleInstance(() => true)){
         console.log('Marksearch Is Already Running')
@@ -20,7 +20,9 @@ function electronInit(){
        * event handler and you close all the windows (at least it
        * does on OSX)
        */
-      electronApp.on('window-all-closed', () => {})
+      electronApp.on('window-all-closed', () => {
+        // do nothing
+      })
 
       electronApp.on('will-quit', () => {
         /****

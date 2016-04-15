@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
 var Crypto = require('crypto')
 
 var appSettings = require('../../db/appSettings')
 var appLogger = require('../../utils/appLogger')
 
-function resetJWTsecret(req, res, next){
+function resetJWTsecret(req, res) {
   appSettings.db('appSettings')
     .where('id', 'appSettings')
     .update({

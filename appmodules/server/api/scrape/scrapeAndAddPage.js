@@ -1,7 +1,5 @@
-'use strict';
+'use strict'
 
-var fs = require('fs')
-var url = require('url')
 var path = require('path')
 
 var inspector = require('schema-inspector')
@@ -61,7 +59,7 @@ function scrapeAndAddPage(req, res, next) {
     webContents.openDevTools()
   }
 
-  webContents.once('did-finish-load', event => {
+  webContents.once('did-finish-load', () => {
     /****
      * Tell renderer to start loading urlToScrape
      */
@@ -71,15 +69,15 @@ function scrapeAndAddPage(req, res, next) {
   webContents.once('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
     var errMessage = `
       BrowserWindow webContents: did-fail-load
-      errorCode: ${errorCode}
-      errorDescription: ${errorDescription}
-      validatedURL: ${validatedURL}
-      req.params.pageUrl: ${req.params.pageUrl}
+      errorCode: ${ errorCode }
+      errorDescription: ${ errorDescription }
+      validatedURL: ${ validatedURL }
+      req.params.pageUrl: ${ req.params.pageUrl }
     `
     logErrorDestroyBrowserAndRespond(errMessage, req, res)
   })
 
-  webContents.once('crashed', event => {
+  webContents.once('crashed', () => {
     logErrorDestroyBrowserAndRespond('BrowserWindow webContents: crashed', req, res)
   })
 
@@ -108,7 +106,7 @@ function scrapeAndAddPage(req, res, next) {
 
     var validReqBody = inspector.validate(schemas.reqBodyValidation, req.body)
     if(!validReqBody.valid){
-      let errMessage = `Error(s) with the req.body data in scrapeAndAddPage : ${validReqBody.format()}`
+      let errMessage = `Error(s) with the req.body data in scrapeAndAddPage : ${ validReqBody.format() }`
       let err = new Error(errMessage)
       console.error(errMessage)
       appLogger.log.error({err, req, res})
@@ -121,8 +119,8 @@ function scrapeAndAddPage(req, res, next) {
 
 }
 
-function logErrorDestroyBrowserAndRespond(errorMessage, req, res){
-  console.error(`An Error Occurred: ${errorMessage}`)
+function logErrorDestroyBrowserAndRespond(errorMessage, req, res) {
+  console.error(`An Error Occurred: ${ errorMessage }`)
   var err = new Error(errorMessage)
   appLogger.log.error({err, req, res})
   browserWindow.destroy()

@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
 var jwt = require('jsonwebtoken')
 
 var appSettings = require('../db/appSettings')
 var appLogger = require('../utils/appLogger')
 
-function authorizationCheck(req, res, next){
+function authorizationCheck(req, res, next) {
   var token = req.get('Authorization') || req.body.JWT
   if(!token){
     console.log('Request missing Authorization Header or JWT post body data.')
@@ -15,16 +15,14 @@ function authorizationCheck(req, res, next){
     token = token.replace('Bearer ', '')
   }
   jwt.verify(token, appSettings.settings.JWTsecret, (err, decoded) => {
-    if(err) {
+    if(err){
       console.log('Failed to authenticate token.')
       console.error(err)
       appLogger.log.error({err, req, res})
       return res.status(403).end()
     }
-    else{
-      req.decoded = decoded
-      next()
-    }
+    req.decoded = decoded
+    return next()
   })
 }
 

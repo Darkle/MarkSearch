@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var pagesdb = require('../../../db/pagesdb')
 var processSearchTerms = require('./processSearchTerms')
@@ -7,7 +7,7 @@ var printSearchSQL = require('./printSearchSQL')
 
 var devMode = process.env.NODE_ENV === 'development'
 
-function search(req, res, next){
+function search(req, res) {
 
   var processedSearchTerms = processSearchTerms(req.params.searchTerms)
   var domainToSearchFor = processedSearchTerms.domainToSearchFor

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 
@@ -15,7 +15,7 @@ var appTrayMenu = null
 var devMode = process.env.NODE_ENV === 'development'
 var logsFolder = path.join(electronApp.getPath('appData'), 'MarkSearch', 'logs')
 
-function trayMenu(){
+function trayMenu() {
   var BrowserWindow = electron.BrowserWindow
 
   appTrayMenu = new Tray(path.join(__dirname, 'icons', 'MS-iconTemplate.png'))
@@ -50,12 +50,12 @@ function trayMenu(){
                 }
               }
           )
-          settingsWindow.loadURL(`${global.msServerAddr.combined}/settings`)
+          settingsWindow.loadURL(`${ global.msServerAddr.combined }/settings`)
           if(devMode){
             settingsWindow.openDevTools()
           }
 
-          settingsWindow.on('closed', () =>{
+          settingsWindow.on('closed', () => {
             settingsWindow = null
           })
         }
@@ -64,13 +64,13 @@ function trayMenu(){
     {
       label: 'Help',
       click: function() {
-        shell.openExternal(`${global.msServerAddr.combined}/help`)
+        shell.openExternal(`${ global.msServerAddr.combined }/help`)
       }
     },
     {
       label: 'About',
       click: function() {
-        shell.openExternal(`${global.msServerAddr.combined}/about`)
+        shell.openExternal(`${ global.msServerAddr.combined }/about`)
       }
     },
     {

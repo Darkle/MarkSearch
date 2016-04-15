@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var gulp = require('gulp')
 var runSequence = require('run-sequence')
@@ -9,6 +9,7 @@ var sourcemaps = require('gulp-sourcemaps')
 var browserify = require('browserify')
 var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
+//noinspection Eslint
 var babelify = require('babelify')
 var gutil = require('gulp-util')
 var autoprefixer = require('gulp-autoprefixer')
@@ -105,7 +106,7 @@ gulp.task('less', () =>
  */
 gulp.task('browserify', () => {
   var uName = username.sync()
-  var regexForReplace = new RegExp(uName,'gi')
+  var regexForReplace = new RegExp(uName, 'gi')
   var files = [
     path.join(basePath, 'frontend', 'src', 'js', 'searchPage.js'),
     path.join(basePath, 'frontend', 'src', 'js', 'settingsPage', 'settingsPage.js'),
@@ -115,7 +116,7 @@ gulp.task('browserify', () => {
     path.join(basePath, 'frontend', 'src', 'js', 'aboutPage.js')
   ]
   // map them to our stream function
-  var tasks = files.map(function(entry){
+  var tasks = files.map(function(entry) {
     return browserify({
       entries: [entry],
       debug: true,
@@ -131,13 +132,13 @@ gulp.task('browserify', () => {
         sourceMaps: true
       }
     )
-    .on('error', function(err){
+    .on('error', function(err) {
       console.log('error with browserify')
       gutil.log(err.message)
       this.emit('end')
     })
     .bundle()
-    .on('error', function(err){
+    .on('error', function(err) {
       console.log('error with browserify')
       gutil.log(err.message)
       this.emit('end')

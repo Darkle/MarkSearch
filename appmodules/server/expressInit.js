@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 
@@ -17,7 +17,7 @@ var api = require('./routes/api')
 
 var devMode = process.env.NODE_ENV === 'development'
 
-function expressInit(express, expressApp){
+function expressInit(express, expressApp) {
   expressApp.use(addRequestId)
   if(devMode){
     expressApp.use(logger('dev'))
@@ -68,7 +68,7 @@ function expressInit(express, expressApp){
   expressApp.use(bodyParser.urlencoded({ limit: '3mb', extended: false }))
   expressApp.use(cookieParser())
   expressApp.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'static')))
-  expressApp.use('/bower_components',  express.static(path.join(__dirname, '..', '..', 'bower_components')))
+  expressApp.use('/bower_components', express.static(path.join(__dirname, '..', '..', 'bower_components')))
   /****
    * Routes
    */

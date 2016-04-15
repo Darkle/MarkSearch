@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
 var pagesdb = require('../../db/pagesdb')
 var appLogger = require('../../utils/appLogger')
 
-function getAllPages(req, res, next) {
+function getAllPages(req, res) {
 
   var dateFilter = {
     dateFilterStartDate: req.body.dateFilterStartDate,

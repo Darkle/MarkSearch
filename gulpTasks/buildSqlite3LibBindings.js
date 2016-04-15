@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 
@@ -12,7 +12,7 @@ var semver = require('semver')
 var basePath = path.resolve('')
 var platform = process.platform
 
-gulp.task('sqlite', () =>{
+gulp.task('sqlite', () => {
   // TODO - make this work on Windows & Linux
   var sqliteBinaryFullDir
 
@@ -33,7 +33,7 @@ gulp.task('sqlite', () =>{
 
       var osxVersionToUse = '0.0.0'
 
-      sqliteVersions.forEach(version =>{
+      sqliteVersions.forEach(version => {
         if(semver.gt(version, osxVersionToUse)){
           osxVersionToUse = version
         }
@@ -56,7 +56,7 @@ gulp.task('sqlite', () =>{
   // }
 
   return exeq(
-    `npm install sqlite3 --save --build-from-source --sqlite=${sqliteBinaryFullDir}`
+    `npm install sqlite3 --save --build-from-source --sqlite=${ sqliteBinaryFullDir }`
   )
   .then(function() {
     console.log('Successfully compiled sqlite3 lib binding')

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 var os = require('os')
@@ -38,14 +38,14 @@ gulp.task('serverModuleSizes', () => {
   var nduOutputFilePath = path.join(desktopPath, 'nduAppNpmModuleSizes.html')
 
   return exeq(
-    `${nduAppPath} > ${nduOutputFilePath}`,
-    `${openFileShell} ${nduOutputFilePath}`
+    `${ nduAppPath } > ${ nduOutputFilePath }`,
+    `${ openFileShell } ${ nduOutputFilePath }`
   )
   .then(function() {
-    console.log('modulesize (ndu) completed successfully, now opening in browser');
+    console.log('modulesize (ndu) completed successfully, now opening in browser')
   })
   .catch(function(err) {
-    console.error('ther was an error with running modulesize (ndu)', err);
+    console.error('ther was an error with running modulesize (ndu)', err)
   })
 
 })

@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
 var pagesdb = require('../../db/pagesdb')
 var appLogger = require('../../utils/appLogger')
 
-function getSinglePage(req, res, next) {
+function getSinglePage(req, res) {
   pagesdb.db('pages')
       .where('pageUrl', req.params.pageUrl)
       .first()

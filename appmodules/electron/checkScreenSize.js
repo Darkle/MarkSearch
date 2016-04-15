@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var electron = require('electron')
 
@@ -7,7 +7,7 @@ var electron = require('electron')
  * use the desktop width & height for the window size
  */
 
-function checkScreenSize(){
+function checkScreenSize() {
   var defaultWindowSize = {
     width: 1024,
     height: 768

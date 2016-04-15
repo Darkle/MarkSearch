@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
 /****
  * Examples of the SQL statements created in search.js: http://bit.ly/1TxvdZa
  */
 
-function printSearchSQL(knexSQL){
+function printSearchSQL(knexSQL) {
   console.log(`=========================================================================================================
   knexSQL.toSQL():
         

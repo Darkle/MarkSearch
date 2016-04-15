@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var url = require('url')
 
@@ -11,7 +11,7 @@ var safeBrowsingCheck = require('../safeBrowsing')
 var collapseWhiteSpace = require('../../utils/collapseWhiteSpace')
 var appLogger = require('../../utils/appLogger')
 
-function addPage(req, res, next) {
+function addPage(req, res) {
   /****
    * When saving a page, we’re saving:
    *  pageUrl - String - e.g. 'http://foo.com'
@@ -63,11 +63,11 @@ function addPage(req, res, next) {
    */
   pagesdb.upsertRow(pageData)
     .bind({pageUrl, req, res})
-    .then(function(){
+    .then(function() {
       this.res.status(200).end()
       return this.pageUrl
     })
-    .catch(function(err){
+    .catch(function(err) {
       console.log(`There was an error saving the page to the database`)
       console.error(err)
       this.res.status(500).end()
@@ -80,7 +80,7 @@ function addPage(req, res, next) {
     /****
      * Get archiveUrl & safeBrowsingCheck running in parallel
      */
-    .then( pageUrl => [archiveUrl(pageUrl), safeBrowsingCheck(pageUrl)])
+    .then(pUrl => [archiveUrl(pUrl), safeBrowsingCheck(pUrl)])
     .spread(function(archiveIsUrl, safeBrowsingData) {
       /****
        * _.merge will remove any null values
@@ -90,7 +90,7 @@ function addPage(req, res, next) {
         return pagesdb.updateColumns(updateData)
       }
     })
-    .catch(function(err){
+    .catch(function(err) {
       console.error(err)
       var requestForError = this.req
       var responseForError = this.res

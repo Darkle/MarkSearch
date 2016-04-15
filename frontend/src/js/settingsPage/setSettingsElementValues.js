@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-/* globals markSearchSettings: true */
+/* global markSearchSettings: true */
 
 import {
   dbLocationInfoTitle$,
@@ -12,7 +12,7 @@ import {
   dbLocationText$
 } from './settingsPage'
 
-function setSettingsElementValues(){
+function setSettingsElementValues() {
   dbLocationInfoTitle$.text('Current Database Location:')
   if(markSearchSettings.prebrowsing){
     prebrowsingCheckbox$.prop('checked', true)

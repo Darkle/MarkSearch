@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var _ = require('lodash')
 var validator = require('validator')
@@ -25,7 +25,7 @@ module.exports = {
       prebrowsing: {
         type: 'boolean',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(!_.isUndefined(post)){
             if(post === 'true' || post === 1){
               post = true
@@ -40,7 +40,7 @@ module.exports = {
       alwaysDisableTooltips: {
         type: 'boolean',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(!_.isUndefined(post)){
             if(post === 'true' || post === 1){
               post = true
@@ -55,7 +55,7 @@ module.exports = {
       bookmarkExpiryEnabled: {
         type: 'boolean',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(!_.isUndefined(post)){
             if(post === 'true' || post === 1){
               post = true
@@ -70,7 +70,7 @@ module.exports = {
       bookmarkExpiryMonths: {
         type: 'integer',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(!_.isUndefined(post) && !_.isInteger(post)){
             post = _.toInteger(post)
           }
@@ -80,7 +80,7 @@ module.exports = {
       bookmarkExpiryLastCheck: {
         type: 'integer',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(!_.isUndefined(post) && !_.isInteger(post)){
             post = _.toInteger(post)
           }
@@ -90,7 +90,7 @@ module.exports = {
       serverPort: {
         type: 'integer',
         optional: true,
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(!_.isUndefined(post) && !_.isInteger(post)){
             post = _.toInteger(post)
           }
@@ -133,7 +133,7 @@ module.exports = {
       bookmarkExpiryEmail: {
         type: 'string',
         optional: true,
-        exec: function(scheme, post){
+        exec: function(scheme, post) {
           if(_.isString(post) && post.length && !validator.isEmail(post)){
             this.report(`bookmarkExpiryEmail doesn't seem to be a valid email address`)
           }

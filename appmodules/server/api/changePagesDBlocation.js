@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 
@@ -9,7 +9,7 @@ var parsePath = require('parse-filepath')
 var pagesdb = require('../../db/pagesdb')
 var appLogger = require('../../utils/appLogger')
 
-function changePagesDBlocation(req, res, next){
+function changePagesDBlocation(req, res) {
 
   var parsedNewPagesDBFileFolder
   var parsedOldPagesDBFilePath

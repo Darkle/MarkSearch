@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var url = require('url')
 
@@ -36,7 +36,7 @@ module.exports = {
     properties: {
       pageUrl: {
         type: 'string',
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(_.isString(post)){
             post = url.parse(post).href
           }
@@ -45,7 +45,7 @@ module.exports = {
       },
       dateCreated: {
         type: 'integer',
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(_.isString(post)){
             post = _.toInteger(post)
           }
@@ -54,7 +54,7 @@ module.exports = {
       },
       safeBrowsing: {
         type: ['string', 'null'],
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(!_.isNull(post) && _.isObject(post)){
             post = JSON.stringify(post)
           }
@@ -73,7 +73,7 @@ module.exports = {
       pageUrl: {
         type: 'string',
         maxLength: 2000,
-        exec: function(scheme, post){
+        exec: function(scheme, post) {
           if(_.isString(post) && !validUrl.isWebUri(post)){
             this.report('pageUrl is not a valid web url!')
           }
@@ -99,7 +99,7 @@ module.exports = {
       archiveLink: {
         type: ['string', 'null'],
         maxLength: 2000,
-        exec: function(scheme, post){
+        exec: function(scheme, post) {
           if(_.isString(post) && !validUrl.isWebUri(post)){
             this.report('archiveLink is not a valid web url!')
           }
@@ -126,7 +126,7 @@ module.exports = {
     properties: {
       pageUrl: {
         type: 'string',
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(_.isString(post)){
             post = url.parse(post).href
           }
@@ -146,7 +146,7 @@ module.exports = {
       safeBrowsing: {
         optional: true,
         type: ['string', 'null'],
-        exec: function(schema, post){
+        exec: function(schema, post) {
           if(!_.isNull(post) && _.isObject(post)){
             post = JSON.stringify(post)
           }
@@ -179,7 +179,7 @@ module.exports = {
       pageUrl: {
         type: 'string',
         maxLength: 2000,
-        exec: function(scheme, post){
+        exec: function(scheme, post) {
           if(_.isString(post) && !validUrl.isWebUri(post)){
             this.report('pageUrl is not a valid web url!')
           }
@@ -211,7 +211,7 @@ module.exports = {
         type: ['string', 'null'],
         optional: true,
         maxLength: 2000,
-        exec: function(scheme, post){
+        exec: function(scheme, post) {
           if(_.isString(post) && !validUrl.isWebUri(post)){
             this.report('archiveLink is not a valid web url!')
           }

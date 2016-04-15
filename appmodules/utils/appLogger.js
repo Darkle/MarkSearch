@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 
@@ -24,8 +24,8 @@ logger.init = (markSearchAppDataPath) => {
     ],
     serializers: {
       err: bunyan.stdSerializers.err,
-      req: req => {
-        return {
+      req: req =>
+        ({
           requestId: req.id,
           baseUrl: req.baseUrl,
           originalUrl: req.originalUrl,
@@ -44,18 +44,16 @@ logger.init = (markSearchAppDataPath) => {
           signedCookies: req.signedCookies,
           remoteAddress: _.get(req, 'connection.remoteAddress'),
           domain: req.domain,
-        }
-      },
-      res: res => {
-        return {
+        }),
+      res: res => 
+        ({
           requestId: _.get(res, 'req.id'),
           statusCode: res.statusCode,
           statusMessage: res.statusMessage,
           _header: res._header,
           _headers: res._headers,
           _removedHeader: res._removedHeader,
-        }
-      }
+        })
     }
   })
  

@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-/* globals notie  */
+/* global notie  */
 
 import { csrfToken } from './searchPage'
 import { queryServerAndRender } from './queryServerAndRender'
@@ -13,12 +13,12 @@ import _ from 'lodash'
  * that its easy to remove them (being the event listener functions) when remove old results in
  * removeResults.js module
  */
-function showSafeBrowsingDetails(event){
+function showSafeBrowsingDetails(event) {
   event.preventDefault()
   $(event.currentTarget).parent().next().toggleClass('showBlock')
 }
 
-function deletePageFromMarksearch(event){
+function deletePageFromMarksearch(event) {
   event.preventDefault()
   var deleteButton = $(event.currentTarget)
   var pageUrl = encodeURIComponent(deleteButton.data("pageurl"))
@@ -40,7 +40,7 @@ function deletePageFromMarksearch(event){
     }
     resultDiv.animate({height: "toggle"}, 400, () => {
       resultDiv.remove()
-      got.delete(`/frontendapi/remove/${pageUrl}`,
+      got.delete(`/frontendapi/remove/${ pageUrl }`,
           {
             headers:
             {
@@ -51,7 +51,7 @@ function deletePageFromMarksearch(event){
            * dont simplify this to .then(queryServerAndRender) as that
            * will send through the response as searchTerms.
            */
-          .then( response => queryServerAndRender())
+          .then(() => queryServerAndRender())
           .catch(err => console.error(err))
     })
   })

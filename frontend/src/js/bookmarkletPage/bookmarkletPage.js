@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import "babel-polyfill"
 
@@ -8,7 +8,7 @@ import got from 'got'
 
 $(document).ready(bookmarkletPageInit)
 
-function bookmarkletPageInit(event){
+function bookmarkletPageInit() {
   var csrfToken = $('#csrfInput').val()
   var xhrHeaders = {
     'X-CSRF-Token': csrfToken
@@ -18,7 +18,7 @@ function bookmarkletPageInit(event){
     .then( response => {
       var responseData = JSON.parse(response.body)
       var bookmarkletJS = generateBookmarkletJS(responseData.protocolIpandPort, responseData.token)
-      $('#bookmarkletLink').attr('href', `javascript:${encodeURIComponent(bookmarkletJS)}`)
+      $('#bookmarkletLink').attr('href', `javascript:${ encodeURIComponent(bookmarkletJS) }`)
     })
     .catch( err => {
       console.error(err)

@@ -1,14 +1,14 @@
-'use strict';
+'use strict'
 
 var jwt = require('jsonwebtoken')
 var _ = require('lodash')
 
 var appSettings = require('../db/appSettings')
 
-function generateJWTtoken(){
+function generateJWTtoken() {
   return jwt.sign(
     {
-      client: `MarkSearch Extension/Bookmarklet_${_.random(0, 100)}`
+      client: `MarkSearch Extension/Bookmarklet_${ _.random(0, 100) }`
     },
     appSettings.settings.JWTsecret
   )

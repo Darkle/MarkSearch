@@ -1,6 +1,6 @@
-;(function(){
+;(function() {
   var ipc = require('ipc')
-  ipc.on('sendPageData', function(event, arg) {
+  ipc.on('sendPageData', function() {
     try{
       var description = ''
       var descriptionElem = document.querySelector('meta[name="description"], meta[name="Description"], meta[name="DESCRIPTION"], meta[property="og:description"]')

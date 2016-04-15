@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var MailGun = require('mailgun-es6')
 
@@ -11,7 +11,7 @@ var mailGun = new MailGun({
   domainName: 'mailgun.coopcoding.com'
 })
 
-function emailBookmarklet(req, res, next){
+function emailBookmarklet(req, res) {
   /****
    * req.body.email is validated in requestDataValidation.js
    */
@@ -22,11 +22,11 @@ function emailBookmarklet(req, res, next){
       html: `<div style="font-size: 1rem; margin-bottom: 1rem;">
                 Open the page below on your mobile device, then bookmark the link shown on that page:
                </div>
-              <a style="font-size: 1rem;" href="${global.msServerAddr.combined}/bookmarklet">${global.msServerAddr.combined}/bookmarklet</a>
+              <a style="font-size: 1rem;" href="${ global.msServerAddr.combined }/bookmarklet">${ global.msServerAddr.combined }/bookmarklet</a>
                 `
     })
   .then(mailgunResponse => {
-    console.log(`emailBookmarklet mailgun response: ${mailgunResponse.message}`)
+    console.log(`emailBookmarklet mailgun response: ${ mailgunResponse.message }`)
     res.status(200).end()
   })
   .catch(err => {

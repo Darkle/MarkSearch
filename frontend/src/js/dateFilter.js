@@ -1,9 +1,10 @@
-'use strict';
+'use strict'
 
-/* globals formplate */
+/* global formplate */
 
 import { queryServerAndRender } from './queryServerAndRender'
 
+//noinspection Eslint
 import velocity from 'velocity-animate'
 import moment from 'moment'
 import _ from 'lodash'
@@ -19,7 +20,7 @@ var selectFromMonth$
 var selectFromYear$
 var selectToMonth$
 var selectToYear$
-var searchInput$
+
 var shortCutValues = {
   "Past 3 days": {
     dateStart: () => moment().subtract(3, 'days')
@@ -69,7 +70,7 @@ var ph = 'placeholder'
  * This is for in case they resize the browser while the
  * datefilter is shown.
  */
-function checkMatchMediaForResultsContainerMarginTop(){
+function checkMatchMediaForResultsContainerMarginTop() {
   var marginTop = 140
   if(window.matchMedia("(max-width: 54.5em)").matches){
     marginTop = 84
@@ -77,15 +78,15 @@ function checkMatchMediaForResultsContainerMarginTop(){
   return marginTop
 }
 
-function dateFilterIsSet(){
+function dateFilterIsSet() {
   return (shortCutIsSet() || allFromToIsSet())
 }
 
-function shortCutIsSet(){
+function shortCutIsSet() {
   return selectShortcuts$.val() !== ph
 }
 
-function allFromToIsSet(){
+function allFromToIsSet() {
   var fromToSelectsAsArr = [
     selectFromMonth$,
     selectFromYear$,
@@ -95,7 +96,7 @@ function allFromToIsSet(){
   return _.every(fromToSelectsAsArr, item => item.val() !== ph)
 }
 
-function selectFromToHandler(event){
+function selectFromToHandler(event) {
   var selectElem$ = $(event.currentTarget)
   var relatedElems = selectElemRelatedElements[selectElem$[0].className]
   if(selectElem$.val() !== ph && relatedElems.siblingSelect().val() !== ph){
@@ -118,7 +119,7 @@ function selectFromToHandler(event){
   }
 }
 
-function dateFilterResetAll(dateFilterSubbarStillOpen){
+function dateFilterResetAll(dateFilterSubbarStillOpen) {
   if(!dateFilterSubbarStillOpen){
     resetFromTo()
     $(window).off('resize')
@@ -129,7 +130,7 @@ function dateFilterResetAll(dateFilterSubbarStillOpen){
   queryServerAndRender()
 }
 
-function resetFromTo(){
+function resetFromTo() {
   selectFromMonth$.val(ph)
   selectFromYear$.val(ph)
   selectToMonth$.val(ph)
@@ -138,13 +139,13 @@ function resetFromTo(){
   toContainer$.addClass('lightBlue')
 }
 
-function hideShowDateFilterSubbar(){
+function hideShowDateFilterSubbar() {
   var dataIsShown = dateFilterContainer$.data('isShown')
   if(dataIsShown === 'true'){
     dateFilterContainer$.data('isShown', 'false')
     $.Velocity(resultsOuterContainer$[0], { marginTop: checkMatchMediaForResultsContainerMarginTop() }, 500)
     $.Velocity(dateFilterContainer$[0], "slideUp", { duration: 500, display: 'none' })
-        .then(elements => {
+        .then(() => {
           dateFilterMaterialIcon$.removeClass('navBar-materialIcon-selected')
           dateFilterResetAll()
         })
@@ -170,7 +171,7 @@ function hideShowDateFilterSubbar(){
   }
 }
 
-function getDateFilterParameters(){
+function getDateFilterParameters() {
   var dateStartInMilliseconds
   var dateEndInMilliseconds
   if(shortCutIsSet()){
@@ -181,7 +182,7 @@ function getDateFilterParameters(){
     /****
      * When using `YYYY MM` format, month starts at 1
      */
-    dateStartInMilliseconds = moment(`${selectFromYear$.val()} ${selectFromMonth$.val()}`, `YYYY MM`).valueOf()
+    dateStartInMilliseconds = moment(`${ selectFromYear$.val() } ${ selectFromMonth$.val() }`, `YYYY MM`).valueOf()
     /****
      * For date end, we want to include all of the end date month, i.e. not just the start
      * of that month, but include all the days of that month up to 23:59 of the last
@@ -199,7 +200,7 @@ function getDateFilterParameters(){
      * day in that month
      */
     var selectToMonthAsNum = Number(selectToMonth$.val())
-    dateEndInMilliseconds = moment(`${selectToYear$.val()}`, `YYYY`)
+    dateEndInMilliseconds = moment(`${ selectToYear$.val() }`, `YYYY`)
         .add(selectToMonthAsNum, 'months')
         .subtract(1, 'second')
         .valueOf()
@@ -210,7 +211,7 @@ function getDateFilterParameters(){
   }
 }
 
-function dateFilterInit(){
+function dateFilterInit() {
   formplate($('body'))
   var subBar$ = $('.subBar')
   var dateFilterNavButtonContainer$ = $('.dateFilter')
@@ -222,7 +223,6 @@ function dateFilterInit(){
   dateFilterContainer$ = $('.dateFilterSettings')
   fromContainer$ = $('.fromContainer')
   toContainer$ = $('.toContainer')
-  searchInput$ = $('#searchInput')
   selectFromMonth$ = $('.selectFromMonth', fromContainer$)
   selectFromYear$ = $('.selectFromYear', fromContainer$)
   selectToMonth$ = $('.selectToMonth', toContainer$)
@@ -241,7 +241,7 @@ function dateFilterInit(){
     $('<option>', {text: year, value: year}).appendTo('.selectFromYear, .selectToYear')
   })
 
-  selectShortcuts$.change(event => {
+  selectShortcuts$.change(() => {
     if(selectShortcuts$.val() === ph){
       dateFilterResetAll(true)
     }
@@ -268,8 +268,8 @@ function dateFilterInit(){
     if(currentlyShownSubBar$[0] && currentlyShownSubBar$[0] !== dateFilterContainer$[0]){
       dateFilterMaterialIcon$.addClass('navBar-materialIcon-selected')
       $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' })
-          .then(elems => {
-            currentlyShownSubBar$.data('isShown','false')
+          .then(() => {
+            currentlyShownSubBar$.data('isShown', 'false')
             otherNavMaterialIcons$.removeClass('navBar-materialIcon-selected navBar-materialIcon-hover')
             hideShowDateFilterSubbar()
           })

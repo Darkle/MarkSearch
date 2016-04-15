@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var path = require('path')
 var Crypto = require('crypto')
@@ -17,13 +17,14 @@ var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 var schemas = require('./appSettingsSanitizationAndValidationSchemas')
 
 var appSettings = {}
+var randomCryptoLength = 256
 
 appSettings.init = (appDataPath) => {
   knexConfig.connection.filename = path.join(appDataPath, 'MarkSearchAppSettings.db')
   //knexConfig.connection.filename = ':memory:'
   appSettings.db = require('knex')(knexConfig)
   return appSettings.db.schema.hasTable('appSettings').then( exists => {
-    if (!exists) {
+    if (!exists){
       console.log('creating "appSettings" table')
       return appSettings.db.schema.createTable('appSettings', table => {
         table.text('id').primary().notNullable()
@@ -50,26 +51,24 @@ appSettings.init = (appDataPath) => {
        * .toString('hex') for the Jason Web Token to make it url safe (just in case)
        */
       return appSettings.db('appSettings')
-          .insert(
-              {
-                id: 'appSettings',
-                JWTsecret: Crypto.randomBytes(256).toString('hex'),
-                pagesDBFilePath: path.join(appDataPath, 'MarkSearchPages.db'),
-                prebrowsing: true,
-                alwaysDisableTooltips: false,
-                bookmarkExpiryEnabled: false,
-                bookmarkExpiryEmail: '',
-                bookmarkExpiryMonths: 3,
-                bookmarkExpiryLastCheck: Date.now(),
-                skipUpdateVersion: '1',
-                serverPort: 8080
-              }
-          )
-          .return(appSettings.db('appSettings').where('id', 'appSettings').first())
+        .insert(
+          {
+            id: 'appSettings',
+            JWTsecret: Crypto.randomBytes(randomCryptoLength).toString('hex'),
+            pagesDBFilePath: path.join(appDataPath, 'MarkSearchPages.db'),
+            prebrowsing: true,
+            alwaysDisableTooltips: false,
+            bookmarkExpiryEnabled: false,
+            bookmarkExpiryEmail: '',
+            bookmarkExpiryMonths: 3,
+            bookmarkExpiryLastCheck: Date.now(),
+            skipUpdateVersion: '1',
+            serverPort: 8080
+          }
+        )
+        .return(appSettings.db('appSettings').where('id', 'appSettings').first())
     }
-    else{
-      return row
-    }
+    return row
   })
   .then(row => {
     if(!row){
@@ -97,7 +96,7 @@ appSettings.update = (settingsKeyValObj) => {
   var validatedSettingsKeyValObj = inspector.validate(schemas.appSettingsValidation, settingsKeyValObjSansJWTsecret)
   if(!validatedSettingsKeyValObj.valid){
     var errMessage = `Error, passed in app settings did not pass validation.
-                      Error(s): ${validatedSettingsKeyValObj.format()}`
+                      Error(s): ${ validatedSettingsKeyValObj.format() }`
     console.error(errMessage)
     appLogger.log.error({err: errMessage})
     /****

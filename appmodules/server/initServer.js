@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var http = require('http')
 
@@ -10,7 +10,7 @@ var appSettings = require('../db/appSettings')
 
 var ipv4Address = internalIp.v4()
 
-function initServer(expressApp){
+function initServer(expressApp) {
   return isPortInUse(appSettings.settings.serverPort, ipv4Address)
     .then(portInUse => {
       if(portInUse){
@@ -22,8 +22,8 @@ function initServer(expressApp){
                 .then(newServerPort => appSettings.update({serverPort: newServerPort}))
       }
     })
-    .then(() => {
-      return new Promise( (resolve, reject) => {
+    .then(() =>
+      new Promise( (resolve, reject) => {
         var server = http.createServer(expressApp)
         /****
          * Need to specify the ipv4 address, otherwise it may use a
@@ -35,7 +35,7 @@ function initServer(expressApp){
           .on('listening', () => resolve(server.address()))
           .on('error', reject)
       })
-    })
+    )
     .then(serverAddressDetails => {
       /****
        * Assigning the MarkSearch server host & port details to a global
@@ -44,9 +44,9 @@ function initServer(expressApp){
       global.msServerAddr = {
         hostAddress: serverAddressDetails.address,
         port: appSettings.settings.serverPort,
-        combined: `http://${serverAddressDetails.address}:${appSettings.settings.serverPort}`
+        combined: `http://${ serverAddressDetails.address }:${ appSettings.settings.serverPort }`
       }
-      console.info(`Marksearch server listening on: ${global.msServerAddr.combined}`)
+      console.info(`Marksearch server listening on: ${ global.msServerAddr.combined }`)
     })
 }
 

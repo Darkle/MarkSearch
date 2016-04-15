@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-function generateBookmarkletJS(locationHostAndProtocol, token){
+function generateBookmarkletJS(locationHostAndProtocol, token) {
   /****
    * note: when altering this, remember to add semicolons
    */

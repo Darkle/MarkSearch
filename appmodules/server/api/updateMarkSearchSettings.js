@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
 var _ = require('lodash')
 
 var appSettings = require('../../db/appSettings')
 var appLogger = require('../../utils/appLogger')
 
-function updateMarkSearchSettings(req, res, next){
+function updateMarkSearchSettings(req, res) {
 
   appSettings.update(req.body)
     .then( () => {

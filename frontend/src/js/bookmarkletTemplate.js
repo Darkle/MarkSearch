@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /*
  * notie.js - A clean and simple notification plugin (alert/growl style) for javascript, with no dependencies.
@@ -15,7 +15,7 @@
  *
  */
 
-function generateBookmarkletJS(locationHostAndProtocol, token){
+function generateBookmarkletJS(locationHostAndProtocol, token) {
   /****
    * note: when altering this, remember to add semicolons
    */

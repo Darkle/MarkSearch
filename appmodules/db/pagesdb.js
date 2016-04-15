@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var inspector = require('schema-inspector')
 var _ = require('lodash')
@@ -19,9 +19,9 @@ pagesdb.init = (pagesDBFilePath) => {
   //knexConfig.connection.filename = ':memory:'
   pagesdb.db = require('knex')(knexConfig)
   return pagesdb.db.schema.hasTable('pages').then( exists => {
-      if (!exists) {
+      if (!exists){
         console.log('creating "pages" table')
-        return  pagesdb.db.raw(
+        return pagesdb.db.raw(
           `create table pages (
             pageUrl text not null unique on conflict replace,
             dateCreated integer not null,
@@ -51,9 +51,9 @@ pagesdb.init = (pagesDBFilePath) => {
      * fts table.
      */
     pagesdb.db.schema.hasTable('fts').then( exists => {
-      if (!exists) {
+      if (!exists){
         console.log('creating "fts" table')
-        return  pagesdb.db.raw(
+        return pagesdb.db.raw(
             `create virtual table fts using fts5 (
               pageUrl unindexed,
               dateCreated unindexed,
@@ -80,7 +80,7 @@ pagesdb.updateColumns = (columnsDataObj) => {
   var validatedColumnsDataObj = inspector.validate(schemas.updateColumnValidation, columnsDataObj)
   if(!validatedColumnsDataObj.valid){
     var errMessage = `Error, passed in column data did not pass validation.
-                      Error(s): ${validatedColumnsDataObj.format()}`
+                      Error(s): ${ validatedColumnsDataObj.format() }`
     console.error(errMessage)
     appLogger.log.error({err: errMessage})
     /****
@@ -115,7 +115,7 @@ pagesdb.upsertRow = (rowDataObj) => {
   var validatedPageDataObj = inspector.validate(schemas.upsertRowValidation, rowDataObj)
   if(!validatedPageDataObj.valid){
     var errMessage = `Error, passed in row data did not pass validation.
-                      Error(s): ${validatedPageDataObj.format()}`
+                      Error(s): ${ validatedPageDataObj.format() }`
     console.error(errMessage)
     appLogger.log.error({err: errMessage})
     /****
@@ -135,9 +135,7 @@ pagesdb.upsertRow = (rowDataObj) => {
       if(row){
         return pagesdb.updateColumns(rowDataObj)
       }
-      else{
-        return pagesdb.insertRow(rowDataObj)
-      }
+      return pagesdb.insertRow(rowDataObj)
     })
 }
 

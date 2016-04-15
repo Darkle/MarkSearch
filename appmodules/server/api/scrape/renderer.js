@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var electron = require('electron')
 var url = require('url')
@@ -10,7 +10,7 @@ var domReadyFired = false
 var webview
 var urlToScrape
 
-function removeWebview(){
+function removeWebview() {
   if(!webview){
     webview = document.querySelector('webview')
   }
@@ -32,20 +32,20 @@ function removeWebview(){
   urlToScrape = null
 }
 
-function sendErrorToMainProcess(data){
+function sendErrorToMainProcess(data) {
   removeWebview()
   ipcRenderer.send('webview-error', JSON.stringify(data))
 }
 
-function sendLogToMainProcess(data){
-  ipcRenderer.send('webview-log', JSON.stringify(data))
-}
+//function sendLogToMainProcess(data) {
+//  ipcRenderer.send('webview-log', JSON.stringify(data))
+//}
 
 /****
  * A check in case there is a site that is online but just takes
  * forever and never seems to load properly
  */
-function didStartLoadListener(){
+function didStartLoadListener() {
   setTimeout( () => {
     if(!domReadyFired){
       sendErrorToMainProcess(`webview: load timeout`)
@@ -62,7 +62,7 @@ function didStartLoadListener(){
  * event listener as a backup. It could be it doesn't fire because of an
  * image/object taking forever to load.
  */
-function domReadyListener(){
+function domReadyListener() {
   domReadyFired = true
   webview.setAudioMuted(true)
   setTimeout( () => {
@@ -88,7 +88,7 @@ function didFinishLoadListener() {
   }
 }
 
-function didFailLoadListener(){
+function didFailLoadListener() {
   if(event.validatedURL === urlToScrape){
     //sendErrorToMainProcess(`
     //  webview: did-fail-load
@@ -107,7 +107,7 @@ function didFailLoadListener(){
  * is redirected, so only update the urlToScrape when its the the webview url
  * being redirected.
  */
-function didGetRedirectRequestListener(){
+function didGetRedirectRequestListener() {
   if(event.isMainFrame){
     /****
      * Update the urlToScrape to the new redirected location so we can
@@ -126,17 +126,17 @@ function didGetRedirectRequestListener(){
   }
 }
 
-function crashedListener(){
+function crashedListener() {
   sendErrorToMainProcess(`webview: crashed`)
   removeWebview()
 }
 
-function gpuCrashedListener(){
+function gpuCrashedListener() {
   sendErrorToMainProcess(`webview: crashed`)
   removeWebview()
 }
 
-function ipcMessageListener(){
+function ipcMessageListener() {
   if(event.channel === 'returnDocDetails'){
     /****
      * Send back the updated urlToScrape in the case of it being redirected
@@ -145,12 +145,12 @@ function ipcMessageListener(){
     ipcRenderer.send('returnDocDetails', JSON.stringify(event.args[0]))
   }
   else if(event.channel === 'returnDocDetailsError'){
-    sendErrorToMainProcess(`webviewPreload error: ${event.args}`)
+    sendErrorToMainProcess(`webviewPreload error: ${ event.args }`)
   }
   removeWebview()
 }
 
-module.exports = function () {
+module.exports = function() {
 
   ipcRenderer.on('createAndLoadWebview', (event, sentUrlToScrape) => {
 

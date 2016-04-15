@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var _ = require('lodash')
 
@@ -6,7 +6,7 @@ var STOPWORDS = require('./lunrStopwordFilter.json')
 
 var devMode = process.env.NODE_ENV === 'development'
 
-function processSearchTerms(searchTerms){
+function processSearchTerms(searchTerms) {
 
   if(devMode){
     console.log(`searchTerms before process`)
@@ -56,7 +56,7 @@ function processSearchTerms(searchTerms){
       var pipeIndex = searchTerm.indexOf('|')
       if(hyphenIndex > -1){
         if(hyphenIndex === 0){
-          searchTerm = `NOT ${searchTerm.slice(1)}`
+          searchTerm = `NOT ${ searchTerm.slice(1) }`
         }
         else{
           /****
@@ -94,10 +94,10 @@ function processSearchTerms(searchTerms){
                * add quotes and add pipe back for the pipe check and add OR below.
                */
               if(pipeIndex === 0){
-                searchTerm = `|"${searchTerm.slice(1)}"`
+                searchTerm = `|"${ searchTerm.slice(1) }"`
               }
               else{
-                searchTerm = `"${searchTerm}"`
+                searchTerm = `"${ searchTerm }"`
               }
             }
           }
@@ -110,7 +110,7 @@ function processSearchTerms(searchTerms){
        * and so we can then add an OR to it here.
        */
       if(pipeIndex === 0){
-        searchTerm = `OR ${searchTerm.slice(pipeIndex + 1)}`
+        searchTerm = `OR ${ searchTerm.slice(pipeIndex + 1) }`
       }
       return searchTerm
     })
@@ -119,7 +119,7 @@ function processSearchTerms(searchTerms){
   if(devMode){
     console.log(`searchTerms after process`)
     console.log(processedSearchTerms)
-    console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${domainToSearchFor}`)
+    console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${ domainToSearchFor }`)
   }
 
   return {

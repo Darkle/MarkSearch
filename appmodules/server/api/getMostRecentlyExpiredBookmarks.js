@@ -1,9 +1,8 @@
-'use strict';
+'use strict'
 
 var bookmarkExpiry = require('../bookmarkExpiry')
-var appLogger = require('../../utils/appLogger')
 
-function getMostRecentlyExpiredBookmarks(req, res, next){
+function getMostRecentlyExpiredBookmarks(req, res) {
   res.json(bookmarkExpiry.mostRecentlyExpiredBookmarks)
 }
 

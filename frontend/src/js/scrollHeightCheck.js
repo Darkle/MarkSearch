@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-function scrollHeightCheck(win, doc, padding){
+function scrollHeightCheck(win, doc, padding) {
   return $(win).scrollTop() >= ( ($(doc).height() - $(win).height()) - padding)
 }
 /****

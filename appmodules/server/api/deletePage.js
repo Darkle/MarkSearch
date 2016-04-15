@@ -1,13 +1,13 @@
-'use strict';
+'use strict'
 
 var pagesdb = require('../../db/pagesdb')
 var appLogger = require('../../utils/appLogger')
 var bookmarkExpiry = require('../bookmarkExpiry')
 
-function deletePage(req, res, next) {
+function deletePage(req, res) {
   pagesdb
     .deleteRow(req.params.pageUrl)
-    .then( numRowsAffected => {
+    .then(() => {
       res.status(200).end()
       /****
        * We also need to remove the bookmark we just deleted from the

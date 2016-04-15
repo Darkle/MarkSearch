@@ -1,0 +1,195 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true,
+    "jquery": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "impliedStrict": true
+    }
+  },
+  "rules": {
+    "accessor-pairs": "error",
+    "array-callback-return": "error",
+    "arrow-body-style": [
+      "error",
+      "as-needed"
+    ],
+    "arrow-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
+    "block-scoped-var": "error",
+    "brace-style": [
+      "error", "stroustrup"
+    ],
+    "callback-return": "error",
+    "camelcase": "error",
+    "comma-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "comma-style": [
+      "error",
+      "last"
+    ],
+    // Maybe dont want consistent-return for when using an if statement in a promise to return
+    // the promise will return undefined on its own
+//    "consistent-return": "error",
+    //0 is "off" - http://eslint.org/docs/user-guide/configuring#configuring-rules
+    //use 0 so its easier to see at a glance which rules are off
+    "comma-dangle": 0,
+    "curly": "error",
+    "eqeqeq": "error",
+    "generator-star-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "guard-for-in": "error",
+    "handle-callback-err": "error",
+//    "indent": [
+//      "error",
+//      2
+//    ],
+    "key-spacing": [
+      "error",
+      {
+        "beforeColon": false,
+        "afterColon": true
+      }
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "no-caller": "error",
+    "no-class-assign": "error",
+    "no-confusing-arrow": "error",
+    "no-console": 0,
+    "no-const-assign": "error",
+    "no-dupe-class-members": "error",
+    "no-duplicate-imports": "error",
+    "no-else-return": "error",
+    "no-empty-function": "error",
+    "no-eq-null": "error",
+    "no-eval": "error",
+    "no-extend-native": "error",
+    "no-extra-bind": "error",
+    "no-extra-label": "error",
+    "no-extra-semi": 0,
+    "no-floating-decimal": "error",
+    "no-implied-eval": "error",
+//    "no-invalid-this": "error",
+    "no-iterator": "error",
+    "no-label-var": "error",
+    "no-labels": "error",
+    // no-lone-blocks is just for es5, it will allow it in es6
+    "no-lone-blocks": "error",
+    "no-loop-func": "error",
+//    "no-magic-numbers": "error",
+    "no-mixed-requires": [
+      "error",
+      {
+        "allowCall": true,
+        "grouping": true
+      }
+    ],
+    "no-mixed-spaces-and-tabs": "error",
+    "no-multi-spaces": "error",
+    "no-multi-str": "error",
+    "no-native-reassign": [
+      "error",
+      {
+        "exceptions": [
+          "Promise"
+        ]
+      }
+    ],
+    "no-nested-ternary": "error",
+    "no-new": "error",
+    "no-new-func": "error",
+    "no-new-require": "error",
+    "no-new-symbol": "error",
+    "no-new-wrappers": "error",
+    "no-octal-escape": "error",
+//    "no-param-reassign": "error",
+    "no-path-concat": "error",
+    "no-plusplus": [
+      "error",
+      {
+        "allowForLoopAfterthoughts": true
+      }
+    ],
+    "no-process-exit": "error",
+    "no-proto": "error",
+    "no-return-assign": "error",
+    "no-script-url": "error",
+    "no-self-compare": "error",
+    "no-sequences": "error",
+    "no-shadow": "error",
+    "no-shadow-restricted-names": "error",
+    "no-spaced-func": "error",
+    "no-this-before-super": "error",
+    "no-throw-literal": "error",
+    "no-undef-init": "error",
+    "no-undefined": "error",
+    "no-unexpected-multiline": "error",
+    "no-unneeded-ternary": "error",
+//    "no-use-before-define": "error",
+    "no-useless-call": "error",
+    "no-useless-concat": "error",
+    "no-useless-constructor": "error",
+    "no-useless-escape": "error",
+    "no-void": "error",
+    "no-whitespace-before-property": "error",
+    "no-with": "error",
+//    "object-shorthand": "error",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+//    "prefer-template": "error",
+    "require-yield": "error",
+//    "quotes": [
+//      "error",
+//      "backtick"
+//    ],
+    "semi": [
+      "error",
+      "never"
+    ],
+    "space-before-blocks": [
+      "error",
+      {
+        "keywords": "never",
+        "classes": "always"
+      }
+    ],
+    "space-before-function-paren": [
+      "error",
+      "never"
+    ],
+    "template-curly-spacing": [
+      "error",
+      "always"
+    ],
+//    "vars-on-top": "error",
+    "wrap-iife": [
+      "error",
+      "any"
+    ]
+  }
+}

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import { renderResults } from './renderResults'
 import { scrollHeightCheck } from './scrollHeightCheck'
@@ -14,14 +14,14 @@ var timeout
 /****
  * Exports
  */
-function initInfiniteScroll(event){
+function initInfiniteScroll() {
   /****
    * A simple debounce
    */
   if(timeout){
     clearTimeout(timeout)
   }
-  timeout = setTimeout( ev => {
+  timeout = setTimeout(() => {
     clearTimeout(timeout)
     //eventNum++
     //console.log(`debounce event ${eventNum}`, event)

@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+
 /****
  * Hear me out Bro! We're not aiming for perfection here, just trying to have the search
  * input be focused on load for the majority of desktop browsers. It's no big deal
@@ -11,7 +12,7 @@
  * If the user is using a linux laptop with touch enabled it will be caught by this.
  * And prolly others, but like I said, not trying for perfection here.
  */
-function checkIfTouchDevice(window){
+function checkIfTouchDevice(window) {
   var ts = 'ontouchstart' in window
   var mtp1 = navigator.MaxTouchPoints > 0
   var mtp2 = navigator.msMaxTouchPoints > 0
