@@ -1,43 +1,49 @@
 'use strict';
 
 var path = require('path')
+var os = require('os')
 
 var gulp = require('gulp')
-var username = require('username')
-var shell = require('shelljs')
+var exeq = require('exeq')
 
 var basePath = path.resolve('')
+var platform = process.platform
+var desktopPath
+
+/****
+ * https://github.com/s-a/user-appdata/blob/master/lib%2Findex.js
+ * https://github.com/janbiasi/appdata/blob/master/lib%2FPersistence.js#L45
+ * https://github.com/illfang/node-normalized-appdata/blob/master/index.js
+ * https://github.com/MrJohz/appdirectory/blob/master/lib%2Fappdirectory.js
+ */
+// TODO make it work on Linux & Windows
+if(platform === 'darwin'){
+  desktopPath = path.join(os.homedir(), 'Desktop')
+}
+// else if(platform === 'darwin'){
+//
+// }
+// else if(platform === 'win32'){
+//
+// }
 
 gulp.task('serverModuleSizes', () => {
   /****
    * https://github.com/groupon/ndu
    */
+  // TODO make it work on Linux & Windows
   var nduAppPath = path.join(basePath, 'node_modules', '.bin', 'ndu')
-  var nduOutputFilePath = path.join('/Users', username.sync(), 'Desktop', 'nduAppNpmModuleSizes.html')
-  return shell.exec(`${nduAppPath} > ${nduOutputFilePath}`, (exitCode, stdout, stderr) => {
-    if(exitCode === 0){
-      console.log('modulesize exec completed successfully')
-      shell.exec(`open -a "Google Chrome" ${nduOutputFilePath}`, (exitCode, stdout, stderr) => {
-        if(exitCode === 0){
-          console.log('opening html file completed successfully')
-        }
-        else{
-          console.error(`
-            An error occured with the second shell task in the osx-selfsign-electron-for-dev gulp task!
-            Exit code: ${exitCode}
-            Program output: ${stdout}
-            Program stderr: ${stderr}
-          `)
-        }
-      })
-    }
-    else{
-      console.error(`
-            An error occured with the first shell task in modulesize gulp task!
-            Exit code: ${exitCode}
-            Program output: ${stdout}
-            Program stderr: ${stderr}
-          `)
-    }
+  var nduOutputFilePath = path.join(desktopPath, 'nduAppNpmModuleSizes.html')
+
+  return exeq(
+    `${nduAppPath} > ${nduOutputFilePath}`,
+    `open -a "Google Chrome" ${nduOutputFilePath}`
+  )
+  .then(function() {
+    console.log('modulesize (ndu) completed successfully, now opening in browser');
   })
+  .catch(function(err) {
+    console.error('ther was an error with running modulesize (ndu)', err);
+  })
+
 })

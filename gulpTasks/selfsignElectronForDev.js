@@ -3,7 +3,7 @@
 var path = require('path')
 
 var gulp = require('gulp')
-var shell = require('shelljs')
+var exeq = require('exeq')
 
 var basePath = path.resolve('')
 
@@ -15,26 +15,15 @@ gulp.task('selfsign', () => {
    * seem to work, however signing it with --deep first and then signing it a
    * second time without --deep seems to work. ¯\_(ツ)_/¯
    */
-  return shell.exec(`${shellTask} --deep`, (exitCode, stdout, stderr) => {
-    if(exitCode === 0){
-      shell.exec(shellTask, (exitCode, stdout, stderr) => {
-        if(exitCode !== 0){
-          console.error(`
-            An error occured with the second shell task in the osx-selfsign-electron-for-dev gulp task!
-            Exit code: ${exitCode}
-            Program output: ${stdout}
-            Program stderr: ${stderr}
-          `)
-        }
-      })
-    }
-    else{
-      console.error(`
-            An error occured with the first shell task in the osx-selfsign-electron-for-dev gulp task!
-            Exit code: ${exitCode}
-            Program output: ${stdout}
-            Program stderr: ${stderr}
-          `)
-    }
+  return exeq(
+    `${shellTask} --deep`,
+    shellTask
+  )
+  .then(function() {
+    console.log('selfsign completed successfully');
   })
+  .catch(function(err) {
+    console.error('ther was an error self signing the electron app', err);
+  })
+
 })
