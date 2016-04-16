@@ -157,6 +157,9 @@ var _validUrl2 = _interopRequireDefault(_validUrl);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var addPageUrlsDiv$;
+
+//noinspection Eslint
+
 var addPageMaterialIcon$;
 var progressBar$;
 var addUrlsTextArea$;
@@ -170,7 +173,7 @@ function hideShowAddPageSubbar(refreshResults) {
   addUrlsTextArea$.css('overflow-y', 'hidden');
   if (dataIsShown === 'true') {
     addPageUrlsDiv$.data('isShown', 'false');
-    $.Velocity(addPageUrlsDiv$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elements) {
+    $.Velocity(addPageUrlsDiv$[0], "slideUp", { duration: 500, display: 'none' }).then(function () {
       progressBar$.width(0);
       addUrlsTextArea$.removeClass('hide');
       addUrlsProgress$.addClass('hide');
@@ -187,7 +190,7 @@ function hideShowAddPageSubbar(refreshResults) {
   } else {
     addPageUrlsDiv$.data('isShown', 'true');
     addPageMaterialIcon$.addClass('navBar-materialIcon-selected');
-    $.Velocity(addPageUrlsDiv$[0], "slideDown", { duration: 500, display: 'flex' }).then(function (elements) {
+    $.Velocity(addPageUrlsDiv$[0], "slideDown", { duration: 500, display: 'flex' }).then(function () {
       addUrlsTextArea$.css('overflow-y', '');
     });
   }
@@ -233,7 +236,7 @@ function addUrlsInit() {
       if (currentlyShownSubBar$.hasClass('dateFilterSettings')) {
         $.Velocity(resultsOuterContainer$[0], { marginTop: (0, _dateFilter.checkMatchMediaForResultsContainerMarginTop)() }, 500);
       }
-      $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elems) {
+      $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' }).then(function () {
         currentlyShownSubBar$.data('isShown', 'false');
         otherNavMaterialIcons$.removeClass('navBar-materialIcon-selected navBar-materialIcon-hover');
         /****
@@ -254,7 +257,7 @@ function addUrlsInit() {
         hideShowAddPageSubbar(refreshResults);
       }
   });
-  $('.urlCancelButton').click(function (event) {
+  $('.urlCancelButton').click(function () {
     var refreshResults = false;
     hideShowAddPageSubbar(refreshResults);
   });
@@ -280,9 +283,9 @@ function addUrlsInit() {
     addUrlsTextArea$.toggleClass('hide');
     addUrlsTextArea$.val('');
     progressInfo$.css('height', textAreaHeight);
-    setTimeout(function (event) {
+    setTimeout(function () {
       //progressInfo$.velocity({ height: 35 }, 500)
-      $.Velocity.animate(progressInfo$[0], { height: 35 }, 500).then(function (elements) {
+      $.Velocity.animate(progressInfo$[0], { height: 35 }, 500).then(function () {
         progressInfo$.css('height', '');
       });
     }, 10);
@@ -339,7 +342,9 @@ function addUrlsInit() {
               if (responseBody.length) {
                 try {
                   parsedResponseBody = JSON.parse(responseBody);
-                } catch (e) {}
+                } catch (e) {
+                  // do nothing
+                }
               }
               if (_lodash2.default.get(parsedResponseBody, 'errorMessage')) {
                 errMessage = parsedResponseBody.errorMessage;
@@ -427,7 +432,7 @@ function addUrlsInit() {
               progressBar$.velocity("stop");
               $.Velocity.animate(progressBar$[0], { width: progressBarContainerWidth }, 10, 'easeOutExpo');
               progressInfo$.text('All URLs Saved');
-              window.setTimeout(function (ev) {
+              window.setTimeout(function () {
                 var refreshResults = true;
                 hideShowAddPageSubbar(refreshResults);
               }, 2500);
@@ -443,7 +448,7 @@ function addUrlsInit() {
     'leading': true,
     'trailing': false
   }));
-  errorOKbutton$.click(function (event) {
+  errorOKbutton$.click(function () {
     var refreshResults = true;
     hideShowAddPageSubbar(refreshResults);
   });
@@ -455,6 +460,7 @@ exports.addUrlsInit = addUrlsInit;
 
 },{"./dateFilter":6,"./queryServerAndRender":11,"./searchPage":17,"got":323,"lodash":343,"suspend":393,"valid-url":402,"velocity-animate":466}],3:[function(require,module,exports){
 'use strict';
+
 /****
  * Hear me out Bro! We're not aiming for perfection here, just trying to have the search
  * input be focused on load for the majority of desktop browsers. It's no big deal
@@ -547,7 +553,7 @@ exports.chunkResults = chunkResults;
 },{"lodash":343}],6:[function(require,module,exports){
 'use strict';
 
-/* globals formplate */
+/* global formplate */
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -571,6 +577,9 @@ var _lodash2 = _interopRequireDefault(_lodash);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var resultsOuterContainer$;
+
+//noinspection Eslint
+
 var dateFilterContainer$;
 var dateFilterMaterialIcon$;
 var fromContainer$;
@@ -581,7 +590,7 @@ var selectFromMonth$;
 var selectFromYear$;
 var selectToMonth$;
 var selectToYear$;
-var searchInput$;
+
 var shortCutValues = {
   "Past 3 days": {
     dateStart: function dateStart() {
@@ -730,7 +739,7 @@ function hideShowDateFilterSubbar() {
   if (dataIsShown === 'true') {
     dateFilterContainer$.data('isShown', 'false');
     $.Velocity(resultsOuterContainer$[0], { marginTop: checkMatchMediaForResultsContainerMarginTop() }, 500);
-    $.Velocity(dateFilterContainer$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elements) {
+    $.Velocity(dateFilterContainer$[0], "slideUp", { duration: 500, display: 'none' }).then(function () {
       dateFilterMaterialIcon$.removeClass('navBar-materialIcon-selected');
       dateFilterResetAll();
     });
@@ -797,7 +806,6 @@ function dateFilterInit() {
   dateFilterContainer$ = $('.dateFilterSettings');
   fromContainer$ = $('.fromContainer');
   toContainer$ = $('.toContainer');
-  searchInput$ = $('#searchInput');
   selectFromMonth$ = $('.selectFromMonth', fromContainer$);
   selectFromYear$ = $('.selectFromYear', fromContainer$);
   selectToMonth$ = $('.selectToMonth', toContainer$);
@@ -816,7 +824,7 @@ function dateFilterInit() {
     $('<option>', { text: year, value: year }).appendTo('.selectFromYear, .selectToYear');
   });
 
-  selectShortcuts$.change(function (event) {
+  selectShortcuts$.change(function () {
     if (selectShortcuts$.val() === ph) {
       dateFilterResetAll(true);
     } else {
@@ -842,7 +850,7 @@ function dateFilterInit() {
      */
     if (currentlyShownSubBar$[0] && currentlyShownSubBar$[0] !== dateFilterContainer$[0]) {
       dateFilterMaterialIcon$.addClass('navBar-materialIcon-selected');
-      $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' }).then(function (elems) {
+      $.Velocity(currentlyShownSubBar$[0], "slideUp", { duration: 500, display: 'none' }).then(function () {
         currentlyShownSubBar$.data('isShown', 'false');
         otherNavMaterialIcons$.removeClass('navBar-materialIcon-selected navBar-materialIcon-hover');
         hideShowDateFilterSubbar();
@@ -945,14 +953,14 @@ var timeout;
 /****
  * Exports
  */
-function initInfiniteScroll(event) {
+function initInfiniteScroll() {
   /****
    * A simple debounce
    */
   if (timeout) {
     clearTimeout(timeout);
   }
-  timeout = setTimeout(function (ev) {
+  timeout = setTimeout(function () {
     clearTimeout(timeout);
     //eventNum++
     //console.log(`debounce event ${eventNum}`, event)
@@ -1112,7 +1120,9 @@ function queryServerAndRender() {
     var parsedresponseBody;
     try {
       parsedresponseBody = JSON.parse(err.response.body);
-    } catch (e) {}
+    } catch (e) {
+      // do nothing
+    }
     (0, _updateResultsCountDiv.updateResultsCountDiv)(parsedresponseBody);
   });
 }
@@ -1185,7 +1195,7 @@ exports.removeResults = removeResults;
 },{"./resultsEventHandlers":14,"./searchPage":17,"lodash":343}],13:[function(require,module,exports){
 'use strict';
 
-/* globals markSearchSettings  */
+/* global markSearchSettings  */
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -1206,10 +1216,6 @@ var _dompurify = require('dompurify');
 
 var _dompurify2 = _interopRequireDefault(_dompurify);
 
-var _moment = require('moment');
-
-var _moment2 = _interopRequireDefault(_moment);
-
 var _stemPorter = require('stem-porter');
 
 var _stemPorter2 = _interopRequireDefault(_stemPorter);
@@ -1221,6 +1227,8 @@ var _validator2 = _interopRequireDefault(_validator);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var STOPWORDS = require('../../../appmodules/server/api/search/lunrStopwordFilter.json');
+//import moment from 'moment'
+
 
 /****
  * Exports
@@ -1262,7 +1270,7 @@ function renderResults(resultsChunk, searchTerms) {
           addRemoveDiv = document.getElementById('addRemoveDiv');
         }
         _lodash2.default.each(resultsChunk.resultRows, function (row) {
-          resultItemNumber++;
+          resultItemNumber += 1;
           /****
            * prebrowsing for the first 2 results (if set in settings).
            * Preconnect for the first and dns-prefetch for the second.
@@ -1408,7 +1416,7 @@ function renderResults(resultsChunk, searchTerms) {
               }).forEach(function (searchWord) {
                 var stemmedSearchWord = (0, _stemPorter2.default)(searchWord);
                 var regex = new RegExp('(' + stemmedSearchWord + '[a-z]*)', 'gi');
-                var replacement = highlightOpeningSpan + '$1' + '</span>';
+                var replacement = highlightOpeningSpan + '$1</span>';
                 row.snippet = row.snippet.replace(regex, replacement);
               });
             }
@@ -1490,10 +1498,10 @@ function renderResults(resultsChunk, searchTerms) {
  */
 exports.renderResults = renderResults;
 
-},{"../../../appmodules/server/api/search/lunrStopwordFilter.json":1,"./resultsEventHandlers":14,"./resultsObject":15,"./searchPage":17,"dompurify":320,"lodash":343,"moment":345,"stem-porter":369,"validator":403}],14:[function(require,module,exports){
+},{"../../../appmodules/server/api/search/lunrStopwordFilter.json":1,"./resultsEventHandlers":14,"./resultsObject":15,"./searchPage":17,"dompurify":320,"lodash":343,"stem-porter":369,"validator":403}],14:[function(require,module,exports){
 'use strict';
 
-/* globals notie  */
+/* global notie  */
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -1555,7 +1563,7 @@ function deletePageFromMarksearch(event) {
        * dont simplify this to .then(queryServerAndRender) as that
        * will send through the response as searchTerms.
        */
-      .then(function (response) {
+      .then(function () {
         return (0, _queryServerAndRender.queryServerAndRender)();
       }).catch(function (err) {
         return console.error(err);
@@ -1647,7 +1655,7 @@ var searchInput$;
 
 $(document).ready(searchPageInit);
 
-function searchPageInit(event) {
+function searchPageInit() {
   exports.searchInput$ = searchInput$ = $('#searchInput');
   exports.
   /****
@@ -1732,7 +1740,7 @@ function searchPageInit(event) {
   if (isIOS7) {
     console.info("we may be on an iPhone 4");
     var navHeader$ = $('.navHeader');
-    navHeader$.on('touchstart', function (event) {
+    navHeader$.on('touchstart', function () {
       body$.scrollTop(0);
     });
   }
@@ -1759,7 +1767,7 @@ exports.searchInput$ = searchInput$;
 },{"./addUrls":2,"./checkIfTouchDevice":3,"./checkIfiOS7":4,"./dateFilter":6,"./infiniteScroll":8,"./initSearchPlaceholder":9,"./queryServerAndRender":11,"./tooltips":18,"babel-polyfill":21,"lodash":343}],18:[function(require,module,exports){
 'use strict';
 
-/* globals markSearchSettings */
+/* global markSearchSettings */
 
 Object.defineProperty(exports, "__esModule", {
   value: true

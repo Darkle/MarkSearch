@@ -13,7 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 $(document).ready(bookmarkletPageInit);
 
-function bookmarkletPageInit(event) {
+function bookmarkletPageInit() {
   var csrfToken = $('#csrfInput').val();
   var xhrHeaders = {
     'X-CSRF-Token': csrfToken

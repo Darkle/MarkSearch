@@ -7,15 +7,15 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _jquery2.default)(document).ready(function (event) {
+(0, _jquery2.default)(document).ready(function () {
   var helpPageBackButtonContainer = (0, _jquery2.default)('.helpPageBackButtonContainer');
   var backButtonIcon = (0, _jquery2.default)('#helpPageBackButton .material-icons');
   helpPageBackButtonContainer.addClass('showFlex');
-  helpPageBackButtonContainer.hover(function (event) {
+  helpPageBackButtonContainer.hover(function () {
     backButtonIcon.addClass('navBar-materialIcon-hover');
-  }, function (event) {
+  }, function () {
     backButtonIcon.removeClass('navBar-materialIcon-hover');
-  }).on('touchend', function (event) {
+  }).on('touchend', function () {
     backButtonIcon.removeClass('navBar-materialIcon-hover');
   });
   (0, _jquery2.default)('#helpPageBackButton').click(function (event) {

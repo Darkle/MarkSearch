@@ -30,7 +30,7 @@ function importUrls(event) {
         headers: xhrHeaders
       }
     )
-    .then( () => {
+    .then(() => {
       var urlsToSave
       var urlsArray
       var fileText = onloadEvent.target.result
@@ -52,7 +52,7 @@ function importUrls(event) {
         saveUrls(deDupedUrlsToSave)
       }
     })
-    .catch( err => {
+    .catch(err => {
       console.error(err)
       var errorMessage = getErrorMessage(err)
       hidePageSubbarAndReset()

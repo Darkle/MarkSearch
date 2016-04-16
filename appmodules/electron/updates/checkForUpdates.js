@@ -47,7 +47,7 @@ function checkForUpdate() {
   })
 }
 
-function initUpdatesCheck(){
+function initUpdatesCheck() {
   /****
    * Do a check straight away on startup in case they don't leave
    * MarkSearch running for a week.

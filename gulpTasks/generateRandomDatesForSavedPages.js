@@ -1,39 +1,23 @@
 'use strict'
 
 var path = require('path')
-var os = require('os')
 
 var gulp = require('gulp')
 var _ = require('lodash')
 var moment = require('moment')
 var coForEach = require('co-foreach')
+var AppDirectory = require('appdirectory')
 
-var platform = process.platform
-var appDataPath
-
-/****
- * https://github.com/s-a/user-appdata/blob/master/lib%2Findex.js
- * https://github.com/janbiasi/appdata/blob/master/lib%2FPersistence.js#L45
- * https://github.com/illfang/node-normalized-appdata/blob/master/index.js
- * https://github.com/MrJohz/appdirectory/blob/master/lib%2Fappdirectory.js
- */
-// TODO make it work on Linux & Windows
-if(platform === 'darwin'){
-  appDataPath = path.join(os.homedir(), 'Library', 'Application Support')
-}
-// else if(platform === 'darwin'){
-//
-// }
-// else if(platform === 'win32'){
-//
-// }
+// TODO make sure this works on Linux & Windows
+var userDirectories = new AppDirectory('MarkSearch')
+var appDataPath = userDirectories.userData()
 
 gulp.task('randomDates', () => {
   var pagesDBknex
   var appSettingsKnex = require('knex')({
     client: 'sqlite3',
     connection: {
-      filename: path.join(appDataPath, 'MarkSearch', 'MarkSearchAppSettings.db')
+      filename: path.join(appDataPath, 'MarkSearchAppSettings.db')
     },
     useNullAsDefault: false
   })

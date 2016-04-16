@@ -219,7 +219,9 @@ function getErrorMessage(err) {
   if (responseBody.length) {
     try {
       parsedResponseBody = JSON.parse(responseBody);
-    } catch (e) {}
+    } catch (e) {
+      // do nothing
+    }
   }
   if (_lodash2.default.get(parsedResponseBody, 'errorMessage')) {
     errorMessage = parsedResponseBody.errorMessage;
@@ -233,6 +235,8 @@ exports.getErrorMessage = getErrorMessage;
 
 },{"lodash":333}],5:[function(require,module,exports){
 'use strict';
+
+//noinspection Eslint
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -312,13 +316,13 @@ function importUrls(event) {
    * http://electron.atom.io/docs/all/#file-object
    */
   //TODO - also check file.path doesnt have a trailing slash on windows & linux
-  reader.onload = function (event) {
+  reader.onload = function (onloadEvent) {
     _got2.default.post('/frontendapi/settings/checkIfFileIsBinary/' + encodeURIComponent(file.path), {
       headers: _settingsPage.xhrHeaders
     }).then(function () {
       var urlsToSave;
       var urlsArray;
-      var fileText = event.target.result;
+      var fileText = onloadEvent.target.result;
       if (eventElement.dataset.importType === 'html') {
         var bookmarksDoc = document.implementation.createHTMLDocument('');
         bookmarksDoc.body.innerHTML = fileText;
@@ -345,8 +349,8 @@ function importUrls(event) {
         (0, _showNotie.showNotie)(3, 'There Was An Error Opening The File. Error: ' + errorMessage, 6);
       });
     });
-    reader.onerror = function (event) {
-      console.error(event);
+    reader.onerror = function (errorEvent) {
+      console.error(errorEvent);
       console.error(reader.error);
       (0, _showNotie.showNotie)(3, 'There Was An Error Loading The File. Error: ' + reader.error.name, 6);
       reader.abort();
@@ -391,7 +395,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param urlsToSave - Set()
  */
 function saveUrls(urlsToSave) {
-  (0, _suspend2.default)(regeneratorRuntime.mark(function _callee(urlsToSave) {
+  (0, _suspend2.default)(regeneratorRuntime.mark(function _callee(genUrlsToSave) {
     var progressBarContainerWidth, urlsThatErrored, progressStepAmount, error, index, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, url, encodedUrl, errMessage, responseBody, parsedResponseBody, ul$, errorTextBeginning, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, errUrl;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -400,7 +404,7 @@ function saveUrls(urlsToSave) {
           case 0:
             progressBarContainerWidth = _settingsPage.addUrlsProgress$.width();
             urlsThatErrored = [];
-            progressStepAmount = progressBarContainerWidth / urlsToSave.size;
+            progressStepAmount = progressBarContainerWidth / genUrlsToSave.size;
             index = 0;
 
             _settingsPage.progressBar$.velocity("stop");
@@ -411,7 +415,7 @@ function saveUrls(urlsToSave) {
             _didIteratorError = false;
             _iteratorError = undefined;
             _context.prev = 10;
-            _iterator = urlsToSave[Symbol.iterator]();
+            _iterator = genUrlsToSave[Symbol.iterator]();
 
           case 12:
             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -445,7 +449,9 @@ function saveUrls(urlsToSave) {
             if (responseBody.length) {
               try {
                 parsedResponseBody = JSON.parse(responseBody);
-              } catch (e) {}
+              } catch (e) {
+                // do nothing
+              }
             }
             if (_lodash2.default.get(parsedResponseBody, 'errorMessage')) {
               errMessage = parsedResponseBody.errorMessage;
@@ -512,7 +518,7 @@ function saveUrls(urlsToSave) {
             ul$ = $('<ul>');
             errorTextBeginning = '';
 
-            if (urlsThatErrored.length !== urlsToSave.size) {
+            if (urlsThatErrored.length !== genUrlsToSave.size) {
               errorTextBeginning = 'Most URLs Saved, However ';
             }
             $('<li>' + errorTextBeginning + 'Errors Occured While Saving The Following URLs:</li>').appendTo(ul$);
@@ -569,7 +575,7 @@ function saveUrls(urlsToSave) {
             _settingsPage.progressBar$.velocity("stop");
             $.Velocity.animate(_settingsPage.progressBar$[0], { width: progressBarContainerWidth }, 10, 'easeOutExpo');
             _settingsPage.progressInfo$.text('All URLs Saved');
-            window.setTimeout(function (ev) {
+            window.setTimeout(function () {
               (0, _hideShowAddPageSubbar.hidePageSubbarAndReset)();
             }, 3500);
 
@@ -587,7 +593,7 @@ exports.saveUrls = saveUrls;
 },{"./externalLinks":3,"./hideShowAddPageSubbar":5,"./settingsPage":9,"got":313,"lodash":333,"suspend":376}],8:[function(require,module,exports){
 'use strict';
 
-/* globals markSearchSettings: true */
+/* global markSearchSettings: true */
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -621,7 +627,7 @@ exports.setSettingsElementValues = setSettingsElementValues;
 },{"./settingsPage":9}],9:[function(require,module,exports){
 'use strict';
 
-/* globals markSearchSettings: true, Clipboard, formplate, buttonplate  */
+/* global markSearchSettings: true, Clipboard, formplate, buttonplate  */
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -673,7 +679,7 @@ var dbLocationText$;
 
 $(document).ready(settingsPageInit);
 
-function settingsPageInit(event) {
+function settingsPageInit() {
   var body$ = $('body');
   window.markSearchSettings = body$.data('marksearchSettings');
   formplate(body$);
@@ -715,6 +721,7 @@ function settingsPageInit(event) {
 
   var csrfToken = $('#csrfInput').val();
   $('.brandLogo a').removeAttr('href');
+  //noinspection Eslint
   new Clipboard('.clipBoardButton');
   exports.xhrHeaders = xhrHeaders = {
     'X-CSRF-Token': csrfToken
@@ -783,7 +790,7 @@ function settingsPageInit(event) {
           bookmarkletText: generatedBookmarkletText
         }
       });
-    }).then(function (response) {
+    }).then(function () {
       (0, _showNotie.showNotie)(1, 'Email Sent. (check your spam folder)', 5);
     }).catch(function (err) {
       console.error(err);
@@ -800,7 +807,7 @@ function settingsPageInit(event) {
     changeDBLocInput$.click();
   });
 
-  changeDBLocInput$.change(function (event) {
+  changeDBLocInput$.change(function () {
     var files = changeDBLocInput$[0].files;
     if (!files.length) {
       return;
@@ -850,7 +857,7 @@ function settingsPageInit(event) {
   /****
    * OK Button On Importing Bookmarks Saving Error
    */
-  errorOKbutton$.click(function (event) {
+  errorOKbutton$.click(function () {
     (0, _hideShowAddPageSubbar.hidePageSubbarAndReset)();
   });
 
@@ -956,7 +963,7 @@ exports.dbLocationText$ = dbLocationText$;
 },{"../bookmarkletTemplate":1,"./exportUrls":2,"./externalLinks":3,"./getErrorMessage":4,"./hideShowAddPageSubbar":5,"./importUrls":6,"./setSettingsElementValues":8,"./showNotie":10,"babel-polyfill":12,"bluebird":15,"got":313}],10:[function(require,module,exports){
 'use strict';
 
-/* globals notie  */
+/* global notie  */
 
 Object.defineProperty(exports, "__esModule", {
   value: true

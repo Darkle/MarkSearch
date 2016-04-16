@@ -55,9 +55,9 @@ function scrapeAndAddPage(req, res, next) {
 
   var webContents = browserWindow.webContents
   webContents.setAudioMuted(true)
-  if(devMode){
-    webContents.openDevTools()
-  }
+//  if(devMode){
+//    webContents.openDevTools()
+//  }
 
   webContents.once('did-finish-load', () => {
     /****

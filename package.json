@@ -28,7 +28,7 @@
     "domain-name-parser": "^2.3.0",
     "dompurify": "^0.7.4",
     "electron-positioner": "^2.0.3",
-    "electron-prebuilt": "^0.37.5",
+    "electron-prebuilt": "^0.37.6",
     "existent": "^1.0.1",
     "express": "^4.13.4",
     "express-request-id": "^1.1.0",
@@ -64,6 +64,7 @@
     "velocity-animate": "^1.2.3"
   },
   "devDependencies": {
+    "appdirectory": "^0.1.0",
     "babel-polyfill": "^6.5.0",
     "babel-preset-es2015": "^6.5.0",
     "babelify": "^7.2.0",

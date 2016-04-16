@@ -12,12 +12,6 @@ var platform = process.platform
 var desktopPath
 var openFileShell
 
-/****
- * https://github.com/s-a/user-appdata/blob/master/lib%2Findex.js
- * https://github.com/janbiasi/appdata/blob/master/lib%2FPersistence.js#L45
- * https://github.com/illfang/node-normalized-appdata/blob/master/index.js
- * https://github.com/MrJohz/appdirectory/blob/master/lib%2Fappdirectory.js
- */
 // TODO make it work on Linux & Windows
 if(platform === 'darwin'){
   desktopPath = path.join(os.homedir(), 'Desktop')
