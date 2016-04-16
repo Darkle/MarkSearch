@@ -81,13 +81,6 @@ function checkForExpiredBookmarks() {
 bookmarkExpiry.init = () => {
   bookmarkExpiry.stopBookmarksExpiry()
   /****
-   * On start, if it's been longer than the expiry time set since last checked,
-   * run straight away.
-   */
-  if(shouldWeRunBookmarkExpiryCheck()){
-    checkForExpiredBookmarks()
-  }
-  /****
    * So we're doing a minimal check every 3 hours
    */
   setTimeoutRef = setTimeout(() => {
