@@ -182,10 +182,10 @@
       "error",
       "never"
     ],
-//    "template-curly-spacing": [
-//      "error",
-//      "always"
-//    ],
+    "template-curly-spacing": [
+      "error",
+      "always"
+    ],
 //    "vars-on-top": "error",
     "wrap-iife": [
       "error",
