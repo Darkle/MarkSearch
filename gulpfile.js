@@ -15,14 +15,8 @@ require('./gulpTasks/startDev')
 * that comes with the sqlite3 js library does not include support for the full text
 * search (fts5) in SQLite.
 *
-* Also, at the moment when using it with Electron, I seem to get an error of "Cannot find 
-* module '/node_modules/sqlite3/lib/binding/electron-v0.37-darwin-x64/node_sqlite3.node',
-* which I guess means its looking in the wrong folder because node_sqlite3.node is in the 
-* '/node_modules/sqlite3/lib/binding/node-v47-darwin-x64/' folder, so at the end of this 
-* gulp task, we also create a symlink so it finds the node_sqlite3.node file.
-*
-* note: when bulding on Linux/Windows, may need to set up differently - e.g. the
-* headers: https://github.com/mapbox/node-sqlite3#source-install
+* Install What is required by your OS for node-gyp before running this task.
+* https://github.com/nodejs/node-gyp
 */
 require('./gulpTasks/buildSqlite3LibBindings')
 

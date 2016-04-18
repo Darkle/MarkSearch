@@ -73,10 +73,10 @@
         "afterColon": true
       }
     ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
+//    "linebreak-style": [
+//      "error",
+//      "unix"
+//    ],
     "no-caller": "error",
     "no-class-assign": "error",
     "no-confusing-arrow": "error",
