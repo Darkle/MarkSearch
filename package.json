@@ -46,7 +46,7 @@
     "knex": "^0.10.0",
     "lodash": "^4.9.0",
     "mailgun-es6": "^1.1.4",
-    "moment": "^2.10.6",
+    "moment": "^2.13.0",
     "morgan": "~1.7.0",
     "ms": "^0.7.1",
     "netscape-bookmarks": "^0.1.0",
