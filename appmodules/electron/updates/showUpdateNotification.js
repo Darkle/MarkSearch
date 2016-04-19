@@ -14,16 +14,28 @@ var BrowserWindow = electron.BrowserWindow
 var electronShell = electron.shell
 var notificationWindow = null
 var devMode = process.env.NODE_ENV === 'development'
+var platform = process.platform
+var noticationWindowWidth = 420
+var noticationWindowHeight = 140
+
+ if(platform === 'linux'){
+   noticationWindowWidth = 420
+   noticationWindowHeight = 140
+ }
+ else if(platform === 'win32'){
+   noticationWindowWidth = 435
+   noticationWindowHeight = 160
+ }
 
 function showUpdateNotification(latestUpdateVersion) {
 
   /****
    * http://electron.atom.io/docs/v0.37.5/api/browser-window/#new-browserwindowoptions
-   */
+   */ 
   notificationWindow = new BrowserWindow(
     {
-      width: 420,
-      height: 140,
+      width: noticationWindowWidth,
+      height: noticationWindowHeight,
       // frame: false,
       resizable: false,
       alwaysOnTop: true,
@@ -31,6 +43,7 @@ function showUpdateNotification(latestUpdateVersion) {
       fullscreenable: false,
       acceptFirstMouse: true,
       titleBarStyle: 'hidden',
+      autoHideMenuBar: true,
       title: 'An Update Is Available For MarkSearch'
     }
   )
