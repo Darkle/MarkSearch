@@ -18,8 +18,10 @@ var rename = require('gulp-rename')
 var eventStream = require('event-stream')
 var username = require('username')
 var replace = require('gulp-replace')
+var internalIp = require('internal-ip')
 
 var basePath = path.resolve('')
+var ipv4Address = internalIp.v4()
 
 gulp.task('default', function() {
   runSequence(
@@ -57,7 +59,7 @@ gulp.task('nodemon', cb => {
 
 gulp.task('browser-sync', () =>
   browserSync.init({
-    proxy: "192.168.1.10:8080",
+    proxy: `${ ipv4Address }:8080`,
     files: [
       //path.join(basePath, 'appmodules', '**', '*.*')
       path.join(basePath, 'appmodules', 'server', 'views', '*.jade')

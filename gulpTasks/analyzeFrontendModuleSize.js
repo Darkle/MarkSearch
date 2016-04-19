@@ -8,27 +8,13 @@ var _ = require('lodash')
 var exeq = require('exeq')
 
 var basePath = path.resolve('')
-var platform = process.platform
-var desktopPath
-var openFileShell
-
-// TODO make it work on Linux & Windows
-if(platform === 'darwin'){
-  desktopPath = path.join(os.homedir(), 'Desktop')
-  openFileShell = `open -a "Google Chrome"`
-}
-// else if(platform === 'darwin'){
-//
-// }
-// else if(platform === 'win32'){
-//
-// }
+var desktopPath = path.join(os.homedir(), 'Desktop')
+var openFileShell = `open -a "Google Chrome"`
 
 gulp.task('frontendModuleSize', () => {
   /****
    * https://www.npmjs.com/package/disc
    */
-  // TODO make it work on Linux & Windows
   var discAppPath = path.join(basePath, 'node_modules', '.bin', 'discify')
   var bundleFilePaths = path.join(basePath, 'frontend', 'static', 'js')
   var bundleFiles = [
