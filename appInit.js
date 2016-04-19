@@ -27,7 +27,7 @@ var expressApp = express()
  */
 jetpack.dir(path.join(appDataPath, 'logs'))
 appLogger.init(appDataPath)
- 
+
 electronInit()
   .then(() => appSettings.init(appDataPath))
   .then(pagesDBFilePath => pagesdb.init(pagesDBFilePath))

@@ -8,7 +8,7 @@ var _ = require('lodash')
 var logger = {}
 
 logger.init = (markSearchAppDataPath) => {
-  
+  //TODO - double check these are working on OSX and linux
   var logsFolder = path.join(markSearchAppDataPath, 'logs')
 
   logger.log = bunyan.createLogger({
@@ -24,6 +24,18 @@ logger.init = (markSearchAppDataPath) => {
     ],
     serializers: {
       err: bunyan.stdSerializers.err,
+      uException: electronProcess =>
+        ({
+          execPath: electronProcess.execPath,
+          cwd: electronProcess.cwd(),
+          env: electronProcess.env,
+          uptime: electronProcess.uptime(),
+          arch: electronProcess.arch,
+          platform: electronProcess.platform,
+          versions: electronProcess.versions,
+          memoryUsage: electronProcess.memoryUsage(),
+          argv: electronProcess.argv.join(', ')
+        }),
       req: req =>
         ({
           requestId: req.id,
@@ -43,7 +55,7 @@ logger.init = (markSearchAppDataPath) => {
           cookies: req.cookies,
           signedCookies: req.signedCookies,
           remoteAddress: _.get(req, 'connection.remoteAddress'),
-          domain: req.domain,
+          domain: req.domain
         }),
       res: res => 
         ({
@@ -52,26 +64,30 @@ logger.init = (markSearchAppDataPath) => {
           statusMessage: res.statusMessage,
           _header: res._header,
           _headers: res._headers,
-          _removedHeader: res._removedHeader,
+          _removedHeader: res._removedHeader
         })
     }
   })
- 
-  require('crashreporter').configure({
-    outDir: logsFolder,
-    exitOnCrash: true,
-    maxCrashFile: 5
-  })
 
 /****
- * Throw so electron doesn't keep running - we
- * probably want to bail on these.
+ * Prolly best to exit on these.
  */
   process.on('uncaughtException', function handleUncaughtException(err) {
     console.log('uncaughtException')
     console.error(err)
-    logger.log.error({err})
-    throw err
+    logger.log.error({err, uException: process})
+//    logger.log.on('close', function() {
+//      console.log('the bunyan write has finished')
+//    })
+    /****
+     * If we throw straight away, the logger doesn't seem to have
+     * enough time to write to the log file. I dunno how to hook
+     * into bunyans file write/stream to know when it's finishes, so
+     * gonna just do a setTimeout of 3 seconds.
+     */
+    setTimeout(() => {
+      process.exit(1)
+    }, 3000)
   })
 
 }
