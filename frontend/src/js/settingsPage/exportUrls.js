@@ -18,7 +18,7 @@ function exportUrls(typeOfExport) {
 
       var downloadLink = document.createElement("a")
       document.body.appendChild(downloadLink)
-      downloadLink.setAttribute('style', "display: none")
+      downloadLink.setAttribute('class', 'hide')
 
       if(typeOfExport === 'HTML'){
         var bookmarks = {
