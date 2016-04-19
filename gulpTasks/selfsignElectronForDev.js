@@ -23,7 +23,7 @@ gulp.task('selfsign', () => {
     console.log('selfsign completed successfully')
   })
   .catch(function(err) {
-    console.error('ther was an error self signing the electron app', err)
+    console.error('there was an error self signing the electron app', err)
   })
 
 })

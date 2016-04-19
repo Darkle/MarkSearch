@@ -45,6 +45,7 @@ function trayMenu() {
                 width: windowSize.width,
                 height: windowSize.height,
                 title: 'MarkSearch Settings',
+                autoHideMenuBar: true,
                 webPreferences: {
                   nodeIntegration: false
                 }
