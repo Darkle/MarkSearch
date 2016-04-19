@@ -80,10 +80,12 @@ logger.init = (markSearchAppDataPath) => {
 //      console.log('the bunyan write has finished')
 //    })
     /****
-     * If we throw straight away, the logger doesn't seem to have
+     * If we throw/exit straight away, the logger doesn't seem to have
      * enough time to write to the log file. I dunno how to hook
      * into bunyans file write/stream to know when it's finishes, so
      * gonna just do a setTimeout of 3 seconds.
+     * Using process.exit() as throwing in a setTimeout would create another
+     * uncaughtException which would create an infinite loop here.
      */
     setTimeout(() => {
       process.exit(1)
