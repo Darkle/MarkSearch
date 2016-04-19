@@ -76,14 +76,13 @@ logger.init = (markSearchAppDataPath) => {
     console.log('uncaughtException')
     console.error(err)
     logger.log.error({err, uException: process})
-//    logger.log.on('close', function() {
-//      console.log('the bunyan write has finished')
-//    })
     /****
      * If we throw/exit straight away, the logger doesn't seem to have
-     * enough time to write to the log file. I dunno how to hook
-     * into bunyans file write/stream to know when it's finishes, so
-     * gonna just do a setTimeout of 3 seconds.
+     * enough time to write to the log file. At the moment, there doesn't
+     * seem to be a way to know when bunyan has finished writing to the log
+     * file - https://github.com/trentm/node-bunyan/issues/95, so gonna just
+     * do a setTimeout of 3 seconds.
+     *
      * Using process.exit() as throwing in a setTimeout would create another
      * uncaughtException which would create an infinite loop here.
      */
