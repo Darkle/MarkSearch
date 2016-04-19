@@ -21,14 +21,13 @@ function changePagesDBlocation(req, res) {
   catch(err){
     console.error(err)
     appLogger.log.error({err, req, res})
-    res
+    return res
       .status(500)
       .json(
         {
           errorMessage: 'There was an error parsing the newPagesDBFileFolder/oldPagesDBFilePath path'
         }
       )
-    return
   }
 
   var newPagesDBFilePath = path.join(parsedNewPagesDBFileFolder, 'MarkSearchPages.db')
@@ -36,7 +35,7 @@ function changePagesDBlocation(req, res) {
 
   pagesdb.db.destroy()
     .then(() =>
-      fsExtra.moveAsync(
+      fsExtra.copyAsync(
         oldPagesDBFilePath,
         newPagesDBFilePath,
         {
