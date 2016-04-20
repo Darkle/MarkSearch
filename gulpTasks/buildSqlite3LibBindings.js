@@ -10,7 +10,7 @@ var electronVersion = require(path.resolve('', 'package.json')).dependencies['el
 var useExternalSQLite = false
 
 gulp.task('sqlite', () => {
-  // TODO - make this work on Windows & Linux
+  // TODO - make this work on Linux
 
   //TODO - change this back to regular install from default npm when mapbox add fts5 flags & update sqlite source verion
   /****
@@ -18,7 +18,8 @@ gulp.task('sqlite', () => {
    * (note: sqlite3 npm lib comes with sqlite-autoconf-3090100.tar.gz (which is a litle old, but
    * does includes the fts5 addon))
    *
-   * Our fork uses SQLite version 3.12.2 - sqlite-autoconf-3120200.tar.gz
+   * Our fork uses SQLite version 3.12.2 - sqlite-autoconf-3120200.tar.gz, and includes the SQLITE_ENABLE_FTS5 addon flag
+   * in sqlite3.gyp.
    */
   var shellTask = `npm install sqlite3@https://github.com/Darkle/node-sqlite3 --runtime=electron --dist-url=https://atom.io/download/atom-shell --target=${ electronVersion } --target_arch=${ process.arch } --target_platform=${ platform } --build-from-source`
 
