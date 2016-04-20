@@ -11,8 +11,6 @@
     "ban": "ban",
     "dev": "DEBUG='MarkSearch:*' electron appInit.js",
     "test": "snyk test",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect",
     "nsp": "nsp check"
   },
   "dependencies": {
