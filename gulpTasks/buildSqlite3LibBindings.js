@@ -11,14 +11,22 @@ var useExternalSQLite = false
 
 gulp.task('sqlite', () => {
   // TODO - make this work on Windows & Linux
+
+  //TODO - change this back to regular install from default npm when mapbox add fts5 flags & update sqlite source verion
   /****
-   * If want to build against an external SQLite (e.g. one installed by homebrew).
    *
    * (note: sqlite3 npm lib comes with sqlite-autoconf-3090100.tar.gz (which is a litle old, but
    * does includes the fts5 addon))
+   *
+   * Our fork uses SQLite version 3.12.2 - sqlite-autoconf-3120200.tar.gz
    */
-  var externalSQLite = ''
+  var shellTask = `npm install sqlite3@https://github.com/Darkle/node-sqlite3 --runtime=electron --dist-url=https://atom.io/download/atom-shell --target=${ electronVersion } --target_arch=${ process.arch } --target_platform=${ platform } --build-from-source`
+
+  /****
+   * If want to build against an external SQLite (e.g. one installed by homebrew).
+   */
   if(useExternalSQLite){
+    var externalSQLite = ''
     var externalSQLiteDir
     if(platform === 'darwin'){
       /****
@@ -34,9 +42,9 @@ gulp.task('sqlite', () => {
     //
     // }
     externalSQLite = `--sqlite=${ externalSQLiteDir }`
+    shellTask += ` ${ externalSQLite }`
   }
-  //TODO - change this back to regular install from default npm when mapbox add fts5 flags & update sqlite source verion
-  var shellTask = `npm install sqlite3@https://github.com/Darkle/node-sqlite3 --runtime=electron --dist-url=https://atom.io/download/atom-shell --target=${ electronVersion } --target_arch=${ process.arch } --target_platform=${ platform } --build-from-source ${ externalSQLite }`
+
   console.log(`running ${ shellTask }`)
 
   return exeq(shellTask)
