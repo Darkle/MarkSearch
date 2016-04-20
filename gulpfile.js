@@ -1,5 +1,9 @@
 'use strict';
 
+/****
+ * note: run these via gulp in default cmd.exe when on Windows as opposed to MinGW et.al., as had an issue
+ * with MinGW not finding python on Win10 for the sqlite3 build task.
+ */
 
 /****
 * startDev ('default', 'browserify', 'nodemon', 'browser-sync', 'watch-less', 'watch-js')
@@ -18,6 +22,7 @@ require('./gulpTasks/startDev')
 *
 * Install What is required by your OS for node-gyp before running this task.
 * https://github.com/nodejs/node-gyp
+*
 */
 require('./gulpTasks/buildSqlite3LibBindings')
 
