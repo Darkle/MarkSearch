@@ -29,6 +29,7 @@ var bookmarkExpiryCheckbox$
 var bookmarkExpiryEmail$
 var bookmarkExpirySelectMonths$
 var dbLocationText$
+var trayIconColor$
 
 $(document).ready(settingsPageInit)
 
@@ -71,6 +72,7 @@ function settingsPageInit() {
   progressInfo$ = $('.progressInfo')
   progressBar$ = $('.progressBar')
   errorOKbutton$ = $('.errorOKbutton')
+  trayIconColor$ = $('#trayIconSelect')
 
   var csrfToken = $('#csrfInput').val()
   $('.brandLogo a').removeAttr('href')
@@ -284,7 +286,8 @@ function settingsPageInit() {
           alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked,
           bookmarkExpiryEnabled: bookmarkExpiryCheckbox$[0].checked,
           bookmarkExpiryMonths: parseInt(bookmarkExpirySelectMonths$.val()),
-          bookmarkExpiryEmail: bookmarkExpiryEmail$.val()
+          bookmarkExpiryEmail: bookmarkExpiryEmail$.val(),
+          trayIconColor: trayIconColor$.val()
         }
         newSettings.pagesDBFilePath = newPagesDBFilePath || markSearchSettings.pagesDBFilePath
         return newSettings
@@ -329,5 +332,6 @@ export {
   bookmarkExpiryCheckbox$,
   bookmarkExpiryEmail$,
   bookmarkExpirySelectMonths$,
-  dbLocationText$
+  dbLocationText$,
+  trayIconColor$
 }

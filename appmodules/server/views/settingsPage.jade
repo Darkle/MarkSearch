@@ -96,6 +96,21 @@ block content
         .settingDetail
           p.
             Use this button to revoke all tokens generated for extensions or bookmarklets.
+      .trayIconContainer
+        .trayIconSettings
+          .formplate
+            label MarkSearch Tray Icon Color
+          .formplate
+            select#trayIconSelect
+              option(value="blue") Blue
+              option(value="black") Black
+              option(value="white") White
+        .settingDetail
+          p.
+            This setting allows you to change the color of the MarkSearch system tray icon.
+          p.
+            Note: once you save this setting, you will have to restart MarkSearch for the new
+            icon to be shown.
       .importContainer
         .importTitle Import Bookmarks
         .importButtonsContainer

@@ -101,6 +101,7 @@ appSettings.update = (settingsKeyValObj) => {
                       Error(s): ${ validatedSettingsKeyValObj.format() }`
     console.error(errMessage)
     appLogger.log.error({err: errMessage})
+    var errorToReturn = new Error(errMessage)
     /****
      * Note: we need to return a blubird promise here, in case we use bluebird's
      * bind method when calling appSettings.update. Returning a native promise
@@ -108,7 +109,7 @@ appSettings.update = (settingsKeyValObj) => {
      * Also, throwing an error here would also cause an uncaughtException error
      * because we wouldn't be returning a bluebird promise.
      */
-    return Promise.reject(errMessage)
+    return Promise.reject(errorToReturn)
   }
   return appSettings.db('appSettings')
     .where('id', 'appSettings')

@@ -83,6 +83,7 @@ pagesdb.updateColumns = (columnsDataObj) => {
                       Error(s): ${ validatedColumnsDataObj.format() }`
     console.error(errMessage)
     appLogger.log.error({err: errMessage})
+    let errorToReturn = new Error(errMessage)
     /****
      * Note: we need to return a blubird promise here, because we use bluebird's
      * bind method in addPage.js and returning a native promise would cause an
@@ -90,7 +91,7 @@ pagesdb.updateColumns = (columnsDataObj) => {
      * Also, throwing an error here would also cause an uncaughtException error
      * because we wouldn't be returning a bluebird promise.
      */
-    return Promise.reject(errMessage)
+    return Promise.reject(errorToReturn)
   }
 
   var pageUrlPrimaryKey = columnsDataObj.pageUrl
@@ -118,6 +119,7 @@ pagesdb.upsertRow = (rowDataObj) => {
                       Error(s): ${ validatedPageDataObj.format() }`
     console.error(errMessage)
     appLogger.log.error({err: errMessage})
+    let errorToReturn = new Error(errMessage)
     /****
      * Note: we need to return a blubird promise here, because we use bluebird's
      * bind method in addPage.js and returning a native promise would cause an
@@ -125,7 +127,7 @@ pagesdb.upsertRow = (rowDataObj) => {
      * Also, throwing an error here would also cause an uncaughtException error
      * because we wouldn't be returning a bluebird promise.
      */
-    return Promise.reject(errMessage)
+    return Promise.reject(errorToReturn)
   }
   return pagesdb
     .db('pages')
@@ -190,7 +192,8 @@ pagesdb.insertRow = rowData =>
 
 pagesdb.deleteRow = pageUrl => {
   if(!_.isString(pageUrl)){
-    return Promise.reject(`pageUrl passed to pagesdb.deleteRow was not a string`)
+    let errorToReturn = new Error(`pageUrl passed to pagesdb.deleteRow was not a string`)
+    return Promise.reject(errorToReturn)
   }
   /****
    * note: gotta do the fts delete first as it relies on the rowid from the pages table.

@@ -9,7 +9,8 @@ import {
   bookmarkExpiryCheckbox$,
   bookmarkExpiryEmail$,
   bookmarkExpirySelectMonths$,
-  dbLocationText$
+  dbLocationText$,
+  trayIconColor$
 } from './settingsPage'
 
 function setSettingsElementValues() {
@@ -30,6 +31,7 @@ function setSettingsElementValues() {
   }
   bookmarkExpiryEmail$.val(markSearchSettings.bookmarkExpiryEmail)
   bookmarkExpirySelectMonths$.val(markSearchSettings.bookmarkExpiryMonths)
+  trayIconColor$.val(markSearchSettings.trayIconColor)
 }
 
 export { setSettingsElementValues }

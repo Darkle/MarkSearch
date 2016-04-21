@@ -54,7 +54,8 @@ router.get('/settings', (req, res) => {
               alwaysDisableTooltips: appSettings.settings.alwaysDisableTooltips,
               bookmarkExpiryEnabled: appSettings.settings.bookmarkExpiryEnabled,
               bookmarkExpiryEmail: appSettings.settings.bookmarkExpiryEmail,
-              bookmarkExpiryMonths: appSettings.settings.bookmarkExpiryMonths
+              bookmarkExpiryMonths: appSettings.settings.bookmarkExpiryMonths,
+              trayIconColor: appSettings.settings.trayIconColor
             }
         )
       }

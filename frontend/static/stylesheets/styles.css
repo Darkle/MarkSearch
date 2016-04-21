@@ -1311,6 +1311,34 @@ body {
 .settingsPage .bookmarkExpiryContainer .bookmarkExpirySettings #bookmarkExpiryEmail {
   margin-bottom: 0;
 }
+.settingsPage .trayIconContainer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.settingsPage .trayIconContainer .trayIconSettings {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.settingsPage .trayIconContainer .trayIconSettings > div:nth-of-type(1) {
+  margin-top: 0;
+}
+.settingsPage .trayIconContainer .trayIconSettings > div:nth-of-type(2) {
+  margin-top: 0.7rem;
+}
 .settingsPage .importContainer {
   display: -webkit-box;
   display: -webkit-flex;

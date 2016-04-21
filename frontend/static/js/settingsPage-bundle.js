@@ -620,6 +620,7 @@ function setSettingsElementValues() {
   }
   _settingsPage.bookmarkExpiryEmail$.val(markSearchSettings.bookmarkExpiryEmail);
   _settingsPage.bookmarkExpirySelectMonths$.val(markSearchSettings.bookmarkExpiryMonths);
+  _settingsPage.trayIconColor$.val(markSearchSettings.trayIconColor);
 }
 
 exports.setSettingsElementValues = setSettingsElementValues;
@@ -632,7 +633,7 @@ exports.setSettingsElementValues = setSettingsElementValues;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.dbLocationText$ = exports.bookmarkExpirySelectMonths$ = exports.bookmarkExpiryEmail$ = exports.bookmarkExpiryCheckbox$ = exports.alwaysDisableTooltipsCheckbox$ = exports.prebrowsingCheckbox$ = exports.dbLocationInfoTitle$ = exports.notieAlert$ = exports.addUrlsProgress$ = exports.progressInfo$ = exports.errorOKbutton$ = exports.progressBar$ = exports.addPageUrlsDiv$ = exports.xhrHeaders = undefined;
+exports.trayIconColor$ = exports.dbLocationText$ = exports.bookmarkExpirySelectMonths$ = exports.bookmarkExpiryEmail$ = exports.bookmarkExpiryCheckbox$ = exports.alwaysDisableTooltipsCheckbox$ = exports.prebrowsingCheckbox$ = exports.dbLocationInfoTitle$ = exports.notieAlert$ = exports.addUrlsProgress$ = exports.progressInfo$ = exports.errorOKbutton$ = exports.progressBar$ = exports.addPageUrlsDiv$ = exports.xhrHeaders = undefined;
 
 require('babel-polyfill');
 
@@ -676,6 +677,7 @@ var bookmarkExpiryCheckbox$;
 var bookmarkExpiryEmail$;
 var bookmarkExpirySelectMonths$;
 var dbLocationText$;
+var trayIconColor$;
 
 $(document).ready(settingsPageInit);
 
@@ -718,6 +720,7 @@ function settingsPageInit() {
   exports.progressInfo$ = progressInfo$ = $('.progressInfo');
   exports.progressBar$ = progressBar$ = $('.progressBar');
   exports.errorOKbutton$ = errorOKbutton$ = $('.errorOKbutton');
+  exports.trayIconColor$ = trayIconColor$ = $('#trayIconSelect');
 
   var csrfToken = $('#csrfInput').val();
   $('.brandLogo a').removeAttr('href');
@@ -917,7 +920,8 @@ function settingsPageInit() {
         alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked,
         bookmarkExpiryEnabled: bookmarkExpiryCheckbox$[0].checked,
         bookmarkExpiryMonths: parseInt(bookmarkExpirySelectMonths$.val()),
-        bookmarkExpiryEmail: bookmarkExpiryEmail$.val()
+        bookmarkExpiryEmail: bookmarkExpiryEmail$.val(),
+        trayIconColor: trayIconColor$.val()
       };
       newSettings.pagesDBFilePath = newPagesDBFilePath || markSearchSettings.pagesDBFilePath;
       return newSettings;
@@ -959,6 +963,7 @@ exports.bookmarkExpiryCheckbox$ = bookmarkExpiryCheckbox$;
 exports.bookmarkExpiryEmail$ = bookmarkExpiryEmail$;
 exports.bookmarkExpirySelectMonths$ = bookmarkExpirySelectMonths$;
 exports.dbLocationText$ = dbLocationText$;
+exports.trayIconColor$ = trayIconColor$;
 
 },{"../bookmarkletTemplate":1,"./exportUrls":2,"./externalLinks":3,"./getErrorMessage":4,"./hideShowAddPageSubbar":5,"./importUrls":6,"./setSettingsElementValues":8,"./showNotie":10,"babel-polyfill":12,"bluebird":15,"got":313}],10:[function(require,module,exports){
 'use strict';
