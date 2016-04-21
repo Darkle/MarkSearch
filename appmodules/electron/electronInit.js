@@ -7,6 +7,7 @@ var pagesdb = require('../db/pagesdb')
 var appSettings = require('../db/appSettings')
 
 var electronApp = electron.app
+var platform = process.platform
 
 function electronInit() {
     return new Promise(resolve => {
@@ -42,7 +43,9 @@ function electronInit() {
          * so there is no menu in the menu bar when they open the settings
          * page.
          */
-        electronApp.dock.hide()
+        if(platform === 'darwin'){
+          electronApp.dock.hide()
+        }
         resolve()
       })
     })
