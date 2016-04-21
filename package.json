@@ -38,7 +38,7 @@
     "isbinaryfile": "^3.0.0",
     "jade": "^1.11.0",
     "jquery": "^2.2.3",
-    "jsdom": "^8.3.1",
+    "jsdom": "^8.4.0",
     "jsonwebtoken": "^5.7.0",
     "knex": "^0.10.0",
     "lodash": "^4.9.0",
