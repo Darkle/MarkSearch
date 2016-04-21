@@ -11438,15 +11438,19 @@ var isStream = module.exports = function (stream) {
 };
 
 isStream.writable = function (stream) {
-	return isStream(stream) && stream.writable !== false && typeof stream._write == 'function' && typeof stream._writableState == 'object';
+	return isStream(stream) && stream.writable !== false && typeof stream._write === 'function' && typeof stream._writableState === 'object';
 };
 
 isStream.readable = function (stream) {
-	return isStream(stream) && stream.readable !== false && typeof stream._read == 'function' && typeof stream._readableState == 'object';
+	return isStream(stream) && stream.readable !== false && typeof stream._read === 'function' && typeof stream._readableState === 'object';
 };
 
 isStream.duplex = function (stream) {
 	return isStream.writable(stream) && isStream.readable(stream);
+};
+
+isStream.transform = function (stream) {
+	return isStream.duplex(stream) && typeof stream._transform === 'function' && typeof stream._transformState === 'object';
 };
 
 },{}],323:[function(require,module,exports){
@@ -14516,7 +14520,6 @@ function indexOf(xs, x) {
 },{"./_stream_duplex":339,"_process":332,"buffer":7,"core-util-is":299,"events":302,"inherits":316,"isarray":338,"process-nextick-args":331,"string_decoder/":361,"util":6}],342:[function(require,module,exports){
 arguments[4][310][0].apply(exports,arguments)
 },{"./_stream_duplex":339,"core-util-is":299,"dup":310,"inherits":316}],343:[function(require,module,exports){
-(function (process){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
 // the drain event emission and buffering.
@@ -14530,7 +14533,7 @@ var processNextTick = require('process-nextick-args');
 /*</replacement>*/
 
 /*<replacement>*/
-var asyncWrite = !process.browser && ['v0.10', 'v0.9.'].indexOf(process.version.slice(0, 5)) > -1 ? setImmediate : processNextTick;
+var asyncWrite = !true ? setImmediate : processNextTick;
 /*</replacement>*/
 
 /*<replacement>*/
@@ -15033,11 +15036,27 @@ function CorkedRequest(state) {
     }
   };
 }
-}).call(this,require('_process'))
+},{"./_stream_duplex":339,"buffer":7,"core-util-is":299,"events":302,"inherits":316,"process-nextick-args":331,"util-deprecate":367}],344:[function(require,module,exports){
+var Stream = (function (){
+  try {
+    return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
+  } catch(_){}
+}());
+exports = module.exports = require('./lib/_stream_readable.js');
+exports.Stream = Stream || exports;
+exports.Readable = exports;
+exports.Writable = require('./lib/_stream_writable.js');
+exports.Duplex = require('./lib/_stream_duplex.js');
+exports.Transform = require('./lib/_stream_transform.js');
+exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./_stream_duplex":339,"_process":332,"buffer":7,"core-util-is":299,"events":302,"inherits":316,"process-nextick-args":331,"util-deprecate":367}],344:[function(require,module,exports){
-arguments[4][312][0].apply(exports,arguments)
-},{"./lib/_stream_duplex.js":339,"./lib/_stream_passthrough.js":340,"./lib/_stream_readable.js":341,"./lib/_stream_transform.js":342,"./lib/_stream_writable.js":343,"dup":312}],345:[function(require,module,exports){
+// inline-process-browser and unreachable-branch-transform make sure this is
+// removed in browserify builds
+if (!true) {
+  module.exports = require('stream');
+}
+
+},{"./lib/_stream_duplex.js":339,"./lib/_stream_passthrough.js":340,"./lib/_stream_readable.js":341,"./lib/_stream_transform.js":342,"./lib/_stream_writable.js":343,"stream":345}],345:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
