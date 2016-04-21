@@ -5,6 +5,7 @@ var path = require('path')
 var electron = require('electron')
 
 var checkScreenSize = require('./checkScreenSize')
+var appSettings = require('../db/appSettings')
 
 var electronApp = electron.app
 var Menu = electron.Menu
@@ -14,11 +15,17 @@ var settingsWindow = null
 var appTrayMenu = null
 var devMode = process.env.NODE_ENV === 'development'
 var logsFolder = path.join(electronApp.getPath('appData'), 'MarkSearch', 'logs')
+var blueIcon = path.join(__dirname, 'icons', 'Blue', 'MSblue-iconTemplate.png')
 
 function trayMenu() {
   var BrowserWindow = electron.BrowserWindow
+  var trayIconToUse = path.join(__dirname, 'icons', 'MS-iconTemplate.png')
+  
+  if(appSettings.settings.useBlueSystemTrayIcon){
+    trayIconToUse = blueIcon
+  }
 
-  appTrayMenu = new Tray(path.join(__dirname, 'icons', 'MS-iconTemplate.png'))
+  appTrayMenu = new Tray(trayIconToUse)
 
   var contextMenu = Menu.buildFromTemplate([
     {
@@ -45,13 +52,22 @@ function trayMenu() {
                 width: windowSize.width,
                 height: windowSize.height,
                 title: 'MarkSearch Settings',
+                icon: blueIcon,
                 autoHideMenuBar: true,
+//                titleBarStyle: 'hidden',
                 webPreferences: {
                   nodeIntegration: false
                 }
               }
           )
+          /****
+           * Remove the menu in menu bar, so they dont accidentally exit the
+           * app.
+           */
+          settingsWindow.setMenu(null)
+
           settingsWindow.loadURL(`${ global.msServerAddr.combined }/settings`)
+
           if(devMode){
             settingsWindow.openDevTools()
           }

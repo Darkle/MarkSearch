@@ -96,6 +96,21 @@ module.exports = {
           }
           return post
         }
+      },
+      useBlueSystemTrayIcon: {
+        type: 'boolean',
+        optional: true,
+        exec: function(schema, post) {
+          if(!_.isUndefined(post)){
+            if(post === 'true' || post === 1){
+              post = true
+            }
+            if(post === 'false' || post === 0){
+              post = false
+            }
+          }
+          return post
+        }
       }
     }
   },
@@ -159,6 +174,10 @@ module.exports = {
         type: 'integer',
         gt: 0,
         error: 'serverPort must be a valid integer and larger than 0',
+        optional: true
+      },
+      useBlueSystemTrayIcon: {
+        type: 'boolean',
         optional: true
       }
     }
