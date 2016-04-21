@@ -15,7 +15,7 @@ var electronShell = electron.shell
 var notificationWindow = null
 var devMode = process.env.NODE_ENV === 'development'
 var platform = process.platform
-var iconPath = path.resolve(__dirname, '..', 'icons', 'Blue', 'MSblue-iconTemplate.png')
+var notificationWindowIcon = path.join(__dirname, '..', 'icons', 'blue', 'MS-iconTemplate.png')
 var noticationWindowWidth = 420
 var noticationWindowHeight = 140
 
@@ -45,7 +45,7 @@ function showUpdateNotification(latestUpdateVersion) {
       acceptFirstMouse: true,
       titleBarStyle: 'hidden',
       autoHideMenuBar: true,
-      icon: iconPath,
+      icon: notificationWindowIcon,
       title: 'An Update Is Available For MarkSearch'
     }
   )

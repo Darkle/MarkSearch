@@ -243,7 +243,7 @@ function settingsPageInit() {
    */
   saveSettingsButtonButton$.click( event => {
     event.preventDefault()
-    var dbChangePromise = null
+    var dbChangePromise = Promise.resolve()
     var dbLocationText = dbLocationText$.text().trim()
 
     /****

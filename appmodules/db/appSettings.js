@@ -38,7 +38,7 @@ appSettings.init = (appDataPath) => {
         table.integer('bookmarkExpiryLastCheck').notNullable()
         table.text('skipUpdateVersion').notNullable()
         table.integer('serverPort').notNullable()
-        table.boolean('useBlueSystemTrayIcon').notNullable()
+        table.text('trayIconColor').notNullable()
       })
     }
   })
@@ -65,7 +65,7 @@ appSettings.init = (appDataPath) => {
             bookmarkExpiryLastCheck: Date.now(),
             skipUpdateVersion: '1',
             serverPort: 8080,
-            useBlueSystemTrayIcon: false
+            trayIconColor: 'blue'
           }
         )
         .return(appSettings.db('appSettings').where('id', 'appSettings').first())

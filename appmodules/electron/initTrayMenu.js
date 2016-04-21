@@ -15,17 +15,12 @@ var settingsWindow = null
 var appTrayMenu = null
 var devMode = process.env.NODE_ENV === 'development'
 var logsFolder = path.join(electronApp.getPath('appData'), 'MarkSearch', 'logs')
-var blueIcon = path.join(__dirname, 'icons', 'Blue', 'MSblue-iconTemplate.png')
+var settingsWindowIcon = path.join(__dirname, 'icons', 'blue', 'MS-iconTemplate.png')
 
 function trayMenu() {
   var BrowserWindow = electron.BrowserWindow
-  var trayIconToUse = path.join(__dirname, 'icons', 'MS-iconTemplate.png')
-  
-  if(appSettings.settings.useBlueSystemTrayIcon){
-    trayIconToUse = blueIcon
-  }
-
-  appTrayMenu = new Tray(trayIconToUse)
+  var appTrayIcon = path.join(__dirname, 'icons', appSettings.settings.trayIconColor, 'MS-iconTemplate.png')
+  appTrayMenu = new Tray(appTrayIcon)
 
   var contextMenu = Menu.buildFromTemplate([
     {
@@ -52,7 +47,7 @@ function trayMenu() {
                 width: windowSize.width,
                 height: windowSize.height,
                 title: 'MarkSearch Settings',
-                icon: blueIcon,
+                icon: settingsWindowIcon,
                 autoHideMenuBar: true,
 //                titleBarStyle: 'hidden',
                 webPreferences: {
