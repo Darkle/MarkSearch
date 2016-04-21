@@ -62,7 +62,8 @@ function trayMenu() {
           )
           /****
            * Remove the menu in menu bar, so they dont accidentally exit the
-           * app.
+           * app - on windows i think you can still access it by pressing the
+           * alt key.
            */
           settingsWindow.setMenu(null)
 
