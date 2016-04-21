@@ -7,7 +7,7 @@ var gulp = require('gulp')
 var _ = require('lodash')
 var exeq = require('exeq')
 
-var basePath = path.resolve('')
+var basePath = path.resolve(__dirname, '..')
 var desktopPath = path.join(os.homedir(), 'Desktop')
 var openFileShell = `open -a "Google Chrome"`
 

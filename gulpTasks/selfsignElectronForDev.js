@@ -5,7 +5,7 @@ var path = require('path')
 var gulp = require('gulp')
 var exeq = require('exeq')
 
-var basePath = path.resolve('')
+var basePath = path.resolve(__dirname, '..')
 
 gulp.task('selfsign', () => {
   var electronAppPath = path.join(basePath, 'node_modules', 'electron-prebuilt', 'dist', 'Electron.app')

@@ -20,7 +20,7 @@ var username = require('username')
 var replace = require('gulp-replace')
 var internalIp = require('internal-ip')
 
-var basePath = path.resolve('')
+var basePath = path.resolve(__dirname, '..')
 var ipv4Address = internalIp.v4()
 
 gulp.task('default', function() {

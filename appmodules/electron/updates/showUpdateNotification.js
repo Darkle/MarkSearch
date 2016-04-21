@@ -15,7 +15,9 @@ var electronShell = electron.shell
 var notificationWindow = null
 var devMode = process.env.NODE_ENV === 'development'
 var platform = process.platform
-var iconPath = path.resolve('..', 'icons', 'Blue', 'MSblue-iconTemplate.png')
+var iconPath = path.resolve(__dirname, '..', 'icons', 'Blue', 'MSblue-iconTemplate.png')
+console.log('iconPath')
+console.log(iconPath)
 var noticationWindowWidth = 420
 var noticationWindowHeight = 140
 

@@ -5,7 +5,7 @@ var path = require('path')
 var gulp = require('gulp')
 var jetpack = require('fs-jetpack')
 
-var basePath = path.resolve('')
+var basePath = path.resolve(__dirname, '..')
 
 gulp.task('alterGotPackageJson', () => {
   var gotPackageJsonFilePath = path.join(basePath, 'node_modules', 'got', 'package.json')
