@@ -8,29 +8,31 @@ var existent = require('existent')
 
 var platform = process.platform
 // TODO try to get this working on Linux & Windows
-var userDirectories
+var appDataPath
 
 if(platform === 'darwin'){
-  userDirectories = new AppDirectory('MarkSearch')
+  appDataPath = new AppDirectory('MarkSearch').userData()
 }
-// else if(platform === 'linux'){
-//
-// }
+else if(platform === 'linux'){
+  /****
+   * The Electron AppData folder on Linux is in the config folder
+   * rather than the userData folder on Linux.
+   */
+  appDataPath = new AppDirectory('MarkSearch').userConfig()
+}
 else if(platform === 'win32'){
-  userDirectories = new AppDirectory('MarkSearch')
+  appDataPath = new AppDirectory('MarkSearch').userData()
   /****
    * If MarkSearch folder is not in the AppData Local folder, then
    * use the Roaming folder.
    */
-  if(!existent.sync(userDirectories.userData())){
-    userDirectories = new AppDirectory({
+  if(!existent.sync(appDataPath)){
+    appDataPath = new AppDirectory({
       appName: "MarkSearch",
       useRoaming: true
-    })
+    }).userData()
   }
 }
-
-var appDataPath = userDirectories.userData()
 
 /****
  * This is not working on Windows atm because sqlite3 is installed
