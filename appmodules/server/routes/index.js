@@ -68,13 +68,10 @@ router.get('/settings', (req, res) => {
  * the csrf token
  */
 router.get('/bookmarklet', (req, res) => {
-  // var token = generateJWTtoken()
-  // var bookmarkletJS = generateBookmarkletJS(global.msServerAddr.combined, token)
   res.render('bookmarkletPage',
       {
         title: 'MarkSearch Bookmarklet',
-        csrfToken: req.csrfToken(),
-        // bookmarkletHref: `javascript:${encodeURIComponent(bookmarkletJS)}`
+        csrfToken: req.csrfToken()
       }
   )
 })
