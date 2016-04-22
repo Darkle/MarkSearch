@@ -33,7 +33,7 @@ function generateArchiveOfPage(pageUrl) {
           }
           else{
             archiveLink = {
-              archiveLink: httpResponse.headers.location,
+              archiveLink: locationHeader,
               pageUrl: pageUrl
             }
           }
