@@ -19,14 +19,14 @@ var notificationWindowIcon = path.join(__dirname, '..', 'icons', 'blue', 'MS-ico
 var noticationWindowWidth = 420
 var noticationWindowHeight = 140
 
- if(platform === 'linux'){
-   noticationWindowWidth = 420
-   noticationWindowHeight = 140
- }
- else if(platform === 'win32'){
-   noticationWindowWidth = 435
-   noticationWindowHeight = 160
- }
+if(platform === 'linux'){
+  noticationWindowWidth = 415
+  noticationWindowHeight = 120
+}
+else if(platform === 'win32'){
+ noticationWindowWidth = 435
+ noticationWindowHeight = 160
+}
 
 function showUpdateNotification(latestUpdateVersion) {
 
