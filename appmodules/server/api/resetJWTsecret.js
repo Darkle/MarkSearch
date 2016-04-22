@@ -5,11 +5,13 @@ var Crypto = require('crypto')
 var appSettings = require('../../db/appSettings')
 var appLogger = require('../../utils/appLogger')
 
+var randomCryptoLength = 256
+
 function resetJWTsecret(req, res) {
   appSettings.db('appSettings')
     .where('id', 'appSettings')
     .update({
-      JWTsecret: Crypto.randomBytes(128).toString('hex')
+      JWTsecret: Crypto.randomBytes(randomCryptoLength).toString('hex')
     })
     .return(appSettings.db('appSettings').where('id', 'appSettings'))
     .then( rows => {
