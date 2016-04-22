@@ -31,6 +31,8 @@ gulp.task('sqlite', () => {
       /****
        * Homebrew sqlite installed folder
        * /usr/local/opt/sqlite/ is a symlink to the most up to date version installed in /usr/local/Cellar/sqlite
+       * note: with Homebrew, make sure you have installed sqlite using the right
+       * flag: e.g. `brew install sqlite3 --with-fts5`
        */
       externalSQLiteDir = '/usr/local/opt/sqlite/'
     }

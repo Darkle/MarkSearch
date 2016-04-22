@@ -1,17 +1,3 @@
-* knex relies on sqlite3 so must install & build sqlite3 node module before install knex
-* When setting up dev on another mac, for some reason the sqlite3 binaries i have in repo
-    arent working for compiling sqlite3 node module against them (fts5 module not found)
-    so seem to need to build sqlite3 on new mac and then pass that into npm sqlite build.
-    So make sure hombrew has the version we want, then do:
-    `brew install sqlite3 --with-fts5`,
-     then build sqlite3 node module using:
-    `npm install sqlite3 --save --build-from-source --sqlite=/usr/local/Cellar/sqlite/versionWeAreUsing`
-* Combinations that I know work:
-  sqlite3@3.1.2 --save --build-from-source --sqlite=/usr/local/Cellar/sqlite/3.11.0/
-* for sqlite@3.1.3, if you get an error of "Cannot find module '/node_modules/sqlite3/lib/binding/
-    electron-v0.37-darwin-x64/node_sqlite3.node'", try using a symlink in the
-    "/node_modules/sqlite3/lib/binding/" folder. So create a symlink for the node-v47-darwin-x64
-    folder and name the symlink electron-v0.37-darwin-x64
 * stick with got version 5 so it works in the browser (if there is a need to upgrade, info here: http://bit.ly/1Xe6sPZ)
     but may as well stick with got version 5
 * maybe the sqlite corruption occurs when I'm ading stuff to pages db and i also have it open in the
