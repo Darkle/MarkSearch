@@ -63,9 +63,9 @@ router.get('/settings', (req, res) => {
 })
 
 /****
- * Don't load the bookmarklet code directly on load as it includes the token.
- * Load the boookmarklet code and token via the frontend api so you need to include
- * the csrf token
+ * We don't load the bookmarklet code directly on load as it includes the token.
+ * The bookmarklet page js loads the boookmarklet code and token via the frontend api so
+ * there is some security there (the csrf token).
  */
 router.get('/bookmarklet', (req, res) => {
   res.render('bookmarkletPage',
