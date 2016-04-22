@@ -215,7 +215,7 @@ module.exports = {
         type: 'string',
         optional: true,
         exec: function(scheme, post) {
-          if(_.isString(post) && post.length && !validator.isEmail(post)){
+          if(_.isString(post) && !validator.isEmail(post)){
             this.report(`req.body.email doesn't seem to be a valid email address`)
           }
         }
