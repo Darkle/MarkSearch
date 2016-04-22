@@ -4,26 +4,17 @@
   position: fixed;
   top: 0;
   z-index: 99;
-  //height: 4rem;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  //box-shadow: 0px 33px 66px 0px rgba(0,0,0,0.64);
-  //font-size: 3rem;
-  //outline: 3px solid #ffff00;
-  //position: absolute;
 }
 
 .navHeader nav {
   background-color: @paletteBlue;
-
-  //outline: 2px solid green;
-  //background-color: #EDE480;
   display: flex;
   flex: 1 1 4rem;
-  //outline: 3px solid #e9322d;
 }
 
 .navHeader .helpPageBackButtonContainer {
@@ -36,8 +27,6 @@
 }
 
 .navHeader .brandLogo {
-  //outline: 2px solid purple;
-  //background-color: purple;
   /****
   * Element is both a flex item for it's parent container,
   * and a flex container itself for it's child element
@@ -46,17 +35,13 @@
   display: flex;
   align-items: center;
   font-family: 'exoregular';
-  //background-color: #55201B;
-  //font-size: 1.9rem;
 }
 
 .navHeader .brandLogo a {
   flex: 1 1 auto;
-  //color: #444;
   color: @paletteTextColorLight;
   text-align: right;
   padding-right: 1rem;
-  //padding-left: 0.5rem;
   text-decoration: none;
 }
 
@@ -70,14 +55,10 @@
 }
 
 .navHeader .brandLogo a:hover{
-  //background: rgba(0, 0, 0, 0.1);
-  //opacity: 0.8;
   color: @paletteTextColorDarker;
 }
 
 .navHeader .searchContainer {
-  //outline: 2px solid #f3f34d;
-  //background-color: #f3f34d;
   /****
   * Element is both a flex item for it's parent container,
   * and a flex container itself for it's child element
@@ -108,34 +89,23 @@
 .navHeader .rightContainer {
   flex: 2 1 auto;
   display: flex;
-  //min-width: 192px;
 }
-
-//.navHeader .rightContainer >*{
-//outline: 1px solid green;
-//}
 
 /***
 * Material design icons in the header
 */
 .navHeader .material-icons {
   font-size: 3rem;
-  //color: #BBDEFB;
   color: #77BBEB;
-  //opacity: 0.5;
 }
 
 .navHeader .dateFilter {
-  //outline: 2px solid #898941;
-  //background-color: #c3c3c3;
   /****
   * Element is both a flex item for it's parent container,
   * and a flex container itself for it's child element
   */
-  //flex: 0 0 80px;
   flex: 0 1 4rem;
   display: flex;
-  //margin: 0 10px;
 }
 
 .navHeader .dateFilter a {
@@ -146,20 +116,9 @@
   text-decoration: none;
 }
 
-.navHeader .dateFilter a:hover .material-icons {
-  //background: rgba(0, 0, 0, 0.5);
-  //color: rgba(0, 0, 0, 0.52);
-  //color: @paletteTextColorDarker;
-  //color: #2670A2;
-  //opacity: 1;
-}
-
 .navHeader .addPage {
-  //outline: 2px solid #000000;
-  //background-color: #e46119;
   flex: 0 1 4rem;
   display: flex;
-  //position: relative;
 }
 
 .navHeader .addPage a {
@@ -170,15 +129,7 @@
   text-decoration: none;
 }
 
-.navHeader .addPage a:hover .material-icons {
-  //background: rgba(0, 0, 0, 0.5);
-  //color: rgba(0, 0, 0, 0.52);
-  //color: @paletteTextColorDarker;
-}
-
 .navHeader .settings-etal {
-  //outline: 2px solid #000000;
-  //background-color: #e46119;
   flex: 0 1 4rem;
   display: flex;
 }
@@ -192,12 +143,6 @@
   display: none;
 }
 
-.navHeader .settings-etal a:hover .material-icons {
-  //background: rgba(0, 0, 0, 0.5);
-  //color: rgba(0, 0, 0, 0.52);
-  //color: @paletteTextColorDarker;
-}
-
 /****
 * Header Nav subBars
 */
@@ -205,27 +150,17 @@
   background-color: @paletteGrey;
   display: flex;
   flex: 1 1 auto;
-  //font-size: 1.5rem;
   justify-content: space-around;
   box-shadow: 0px 15px 67px 0px rgba(0,0,0,0.64);
-  //margin-top: ;
-  //display: none;
-  //outline: 2px solid green;
 }
 
 /****
 * Date Filter
 */
 .navHeader .dateFilterSettings {
-  //flex: 0 1 50rem;
-  //justify-content: space-around;
   height: 50px;
   font-size: 1rem;
-  //padding: 0.5rem 0;
-  //line-height: 50px;
-  //padding: 0.4rem 0;
   color: #3498DB;
-  //display: flex;
   align-items: center;
 }
 
@@ -256,44 +191,25 @@
 
 .navHeader .dateFilterSettings .fromToContainer {
   flex: 1 1 auto;
-  //justify-content: space-around;
-  /* align-items: stretch; */
   display: flex;
   padding: 0.45rem 0;
-  //outline: 2px solid #666666;
-  //color: #90C4E6;
-  //outline: 1px solid green;
-  //width: 25rem;
 }
 
 .navHeader .dateFilterSettings .fromContainer {
   display: flex;
   flex: 1 1 auto;
-  //width: 16rem;
   align-items: center;
 }
 
 .navHeader .dateFilterSettings .fromContainer > span {
   display: flex;
   justify-content: center;
-  //flex: 1 1 auto;
   width: 3.5rem;
 }
-
-//.navHeader .dateFilterSettings .formplate select {
-//  display: flex;
-//  justify-content: center;
-//  width: 3.35rem;
-//}
-
-//.navHeader .dateFilterSettings .fromContainer .selectFromMonth {
-//  width: 172px;
-//}
 
 .navHeader .dateFilterSettings .toContainer {
   display: flex;
   flex: 1 1 auto;
-  //width: 16rem;
   align-items: center;
 }
 
@@ -304,11 +220,9 @@
 }
 
 .navHeader .dateFilterSettings .shortcutsContainer {
-  //border-right: 2px solid #2670A2;
   display: flex;
   flex: 1 1 auto;
   padding: 0.45rem 0;
-  //width: 9rem;
   border-left-width: 1px;
   border-left-style: solid;
   border-left-color: #3498DB;
@@ -319,142 +233,11 @@
   margin-left: 0.5rem;
 }
 
-//.navHeader .dateFilterSettings .selectContainerShortcuts {
-//  position: relative;
-//  margin-left: 1rem;
-//}
-//
-//.navHeader .dateFilterSettings .selectContainerShortcuts::after {
-//  //position: absolute;
-//  //right: 7px;
-//  //height: 36px;
-//  //content: "\e601";
-//  //font-size: 20px;
-//  //line-height: 37px;
-//  //line-height: 2.3125rem;
-//  //color: #d1d1d1;
-//  //background-color: #fff;
-//  //z-index: 1;
-//  border-bottom: 2px solid #999;
-//  border-right: 2px solid #999;
-//  content: '';
-//  display: block;
-//  height: 5px;
-//  //margin-top: -4px;
-//  pointer-events: none;
-//  position: absolute;
-//  right: 0;
-//  top: 0;
-//  transform-origin: 66% 66%;
-//  transform: rotate(45deg);
-//  transition: all 0.15s ease-in-out;
-//  width: 5px;
-//  //outline: 2px solid red;
-//}
-//
-//.navHeader .dateFilterSettings .selectContainerMonth {
-//  position: relative;
-//  margin-left: 1rem;
-//}
-//
-//.navHeader .dateFilterSettings .selectContainerMonth::after {
-//  //position: absolute;
-//  //right: 7px;
-//  //height: 36px;
-//  //content: "\e601";
-//  //font-size: 20px;
-//  //line-height: 37px;
-//  //line-height: 2.3125rem;
-//  //color: #d1d1d1;
-//  //background-color: #fff;
-//  //z-index: 1;
-//  border-bottom: 2px solid #999;
-//  border-right: 2px solid #999;
-//  content: '';
-//  display: block;
-//  height: 5px;
-//  //margin-top: -4px;
-//  pointer-events: none;
-//  position: absolute;
-//  right: -14px;
-//  top: 12px;
-//  transform-origin: 66% 66%;
-//  transform: rotate(45deg);
-//  transition: all 0.15s ease-in-out;
-//  width: 5px;
-//  //outline: 2px solid red;
-//}
-//
-//.navHeader .dateFilterSettings .selectContainerYear {
-//  position: relative;
-//  margin-left: 1rem;
-//}
-//
-//.navHeader .dateFilterSettings .selectContainerYear::after {
-//  //position: absolute;
-//  //right: 7px;
-//  //height: 36px;
-//  //content: "\e601";
-//  //font-size: 20px;
-//  //line-height: 37px;
-//  //line-height: 2.3125rem;
-//  //color: #d1d1d1;
-//  //background-color: #fff;
-//  //z-index: 1;
-//  border-bottom: 2px solid #999;
-//  border-right: 2px solid #999;
-//  content: '';
-//  display: block;
-//  height: 5px;
-//  //margin-top: -4px;
-//  pointer-events: none;
-//  position: absolute;
-//  right: 0;
-//  top: 0;
-//  transform-origin: 66% 66%;
-//  transform: rotate(45deg);
-//  transition: all 0.15s ease-in-out;
-//  width: 5px;
-//  //outline: 2px solid red;
-//}
-
-.navHeader .dateFilterSettings select {
-  //background-color: transparent;
-  //appearance: none;
-  //margin:0;
-  //border:0;
-  //padding:0;
-  ////vertical-align:middle;
-  //white-space:normal;
-  //line-height:1;
-}
-
-//.navHeader .dateFilterSettings .nice-select {
-//  border-radius: 0;
-//  border: none;
-//  float: none;
-//  font-size: inherit;
-//  height: inherit;
-//  line-height: inherit;
-//  background-color: #ECF0F1;
-//}
-
-//.navHeader .dateFilterSettings .nice-select .list {
-//  border-radius: 0;
-//  margin-top: 0;
-//  background-color: #ECF0F1;
-//}
-
-
-//.navHeader .dateFilterSettings .fromDate:focus .fromToContainer {
-//  color: #3498DB;
-//}
 /****
 * Add Page Urls
 */
 .navHeader .addPageUrls {
   flex: 1 1 auto;
-  //display: flex;
   flex-direction: column;
 }
 
@@ -482,7 +265,6 @@
   text-align: center;
   padding: 2rem;
   justify-content: center;
-  //overflow-y: scroll;
   font-size: 1.1rem;
 }
 
@@ -523,32 +305,9 @@
   cursor: pointer;
 }
 
-//.navHeader .addPageUrls .addUrlsProgress #nprogress .bar {
-//  background: #F1C40F;
-//  height: 100%;
-//}
-//
-//.navHeader .addPageUrls .addUrlsProgress #nprogress .peg {
-//  box-shadow: none;
-//}
-
-//.navHeader .addPageUrls .addUrlsProgress::-webkit-progress-bar  {
-//  background-color: #ECF0F1;
-//}
-//
-//.navHeader .addPageUrls .addUrlsProgress::-webkit-progress-value  {
-//  background-color: #F1C40F;
-//}
-//
-//.navHeader .addPageUrls .addUrlsProgress::-moz-progress-bar  {
-//  background-color: #F1C40F;
-//}
-
 .navHeader .addPageUrls .addPageButtons {
-  //text-align: center;
   display: flex;
   flex: 1 1 auto;
-  //color: #90C4E6;
   color: white;
   height: 50px;
   font-size: 24px;
@@ -556,14 +315,9 @@
 }
 
 .navHeader .addPageUrls .urlSaveButton {
-  //text-align: center;
   flex: 1 1 auto;
   border: none;
   text-align: center;
-  //padding: 2px 0 3px 0;
-  //border-right: 1px solid #2670A2;
-  //outline: 1px solid #2670A2;
-  //background-color: #F1C40F;
   background-color: #3498DB;
 }
 
@@ -573,14 +327,10 @@
 }
 
 .navHeader .addPageUrls .urlCancelButton {
-  //text-align: center;
   flex: 1 1 auto;
   background-color: #34495E;
   border: none;
   text-align: center;
-  //padding: 2px 0 3px 0;
-  //border-left: 1px solid #2670A2;
-  //outline: 1px solid #2670A2;
 }
 
 .navHeader .addPageUrls .urlCancelButton:hover {
@@ -591,7 +341,6 @@
 
 .navHeader .settingsAndHelp {
   flex: 1 1 auto;
-  //display: flex;
   height: 50px;
   font-size: 24px;
   line-height: 50px;

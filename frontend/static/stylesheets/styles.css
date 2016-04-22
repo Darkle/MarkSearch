@@ -429,7 +429,6 @@ body {
   -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
-  /* align-items: stretch; */
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -693,9 +692,6 @@ body {
 /****
 * Index/Search page
 ****/
-.searchPage {
-  /*display: flex;*/
-}
 .searchPage #resultsOuterContainer {
   width: 100%;
   display: -webkit-box;
