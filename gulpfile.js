@@ -14,7 +14,7 @@
 require('./gulpTasks/startDev')
 
 /****
-* buildSqlite3LibBindings ('sqlite', 'sqliteSymlink')
+* buildSqlite3LibBindings ('sqlite')
 * https://github.com/mapbox/node-sqlite3
 *
 * Build sqlite3 lib bindings against the source that comes with the npm sqlite3 lib, or
