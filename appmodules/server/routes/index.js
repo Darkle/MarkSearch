@@ -63,7 +63,7 @@ router.get('/settings', (req, res) => {
 })
 
 /****
- * We don't load the bookmarklet code directly on load as it includes the token.
+ * We don't load the bookmarklet code directly on load as it includes an api token.
  * The bookmarklet page js loads the boookmarklet code and token via the frontend api so
  * there is some security there (the csrf token).
  */
