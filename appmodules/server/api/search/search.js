@@ -77,7 +77,6 @@ function search(req, res) {
         `dateCreated`,
         `pageDomain`,
         `pageTitle`,
-        // `pageText`,
         `pageDescription`,
         `archiveLink`,
         `safeBrowsing`,
