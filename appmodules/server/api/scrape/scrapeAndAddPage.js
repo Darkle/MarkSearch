@@ -37,7 +37,6 @@ function scrapeAndAddPage(req, res, next) {
    */
   var urlToScrape = req.params.pageUrl
 
-  // browserWindow = new BrowserWindow({show: devMode})
   browserWindow = new BrowserWindow({show: false})
   browserWindow.loadURL(path.join('file://', __dirname, 'webviewContainerWindow.html'))
 
