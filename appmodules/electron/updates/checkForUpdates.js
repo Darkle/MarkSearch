@@ -13,7 +13,7 @@ var devMode = process.env.NODE_ENV === 'development'
 var checkInterval = ms('7 days')
 var updateUrlToCheck= 'https://raw.githubusercontent.com/Darkle/MarkSearch-Updates/master/updateInfo.json'
 /****
- * When running electron in dev, it reports its own package.json version,
+ * When running electron in dev, Electron reports its own package.json version,
  * so when in devMode, get the version number from the MarkSearch
  * package.json directly.
  */
