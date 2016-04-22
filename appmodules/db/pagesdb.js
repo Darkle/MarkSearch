@@ -16,7 +16,6 @@ var pagesdb = {}
 
 pagesdb.init = (pagesDBFilePath) => {
   knexConfig.connection.filename = pagesDBFilePath
-  //knexConfig.connection.filename = ':memory:'
   pagesdb.db = require('knex')(knexConfig)
   return pagesdb.db.schema.hasTable('pages').then( exists => {
       if (!exists){

@@ -21,7 +21,6 @@ var randomCryptoLength = 256
 
 appSettings.init = (appDataPath) => {
   knexConfig.connection.filename = path.join(appDataPath, 'MarkSearchAppSettings.db')
-  //knexConfig.connection.filename = ':memory:'
   appSettings.db = require('knex')(knexConfig)
   return appSettings.db.schema.hasTable('appSettings').then( exists => {
     if (!exists){
