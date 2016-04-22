@@ -23,7 +23,6 @@ function setSettingsElementValues() {
     alwaysDisableTooltipsCheckbox$.prop('checked', true)
     alwaysDisableTooltipsCheckbox$.parent().addClass('checked')
   }
-  //TODO - double check the .slice(0, -19) works ok on windows & linux
   dbLocationText$.text(markSearchSettings.pagesDBFilePath.slice(0, -19))
   if(markSearchSettings.bookmarkExpiryEnabled){
     bookmarkExpiryCheckbox$.prop('checked', true)

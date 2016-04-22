@@ -8,7 +8,6 @@ var _ = require('lodash')
 var logger = {}
 
 logger.init = (markSearchAppDataPath) => {
-  //TODO - double check these are working on OSX and linux
   var logsFolder = path.join(markSearchAppDataPath, 'logs')
 
   logger.log = bunyan.createLogger({

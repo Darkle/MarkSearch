@@ -10,8 +10,6 @@ var electronVersion = require(path.resolve(__dirname, '..', 'package.json')).dep
 var useExternalSQLite = false
 
 gulp.task('sqlite', () => {
-  // TODO - make this work on Linux
-
   //TODO - change this back to regular install from default npm when mapbox add fts5 flags & update sqlite source verion
   /****
    *

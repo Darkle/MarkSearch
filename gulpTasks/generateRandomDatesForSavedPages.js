@@ -10,7 +10,6 @@ var AppDirectory = require('appdirectory')
 var existent = require('existent')
 
 var platform = process.platform
-// TODO try to get this working on Linux & Windows
 var appDataPath
 
 if(platform === 'darwin'){
