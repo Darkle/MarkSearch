@@ -182,8 +182,6 @@ function settingsPageInit() {
      * slash from the markSearchSettings.pagesDBFilePath when checking against dbLocationText$.text().
      * (.path is available in Electron.)
      */
-    //TODO - double check the .slice(0, -19) works ok on windows & linux
-    //TODO - also check files[0].path doesnt have a trailing slash on windows & linux
     if(markSearchSettings.pagesDBFilePath.slice(0, -19) !== dbLocationText$.text().trim){
       dbLocationInfoTitle$.text('Database Will Be Moved To:')
     }
@@ -253,7 +251,6 @@ function settingsPageInit() {
      * filename and trailing slash from the markSearchSettings.pagesDBFilePath when
      * checking against dbLocationText.
      */
-    //TODO - double check the .slice(0, -19) works ok on windows & linux
     if(markSearchSettings.pagesDBFilePath.slice(0, -19) !== dbLocationText){
       dbChangePromise = got.post('/frontendapi/settings/changePagesDBlocation',
         {
