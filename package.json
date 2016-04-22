@@ -7,7 +7,7 @@
   "license": "MIT",
   "main": "appInit.js",
   "scripts": {
-    "start": "electron appInit.js",
+    "start": "",
     "ban": "ban",
     "dev": "DEBUG='MarkSearch:*' electron appInit.js",
     "test": "snyk test",
