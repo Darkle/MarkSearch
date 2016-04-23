@@ -21,7 +21,7 @@ var devMode = process.env.NODE_ENV === 'development'
 var logsFolder = path.join(electronApp.getPath('appData'), 'MarkSearch', 'logs')
 var settingsWindowIcon = path.join(__dirname, 'icons', 'blue', 'MS-iconTemplate.png')
 var aboutWindowWidth = 400
-var aboutWindowHeight = 420
+var aboutWindowHeight = 405
 
 function trayMenu() {
   var appTrayIcon = path.join(__dirname, 'icons', appSettings.settings.trayIconColor, 'MS-iconTemplate.png')
