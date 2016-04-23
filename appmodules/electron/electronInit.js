@@ -5,6 +5,7 @@ var Promise = require('bluebird')
 
 var pagesdb = require('../db/pagesdb')
 var appSettings = require('../db/appSettings')
+var appLogger = require('../utils/appLogger')
 
 var electronApp = electron.app
 var platform = process.platform
@@ -13,7 +14,8 @@ function electronInit() {
     return new Promise(resolve => {
 
       if(electronApp.makeSingleInstance(() => true)){
-        console.log('Marksearch Is Already Running')
+        appLogger.log.error({err: 'Marksearch Is Already Running'})
+        global.devMode && console.log('Marksearch Is Already Running')
         electronApp.quit()
       }
       /****

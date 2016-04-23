@@ -17,7 +17,6 @@ var platform = process.platform
 var settingsWindow = null
 var aboutWindow = null
 var appTrayMenu = null
-var devMode = process.env.NODE_ENV === 'development'
 var logsFolder = path.join(electronApp.getPath('appData'), 'MarkSearch', 'logs')
 var settingsWindowIcon = path.join(__dirname, 'icons', 'blue', 'MS-iconTemplate.png')
 var aboutWindowWidth = 400
@@ -42,7 +41,7 @@ function trayMenu() {
         }
         else{
           var windowSize = checkScreenSize()
-          if(devMode){
+          if(global.devMode){
             windowSize.width = 1050
             windowSize.height = 1200
           }
@@ -68,7 +67,7 @@ function trayMenu() {
 
           settingsWindow.loadURL(`${ global.msServerAddr.combined }/settings`)
 
-          if(devMode){
+          if(global.devMode){
             settingsWindow.openDevTools()
           }
 
@@ -122,7 +121,7 @@ function trayMenu() {
 
           aboutWindow.loadURL(`file://${ path.join(__dirname, 'about', 'about.html') }`)
 
-          if(devMode){
+          if(global.devMode){
             aboutWindow.openDevTools()
           }
 

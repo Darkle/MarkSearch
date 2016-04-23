@@ -18,7 +18,7 @@ function deletePage(req, res) {
       bookmarkExpiry.removeBookmarkFromMostRecentlyExpiredBookmarks(req.params.pageUrl)
     })
     .catch( err => {
-      console.error(err)
+      global.devMode && console.error(err)
       appLogger.log.error({err, req, res})
       res.status(500).end()
     })

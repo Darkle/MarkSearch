@@ -15,11 +15,9 @@ var expressErrorMiddleware = require('./expressErrorMiddleware')
 var routes = require('./routes/index')
 var api = require('./routes/api')
 
-var devMode = process.env.NODE_ENV === 'development'
-
 function expressInit(express, expressApp) {
   expressApp.use(addRequestId)
-  if(devMode){
+  if(global.devMode){
     expressApp.use(logger('dev'))
   }
   expressApp.use(compression())
@@ -77,7 +75,7 @@ function expressInit(express, expressApp) {
 
   expressErrorMiddleware(expressApp)
 
-  if(devMode){
+  if(global.devMode){
     /****
      * Pretty print html
      */

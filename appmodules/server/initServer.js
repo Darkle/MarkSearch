@@ -46,7 +46,7 @@ function initServer(expressApp) {
         port: appSettings.settings.serverPort,
         combined: `http://${ serverAddressDetails.address }:${ appSettings.settings.serverPort }`
       }
-      console.info(`Marksearch server listening on: ${ global.msServerAddr.combined }`)
+      global.devMode && console.info(`Marksearch server listening on: ${ global.msServerAddr.combined }`)
     })
 }
 

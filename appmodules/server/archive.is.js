@@ -24,7 +24,7 @@ function generateArchiveOfPage(pageUrl) {
         (err, httpResponse) => {
           var locationHeader = _.get(httpResponse, 'headers.location')
           if(err || !locationHeader){
-            console.error("Couldn't get an archive.is backup:", err)
+            global.devMode && console.error("Couldn't get an archive.is backup:", err)
             /****
              * We're not doing a reject here as we want to continue on to the
              * next promise (safeBrowsing). It's not the end of the world if

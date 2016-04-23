@@ -19,7 +19,7 @@ pagesdb.init = (pagesDBFilePath) => {
   pagesdb.db = require('knex')(knexConfig)
   return pagesdb.db.schema.hasTable('pages').then( exists => {
       if (!exists){
-        console.log('creating "pages" table')
+        global.devMode && console.log('creating "pages" table')
         return pagesdb.db.raw(
           `create table pages (
             pageUrl text not null unique on conflict replace,
@@ -51,7 +51,7 @@ pagesdb.init = (pagesDBFilePath) => {
      */
     pagesdb.db.schema.hasTable('fts').then( exists => {
       if (!exists){
-        console.log('creating "fts" table')
+        global.devMode && console.log('creating "fts" table')
         return pagesdb.db.raw(
             `create virtual table fts using fts5 (
               pageUrl unindexed,
@@ -80,7 +80,7 @@ pagesdb.updateColumns = (columnsDataObj) => {
   if(!validatedColumnsDataObj.valid){
     var errMessage = `Error, passed in column data did not pass validation.
                       Error(s): ${ validatedColumnsDataObj.format() }`
-    console.error(errMessage)
+    global.devMode && console.error(errMessage)
     appLogger.log.error({err: errMessage})
     let errorToReturn = new Error(errMessage)
     /****
@@ -116,7 +116,7 @@ pagesdb.upsertRow = (rowDataObj) => {
   if(!validatedPageDataObj.valid){
     var errMessage = `Error, passed in row data did not pass validation.
                       Error(s): ${ validatedPageDataObj.format() }`
-    console.error(errMessage)
+    global.devMode && console.error(errMessage)
     appLogger.log.error({err: errMessage})
     let errorToReturn = new Error(errMessage)
     /****

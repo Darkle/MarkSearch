@@ -23,7 +23,7 @@ function errorMiddleware(app) {
      */
     var errObjectToShow = {}
     if(app.get('env') === 'development'){
-      console.error(err)
+      global.devMode && console.error(err)
       errObjectToShow = err
     }
     appLogger.log.error({err, req, res})

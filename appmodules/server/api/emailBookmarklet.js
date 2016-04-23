@@ -26,11 +26,11 @@ function emailBookmarklet(req, res) {
                 `
     })
   .then(mailgunResponse => {
-    console.log(`emailBookmarklet mailgun response: ${ mailgunResponse.message }`)
+    global.devMode && console.log(`emailBookmarklet mailgun response: ${ mailgunResponse.message }`)
     res.status(200).end()
   })
   .catch(err => {
-    console.error(err)
+    global.devMode && console.error(err)
     appLogger.log.error({err, req, res})
     res.status(500).json(
       {

@@ -75,7 +75,7 @@ function safeBrowsingCheck(pageUrl) {
          * it to the db.
          */
         if(error){
-          console.error("Couldn't get safebrowsing details :", error)
+          global.devMode && console.error("Couldn't get safebrowsing details :", error)
         }
         else{
           /****

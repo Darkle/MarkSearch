@@ -9,8 +9,8 @@ var electron = require('electron')
 
 function checkScreenSize() {
   var defaultWindowSize = {
-    width: 1024,
-    height: 768
+    width: 1050,
+    height: 1200
   }
   var electronScreen = electron.screen
   var displayScreenSize = electronScreen.getPrimaryDisplay().workAreaSize

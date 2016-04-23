@@ -13,7 +13,6 @@ var ipcMain = electron.ipcMain
 var BrowserWindow = electron.BrowserWindow
 var electronShell = electron.shell
 var notificationWindow = null
-var devMode = process.env.NODE_ENV === 'development'
 var platform = process.platform
 var notificationWindowIcon = path.join(__dirname, '..', 'icons', 'blue', 'MS-iconTemplate.png')
 var noticationWindowWidth = 420
@@ -58,7 +57,7 @@ function showUpdateNotification(latestUpdateVersion) {
   notificationWindow.loadURL(`file://${ path.join(__dirname, 'updateNotification.html') }`)
 
   notificationWindow.webContents.on('did-finish-load', function() {
-    if(devMode){
+    if(global.devMode){
       notificationWindow.webContents.openDevTools({detach: true})
     }
     notificationWindow.send('latestUpdateVersion', latestUpdateVersion)
@@ -86,7 +85,7 @@ function showUpdateNotification(latestUpdateVersion) {
     appSettings
       .update({skipUpdateVersion: versionToSkip})
       .catch(err => {
-        console.error(err)
+        global.devMode && console.error(err)
         appLogger.log.error({err})
       })
 

@@ -11,7 +11,6 @@ var schemas = require('../../requestDataValidationAndSanitizationSchema')
 var electron = require('electron')
 var BrowserWindow = electron.BrowserWindow
 var ipcMain = electron.ipcMain
-var devMode = process.env.NODE_ENV === 'development'
 
 /****
  * A generator on the front end is calling scrapeAndAddPage, so
@@ -54,7 +53,7 @@ function scrapeAndAddPage(req, res, next) {
 
   var webContents = browserWindow.webContents
   webContents.setAudioMuted(true)
-//  if(devMode){
+//  if(global.devMode){
 //    webContents.openDevTools()
 //  }
 
@@ -80,7 +79,9 @@ function scrapeAndAddPage(req, res, next) {
     logErrorDestroyBrowserAndRespond('BrowserWindow webContents: crashed', req, res)
   })
 
-  ipcMain.on('webview-log', (event, logMessage) => console.log(logMessage))
+  ipcMain.on('webview-log', (event, logMessage) => {
+    global.devMode && console.log(logMessage)
+  })
 
   ipcMain.once('webview-error', (event, errorMessage) =>
     logErrorDestroyBrowserAndRespond(errorMessage, req, res)
@@ -95,7 +96,7 @@ function scrapeAndAddPage(req, res, next) {
     req.body.pageText = docDetails.documentText
     req.body.pageDescription = docDetails.documentDescription
     browserWindow.destroy()
-    // console.dir(req.body)
+    // global.devMode && console.dir(req.body)
     /*
     * We need to do req.body sanitization & validate here as scrapeAndAddPage only gets passed
     * the req.params.pageUrl and we make the req.body.pageTitle etc. here from
@@ -107,7 +108,7 @@ function scrapeAndAddPage(req, res, next) {
     if(!validReqBody.valid){
       let errMessage = `Error(s) with the req.body data in scrapeAndAddPage : ${ validReqBody.format() }`
       let err = new Error(errMessage)
-      console.error(errMessage)
+      global.devMode && console.error(errMessage)
       appLogger.log.error({err, req, res})
       res.status(500).json({errorMessage: errMessage})
     }
@@ -119,7 +120,7 @@ function scrapeAndAddPage(req, res, next) {
 }
 
 function logErrorDestroyBrowserAndRespond(errorMessage, req, res) {
-  console.error(`An Error Occurred: ${ errorMessage }`)
+  global.devMode && console.error(`An Error Occurred: ${ errorMessage }`)
   var err = new Error(errorMessage)
   appLogger.log.error({err, req, res})
   browserWindow.destroy()

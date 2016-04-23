@@ -13,7 +13,7 @@ function checkIfFileIsBinary(req, res) {
     filePath = parsePath(req.params.filePath).path
   }
   catch(err){
-    console.error(err)
+    global.devMode && console.error(err)
     appLogger.log.error({err, req, res})
     res.status(500).json({errorMessage: 'There was an error parsing the file path'})
     return
@@ -25,7 +25,7 @@ function checkIfFileIsBinary(req, res) {
       if(err){
         errorMessage = err.message
       }
-      console.error(err)
+      global.devMode && console.error(err)
       appLogger.log.error({err, req, res})
       res.status(500).json({errorMessage})
     }

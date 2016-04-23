@@ -12,7 +12,7 @@ function openUrlInBrowser(req, res) {
   catch(error){
     let errMessage = `There was an error opening the url in the external web browser`
     let err = new Error(errMessage)
-    console.error(errMessage)
+    global.devMode && console.error(errMessage)
     appLogger.log.error({err, req, res})
     res.status(500).json({errMessage})
   }

@@ -9,7 +9,6 @@ var appLogger = require('../../utils/appLogger')
 var showUpdateNotification = require('./showUpdateNotification')
 var appSettings = require('../../db/appSettings')
 
-var devMode = process.env.NODE_ENV === 'development'
 var checkInterval = ms('7 days')
 var updateUrlToCheck= 'https://raw.githubusercontent.com/Darkle/MarkSearch-Updates/master/updateInfo.json'
 /****
@@ -17,7 +16,7 @@ var updateUrlToCheck= 'https://raw.githubusercontent.com/Darkle/MarkSearch-Updat
  * so when in devMode, get the MarkSearch application version number from the MarkSearch
  * package.json directly.
  */
-var appVersion = devMode ? require('../../../package.json').version : electron.app.getVersion()
+var appVersion = global.devMode ? require('../../../package.json').version : electron.app.getVersion()
 /****
  * Send some info in the user agent to make it easy to block/contact if needed.
  * This is the default user agent for Electron: http://bit.ly/1S5sOQ9
@@ -42,7 +41,7 @@ function checkForUpdate() {
     }
   })
   .catch(err => {
-    console.error(err)
+    global.devMode && console.error(err)
     appLogger({err})
   })
 }

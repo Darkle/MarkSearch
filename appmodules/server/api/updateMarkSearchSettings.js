@@ -12,7 +12,7 @@ function updateMarkSearchSettings(req, res) {
       res.status(200).end()
     })
     .catch( err => {
-      console.error(err)
+      global.devMode && console.error(err)
       appLogger.log.error({err, req, res})
       var errorMessage = err
       if(!_.isString(errorMessage)){

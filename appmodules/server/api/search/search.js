@@ -5,8 +5,6 @@ var processSearchTerms = require('./processSearchTerms')
 var appLogger = require('../../../utils/appLogger')
 var printSearchSQL = require('./printSearchSQL')
 
-var devMode = process.env.NODE_ENV === 'development'
-
 function search(req, res) {
 
   var processedSearchTerms = processSearchTerms(req.params.searchTerms)
@@ -107,7 +105,7 @@ function search(req, res) {
       .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, searchTerms)
   }
   
-  if(devMode){
+  if(global.devMode){
     printSearchSQL(knexSQL)
   }
 
@@ -116,7 +114,7 @@ function search(req, res) {
       res.json(rows)
     })
     .catch( err => {
-      console.error(err)
+      global.devMode && console.error(err)
       appLogger.log.error({err, req, res})
       res
         .status(500)

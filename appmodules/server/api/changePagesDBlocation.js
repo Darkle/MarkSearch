@@ -19,7 +19,7 @@ function changePagesDBlocation(req, res) {
     parsedOldPagesDBFilePath = parsePath(req.body.oldPagesDBFilePath).path
   }
   catch(err){
-    console.error(err)
+    global.devMode && console.error(err)
     appLogger.log.error({err, req, res})
     return res
       .status(500)
@@ -45,7 +45,7 @@ function changePagesDBlocation(req, res) {
     )
     .then(() => pagesdb.init(newPagesDBFilePath))
     .then(() => {
-      console.log('moving database succeeded')
+      global.devMode && console.log('moving database succeeded')
       res.status(200).json(
         {
           newPagesDBFilePath: newPagesDBFilePath
@@ -53,7 +53,7 @@ function changePagesDBlocation(req, res) {
       )
     })
     .catch(err => {
-      console.error(err)
+      global.devMode && console.error(err)
       appLogger.log.error({err, req, res})
       res.status(500).json(JSON.stringify(err.message))
     })

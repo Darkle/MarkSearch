@@ -4,14 +4,11 @@ var _ = require('lodash')
 
 var STOPWORDS = require('./lunrStopwordFilter.json')
 
-var devMode = process.env.NODE_ENV === 'development'
-
 function processSearchTerms(searchTerms) {
 
-  if(devMode){
-    console.log(`searchTerms before process`)
-    console.log(searchTerms)
-  }
+  global.devMode && console.log(`searchTerms before process`)
+  global.devMode && console.log(searchTerms)
+  
   /****
    * Filter out search terms less than 1 character.
    *
@@ -115,13 +112,11 @@ function processSearchTerms(searchTerms) {
       return searchTerm
     })
     .join(' ')
-
-  if(devMode){
-    console.log(`searchTerms after process`)
-    console.log(processedSearchTerms)
-    console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${ domainToSearchFor }`)
-  }
-
+  
+  global.devMode && console.log(`searchTerms after process`)
+  global.devMode && console.log(processedSearchTerms)
+  global.devMode && console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${ domainToSearchFor }`)
+  
   return {
     processedSearchTerms,
     domainToSearchFor

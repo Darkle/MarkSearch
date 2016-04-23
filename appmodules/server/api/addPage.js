@@ -68,8 +68,8 @@ function addPage(req, res) {
       return this.pageUrl
     })
     .catch(function(err) {
-      console.log(`There was an error saving the page to the database`)
-      console.error(err)
+      global.devMode && console.log(`There was an error saving the page to the database`)
+      global.devMode && console.error(err)
       this.res.status(500).end()
       /****
        * Rethrow the error to make it skip archiveUrl and safeBrowsing. No
@@ -91,7 +91,7 @@ function addPage(req, res) {
       }
     })
     .catch(function(err) {
-      console.error(err)
+      global.devMode && console.error(err)
       var requestForError = this.req
       var responseForError = this.res
       appLogger.log.error({err, req: requestForError, res: responseForError})

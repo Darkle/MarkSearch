@@ -24,7 +24,7 @@ appSettings.init = (appDataPath) => {
   appSettings.db = require('knex')(knexConfig)
   return appSettings.db.schema.hasTable('appSettings').then( exists => {
     if (!exists){
-      console.log('creating "appSettings" table')
+      global.devMode && console.log('creating "appSettings" table')
       return appSettings.db.schema.createTable('appSettings', table => {
         table.text('id').primary().notNullable()
         table.text('JWTsecret').notNullable()
@@ -98,7 +98,7 @@ appSettings.update = (settingsKeyValObj) => {
   if(!validatedSettingsKeyValObj.valid){
     var errMessage = `Error, passed in app settings did not pass validation.
                       Error(s): ${ validatedSettingsKeyValObj.format() }`
-    console.error(errMessage)
+    global.devMode && console.error(errMessage)
     appLogger.log.error({err: errMessage})
     var errorToReturn = new Error(errMessage)
     /****

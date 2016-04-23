@@ -63,14 +63,13 @@
   <div id="homepage"><a id="homepageLink" href="https://github.com/Darkle/MarkSearch">https://github.com/Darkle/MarkSearch</a></div>
   <table id="versions"></table>
   <script>
-    var devMode = process.env.NODE_ENV === 'development'
     var electron = require('electron')
     /****
      * When running electron in dev, Electron reports its own package.json version,
      * so when in devMode, get the MarkSearch application version number from the MarkSearch
      * package.json directly.
      */
-    var appVersion = devMode ? require('../../../package.json').version : electron.remote.app.getVersion()
+    var appVersion = global.devMode ? require('../../../package.json').version : electron.remote.app.getVersion()
     var description = document.querySelector('#title')
     description.textContent = `MarkSearch ${ appVersion }`
     /****
