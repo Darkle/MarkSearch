@@ -85,6 +85,12 @@ function trayMenu() {
       }
     },
     {
+      label: 'Help',
+      click: function() {
+        shell.openExternal(`https://github.com/Darkle/MarkSearch#help`)
+      }
+    },
+    {
       label: 'About',
       click: () => {
         if(platform === 'win32'){
