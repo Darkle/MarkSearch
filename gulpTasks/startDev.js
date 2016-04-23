@@ -113,8 +113,7 @@ gulp.task('browserify', () => {
     path.join(basePath, 'frontend', 'src', 'js', 'searchPage.js'),
     path.join(basePath, 'frontend', 'src', 'js', 'settingsPage', 'settingsPage.js'),
     path.join(basePath, 'frontend', 'src', 'js', 'removeOldBookmarksPage', 'removeOldBookmarksPage.js'),
-    path.join(basePath, 'frontend', 'src', 'js', 'bookmarkletPage', 'bookmarkletPage.js'),
-    path.join(basePath, 'frontend', 'src', 'js', 'helpPage.js')
+    path.join(basePath, 'frontend', 'src', 'js', 'bookmarkletPage', 'bookmarkletPage.js')
   ]
   // map them to our stream function
   var tasks = files.map(function(entry) {

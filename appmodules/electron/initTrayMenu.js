@@ -79,12 +79,6 @@ function trayMenu() {
       }
     },
     {
-      label: 'Help',
-      click: function() {
-        shell.openExternal(`${ global.msServerAddr.combined }/help`)
-      }
-    },
-    {
       label: 'Logs',
       click: function() {
         shell.showItemInFolder(logsFolder)
