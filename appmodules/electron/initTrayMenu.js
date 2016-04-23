@@ -11,14 +11,16 @@ var electronApp = electron.app
 var Menu = electron.Menu
 var Tray = electron.Tray
 var shell = electron.shell
+var ipcMain = electron.ipcMain
+var BrowserWindow = electron.BrowserWindow
 var settingsWindow = null
+var aboutWindow = null
 var appTrayMenu = null
 var devMode = process.env.NODE_ENV === 'development'
 var logsFolder = path.join(electronApp.getPath('appData'), 'MarkSearch', 'logs')
 var settingsWindowIcon = path.join(__dirname, 'icons', 'blue', 'MS-iconTemplate.png')
 
 function trayMenu() {
-  var BrowserWindow = electron.BrowserWindow
   var appTrayIcon = path.join(__dirname, 'icons', appSettings.settings.trayIconColor, 'MS-iconTemplate.png')
   appTrayMenu = new Tray(appTrayIcon)
 
@@ -49,7 +51,6 @@ function trayMenu() {
                 title: 'MarkSearch Settings',
                 icon: settingsWindowIcon,
                 autoHideMenuBar: true,
-//                titleBarStyle: 'hidden',
                 webPreferences: {
                   nodeIntegration: false
                 }
@@ -81,15 +82,54 @@ function trayMenu() {
       }
     },
     {
-      label: 'About',
-      click: function() {
-        shell.openExternal(`${ global.msServerAddr.combined }/about`)
-      }
-    },
-    {
       label: 'Logs',
       click: function() {
         shell.showItemInFolder(logsFolder)
+      }
+    },
+    {
+      label: 'About',
+      click: () => {
+        if(aboutWindow){
+          aboutWindow.show()
+        }
+        else{
+          aboutWindow = new BrowserWindow(
+            {
+              width: 400,
+              height: 420,
+              title: 'About MarkSearch',
+              icon: settingsWindowIcon,
+              autoHideMenuBar: true,
+              resizable: false,
+              maximizable: false,
+              fullscreenable: false,
+              titleBarStyle: 'hidden'
+            }
+          )
+          /****
+           * Remove the menu in menu bar, so they dont accidentally exit the
+           * app - on windows i think you can still access it by pressing the
+           * alt key.
+           */
+          aboutWindow.setMenu(null)
+
+          aboutWindow.loadURL(`file://${ path.join(__dirname, 'about', 'about.html') }`)
+
+          if(devMode){
+            aboutWindow.openDevTools()
+          }
+
+          aboutWindow.on('closed', () => {
+            aboutWindow = null
+          })
+
+          ipcMain.on('openAppHomePage', function() {
+            aboutWindow.close()
+            shell.openExternal('https://github.com/Darkle/MarkSearch')
+          })
+          
+        }
       }
     },
     {

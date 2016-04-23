@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About MarkSearch</title>
+  <style>
+    @font-face {
+      font-family: 'open_sansregular';
+      src: url('../../../frontend/static/fonts/open-sans/opensans-regular.ttf') format('truetype');
+    }
+    body {
+      color: #444;
+      /*font-family: "open_sansregular", sans-serif;*/
+      font-family: 'Helvetica', 'Arial', sans-serif;
+      font-size: 20px;
+      line-height: 1.6;
+      background-color: #EEEEEE;
+    }
+    #logo {
+      display: flex;
+      justify-content: center;
+    }
+    #title {
+      text-align: center;
+      font-size: 1em;
+      margin-bottom: 0;
+      margin-top: -1em;
+    }
+    #description {
+      text-align: center;
+      font-size: 0.75em;
+      margin-top: 0;
+    }
+    #license {
+      text-align: center;
+      font-size: 0.6em;
+      color: #999999;
+      margin-bottom: 0.4em;
+    }
+    #homepage {
+      text-align: center;
+      font-size: 0.6em;
+      color: #999999;
+    }
+    #versions {
+      font-size: 0.6em;
+      color: #999999;
+      border-collapse: collapse;
+      margin: 0 auto;
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div id="logo">
+    <img src="../icons/MSlargeIcon.png" id="app-icon" height="200px" />
+  </div>
+  <h2 id="title"></h2>
+  <h3 id="description">A Bookmarking App</h3>
+  <div id="license">Distributed Under The MIT License</div>
+  <div id="homepage"><a id="homepageLink" href="https://github.com/Darkle/MarkSearch">https://github.com/Darkle/MarkSearch</a></div>
+  <table id="versions"></table>
+  <script>
+    var devMode = process.env.NODE_ENV === 'development'
+    var electron = require('electron')
+    /****
+     * When running electron in dev, Electron reports its own package.json version,
+     * so when in devMode, get the MarkSearch application version number from the MarkSearch
+     * package.json directly.
+     */
+    var appVersion = devMode ? require('../../../package.json').version : electron.remote.app.getVersion()
+    var description = document.querySelector('#title')
+    description.textContent = `MarkSearch ${ appVersion }`
+    /****
+     * From: https://github.com/rhysd/electron-about-window/blob/master/src%2Frenderer.ts
+     */
+    var versions = document.querySelector('#versions')
+    var vs = process.versions
+    for (let name of ['electron', 'chrome', 'node', 'v8']) {
+      var tr = document.createElement('tr')
+      var name_td = document.createElement('td')
+      name_td.innerText = name
+      tr.appendChild(name_td)
+      var version_td = document.createElement('td')
+      version_td.innerText = ' : ' + vs[name]
+      tr.appendChild(version_td)
+      versions.appendChild(tr)
+    }
+    var homePageLink = document.querySelector('#homepageLink')
+    homePageLink.addEventListener('click', function(event){
+      event.preventDefault()
+      electron.ipcRenderer.send('openAppHomePage', '')
+    }, false)
+  </script>
+</body>
+</html>
