@@ -26,14 +26,6 @@ router.get('/', (req, res) => {
   )
 })
 
-router.get('/about', (req, res) => {
-  res.render('aboutPage',
-      {
-        title: 'MarkSearch About'
-      }
-  )
-})
-
 router.get('/help', (req, res) => {
   res.render('helpPage',
       {

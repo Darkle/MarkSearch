@@ -1549,19 +1549,6 @@ body {
           justify-content: center;
   font-weight: bold;
 }
-.aboutPage .navHeader .searchContainer {
-  display: none;
-}
-.aboutPage .navHeader .rightContainer {
-  display: none;
-}
-.aboutPage .navHeader .brandLogo h1 {
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  font-weight: bold;
-}
 .errorPage .navHeader .searchContainer {
   display: none !important;
 }

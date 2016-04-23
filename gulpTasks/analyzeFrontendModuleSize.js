@@ -18,7 +18,6 @@ gulp.task('frontendModuleSize', () => {
   var discAppPath = path.join(basePath, 'node_modules', '.bin', 'discify')
   var bundleFilePaths = path.join(basePath, 'frontend', 'static', 'js')
   var bundleFiles = [
-    'aboutPage-bundle.js',
     'helpPage-bundle.js',
     'removeOldBookmarksPage-bundle.js',
     'searchPage-bundle.js',
