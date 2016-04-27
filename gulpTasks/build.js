@@ -140,3 +140,26 @@ gulp.task('package', () =>
     }
   )
 )
+
+gulp.task('packageWin64', () =>
+  packager(
+    {
+      platform: 'win32',
+      arch: 'x64',
+      dir: basePath,
+      asar: true,
+      out: path.join(basePath, 'build'),
+      overwrite: true,
+      prune: true,
+      icon: path.join(basePath, 'appmodules', 'electron', 'icons', 'platform', 'ms.ico')
+    },
+    function doneCallback(err) {
+      if(err){
+        console.error('there was an error packaging for osx', err)
+      }
+      else{
+        console.log('successfully packaged for osx')
+      }
+    }
+  )
+)
