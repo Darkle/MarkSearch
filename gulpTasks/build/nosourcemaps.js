@@ -1,8 +1,9 @@
 'use strict'
 
+var path = require('path')
+
 var gulp = require('gulp')
 var runSequence = require('run-sequence')
-var path = require('path')
 var browserify = require('browserify')
 var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
@@ -17,11 +18,10 @@ var eventStream = require('event-stream')
 var stripDebug = require('gulp-strip-debug')
 var username = require('username')
 var replace = require('gulp-replace')
-var packager = require('electron-packager')
 
-var basePath = path.resolve(__dirname, '..')
+var basePath = path.resolve(__dirname, '..', '..')
 
-gulp.task('build', () =>
+gulp.task('nosourcemaps', () =>
   runSequence(
     'removeLessSourceMapFile',
     'removeAllJsBundleFiles',
@@ -114,52 +114,3 @@ gulp.task('browserifyNoSourceMaps', () => {
   // create a merged stream
   return eventStream.merge.apply(null, tasks)
 })
-
-gulp.task('package', () =>
-  packager(
-    {
-      platform: 'all',
-      arch: 'all',
-      dir: basePath,
-      asar: true,
-      out: path.join(basePath, 'build'),
-      overwrite: true,
-      prune: true,
-      icon: path.join(basePath, 'appmodules', 'electron', 'icons', 'platform', 'ms'),
-      'app-version': require(path.join(basePath, 'package.json')).version,
-      'app-bundle-id': 'com.darkle.MarkSearch',
-      'app-category-type': 'public.app-category.utilities'
-    },
-    function doneCallback(err) {
-      if(err){
-        console.error('there was an error packaging for osx', err)
-      }
-      else{
-        console.log('successfully packaged for osx')
-      }
-    }
-  )
-)
-
-gulp.task('packageWin64', () =>
-  packager(
-    {
-      platform: 'win32',
-      arch: 'x64',
-      dir: basePath,
-      asar: true,
-      out: path.join(basePath, 'build'),
-      overwrite: true,
-      prune: true,
-      icon: path.join(basePath, 'appmodules', 'electron', 'icons', 'platform', 'ms.ico')
-    },
-    function doneCallback(err) {
-      if(err){
-        console.error('there was an error packaging for osx', err)
-      }
-      else{
-        console.log('successfully packaged for osx')
-      }
-    }
-  )
-)

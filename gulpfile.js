@@ -83,12 +83,20 @@ require('./gulpTasks/analyzeFrontendModuleSize')
 // require('./gulpTasks/alterGotPackageJson')
 
 /****
- * build.js ('build')
- * Build the app for distribution as an executable.
- * Remove all sourcemap files from css and js.
+ * nosourcemaps.js ('nosourcemaps')
+ * Remove all the sourcemap files from the frontend js bundles
+ * and the frontend css built from the less files.
+ * Run browserify for the frontend source, omiting souremap files.
+ * Run less for the frontend less files, omiting souremap files.
  * Strip any console calls from the frontend js bundles.
  */
-require('./gulpTasks/build')
+require('./gulpTasks/build/nosourcemaps')
+
+/****
+ * build.js ('packageosx', 'packagewin64', 'packagewin32', 'packagelinux64', 'packagelinux32')
+ * Build the app for distribution as an executable.
+ */
+require('./gulpTasks/build/package')
 
 
 
