@@ -44,12 +44,12 @@ electronInit()
   .then(initUpdatesCheck)
   .then(() => {
     if(firstRun){
-      console.info('first run')
+      global.devMode && console.info('first run')
       electron.shell.openExternal(global.msServerAddr.combined)
     }
   })
   .catch(err => {
-    console.error(err)
+    global.devMode && console.error(err)
     appLogger.log.error({err})
   })
 
