@@ -13,15 +13,22 @@ var _ = require('lodash')
 var Promise = require('bluebird')
 
 var appLogger = require('../utils/appLogger')
-var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 var schemas = require('./appSettingsSanitizationAndValidationSchemas')
 
 var appSettings = {}
 var randomCryptoLength = 256
 
 appSettings.init = (appDataPath) => {
-  knexConfig.connection.filename = path.join(appDataPath, 'MarkSearchAppSettings.db')
-  appSettings.db = require('knex')(knexConfig)
+  appSettings.db = require('knex')({
+    client: 'sqlite3',
+    connection: {
+      filename: path.join(appDataPath, 'MarkSearchAppSettings.db')
+    },
+    /****
+     * https://github.com/tgriesser/knex/pull/1043
+     */
+    useNullAsDefault: false
+  })
   return appSettings.db.schema.hasTable('appSettings').then( exists => {
     if (!exists){
       global.devMode && console.log('creating "appSettings" table')

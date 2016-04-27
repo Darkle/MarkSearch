@@ -1,5 +1,11 @@
 'use strict'
 
+if(!process.env.NODE_ENV){
+  process.env.NODE_ENV = 'production'
+}
+
+global.devMode = process.env.NODE_ENV === 'development'
+
 var path = require('path')
 
 var electron = require('electron')
@@ -17,7 +23,6 @@ var pagesdb = require('./appmodules/db/pagesdb')
 var initServer = require('./appmodules/server/initServer')
 var initUpdatesCheck = require('./appmodules/electron/updates/checkForUpdates')
 
-global.devMode = process.env.NODE_ENV === 'development'
 var appDataPath = path.join(electron.app.getPath('appData'), 'MarkSearch')
 var firstRun = !existent.sync(appDataPath)
 var expressApp = express()

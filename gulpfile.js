@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /****
  * note: run these via gulp in default cmd.exe when on Windows as opposed to MinGW et.al., as had an issue
@@ -81,6 +81,14 @@ require('./gulpTasks/analyzeFrontendModuleSize')
  * https://gist.github.com/Darkle/d44ac3ae27b46e17fe96fd52322c48f4
  */
 // require('./gulpTasks/alterGotPackageJson')
+
+/****
+ * build.js ('build')
+ * Build the app for distribution as an executable.
+ * Remove all sourcemap files from css and js.
+ * Strip any console calls from the frontend js bundles.
+ */
+require('./gulpTasks/build')
 
 
 

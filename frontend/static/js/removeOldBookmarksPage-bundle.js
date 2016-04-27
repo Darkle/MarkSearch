@@ -55,13 +55,13 @@ function removeOldBookmarksPageInit() {
           elemBookmarkDetailsContainer.remove();
         });
       }).catch(function (err) {
-        console.error(err);
+        void 0;
         $('#notie-alert-outer').addClass('notie-alert-error');
         notie.alert(3, 'There Was An Error Deleting The Bookmark\n           Error: ' + err.message, 5);
       });
     });
   }).catch(function (err) {
-    console.error(err);
+    void 0;
   });
 }
 
@@ -6305,7 +6305,7 @@ var onUnhandled = function(promise){
         } else if(handler = global.onunhandledrejection){
           handler({promise: promise, reason: value});
         } else if((console = global.console) && console.error){
-          console.error('Unhandled promise rejection', value);
+          void 0;
         }
       });
       // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
@@ -9421,13 +9421,10 @@ EventEmitter.prototype.addListener = function(type, listener) {
 
     if (m && m > 0 && this._events[type].length > m) {
       this._events[type].warned = true;
-      console.error('(node) warning: possible EventEmitter memory ' +
-                    'leak detected. %d listeners added. ' +
-                    'Use emitter.setMaxListeners() to increase limit.',
-                    this._events[type].length);
+      void 0;
       if (typeof console.trace === 'function') {
         // not supported in IE 10
-        console.trace();
+        void 0;
       }
     }
   }
@@ -28491,7 +28488,7 @@ module.exports = function (obj) {
     function warn(msg) {
         if (utils_hooks__hooks.suppressDeprecationWarnings === false &&
                 (typeof console !==  'undefined') && console.warn) {
-            console.warn('Deprecation warning: ' + msg);
+            void 0;
         }
     }
 
@@ -36815,9 +36812,9 @@ function deprecate (fn, msg) {
       if (config('throwDeprecation')) {
         throw new Error(msg);
       } else if (config('traceDeprecation')) {
-        console.trace(msg);
+        void 0;
       } else {
-        console.warn(msg);
+        void 0;
       }
       warned = true;
     }
@@ -36939,9 +36936,9 @@ exports.deprecate = function(fn, msg) {
       if (process.throwDeprecation) {
         throw new Error(msg);
       } else if (process.traceDeprecation) {
-        console.trace(msg);
+        void 0;
       } else {
-        console.error(msg);
+        void 0;
       }
       warned = true;
     }
@@ -36963,7 +36960,7 @@ exports.debuglog = function(set) {
       var pid = process.pid;
       debugs[set] = function() {
         var msg = exports.format.apply(exports, arguments);
-        console.error('%s %d: %s', set, pid, msg);
+        void 0;
       };
     } else {
       debugs[set] = function() {};
@@ -37409,7 +37406,7 @@ function timestamp() {
 
 // log is just a thin wrapper to console.log that prepends a timestamp
 exports.log = function() {
-  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
+  void 0;
 };
 
 

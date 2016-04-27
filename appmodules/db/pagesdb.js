@@ -8,15 +8,21 @@ var _ = require('lodash')
 var Promise = require('bluebird')
 
 var appLogger = require('../utils/appLogger')
-var knexConfig = require('./knexConfig')[process.env.NODE_ENV]
 var schemas = require('./pagesdbSanitizationAndValidationSchemas')
-
 
 var pagesdb = {}
 
 pagesdb.init = (pagesDBFilePath) => {
-  knexConfig.connection.filename = pagesDBFilePath
-  pagesdb.db = require('knex')(knexConfig)
+  pagesdb.db = require('knex')({
+    client: 'sqlite3',
+    connection: {
+      filename: pagesDBFilePath
+    },
+    /****
+     * https://github.com/tgriesser/knex/pull/1043
+     */
+    useNullAsDefault: false
+  })
   return pagesdb.db.schema.hasTable('pages').then( exists => {
       if (!exists){
         global.devMode && console.log('creating "pages" table')

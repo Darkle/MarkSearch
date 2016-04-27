@@ -160,7 +160,7 @@ function exportUrls(typeOfExport) {
     window.URL.revokeObjectURL(downloadUrl);
     document.body.removeChild(downloadLink);
   }).catch(function (err) {
-    console.error(err);
+    void 0;
     var errorMessage = (0, _getErrorMessage.getErrorMessage)(err);
     (0, _showNotie.showNotie)(3, 'There Was An Error Exporting. Error: ' + errorMessage, 6);
   });
@@ -192,7 +192,7 @@ function externalLinks(event) {
   }
   var urlToOpen = encodeURIComponent(linkHref);
   _got2.default.post('/frontendapi/openUrlInBrowser/' + urlToOpen, { headers: _settingsPage.xhrHeaders }).catch(function (err) {
-    console.error(err);
+    void 0;
   });
 }
 
@@ -342,15 +342,15 @@ function importUrls(event) {
         (0, _saveUrls.saveUrls)(deDupedUrlsToSave);
       }
     }).catch(function (err) {
-      console.error(err);
+      void 0;
       var errorMessage = (0, _getErrorMessage.getErrorMessage)(err);
       (0, _hideShowAddPageSubbar.hidePageSubbarAndReset)().then(function () {
         (0, _showNotie.showNotie)(3, 'There Was An Error Opening The File. Error: ' + errorMessage, 6);
       });
     });
     reader.onerror = function (errorEvent) {
-      console.error(errorEvent);
-      console.error(reader.error);
+      void 0;
+      void 0;
       (0, _showNotie.showNotie)(3, 'There Was An Error Loading The File. Error: ' + reader.error.name, 6);
       reader.abort();
     };
@@ -440,7 +440,7 @@ function saveUrls(urlsToSave) {
             _context.prev = 23;
             _context.t0 = _context['catch'](18);
 
-            console.error(_context.t0);
+            void 0;
             error = _context.t0;
             errMessage = '';
             responseBody = _lodash2.default.get(error, 'response.body');
@@ -751,7 +751,7 @@ function settingsPageInit() {
        */
       browserAddonTokenText$.val(responseData.protocolIpandPort + ',' + responseData.token);
     }).catch(function (err) {
-      console.error(err);
+      void 0;
       var errorMessage = (0, _getErrorMessage.getErrorMessage)(err);
       (0, _showNotie.showNotie)(3, 'There Was An Error Generating The Browser Extension Token. Error: ' + errorMessage, 6);
     });
@@ -767,7 +767,7 @@ function settingsPageInit() {
       var bookmarkletJS = (0, _bookmarkletTemplate.generateBookmarkletJS)(responseData.protocolIpandPort, responseData.token);
       bookmarkletText$.val('javascript:' + encodeURIComponent(bookmarkletJS));
     }).catch(function (err) {
-      console.error(err);
+      void 0;
       var errorMessage = (0, _getErrorMessage.getErrorMessage)(err);
       (0, _showNotie.showNotie)(3, 'There Was An Error Generating The Bookmarklet. Error: ' + errorMessage, 6);
     });
@@ -794,7 +794,7 @@ function settingsPageInit() {
     }).then(function () {
       (0, _showNotie.showNotie)(1, 'Email Sent. (check your spam folder)', 5);
     }).catch(function (err) {
-      console.error(err);
+      void 0;
       var errorMessage = (0, _getErrorMessage.getErrorMessage)(err);
       (0, _showNotie.showNotie)(3, 'There Was An Error Sending The Email. Error: ' + errorMessage, 6);
     });
@@ -832,7 +832,7 @@ function settingsPageInit() {
     _got2.default.post('/frontendapi/settings/revokeExtTokens', { headers: xhrHeaders }).then(function () {
       (0, _showNotie.showNotie)(1, 'Tokens Successfully Revoked', 5);
     }).catch(function (err) {
-      console.error(err);
+      void 0;
       var errorMessage = (0, _getErrorMessage.getErrorMessage)(err);
       (0, _showNotie.showNotie)(3, 'There Was An Error Revoking The Tokens. Error: ' + errorMessage, 6);
     });
@@ -927,7 +927,7 @@ function settingsPageInit() {
       dbLocationInfoTitle$.text('Current Database Location:');
       markSearchSettings = newSettings;
     }).catch(function (err) {
-      console.error(err);
+      void 0;
       var errorMessage = (0, _getErrorMessage.getErrorMessage)(err);
       /****
        * Put the settings element values back to what they were before
@@ -3107,7 +3107,7 @@ function formatAndLogError(error, title, isSoft) {
             printWarning(message, isSoft);
         } else if (typeof console.log === "function" ||
             typeof console.log === "object") {
-            console.log(message);
+            void 0;
         }
     }
 }
@@ -3379,17 +3379,16 @@ var captureStackTrace = (function stackDetection() {
 
 if (typeof console !== "undefined" && typeof console.warn !== "undefined") {
     printWarning = function (message) {
-        console.warn(message);
+        void 0;
     };
     if (util.isNode && process.stderr.isTTY) {
         printWarning = function(message, isSoft) {
             var color = isSoft ? "\u001b[33m" : "\u001b[31m";
-            console.warn(color + message + "\u001b[0m\n");
+            void 0;
         };
     } else if (!util.isNode && typeof (new Error().stack) === "string") {
         printWarning = function(message, isSoft) {
-            console.warn("%c" + message,
-                        isSoft ? "color: darkorange" : "color: red");
+            void 0;
         };
     }
 }
@@ -12796,7 +12795,7 @@ var onUnhandled = function(promise){
         } else if(handler = global.onunhandledrejection){
           handler({promise: promise, reason: value});
         } else if((console = global.console) && console.error){
-          console.error('Unhandled promise rejection', value);
+          void 0;
         }
       });
       // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
@@ -15114,13 +15113,10 @@ EventEmitter.prototype.addListener = function(type, listener) {
 
     if (m && m > 0 && this._events[type].length > m) {
       this._events[type].warned = true;
-      console.error('(node) warning: possible EventEmitter memory ' +
-                    'leak detected. %d listeners added. ' +
-                    'Use emitter.setMaxListeners() to increase limit.',
-                    this._events[type].length);
+      void 0;
       if (typeof console.trace === 'function') {
         // not supported in IE 10
-        console.trace();
+        void 0;
       }
     }
   }
@@ -39110,9 +39106,9 @@ function deprecate (fn, msg) {
       if (config('throwDeprecation')) {
         throw new Error(msg);
       } else if (config('traceDeprecation')) {
-        console.trace(msg);
+        void 0;
       } else {
-        console.warn(msg);
+        void 0;
       }
       warned = true;
     }
@@ -39234,9 +39230,9 @@ exports.deprecate = function(fn, msg) {
       if (process.throwDeprecation) {
         throw new Error(msg);
       } else if (process.traceDeprecation) {
-        console.trace(msg);
+        void 0;
       } else {
-        console.error(msg);
+        void 0;
       }
       warned = true;
     }
@@ -39258,7 +39254,7 @@ exports.debuglog = function(set) {
       var pid = process.pid;
       debugs[set] = function() {
         var msg = exports.format.apply(exports, arguments);
-        console.error('%s %d: %s', set, pid, msg);
+        void 0;
       };
     } else {
       debugs[set] = function() {};
@@ -39704,7 +39700,7 @@ function timestamp() {
 
 // log is just a thin wrapper to console.log that prepends a timestamp
 exports.log = function() {
-  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
+  void 0;
 };
 
 
@@ -41692,7 +41688,7 @@ return function (global, window, document, undefined) {
                 propertyValue = 0;
             }
 
-            if (Velocity.debug >= 2) console.log("Get " + property + ": " + propertyValue);
+            if (Velocity.debug >= 2) void 0;
 
             return propertyValue;
         },
@@ -41751,7 +41747,7 @@ return function (global, window, document, undefined) {
                     if (IE <= 8) {
                         try {
                             element.style[propertyName] = propertyValue;
-                        } catch (error) { if (Velocity.debug) console.log("Browser does not support [" + propertyValue + "] for [" + propertyName + "]"); }
+                        } catch (error) { if (Velocity.debug) void 0; }
                     /* SVG elements have their dimensional properties (width, height, x, y, cx, etc.) applied directly as attributes instead of as styles. */
                     /* Note: IE8 does not support SVG elements, so it's okay that we skip it for SVG animation. */
                     } else if (Data(element) && Data(element).isSVG && CSS.Names.SVGAttribute(property)) {
@@ -41762,7 +41758,7 @@ return function (global, window, document, undefined) {
                         element.style[propertyName] = propertyValue;
                     }
 
-                    if (Velocity.debug >= 2) console.log("Set " + property + " (" + propertyName + "): " + propertyValue);
+                    if (Velocity.debug >= 2) void 0;
                 }
             }
 
@@ -42220,7 +42216,7 @@ return function (global, window, document, undefined) {
                     if (promiseData.promise) {
                         promiseData.rejecter(new Error(abortError));
                     } else {
-                        console.log(abortError);
+                        void 0;
                     }
 
                     return getChain();
@@ -42484,7 +42480,7 @@ return function (global, window, document, undefined) {
                         element: element
                     };
 
-                    if (Velocity.debug) console.log("tweensContainer (scroll): ", tweensContainer.scroll, element);
+                    if (Velocity.debug) void 0;
 
                 /******************************************
                    Tween Data Construction (for Reverse)
@@ -42562,7 +42558,7 @@ return function (global, window, document, undefined) {
                                     lastTweensContainer[lastTween].easing = opts.easing;
                                 }
 
-                                if (Velocity.debug) console.log("reverse tweensContainer (" + lastTween + "): " + JSON.stringify(lastTweensContainer[lastTween]), element);
+                                if (Velocity.debug) void 0;
                             }
                         }
 
@@ -42718,7 +42714,7 @@ return function (global, window, document, undefined) {
                         /* Note: Since SVG elements have some of their properties directly applied as HTML attributes,
                            there is no way to check for their explicit browser support, and so we skip skip this check for them. */
                         if (!Data(element).isSVG && rootProperty !== "tween" && CSS.Names.prefixCheck(rootProperty)[1] === false && CSS.Normalizations.registered[rootProperty] === undefined) {
-                            if (Velocity.debug) console.log("Skipping [" + rootProperty + "] due to a lack of browser support.");
+                            if (Velocity.debug) void 0;
 
                             continue;
                         }
@@ -42949,7 +42945,7 @@ return function (global, window, document, undefined) {
                             unitRatios.vwToPx = callUnitConversionData.vwToPx;
                             unitRatios.vhToPx = callUnitConversionData.vhToPx;
 
-                            if (Velocity.debug >= 1) console.log("Unit ratios: " + JSON.stringify(unitRatios), element);
+                            if (Velocity.debug >= 1) void 0;
 
                             return unitRatios;
                         }
@@ -43056,7 +43052,7 @@ return function (global, window, document, undefined) {
                             easing: easing
                         };
 
-                        if (Velocity.debug) console.log("tweensContainer (" + property + "): " + JSON.stringify(tweensContainer[property]), element);
+                        if (Velocity.debug) void 0;
                     }
 
                     /* Along with its property data, store a reference to the element itself onto tweensContainer. */
