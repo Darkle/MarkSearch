@@ -1,0 +1,15 @@
+{
+  "ecmaVersion": 6,
+  "libs": [],
+  "dontLoad": [
+    "frontend/static/js/*.js"
+  ],
+  "plugins": {
+    "complete_strings": {},
+    "node": {},
+    "lint": {},
+    "requirejs": {},
+    "modules": {},
+    "es_modules": {}
+  }
+}
