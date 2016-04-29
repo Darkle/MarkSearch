@@ -52,6 +52,3 @@ electronInit()
     global.devMode && console.error(err)
     appLogger.log.error({err})
   })
-
-
-
