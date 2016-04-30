@@ -6,7 +6,6 @@ var appSettings = require('../../db/appSettings')
 var appLogger = require('../../utils/appLogger')
 
 function updateMarkSearchSettings(req, res) {
-
   appSettings
     .update(req.body)
     .then(() => res.status(200).end())
@@ -19,7 +18,6 @@ function updateMarkSearchSettings(req, res) {
       }
       res.status(500).json({errorMessage})
     })
-
 }
 
 module.exports = updateMarkSearchSettings
