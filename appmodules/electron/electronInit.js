@@ -41,7 +41,7 @@ function electronInit() {
 
       electronApp.on('ready', () => {
         /****
-         * Hide the app in the dock, cause we don't need it, and also
+         * On OSX, hide the app in the dock, cause we don't need it, and also
          * so there is no menu in the menu bar when they open the settings
          * page.
          */
