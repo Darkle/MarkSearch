@@ -5,12 +5,10 @@ var Crypto = require('crypto')
 var appSettings = require('../../db/appSettings')
 var appLogger = require('../../utils/appLogger')
 
-var randomCryptoLength = 256
-
 function resetJWTsecret(req, res) {
   appSettings
     .update({
-      JWTsecret: Crypto.randomBytes(randomCryptoLength).toString('hex')
+      JWTsecret: Crypto.randomBytes(256).toString('hex')
     })
     .then(() => res.status(200).end())
     .catch(err => {
