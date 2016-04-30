@@ -97,11 +97,11 @@ appSettings.init = (appDataPath) => {
 }
 
 appSettings.update = (settingsKeyValObj) => {
-  var settingsKeyValObjSansJWTsecret = _.omit(settingsKeyValObj, ['JWTsecret', 'id'])
 
-  inspector.sanitize(schemas.appSettingsSanitization, settingsKeyValObjSansJWTsecret)
+  inspector.sanitize(schemas.appSettingsSanitization, settingsKeyValObj)
 
-  var validatedSettingsKeyValObj = inspector.validate(schemas.appSettingsValidation, settingsKeyValObjSansJWTsecret)
+  var validatedSettingsKeyValObj = inspector.validate(schemas.appSettingsValidation, settingsKeyValObj)
+  
   if(!validatedSettingsKeyValObj.valid){
     var errMessage = `Error, passed in app settings did not pass validation.
                       Error(s): ${ validatedSettingsKeyValObj.format() }`
@@ -119,7 +119,7 @@ appSettings.update = (settingsKeyValObj) => {
   }
   return appSettings.db('appSettings')
     .where('id', 'appSettings')
-    .update(settingsKeyValObjSansJWTsecret)
+    .update(settingsKeyValObj)
     .return(appSettings.db('appSettings').where('id', 'appSettings').first())
     .then( row => {
       /****
