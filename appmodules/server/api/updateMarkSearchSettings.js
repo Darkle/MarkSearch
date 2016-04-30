@@ -7,10 +7,9 @@ var appLogger = require('../../utils/appLogger')
 
 function updateMarkSearchSettings(req, res) {
 
-  appSettings.update(req.body)
-    .then( () => {
-      res.status(200).end()
-    })
+  appSettings
+    .update(req.body)
+    .then(() => res.status(200).end())
     .catch( err => {
       global.devMode && console.error(err)
       appLogger.log.error({err, req, res})
