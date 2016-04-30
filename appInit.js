@@ -28,8 +28,7 @@ var firstRun = !existent.sync(appDataPath)
 var expressApp = express()
 
 /****
- * jetpack.dir() will make sure the <appData>/MarkSearch folder is there,
- * as well as the <appData>/MarkSearch/logs folder.
+ * Make sure the <appData>/MarkSearch/logs folder is there.
  */
 jetpack.dir(path.join(appDataPath, 'logs'))
 appLogger.init(appDataPath)
