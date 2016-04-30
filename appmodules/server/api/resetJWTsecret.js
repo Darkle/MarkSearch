@@ -8,16 +8,11 @@ var appLogger = require('../../utils/appLogger')
 var randomCryptoLength = 256
 
 function resetJWTsecret(req, res) {
-  appSettings.db('appSettings')
-    .where('id', 'appSettings')
+  appSettings
     .update({
       JWTsecret: Crypto.randomBytes(randomCryptoLength).toString('hex')
     })
-    .return(appSettings.db('appSettings').where('id', 'appSettings'))
-    .then( rows => {
-      appSettings.settings.JWTsecret = rows[0].JWTsecret
-      res.status(200).end()
-    })
+    .then(() => res.status(200).end())
     .catch(err => {
       global.devMode && console.error(err)
       appLogger.log.error({err, req, res})

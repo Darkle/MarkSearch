@@ -103,6 +103,7 @@ module.exports = {
     type: 'object',
     strict: true,
     someKeys: [
+      'JWTsecret',
       'pagesDBFilePath',
       'prebrowsing',
       'alwaysDisableTooltips',
@@ -114,6 +115,10 @@ module.exports = {
       'serverPort'
     ],
     properties: {
+      JWTsecret: {
+        type: 'string',
+        optional: true
+      },
       pagesDBFilePath: {
         type: 'string',
         optional: true
