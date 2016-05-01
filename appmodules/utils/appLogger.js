@@ -12,8 +12,7 @@ logger.init = (markSearchAppDataPath) => {
 
   var logsFolder = path.join(markSearchAppDataPath, 'logs')
   /****
-   * jetpack.dir(logsFolder) makes sure the <appData>/MarkSearch/logs folder is there.
-   * It creates it if it isn't there.
+   * If the <appData>/MarkSearch/logs folder doesn't exist, create it.
    */
   jetpack.dir(logsFolder)
 
