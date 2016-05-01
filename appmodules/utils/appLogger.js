@@ -4,11 +4,18 @@ var path = require('path')
 
 var bunyan = require('bunyan')
 var _ = require('lodash')
+var jetpack = require('fs-jetpack')
 
 var logger = {}
 
 logger.init = (markSearchAppDataPath) => {
+
   var logsFolder = path.join(markSearchAppDataPath, 'logs')
+  /****
+   * jetpack.dir(logsFolder) makes sure the <appData>/MarkSearch/logs folder is there.
+   * It creates it if it isn't there.
+   */
+  jetpack.dir(logsFolder)
 
   logger.log = bunyan.createLogger({
     name: 'MarkSearchApp',

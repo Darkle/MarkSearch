@@ -10,7 +10,6 @@ var path = require('path')
 
 var electron = require('electron')
 var existent = require('existent')
-var jetpack = require('fs-jetpack')
 var express = require('express')
 
 var appLogger = require('./appmodules/utils/appLogger')
@@ -26,11 +25,6 @@ var initUpdatesCheck = require('./appmodules/electron/updates/checkForUpdates')
 var appDataPath = path.join(electron.app.getPath('appData'), 'MarkSearch')
 var firstRun = !existent.sync(appDataPath)
 var expressApp = express()
-
-/****
- * Make sure the <appData>/MarkSearch/logs folder is there.
- */
-jetpack.dir(path.join(appDataPath, 'logs'))
 
 appLogger.init(appDataPath)
 
