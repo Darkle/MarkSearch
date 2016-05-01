@@ -75,7 +75,11 @@ logger.init = (markSearchAppDataPath) => {
   })
 
 /****
- * Prolly best to exit on these.
+ * Prolly best to exit on uncaught exceptions.
+ *
+ * We're setting process.on('uncaughtException', function... here in the appLogger
+ * as we want to catch uncaught exceptions as early as possible, but not before the
+ * bunyan logger is ready, as we would like to log these errors.
  */
   process.on('uncaughtException', function handleUncaughtException(err) {
     console.log('uncaughtException')
