@@ -19,7 +19,13 @@ gulp.task('sqlite', () => {
    * Our fork uses SQLite version 3.12.2 - sqlite-autoconf-3120200.tar.gz, and includes the SQLITE_ENABLE_FTS5 addon flag
    * in sqlite3.gyp.
    */
-  var shellTask = `npm install sqlite3@https://github.com/Darkle/node-sqlite3 --runtime=electron --dist-url=https://atom.io/download/atom-shell --target=${ electronVersion } --target_arch=${ process.arch } --target_platform=${ platform } --build-from-source`
+  var shellTask = "npm install sqlite3@https://github.com/Darkle/node-sqlite3" +
+                  " --runtime=electron" +
+                  " --dist-url=https://atom.io/download/atom-shell" +
+                  " --target=" + electronVersion +
+                  " --target_arch=" + process.arch +
+                  " --target_platform=" + platform +
+                  " --build-from-source"
 
   /****
    * If want to build against an external SQLite (e.g. one installed by homebrew).
