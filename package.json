@@ -16,7 +16,7 @@
   "dependencies": {
     "babel-polyfill": "^6.8.0",
     "bluebird": "^3.3.5",
-    "body-parser": "^1.15.0",
+    "body-parser": "^1.15.1",
     "bunyan": "^1.8.1",
     "compression": "^1.6.0",
     "cookie-parser": "~1.4.0",
@@ -39,7 +39,7 @@
     "jquery": "^2.2.3",
     "jsdom": "^8.5.0",
     "jsonwebtoken": "^6.2.0",
-    "knex": "^0.11.0",
+    "knex": "0.10.0",
     "lodash": "^4.11.2",
     "mailgun-es6": "^1.1.4",
     "moment": "^2.13.0",
