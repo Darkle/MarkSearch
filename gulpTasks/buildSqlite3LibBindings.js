@@ -13,8 +13,8 @@ gulp.task('sqlite', () => {
   //TODO - change this back to regular install from default npm when mapbox add fts5 flags & update sqlite source verion
   /****
    *
-   * (note: sqlite3 npm lib comes with sqlite-autoconf-3090100.tar.gz (which is a litle old, but
-   * does includes the fts5 addon))
+   * note: the default sqlite3 npm library comes with sqlite-autoconf-3090100.tar.gz, which is a litle old - & while
+   * it does include the fts5 addon, it is not enabled in the sqlite source build flags. Only fts3 is enabled.
    *
    * Our fork uses SQLite version 3.12.2 - sqlite-autoconf-3120200.tar.gz, and includes the SQLITE_ENABLE_FTS5 addon flag
    * in sqlite3.gyp.
