@@ -7,7 +7,6 @@ var _ = require('lodash')
 
 var pagesdb = require('../../db/pagesdb')
 var archiveUrl = require('../archive.is')
-var safeBrowsingCheck = require('../safeBrowsing')
 var collapseWhiteSpace = require('../../utils/collapseWhiteSpace')
 var appLogger = require('../../utils/appLogger')
 
@@ -72,22 +71,15 @@ function addPage(req, res) {
       global.devMode && console.error(err)
       this.res.status(500).end()
       /****
-       * Rethrow the error to make it skip archiveUrl and safeBrowsing. No
+       * Rethrow the error to make it skip archiveUrl. No
        * point doing them if the initial page data hasn't made it into the database.
        */
       throw new Error(err)
     })
-    /****
-     * Get archiveUrl & safeBrowsingCheck running in parallel
-     */
-    .then(pUrl => [archiveUrl(pUrl), safeBrowsingCheck(pUrl)])
-    .spread(function(archiveIsUrl, safeBrowsingData) {
-      /****
-       * _.merge will remove any null values
-       */
-      var updateData = _.merge(archiveIsUrl, safeBrowsingData)
-      if(!_.isEmpty(updateData)){
-        return pagesdb.updateColumns(updateData)
+    .then(archiveUrl)
+    .then(archiveIsUrl => {
+      if(archiveIsUrl){
+        return pagesdb.updateColumns(archiveIsUrl)
       }
     })
     .catch(function(err) {
