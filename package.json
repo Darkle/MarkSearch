@@ -24,7 +24,7 @@
     "domain-name-parser": "^2.3.0",
     "dompurify": "^0.7.4",
     "electron-positioner": "^2.0.3",
-    "electron-prebuilt": "^0.37.8",
+    "electron-prebuilt": "^1.0.1",
     "existent": "^1.0.1",
     "express": "^4.13.4",
     "express-request-id": "^1.1.0",
