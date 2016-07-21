@@ -5,7 +5,7 @@ if(!process.env.NODE_ENV){
 }
 
 global.devMode = process.env.NODE_ENV === 'development'
-var asd = 6
+
 var path = require('path')
 
 var electron = require('electron')
