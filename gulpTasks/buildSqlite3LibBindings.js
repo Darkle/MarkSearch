@@ -9,7 +9,7 @@ var platform = process.platform
 var electronVersion = require(path.resolve(__dirname, '..', 'package.json')).dependencies['electron-prebuilt'].slice(1)
 var useExternalSQLite = false
 
-gulp.task('sqlite', () => {
+gulp.task('buildSqlite', () => {
   //TODO - change this back to regular install from default npm when mapbox add fts5 flags & update sqlite source verion
   /****
    *

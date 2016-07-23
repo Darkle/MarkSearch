@@ -1,8 +1,11 @@
 'use strict'
 
-/****
+/**
  * note: run these via gulp in default cmd.exe when on Windows as opposed to MinGW et.al., as had an issue
  * with MinGW not finding python on Win10 for the sqlite3 build task.
+ *
+ * Also, remember to run `bower install`, `npm install` and `gulp buildSqlite` before running startDev for the first time.
+ * first time.
  */
 
 
@@ -14,7 +17,7 @@
 require('./gulpTasks/startDev')
 
 /****
-* buildSqlite3LibBindings ('sqlite')
+* buildSqlite3LibBindings ('buildSqlite')
 * https://github.com/mapbox/node-sqlite3
 *
 * Build sqlite3 lib bindings against the source that comes with the npm sqlite3 lib, or
@@ -97,14 +100,3 @@ require('./gulpTasks/build/nosourcemaps')
  * Build the app for distribution as an executable.
  */
 require('./gulpTasks/build/package')
-
-
-
-
-
-
-
-
-
-
-

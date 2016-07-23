@@ -9,8 +9,9 @@ var sourcemaps = require('gulp-sourcemaps')
 var browserify = require('browserify')
 var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
-//noinspection Eslint
+/* eslint-disable no-unused-vars */
 var babelify = require('babelify')
+/* eslint-enable no-unused-vars */
 var gutil = require('gulp-util')
 var autoprefixer = require('gulp-autoprefixer')
 var less = require('gulp-less')
@@ -178,5 +179,3 @@ gulp.task('browserify', () => {
   // create a merged stream
   return eventStream.merge.apply(null, tasks)
 })
-
-
