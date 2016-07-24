@@ -9,7 +9,7 @@ var STOPWORDS = require('../../../appmodules/server/api/search/lunrStopwordFilte
 
 import _ from 'lodash'
 import DOMPurify from 'dompurify'
-//import moment from 'moment'
+import moment from 'moment'
 import stem from 'stem-porter'
 import validator from 'validator'
 
@@ -110,10 +110,10 @@ function renderResults(resultsChunk, searchTerms) {
         //  mainDetails.appendChild(resultRank)
         //}
         //
-        // var resultDateCreated = document.createElement('div')
-        //resultDateCreated.textContent = row.dateCreated
-        // resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
-        // mainDetails.appendChild(resultDateCreated)
+        var resultDateCreated = document.createElement('div')
+        resultDateCreated.textContent = row.dateCreated
+        resultDateCreated.textContent = moment(row.dateCreated).format("dddd, MMMM Do YYYY, h:mm:ss a")
+        mainDetails.appendChild(resultDateCreated)
 
         /*****
          * SafeBrowsing
