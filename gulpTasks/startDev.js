@@ -104,10 +104,6 @@ gulp.task('less', () =>
     .pipe(browserSync.stream())
 )
 
-/*****
- * Multiple bundles
- * http://fettblog.eu/gulp-browserify-multiple-bundles/
- */
 gulp.task('browserify', () => {
 
   var uName = username.sync()
@@ -120,10 +116,9 @@ gulp.task('browserify', () => {
     path.join(basePath, 'frontend', 'src', 'js', 'bookmarkletPage', 'bookmarkletPage.js')
   ]
 
-  // map them to our stream function
-  var tasks = files.map(function(entry) {
-    return browserify({
-      entries: [entry],
+  files.forEach(function(file) {
+    browserify({
+      entries: [file],
       debug: true,
       /****
        * Uncomment 'fullPaths: true' if want to run discify below.
@@ -148,7 +143,7 @@ gulp.task('browserify', () => {
       gutil.log(err.message)
       this.emit('end')
     })
-    .pipe(source(entry))
+    .pipe(source(file))
     .pipe(rename({
       dirname: 'js',
       extname: '-bundle.js'
@@ -167,15 +162,16 @@ gulp.task('browserify', () => {
      */
     .pipe(replace(regexForReplace, ''))
     .pipe(gulp.dest(path.join(basePath, 'frontend', 'static')))
-  /****
-   * browserSync.stream messes up here - I think it's becuase we're mapping, so we're
-   * calling it 4 times instead of once. Could individually get around it by using
-   * {match:}, but its easier to just call reload from the 'watch-js' task
-   * after the whole 'browserify' task has finished.
-   */
-  //.pipe(browserSync.stream({match: '**/settingsPage-bundle.js'}))
-  //.pipe(browserSync.stream())
+    /****
+     * browserSync.stream messes up here - I think it's becuase we're mapping, so we're
+     * calling it 4 times instead of once. Could individually get around it by using
+     * {match:}, but its easier to just call reload from the 'watch-js' task
+     * after the whole 'browserify' task has finished.
+     */
+    //.pipe(browserSync.stream({match: '**/settingsPage-bundle.js'}))
+    //.pipe(browserSync.stream())
+
   })
-  // create a merged stream
-  return eventStream.merge.apply(null, tasks)
+
+
 })
