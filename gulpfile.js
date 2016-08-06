@@ -31,6 +31,18 @@ require('./gulpTasks/startDev')
 require('./gulpTasks/buildSqlite3LibBindings')
 
 /****
+ * buildSqlite3LibBindingsForRandomDates ('buildSqliteForRandomDates')
+ *
+ * This task is for building sqlite3 lib for running the generateRandomDatesForSavedPages. On
+ * Windows and Linux, when gulp runs these tasks, it uses node rather than electron to run them, and
+ * since sqlite3 is installed for electron and not node, it doesn't work. So we uninstall the electron
+ * sqlite3 and install regular node sqlite3 (from our repo so it has the FTS5) and then we can run the gulp
+ * task to generate the random dates.
+ *
+ */
+require('./gulpTasks/buildSqlite3LibBindingsForRandomDates')
+
+/****
 * selfsignElectronForDev ('selfsign')
 * Self-sign the electron app for development on OSX so that we dont constantly have to click on
 * the allow incomming connections alert that pops up each time we run electron.

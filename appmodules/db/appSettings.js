@@ -4,9 +4,8 @@ var path = require('path')
 var Crypto = require('crypto')
 
 var inspector = require('schema-inspector')
-var _ = require('lodash')
 /****
- * Note: use blubird promises because if we were to return a Promise.reject() and 
+ * Note: use blubird promises because if we were to return a Promise.reject() and
  * the caller of appSettings.update uses .bind(), that would cause an
  * uncaughtException as native promise bind is a bit different.
  */
@@ -101,7 +100,7 @@ appSettings.update = (settingsKeyValObj) => {
   inspector.sanitize(schemas.appSettingsSanitization, settingsKeyValObj)
 
   var validatedSettingsKeyValObj = inspector.validate(schemas.appSettingsValidation, settingsKeyValObj)
-  
+
   if(!validatedSettingsKeyValObj.valid){
     var errMessage = `Error, passed in app settings did not pass validation.
                       Error(s): ${ validatedSettingsKeyValObj.format() }`

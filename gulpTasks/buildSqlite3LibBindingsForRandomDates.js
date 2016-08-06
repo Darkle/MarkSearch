@@ -6,10 +6,9 @@ var gulp = require('gulp')
 var exeq = require('exeq')
 
 var platform = process.platform
-var electronVersion = require(path.resolve(__dirname, '..', 'package.json')).dependencies['electron-prebuilt'].slice(1)
 var useExternalSQLite = false
 
-gulp.task('buildSqlite', () => {
+gulp.task('buildSqliteForRandomDates', () => {
   // TODO - change this back to regular install from default npm when mapbox add fts5 flags & update sqlite source verion
   /****
    *
@@ -20,9 +19,6 @@ gulp.task('buildSqlite', () => {
    * in sqlite3.gyp.
    */
   var shellTask = "npm install sqlite3@https://github.com/Darkle/node-sqlite3" +
-                  " --runtime=electron" +
-                  " --dist-url=https://atom.io/download/atom-shell" +
-                  " --target=" + electronVersion +
                   " --target_arch=" + process.arch +
                   " --target_platform=" + platform +
                   " --build-from-source"

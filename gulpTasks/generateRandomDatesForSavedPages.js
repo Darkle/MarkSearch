@@ -34,6 +34,13 @@ if(platform === 'darwin'){
       useRoaming: true
     }).userData()
   }
+  /****
+   * For some reason the app directory is being listed twice on Windows 10
+   * (e.g. C:\Users\Darkle\AppData\Local\MarkSearch\MarkSearch), so remove it.
+   */
+  if(appDataPath.endsWith('\\MarkSearch\\MarkSearch')){
+    appDataPath = appDataPath.slice(0, appDataPath.lastIndexOf(`\MarkSearch`) - 1)
+  }
  }
 
 /****
@@ -44,6 +51,8 @@ if(platform === 'darwin'){
  */
 
 gulp.task('randomDates', () => {
+  console.log(`appDataPath`)
+  console.log(appDataPath)
   var pagesDBknex
   var appSettingsKnex = require('knex')({
     client: 'sqlite3',
