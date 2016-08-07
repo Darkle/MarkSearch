@@ -37,9 +37,9 @@ function sendErrorToMainProcess(data) {
   ipcRenderer.send('webview-error', JSON.stringify(data))
 }
 
-//function sendLogToMainProcess(data) {
-//  ipcRenderer.send('webview-log', JSON.stringify(data))
-//}
+function sendLogToMainProcess(data) {
+  ipcRenderer.send('webview-log', JSON.stringify(data))
+}
 
 /****
  * A check in case there is a site that is online but just takes
@@ -63,6 +63,7 @@ function didStartLoadListener() {
  * image/object taking forever to load.
  */
 function domReadyListener() {
+
   domReadyFired = true
   webview.setAudioMuted(true)
   setTimeout( () => {
@@ -153,7 +154,6 @@ function ipcMessageListener() {
 module.exports = function() {
 
   ipcRenderer.on('createAndLoadWebview', (event, sentUrlToScrape) => {
-
     removeWebview()
 
     urlToScrape = sentUrlToScrape

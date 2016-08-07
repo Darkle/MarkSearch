@@ -1,6 +1,6 @@
 ;(function() {
-  var ipc = require('ipc')
-  ipc.on('sendPageData', function() {
+  const { ipcRenderer } = require('electron')
+  ipcRenderer.on('sendPageData', function() {
     try{
       var description = ''
       var descriptionElem = document.querySelector('meta[name="description"], meta[name="Description"], meta[name="DESCRIPTION"], meta[property="og:description"]')
@@ -44,10 +44,10 @@
         documentText: document.body.innerText,
         documentDescription: description
       }
-      ipc.sendToHost('returnDocDetails', docDetails)
+      ipcRenderer.sendToHost('returnDocDetails', docDetails)
     }
     catch(err){
-      ipc.sendToHost('returnDocDetailsError', err.message)
+      ipcRenderer.sendToHost('returnDocDetailsError', err.message)
     }
   })
 })()

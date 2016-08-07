@@ -53,9 +53,9 @@ function scrapeAndAddPage(req, res, next) {
 
   var webContents = browserWindow.webContents
   webContents.setAudioMuted(true)
-//  if(global.devMode){
-//    webContents.openDevTools()
-//  }
+  if(global.devMode){
+    webContents.openDevTools()
+  }
 
   webContents.once('did-finish-load', () => {
     /****
@@ -101,7 +101,7 @@ function scrapeAndAddPage(req, res, next) {
     * We need to do req.body sanitization & validate here as scrapeAndAddPage only gets passed
     * the req.params.pageUrl and we make the req.body.pageTitle etc. here from
     * the scrape, so need to validate the new req.body stuff in here.
-    */ 
+    */
     inspector.sanitize(schemas.reqBodySanitization, req.body)
 
     var validReqBody = inspector.validate(schemas.reqBodyValidation, req.body)
@@ -116,7 +116,6 @@ function scrapeAndAddPage(req, res, next) {
       addPage(req, res, next)
     }
   })
-
 }
 
 function logErrorDestroyBrowserAndRespond(errorMessage, req, res) {

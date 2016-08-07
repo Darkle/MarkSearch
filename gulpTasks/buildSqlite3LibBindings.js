@@ -12,6 +12,7 @@ var useExternalSQLite = false
 gulp.task('buildSqlite', () => {
   // TODO - change this back to regular install from default npm when mapbox add fts5 flags & update sqlite source verion
   /****
+   * https://github.com/electron/electron/pull/5911 ?
    *
    * note: the default sqlite3 npm library comes with sqlite-autoconf-3090100.tar.gz, which is a litle old - & while
    * it does include the fts5 addon, it is not enabled in the sqlite source build flags. Only fts3 is enabled.
