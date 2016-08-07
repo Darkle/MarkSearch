@@ -81,8 +81,11 @@ pagesdb.init = (pagesDBFilePath) => {
 pagesdb.updateColumns = (columnsDataObj) => {
 
   inspector.sanitize(schemas.updateColumnSanitization, columnsDataObj)
-
-  var validatedColumnsDataObj = inspector.validate(schemas.updateColumnValidation, columnsDataObj)
+  /*****
+   * Check requestDataValidation.js for why we're making a copy (_.assign) of columnsDataObj/req.body data
+   * for inspector.validate().
+   */
+  var validatedColumnsDataObj = inspector.validate(schemas.updateColumnValidation, _.assign({}, columnsDataObj))
   if(!validatedColumnsDataObj.valid){
     var errMessage = `Error, passed in column data did not pass validation.
                       Error(s): ${ validatedColumnsDataObj.format() }`
@@ -117,8 +120,11 @@ pagesdb.updateColumns = (columnsDataObj) => {
 pagesdb.upsertRow = (rowDataObj) => {
 
   inspector.sanitize(schemas.upsertRowSanitization, rowDataObj)
-
-  var validatedPageDataObj = inspector.validate(schemas.upsertRowValidation, rowDataObj)
+  /*****
+   * Check requestDataValidation.js for why we're making a copy (_.assign) of rowDataObj/req.body data
+   * for inspector.validate().
+   */
+  var validatedPageDataObj = inspector.validate(schemas.upsertRowValidation, _.assign({}, rowDataObj))
   if(!validatedPageDataObj.valid){
     var errMessage = `Error, passed in row data did not pass validation.
                       Error(s): ${ validatedPageDataObj.format() }`

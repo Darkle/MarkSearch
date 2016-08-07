@@ -3,6 +3,8 @@
 var path = require('path')
 var Crypto = require('crypto')
 
+var _ = require('lodash')
+
 var inspector = require('schema-inspector')
 /****
  * Note: use blubird promises because if we were to return a Promise.reject() and
@@ -99,7 +101,13 @@ appSettings.update = (settingsKeyValObj) => {
 
   inspector.sanitize(schemas.appSettingsSanitization, settingsKeyValObj)
 
-  var validatedSettingsKeyValObj = inspector.validate(schemas.appSettingsValidation, settingsKeyValObj)
+  /*****
+   * Check requestDataValidation.js for why we're making a copy (_.assign) of settingsKeyValObj/req.body data
+   * for inspector.validate().
+   *
+   * updateMarkSearchSettings.js passes in the whole req.body
+   */
+  var validatedSettingsKeyValObj = inspector.validate(schemas.appSettingsValidation, _.assign({}, settingsKeyValObj))
 
   if(!validatedSettingsKeyValObj.valid){
     var errMessage = `Error, passed in app settings did not pass validation.

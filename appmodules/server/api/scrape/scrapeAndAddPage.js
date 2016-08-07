@@ -3,6 +3,7 @@
 var path = require('path')
 
 var inspector = require('schema-inspector')
+var _ = require('lodash')
 
 var addPage = require('../addPage')
 var appLogger = require('../../../utils/appLogger')
@@ -102,9 +103,14 @@ function scrapeAndAddPage(req, res, next) {
     * the req.params.pageUrl and we make the req.body.pageTitle etc. here from
     * the scrape, so need to validate the new req.body stuff in here.
     */
-    inspector.sanitize(schemas.reqBodySanitization, req.body)
 
-    var validReqBody = inspector.validate(schemas.reqBodyValidation, req.body)
+    inspector.sanitize(schemas.reqBodySanitization, req.body)
+    /*****
+     * Check requestDataValidation.js for why we're making a copy (_.assign) of req.body data
+     * for inspector.validate().
+     */
+
+    var validReqBody = inspector.validate(schemas.reqBodyValidation, _.assign({}, req.body))
     if(!validReqBody.valid){
       let errMessage = `Error(s) with the req.body data in scrapeAndAddPage : ${ validReqBody.format() }`
       let err = new Error(errMessage)
