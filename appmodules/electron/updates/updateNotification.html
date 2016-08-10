@@ -93,7 +93,7 @@
   </div>
 </div>
 <script>
-  var ipcRenderer = require('electron').ipcRenderer
+  const { ipcRenderer } = require('electron')
 
   ipcRenderer.on('latestUpdateVersion', function(event, latestUpdateVersion) {
 

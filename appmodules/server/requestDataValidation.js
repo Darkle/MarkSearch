@@ -9,14 +9,14 @@ var schemas = require('./requestDataValidationAndSanitizationSchema')
 function requestDataValidation(req, res, next) {
 
   /****
-   * For some reason the req.body __proto__ is set to null when it has values, which messes up the
+   * For some reason the req.body prototype (__proto__) is set to null when it has values, which messes up the
    * schema-inspector's inspector.validate for the req.body. It generates the following error: http://bit.ly/2aCxtd2
    * and seems to break on this line here in the code: http://bit.ly/2aCxGgw
    *
-   * I'm not sure why it is happening, so for now, I'm just going use lodash to copy the key/values to a new
+   * I'm not sure why it is happening, so for now, I'm just going to use lodash to copy the key/values to a new
    * object with a proper prototype.
    *
-   * {} is equivalent to: Object.create(Object.prototype)
+   * note: {} is equivalent to: Object.create(Object.prototype)
    *
    * I guess do it for req.params as well.
    *
