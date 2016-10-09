@@ -9,7 +9,7 @@ var STOPWORDS = require('../../../appmodules/server/api/search/lunrStopwordFilte
 
 import _ from 'lodash'
 import DOMPurify from 'dompurify'
-import moment from 'moment'
+// import moment from 'moment'
 import stem from 'stem-porter'
 import validator from 'validator'
 
@@ -231,6 +231,7 @@ function renderResults(resultsChunk, searchTerms) {
           metaIconArchive.setAttribute('data-pt-title', 'Archive Link')
           //metaIconArchive.setAttribute('data-pt-gravity', 'bottom 0 3')
           metaIconArchive.setAttribute('target', '_blank')
+          metaIconArchive.setAttribute('rel', 'noopener')
           metaIconArchive.className = 'material-icons protip'
           metaIconArchive.textContent = 'account_balance'
           metaIcons.appendChild(metaIconArchive)
