@@ -1202,6 +1202,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.renderResults = undefined;
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 var _searchPage = require('./searchPage');
 
 var _resultsEventHandlers = require('./resultsEventHandlers');
@@ -1216,10 +1218,6 @@ var _dompurify = require('dompurify');
 
 var _dompurify2 = _interopRequireDefault(_dompurify);
 
-var _moment = require('moment');
-
-var _moment2 = _interopRequireDefault(_moment);
-
 var _stemPorter = require('stem-porter');
 
 var _stemPorter2 = _interopRequireDefault(_stemPorter);
@@ -1231,6 +1229,8 @@ var _validator2 = _interopRequireDefault(_validator);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var STOPWORDS = require('../../../appmodules/server/api/search/lunrStopwordFilter.json');
+// import moment from 'moment'
+
 
 /****
  * Exports
@@ -1242,7 +1242,7 @@ function renderResults(resultsChunk, searchTerms) {
       var resultItemNumber;
       var docFragment;
 
-      (function () {
+      var _ret = function () {
         (0, _resultsObject.updateChunkShownValue)(resultsChunk.chunkIndex, true);
         /****
          * 200 items in each chunk
@@ -1450,6 +1450,7 @@ function renderResults(resultsChunk, searchTerms) {
             metaIconArchive.setAttribute('data-pt-title', 'Archive Link');
             //metaIconArchive.setAttribute('data-pt-gravity', 'bottom 0 3')
             metaIconArchive.setAttribute('target', '_blank');
+            metaIconArchive.setAttribute('rel', 'noopener');
             metaIconArchive.className = 'material-icons protip';
             metaIconArchive.textContent = 'account_balance';
             metaIcons.appendChild(metaIconArchive);
@@ -1488,10 +1489,14 @@ function renderResults(resultsChunk, searchTerms) {
         _searchPage.resultsContainer$[0].appendChild(docFragment);
         docFragment = null;
         addRemoveDiv = null;
-        resolve();
-      })();
+        return {
+          v: resolve()
+        };
+      }();
+
+      if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
     } catch (error) {
-      reject(error);
+      return reject(error);
     }
   });
 }
@@ -1500,7 +1505,7 @@ function renderResults(resultsChunk, searchTerms) {
  */
 exports.renderResults = renderResults;
 
-},{"../../../appmodules/server/api/search/lunrStopwordFilter.json":1,"./resultsEventHandlers":14,"./resultsObject":15,"./searchPage":17,"dompurify":326,"lodash":355,"moment":357,"stem-porter":383,"validator":413}],14:[function(require,module,exports){
+},{"../../../appmodules/server/api/search/lunrStopwordFilter.json":1,"./resultsEventHandlers":14,"./resultsObject":15,"./searchPage":17,"dompurify":326,"lodash":355,"stem-porter":383,"validator":413}],14:[function(require,module,exports){
 'use strict';
 
 /* global notie  */

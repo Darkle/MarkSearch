@@ -271,10 +271,10 @@ function renderResults(resultsChunk, searchTerms) {
       resultsContainer$[0].appendChild(docFragment)
       docFragment = null
       addRemoveDiv = null
-      resolve()
+      return resolve()
     }
     catch(error){
-      reject(error)
+      return reject(error)
     }
   })
 }
