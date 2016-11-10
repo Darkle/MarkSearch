@@ -8,7 +8,7 @@ var appLogger = require('../../utils/appLogger')
 var mailGun = new MailGun({
   privateApi: APIKEYS.mailgunPrivateApiKey,
   publicApi: APIKEYS.mailgunPublicApiKey,
-  domainName: 'mailgun.coopcoding.com'
+  domainName: 'sandbox6a982675720848c6b1ace1f0b6f4878c.mailgun.org'
 })
 
 function emailBookmarklet(req, res) {

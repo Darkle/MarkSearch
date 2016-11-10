@@ -3,17 +3,12 @@
 var http = require('http')
 
 var getPort = require('get-port')
-// var internalIp = require('internal-ip')
+var internalIp = require('internal-ip')
 
 var isPortInUse = require('../utils/isPortInUse')
 var appSettings = require('../db/appSettings')
 
-// var ipv4Address = internalIp.v4()
-/****
-* Switched to localhost 127.0.0.1 so that we can allow that address in the permissions
-* in the chrome extensions manifest file. 
-*/
-var ipv4Address = '127.0.0.1'
+var ipv4Address = internalIp.v4()
 
 function initServer(expressApp) {
   return isPortInUse(appSettings.settings.serverPort, ipv4Address)

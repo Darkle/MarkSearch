@@ -26,7 +26,7 @@ var checkInterval = ms('3h')
 var mailGun = new MailGun({
   privateApi: APIKEYS.mailgunPrivateApiKey,
   publicApi: APIKEYS.mailgunPublicApiKey,
-  domainName: 'mailgun.coopcoding.com'
+  domainName: 'sandbox6a982675720848c6b1ace1f0b6f4878c.mailgun.org'
 })
 
 function shouldWeRunBookmarkExpiryCheck() {
@@ -98,7 +98,7 @@ bookmarkExpiry.stopBookmarksExpiry = () => {
     setTimeoutRef = null
   }
 }
- 
+
 /****
  * .orderBy('dateCreated', 'asc') is for router.post('/frontendapi/getMostRecentlyExpiredBookmarks/' -
  * oldest to newest.

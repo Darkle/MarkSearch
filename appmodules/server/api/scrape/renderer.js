@@ -37,7 +37,7 @@ function sendErrorToMainProcess(data) {
   ipcRenderer.send('webview-error', JSON.stringify(data))
 }
 
-function sendLogToMainProcess(data) {
+function sendLogToMainProcess(data) { // eslint-disable-line
   ipcRenderer.send('webview-log', JSON.stringify(data))
 }
 
