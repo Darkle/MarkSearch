@@ -34,10 +34,10 @@ function generateBookmarkletJS(locationHostAndProtocol, token) {
       var pageTitle = 'pageTitle=' + encodeURIComponent(document.title);
       var pageText = '&pageText=' + encodeURIComponent(document.body.innerText);
       var pageDescription = '&pageDescription=' + encodeURIComponent(description);
-      var JWT = '&JWT=${token}';
+      var JWT = '&JWT=${ token }';
       var params = pageTitle + pageText + pageDescription + JWT;
       var http = new XMLHttpRequest();
-      http.open("POST", '${locationHostAndProtocol}/api/add/'+encodeURIComponent(window.location.href), true);
+      http.open("POST", '${ locationHostAndProtocol }/api/add/'+encodeURIComponent(window.location.href), true);
       http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       http.send(params);
       notie.alert(1, 'Page Saved To MarkSearch', 3);
