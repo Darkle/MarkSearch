@@ -1718,7 +1718,7 @@ function searchPageInit() {
   /****
    * Increase the debounce a bit if on iOS7 as it stutters a bit
    */
-  var debounceTime = isIOS7 ? 800 : 300;
+  var debounceTime = isIOS7 ? 800 : 200;
   /****
    * Extra events cause of <IE10
    */
