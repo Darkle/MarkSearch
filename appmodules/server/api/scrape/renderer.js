@@ -160,6 +160,7 @@ module.exports = function() {
 
     webview = document.createElement('webview')
     webview.setAttribute('src', urlToScrape)
+    webview.setAttribute('style', 'width:100%;height:100%;')
     webview.setAttribute('preload', './webviewPreload.js')
 
     webview.addEventListener('did-start-loading', didStartLoadListener)
