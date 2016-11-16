@@ -24,7 +24,7 @@ logger.init = (markSearchAppDataPath) => {
         level: 'error',
         path: path.join(logsFolder, 'markSearchBunyan.log'),
         period: '2d',
-        count: 5
+        count: 4
       }
     ],
     serializers: {
@@ -62,7 +62,7 @@ logger.init = (markSearchAppDataPath) => {
           remoteAddress: _.get(req, 'connection.remoteAddress'),
           domain: req.domain
         }),
-      res: res => 
+      res: res =>
         ({
           requestId: _.get(res, 'req.id'),
           statusCode: res.statusCode,
@@ -103,4 +103,3 @@ logger.init = (markSearchAppDataPath) => {
 }
 
 module.exports = logger
-

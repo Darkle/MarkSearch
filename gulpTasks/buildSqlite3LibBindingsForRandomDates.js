@@ -16,7 +16,7 @@ gulp.task('buildSqliteForRandomDates', () => {
    * Our fork uses SQLite version 3.12.2 - sqlite-autoconf-3120200.tar.gz, and includes the SQLITE_ENABLE_FTS5 addon flag
    * in sqlite3.gyp.
    *
-   * Note: the dist-url may have changed: https://github.com/electron/electron/releases/tag/v1.4.6 & https://github.com/electron/electron/pull/7881
+   * Note: the dist-url has changed: https://github.com/electron/electron/releases/tag/v1.4.6 & https://github.com/electron/electron/pull/7881
    */
   var shellTask = "npm install sqlite3@https://github.com/Darkle/node-sqlite3" +
                   " --target_arch=" + process.arch +
