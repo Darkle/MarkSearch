@@ -42,7 +42,7 @@ function searchPageInit() {
   dateFilterInit()
 
   /*****
-  * If there is a search hash on the page location on page load, grab it and add it to the search box on the page.
+  * If there is a search hash in the page location on page load, grab it and add it to the search box on the page.
   * The queryServerAndRender() call below will automatically check if there are search terms in the search box
   * & search for them.
   */
