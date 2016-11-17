@@ -7,6 +7,8 @@ requests to it. - (note - it's all sites on http, not https as the MarkSearch se
 
 Make sure i mention how to open the settings via the system tray/menu bar - make sure to include a small screenshot for windows/mac/linux system tray/menu bar
 
+Also put a note that it may take a few minutes for the email to arrive for the token/bookmarklet
+
 ### Help
 
 ##### Setting Up The MarkSearch Browser Extension
