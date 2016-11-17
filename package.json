@@ -47,6 +47,7 @@
     "ms": "^0.7.1",
     "netscape-bookmarks": "^0.1.0",
     "parse-filepath": "^1.0.1",
+    "query-string": "^4.2.3",
     "request": "^2.72.0",
     "require-dir": "^0.3.0",
     "schema-inspector": "^1.6.5",

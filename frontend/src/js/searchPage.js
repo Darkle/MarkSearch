@@ -12,6 +12,7 @@ import { tooltips } from './tooltips'
 import { dateFilterInit } from './dateFilter'
 
 import _ from 'lodash'
+import { parse as parseLocationHash } from 'query-string'
 
 var csrfToken
 var resultsCountDiv$
@@ -39,6 +40,16 @@ function searchPageInit() {
    * anything from searchPage.js
    */
   dateFilterInit()
+
+  /*****
+  * If there is a search hash on the page location on page load, grab it and add it to the search box on the page.
+  * The queryServerAndRender() call below will automatically check if there are search terms in the search box
+  * & search for them.
+  */
+  var searchTermsFromLocationHash = parseLocationHash(window.location.hash).markSearchSearchTerms
+  if(searchTermsFromLocationHash && _.trim(searchTermsFromLocationHash.length)){
+    searchInput$.val(decodeURIComponent(searchTermsFromLocationHash))
+  }
 
   /****
    * Display all bookmarks stored in MarkSearch on page load
