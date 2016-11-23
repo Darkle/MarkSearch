@@ -77,7 +77,7 @@ var validator = require('validator')
  * changePagesDBlocation & checkIfFileIsBinary use parse-filepath, so I think they're ok.
  *
  * note: remember if adding anything new, that 'post' in the exec functions can be undefined, so may need
- * to check against that. 
+ * to check against that.
  */
 
 function allowedToOpenUrl(urlWantToOpen) {
@@ -110,6 +110,9 @@ module.exports = {
           return post
         }
       },
+      // Want to be a bit looser with the search to allow them to search for code.
+      // Knex does its own escaping to prevent sql injection: http://bit.ly/2gjv1gF
+      // Note: if decide to do this again, do it properly: http://bit.ly/2gjwWlk
       // searchTerms: {
       //   type: 'string',
       //   optional: true,
