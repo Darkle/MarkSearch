@@ -112,7 +112,7 @@ module.exports = {
       },
       // Want to be a bit looser with the search to allow them to search for code.
       // Knex does its own escaping to prevent sql injection: http://bit.ly/2gjv1gF
-      // Note: if decide to do this again, do it properly: http://bit.ly/2gjwWlk
+      // Note: if decide to do this again, do it properly with http://bit.ly/2gjwWlk or maybe npm 'validator'
       // searchTerms: {
       //   type: 'string',
       //   optional: true,
