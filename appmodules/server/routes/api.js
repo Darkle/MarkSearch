@@ -13,7 +13,10 @@ var search = require('../api/search/search')
  */
 router.get('/get/:pageUrl', requestDataValidation, apiModules.getSinglePage)
 router.get('/getall/', requestDataValidation, apiModules.getAllPages)
-router.get('/search/:searchTerms', requestDataValidation, search)
+/*****
+* Post for search, cause sometimes we need to post the date filter data as well
+*/
+router.post('/search/:searchTerms', requestDataValidation, search)
 /****
  * /api/add/:pageUrl route is used by the extensions as they send all the page data
  * and dont need to use scrapeAndAddPage

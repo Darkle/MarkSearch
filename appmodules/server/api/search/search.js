@@ -101,10 +101,10 @@ function search(req, res) {
      * and must be in uppercase!
      */
     knexSQL = knexSQL
-      //.whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${searchTerms}" OR NEAR(${searchTerms})`)
+      //.whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${ searchTerms }" OR NEAR(${ searchTerms })`)
       .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, searchTerms)
   }
-  
+
   if(global.devMode){
     printSearchSQL(knexSQL)
   }

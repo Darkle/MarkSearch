@@ -5,7 +5,7 @@
 import { queryServerAndRender } from './queryServerAndRender'
 
 //noinspection Eslint
-import velocity from 'velocity-animate'
+import velocity from 'velocity-animate' // eslint-disable-line
 import moment from 'moment'
 import _ from 'lodash'
 

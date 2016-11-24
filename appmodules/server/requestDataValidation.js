@@ -14,7 +14,7 @@ function requestDataValidation(req, res, next) {
    * and seems to break on this line here in the code: http://bit.ly/2aCxGgw
    *
    * I'm not sure why it is happening, so for now, I'm just going to use lodash to copy the key/values to a new
-   * object with a proper prototype.
+   * object with a proper prototype and then assign the sanitized object back to the req.body & req.params.
    *
    * note: {} is equivalent to: Object.create(Object.prototype)
    *
@@ -29,14 +29,16 @@ function requestDataValidation(req, res, next) {
   inspector.sanitize(schemas.reqParamsSanitization, reqParams)
   inspector.sanitize(schemas.reqBodySanitization, reqBody)
 
+  req.body = reqBody
+  req.params = reqParams
+
   var validReqParams = inspector.validate(schemas.reqParamsValidation, reqParams)
   if(!validReqParams.valid){
     let errMessage = `Error(s) with the reqParams data in requestDataValidation : ${ validReqParams.format() }`
     let err = new Error(errMessage)
     global.devMode && console.error(errMessage)
     appLogger.log.error({err, req, res})
-    res.status(500).json({errMessage})
-    return
+    return res.status(500).json({errMessage})
   }
 
   var validReqBody = inspector.validate(schemas.reqBodyValidation, reqBody)

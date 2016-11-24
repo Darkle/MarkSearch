@@ -9,6 +9,10 @@ Make sure i mention how to open the settings via the system tray/menu bar - make
 
 Also put a note that it may take a few minutes for the email to arrive for the token/bookmarklet
 
+REmember to mention that you can search by site and date filter
+
+Remember to mention about the extensions that search by site and date filter also works
+
 ### Help
 
 ##### Setting Up The MarkSearch Browser Extension
