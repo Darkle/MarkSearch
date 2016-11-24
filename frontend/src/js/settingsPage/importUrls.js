@@ -72,8 +72,3 @@ function importUrls(event) {
 }
 
 export { importUrls }
-
-
-
-
-

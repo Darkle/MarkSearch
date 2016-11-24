@@ -26,8 +26,12 @@ var basePath = path.resolve(__dirname, '..')
 var ipv4Address = internalIp.v4()
 
 gulp.task('default', () =>
+  /*****
+  * Note: really need to have browserify run first as I ran into a big issue
+  * that was hard to track down because the bundle files hadn't been updated.
+  */
   runSequence(
-    //'browserify',
+    'browserify',
     'nodemon',
     'browser-sync',
     'watch-less',
