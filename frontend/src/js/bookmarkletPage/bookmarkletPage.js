@@ -4,7 +4,7 @@ import "babel-polyfill"
 
 import { generateBookmarkletJS } from '../bookmarkletTemplate'
 
-import got from 'got'
+import axios from 'axios'
 
 $(document).ready(bookmarkletPageInit)
 
@@ -14,9 +14,10 @@ function bookmarkletPageInit() {
     'X-CSRF-Token': csrfToken
   }
 
-  got.post('/frontendapi/settings/generateExtToken/', {headers: xhrHeaders})
+  axios
+    .post('/frontendapi/settings/generateExtToken/', null, {headers: xhrHeaders})
     .then( response => {
-      var responseData = JSON.parse(response.body)
+      var responseData = response.data
       var bookmarkletJS = generateBookmarkletJS(responseData.protocolIpandPort, responseData.token)
       $('#bookmarkletLink').attr('href', `javascript:${ encodeURIComponent(bookmarkletJS) }`)
     })

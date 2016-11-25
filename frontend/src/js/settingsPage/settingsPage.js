@@ -12,7 +12,7 @@ import { hidePageSubbarAndReset } from './hideShowAddPageSubbar'
 import { setSettingsElementValues } from './setSettingsElementValues'
 import { externalLinks } from './externalLinks'
 
-import got from 'got'
+import axios from 'axios'
 import Promise from 'bluebird'
 
 var xhrHeaders
@@ -77,7 +77,7 @@ function settingsPageInit() {
   var csrfToken = $('#csrfInput').val()
   $('.brandLogo a').removeAttr('href')
   //noinspection Eslint
-  new Clipboard('.clipBoardButton')
+  new Clipboard('.clipBoardButton')   // eslint-disable-line no-new
   xhrHeaders = {
     'X-CSRF-Token': csrfToken
   }
@@ -97,14 +97,14 @@ function settingsPageInit() {
    */
   browserAddonTokenButton$.click( event => {
     event.preventDefault()
-    got.post('/frontendapi/settings/generateExtToken', {headers: xhrHeaders})
+    axios
+      .post('/frontendapi/settings/generateExtToken', null, {headers: xhrHeaders})
       .then( response => {
-        var responseData = JSON.parse(response.body)
-        /****
-         * Include the url of MarkSearch so user doesn't have to copy & past that
-         * into the extension as well
-         */
-        browserAddonTokenText$.val(`${ responseData.protocolIpandPort },${ responseData.token }`)
+        // /****
+        //  * Include the url of MarkSearch so user doesn't have to copy & past that
+        //  * into the extension as well
+        //  */
+        browserAddonTokenText$.val(`${ response.data.protocolIpandPort },${ response.data.token }`)
       })
       .catch( err => {
         console.error(err)
@@ -118,10 +118,10 @@ function settingsPageInit() {
    */
   bookmarkletButton$.click( event => {
     event.preventDefault()
-    got.post('/frontendapi/settings/generateExtToken', {headers: xhrHeaders})
+    axios
+      .post('/frontendapi/settings/generateExtToken', null, {headers: xhrHeaders})
       .then( response => {
-        var responseData = JSON.parse(response.body)
-        var bookmarkletJS = generateBookmarkletJS(responseData.protocolIpandPort, responseData.token)
+        var bookmarkletJS = generateBookmarkletJS(response.data.protocolIpandPort, response.data.token)
         bookmarkletText$.val(`javascript:${ encodeURIComponent(bookmarkletJS) }`)
       })
       .catch( err => {
@@ -137,19 +137,22 @@ function settingsPageInit() {
    */
   emailBookmarkletButton$.click( event => {
     event.preventDefault()
-    got.post('/frontendapi/settings/generateExtToken', {headers: xhrHeaders})
+    axios
+      .post(
+        '/frontendapi/settings/generateExtToken', null, {headers: xhrHeaders})
       .then( response => {
-        var responseData = JSON.parse(response.body)
+        console.log('emailBookmarkletButton$.click axios response', response)
+        var responseData = response.data
         var bookmarkletJS = generateBookmarkletJS(responseData.protocolIpandPort, responseData.token)
         var generatedBookmarkletText = `javascript:${ encodeURIComponent(bookmarkletJS) }`
         var bookmarkletEmail = bookmarkletEmail$.val()
-        return got.post('/frontendapi/settings/emailBookmarklet',
+        return axios.post('/frontendapi/settings/emailBookmarklet',
           {
-            headers: xhrHeaders,
-            body: {
-              email: bookmarkletEmail,
-              bookmarkletText: generatedBookmarkletText
-            }
+            email: bookmarkletEmail,
+            bookmarkletText: generatedBookmarkletText
+          },
+          {
+            headers: xhrHeaders
           }
         )
       })
@@ -192,7 +195,7 @@ function settingsPageInit() {
    */
   revokeTokens$.click( event => {
     event.preventDefault()
-    got.post('/frontendapi/settings/revokeExtTokens', {headers: xhrHeaders})
+    axios.post('/frontendapi/settings/revokeExtTokens', null, {headers: xhrHeaders})
       .then( () => {
         showNotie(1, 'Tokens Successfully Revoked', 5)
       })
@@ -252,18 +255,16 @@ function settingsPageInit() {
      * checking against dbLocationText.
      */
     if(markSearchSettings.pagesDBFilePath.slice(0, -19) !== dbLocationText){
-      dbChangePromise = got.post('/frontendapi/settings/changePagesDBlocation',
-        {
-          headers: xhrHeaders,
-          body: {
-            newPagesDBFileFolder: dbLocationText,
-            oldPagesDBFilePath: markSearchSettings.pagesDBFilePath
-          }
-        }
-        )
-        .then(response =>
-          JSON.parse(response.body).newPagesDBFilePath
-        )
+      dbChangePromise = axios.post('/frontendapi/settings/changePagesDBlocation',
+                          {
+                            newPagesDBFileFolder: dbLocationText,
+                            oldPagesDBFilePath: markSearchSettings.pagesDBFilePath
+                          },
+                          {
+                            headers: xhrHeaders
+                          }
+                        )
+                        .then(response => response.data.newPagesDBFilePath)
     }
     /****
      * note: for the bookmark expiry, the bookmarkExpiry.init minimal check is always running,
@@ -271,13 +272,15 @@ function settingsPageInit() {
      * and if enabled, run, and then get the email/months dynamically from the appSettings.settings.
      *
      * Using Promise.try rather than Promise.resolve to guard against exceptions.
-     * note: Promise.try(got.post()) aka Promise.try(dbChangePromise) doesn't seem to work, so
-     * return got.post() aka dbChangePromise inside a function in the .try().
+     * note: Promise.try(axios.post()) aka Promise.try(dbChangePromise) doesn't seem to work, so
+     * return axios.post() aka dbChangePromise inside a function in the .try().
      */
 
     Promise
       .try(() => dbChangePromise)
       .then( newPagesDBFilePath => {
+        console.log('second then after dbChangePromise')
+        console.log('newPagesDBFilePath', newPagesDBFilePath)
         var newSettings = {
           prebrowsing: prebrowsingCheckbox$[0].checked,
           alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked,
@@ -289,8 +292,7 @@ function settingsPageInit() {
         newSettings.pagesDBFilePath = newPagesDBFilePath || markSearchSettings.pagesDBFilePath
         return newSettings
       })
-      .tap( newSettings => got.post('/frontendapi/settings/update', {headers: xhrHeaders, body: newSettings})
-      )
+      .tap( newSettings => axios.post('/frontendapi/settings/update', newSettings, {headers: xhrHeaders}))
       .then( newSettings => {
         showNotie(1, 'Settings Saved', 3)
         dbLocationInfoTitle$.text('Current Database Location:')

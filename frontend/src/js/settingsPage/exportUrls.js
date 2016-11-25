@@ -5,13 +5,15 @@ import { showNotie } from './showNotie'
 import { getErrorMessage } from './getErrorMessage'
 
 import netscape from 'netscape-bookmarks'
-import got from 'got'
+import axios from 'axios'
 import _ from 'lodash'
 
 function exportUrls(typeOfExport) {
-  got.post('/frontendapi/getall/', {headers: xhrHeaders})
+  axios
+    .post('/frontendapi/getall/', null, {headers: xhrHeaders})
     .then( response => {
-      var rows = JSON.parse(response.body)
+      console.log('exportUrls axios response', response)
+      var rows = response.data
       var downloadUrl
       var blobData = ''
       var fileExtension = 'html'

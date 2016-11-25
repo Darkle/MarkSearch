@@ -2,7 +2,7 @@
 
 import { xhrHeaders } from './settingsPage'
 
-import got from 'got'
+import axios from 'axios'
 
 function externalLinks(event) {
   event.preventDefault()
@@ -11,7 +11,8 @@ function externalLinks(event) {
     linkHref = 'http://' + window.location.host + linkHref
   }
   var urlToOpen = encodeURIComponent(linkHref)
-  got.post(`/frontendapi/openUrlInBrowser/${ urlToOpen }`, {headers: xhrHeaders})
+  axios
+    .post(`/frontendapi/openUrlInBrowser/${ urlToOpen }`, null, {headers: xhrHeaders})
     .catch(err => {
       console.error(err)
     })

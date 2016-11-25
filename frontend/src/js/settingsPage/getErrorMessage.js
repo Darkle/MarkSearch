@@ -3,22 +3,21 @@
 import _ from 'lodash'
 
 function getErrorMessage(err) {
-  var errorMessage = _.get(err, 'message')
-  var responseBody = _.trim(_.get(err, 'response.body'))
-  var parsedResponseBody
-  if(responseBody.length){
-    try{
-      parsedResponseBody = JSON.parse(responseBody)
-    }
-    catch(e){
-      // do nothing
-    }
+  /*****
+  * Yeah this is bad
+  */
+  var errorMessage = ''
+  var errorMessageOnErrorObject = _.get(err, 'message')
+  var errorMessageVersion1 = _.get(err, 'response.data.errorMessage')
+  var errorMessageVersion2 =_.get(err, 'response.data.errMessage')
+  if(errorMessageVersion1 && errorMessageVersion1.length){
+    errorMessage = errorMessageVersion1
   }
-  if(_.get(parsedResponseBody, 'errorMessage')){
-    errorMessage = parsedResponseBody.errorMessage
+  else if(errorMessageVersion2 && errorMessageVersion2.length){
+    errorMessage = errorMessageVersion2
   }
-  else if(_.get(parsedResponseBody, 'errMessage')){
-    errorMessage = parsedResponseBody.errMessage
+  else if(errorMessageOnErrorObject && errorMessageOnErrorObject.length){
+    errorMessage = errorMessageOnErrorObject
   }
   return errorMessage
 }

@@ -5,7 +5,7 @@
 import { csrfToken } from './searchPage'
 import { queryServerAndRender } from './queryServerAndRender'
 
-import got from 'got'
+import axios from 'axios'
 import _ from 'lodash'
 
 /****
@@ -40,19 +40,14 @@ function deletePageFromMarksearch(event) {
     }
     resultDiv.animate({height: "toggle"}, 400, () => {
       resultDiv.remove()
-      got.delete(`/frontendapi/remove/${ pageUrl }`,
-          {
-            headers:
-            {
-              'X-CSRF-Token': csrfToken
-            }
-          })
-          /****
-           * dont simplify this to .then(queryServerAndRender) as that
-           * will send through the response as searchTerms.
-           */
-          .then(() => queryServerAndRender())
-          .catch(err => console.error(err))
+      axios
+        .delete(`/frontendapi/remove/${ pageUrl }`, {headers: {'X-CSRF-Token': csrfToken}})
+        /****
+         * dont simplify this to .then(queryServerAndRender) as that
+         * will send through the response as searchTerms.
+         */
+        .then(() => queryServerAndRender())
+        .catch(err => console.error(err))
     })
   })
 }

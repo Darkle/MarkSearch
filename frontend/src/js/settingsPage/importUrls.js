@@ -6,7 +6,7 @@ import { showNotie } from './showNotie'
 import { saveUrls } from './saveUrls'
 import { getErrorMessage } from './getErrorMessage'
 
-import got from 'got'
+import axios from 'axios'
 import _ from 'lodash'
 import validUrl from 'valid-url'
 
@@ -23,8 +23,9 @@ function importUrls(event) {
    * http://electron.atom.io/docs/all/#file-object
    */
   reader.onload = onloadEvent => {
-    got.post(
+    axios.post(
       `/frontendapi/settings/checkIfFileIsBinary/${ encodeURIComponent(file.path) }`,
+      null,
       {
         headers: xhrHeaders
       }

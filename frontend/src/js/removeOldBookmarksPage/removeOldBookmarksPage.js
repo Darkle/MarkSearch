@@ -2,7 +2,7 @@
 
 /* global notie */
 import 'babel-polyfill'
-import got from 'got'
+import axios from 'axios'
 import DOMPurify from 'dompurify'
 import moment from 'moment'
 import _ from 'lodash'
@@ -14,9 +14,10 @@ function removeOldBookmarksPageInit() {
   var rowsUl$ = $('#rowsUl')
   // buttonplate($('.deleteBookmark'))
 
-  got.post('/frontendapi/getMostRecentlyExpiredBookmarks/', {headers: {'X-CSRF-Token': csrfToken}})
+  axios.post('/frontendapi/getMostRecentlyExpiredBookmarks/', null, {headers: {'X-CSRF-Token': csrfToken}})
     .then( response => {
-      var rows = JSON.parse(response.body)
+      console.log('removeOldBookmarksPageInit axios response', response)
+      var rows = response.data
 
       rows.forEach(row => {
         /*****
@@ -42,13 +43,7 @@ function removeOldBookmarksPageInit() {
         var currentElement = event.currentTarget
         var urlToDelete = encodeURIComponent($(currentElement).attr('href'))
         var elemBookmarkDetailsContainer = $(currentElement).parent().parent()
-        got.delete(`/frontendapi/remove/${ urlToDelete }`,
-          {
-            headers:
-            {
-              'X-CSRF-Token': csrfToken
-            }
-          })
+        axios.delete(`/frontendapi/remove/${ urlToDelete }`, {headers: {'X-CSRF-Token': csrfToken}})
           .then(() => {
             elemBookmarkDetailsContainer.animate({height: "toggle"}, 400, () => {
               elemBookmarkDetailsContainer.remove()
@@ -60,7 +55,7 @@ function removeOldBookmarksPageInit() {
             notie.alert(
               3,
               `There Was An Error Deleting The Bookmark
-           Error: ${ err.message }`,
+                Error: ${ err.message }`,
               5
             )
           })
@@ -71,4 +66,3 @@ function removeOldBookmarksPageInit() {
       console.error(err)
     })
 }
-

@@ -5,9 +5,9 @@ import { queryServerAndRender } from './queryServerAndRender'
 import { dateFilterResetAll, checkMatchMediaForResultsContainerMarginTop } from './dateFilter'
 
 //noinspection Eslint
-import velocity from 'velocity-animate'
+import velocity from 'velocity-animate'   // eslint-disable-line no-unused-vars
 import suspend from 'suspend'
-import got from 'got'
+import axios from 'axios'
 import _ from 'lodash'
 import validUrl from 'valid-url'
 
@@ -167,27 +167,26 @@ function addUrlsInit() {
               $.Velocity.animate(progressBar$[0], {width: (progressStepAmount*(i+1))}, 4000, 'easeOutSine')
               var encodedUrl = encodeURIComponent(trimmedUrlsArray[i])
               try{
-                yield got.post(`/frontendapi/scrapeAndAdd/${ encodedUrl }`, {headers: {'X-CSRF-Token': csrfToken}})
+                yield axios.post(`/frontendapi/scrapeAndAdd/${ encodedUrl }`, null, {headers: {'X-CSRF-Token': csrfToken}})
               }
               catch(err){
                 console.error(err)
                 error = err
+                /*****
+                * Yeah this is bad
+                */
                 var errMessage = ''
-                var responseBody = _.get(error, 'response.body')
-                var parsedResponseBody
-                if(responseBody.length){
-                  try{
-                    parsedResponseBody = JSON.parse(responseBody)
-                  }
-                  catch(e){
-                    // do nothing
-                  }
+                var errorMessageOnErrorObject = _.get(err, 'message')
+                var errorMessageVersion1 = _.get(err, 'response.data.errorMessage')
+                var errorMessageVersion2 =_.get(err, 'response.data.errMessage')
+                if(errorMessageVersion1 && errorMessageVersion1.length){
+                  errMessage = errorMessageVersion1
                 }
-                if(_.get(parsedResponseBody, 'errorMessage')){
-                  errMessage = parsedResponseBody.errorMessage
+                else if(errorMessageVersion2 && errorMessageVersion2.length){
+                  errMessage = errorMessageVersion2
                 }
-                else if(_.get(parsedResponseBody, 'errMessage')){
-                  errMessage = parsedResponseBody.errMessage
+                else if(errorMessageOnErrorObject && errorMessageOnErrorObject.length){
+                  errMessage = errorMessageOnErrorObject
                 }
                 urlsThatErrored.push({
                   url: trimmedUrlsArray[i],
