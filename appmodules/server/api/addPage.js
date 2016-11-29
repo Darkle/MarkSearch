@@ -19,7 +19,7 @@ function addPage(req, res) {
    *  pageText - String
    *  pageDescription - String
    *  archiveLink - String - e.g. 'https://archive.is/pFvwT'
-   *  safeBrowsing - String (JSON stringified)
+   *  safeBrowsing - String (JSON stringified) - note: we dont do this any more
    *
    * requestDataValidation in the index.js and api.js does validation on the params
    * and body data.
