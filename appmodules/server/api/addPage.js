@@ -2,7 +2,6 @@
 
 var url = require('url')
 
-var domainParser = require('domain-name-parser')
 var _ = require('lodash')
 
 var pagesdb = require('../../db/pagesdb')
@@ -29,11 +28,26 @@ function addPage(req, res) {
   var pageTitle = _.get(req, 'body.pageTitle.length') ? collapseWhiteSpace(req.body.pageTitle) : null
   var pageText = _.get(req, 'body.pageText.length') ? collapseWhiteSpace(req.body.pageText) : null
   var pageDescription = _.get(req, 'body.pageDescription.length') ? collapseWhiteSpace(req.body.pageDescription) : null
-  var pageUrlHostname = url.parse(req.params.pageUrl).hostname
-  /****
-   * Get the domain from pageUrlHostname and remove any subdomains
-   */
-  var pageDomain = domainParser(pageUrlHostname).domainName
+  /*****
+  * Getting the proper host domain is a little tough. There are a couple of libraries on npm, but most of
+  * them use a static suffix list to check against, and the ones that dont have trouble with country tlds:
+  * http://bit.ly/2gCKffa
+  *
+  * So rather than using a suffix list and having to update it periodically, we're gonna grab the hostname
+  * with node's url.parse, then prepend a . to the domain. That way, when they are searching by site, we can
+  * match 'whatever site:bar.com' with results that have the domain '.bar.com' AND 'foo.bar.com' - we're
+  * doing this by using the LIKE clause (http://bit.ly/2fwkWiV) for the WHERE clause when searching by site
+  * in search.js. So searching 'whatever site:bar.com' would result in a WHERE clause something like
+  * where "pageDomain" like '%.bar.com'. So in essence we are saying any rows that have a domain that ends in
+  * '.bar.com'
+  * note: we need the prepended dot, so searching for 'whatever site:abcbar.com' wont return results with
+  * a domain of 'bar.com' as we are searching for rows with domains that end in the site searching for.
+  */
+  var pageDomain = url.parse(req.params.pageUrl).hostname
+  if(pageDomain.startsWith('www.')){
+    pageDomain = pageDomain.slice(4)
+  }
+  pageDomain = '.' + pageDomain
 
   var pageData = {
     pageUrl,

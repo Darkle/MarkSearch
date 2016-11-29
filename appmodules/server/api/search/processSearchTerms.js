@@ -8,7 +8,7 @@ function processSearchTerms(searchTerms) {
 
   global.devMode && console.log(`searchTerms before process`)
   global.devMode && console.log(searchTerms)
-  
+
   /****
    * Filter out search terms less than 1 character.
    *
@@ -40,7 +40,11 @@ function processSearchTerms(searchTerms) {
     .filter( searchTerm => {
       var useSearchTerm = searchTerm.length > 1
       if(searchTerm.startsWith('site:')){
-        domainToSearchFor = searchTerm.slice(5)
+        /*****
+        * The prepended dot here is so we can search for the domain as 'ends with .foo.bar'. More info
+        * in the addPage.js re: domain search (above 'var pageDomain').
+        */
+        domainToSearchFor = '.' +searchTerm.slice(5)
         useSearchTerm = false
       }
       else if(STOPWORDS[searchTerm]){
@@ -112,11 +116,11 @@ function processSearchTerms(searchTerms) {
       return searchTerm
     })
     .join(' ')
-  
+
   global.devMode && console.log(`searchTerms after process`)
   global.devMode && console.log(processedSearchTerms)
   global.devMode && console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${ domainToSearchFor }`)
-  
+
   return {
     processedSearchTerms,
     domainToSearchFor

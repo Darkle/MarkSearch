@@ -22,7 +22,6 @@
     "compression": "^1.6.2",
     "cookie-parser": "~1.4.0",
     "csurf": "^1.8.3",
-    "domain-name-parser": "^2.3.0",
     "dompurify": "^0.7.4",
     "electron-positioner": "^3.0.0",
     "electron-prebuilt": "^1.4.9",

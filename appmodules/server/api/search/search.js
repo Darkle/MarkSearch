@@ -40,6 +40,7 @@ function search(req, res) {
                   'safeBrowsing'
                 )
                 .from('pages')
+                .where('pageDomain', 'like', '%Test%')
                 .where({pageDomain: domainToSearchFor})
       if(usingDateFilter){
         knexSQL = knexSQL
