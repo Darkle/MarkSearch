@@ -13,8 +13,8 @@ function search(req, res) {
   var domainToSearchFor = processedSearchTerms.domainToSearchFor
   /*****
   * The domainToSearchFor is exracted from the search terms, so it doesn't really go
-  * through the requestDataValidation, so do some sanitization for the it and add a percentage
-  * for the LIKE clause for it to match ends with. 
+  * through the requestDataValidation, so do some sanitization for it and add a percentage
+  * for the LIKE clause to match ends with. 
   */
   if(domainToSearchFor){
     domainToSearchFor = `%${ encodeURIComponent(validator.escape(domainToSearchFor)) }`
