@@ -34,12 +34,12 @@ function addPage(req, res) {
   * eg: http://bit.ly/2gCKffa
   *
   * So rather than using a suffix list and having to update it periodically, we're gonna grab the hostname
-  * with node's url.parse, then prepend a . to the domain. That way, when
-  * they are searching by site, we can match 'whatever site:bar.com' with results that have the
-  * domain '.bar.com' AND '.foo.bar.com' - we're doing this by using the LIKE clause (http://bit.ly/2fwkWiV)
-  * for the WHERE clause when searching by site in search.js. So searching 'whatever site:bar.com' would
-  * result in a WHERE clause something like where "pageDomain" like '%.bar.com'. So in essence we are
-  * saying any rows that have a domain that ends in '.bar.com'
+  * with node's url.parse, then prepend a . to the domain. That way, when they are searching by site,
+  * we can match 'whatever site:bar.com' with results that have the domain '.bar.com' AND '.foo.bar.com'
+  * - we're doing this by using the LIKE clause (http://bit.ly/2fwkWiV) for the WHERE clause when searching
+  * by site in search.js. So searching 'whatever site:bar.com' would result in a WHERE clause something
+  * like where "pageDomain" like '%.bar.com'. So in essence we are saying any rows that have a domain that
+  * ends in '.bar.com'
   * note: we need the prepended dot, as if we didnt, searching for 'whatever site:bar.com' would
   * return results for the domains 'abcbar.com' and 'bar.com', which is not what we want, but we
   * would want results from both 'foo.bar.com' and 'bar.com'.
