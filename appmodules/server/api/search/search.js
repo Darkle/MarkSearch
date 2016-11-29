@@ -1,5 +1,7 @@
 'use strict'
 
+var validator = require('validator')
+
 var pagesdb = require('../../../db/pagesdb')
 var processSearchTerms = require('./processSearchTerms')
 var appLogger = require('../../../utils/appLogger')
@@ -9,6 +11,13 @@ function search(req, res) {
 
   var processedSearchTerms = processSearchTerms(req.params.searchTerms)
   var domainToSearchFor = processedSearchTerms.domainToSearchFor
+  /*****
+  * Some sanitization for the domainToSearchFor and add a percentage for the
+  * LIKE clause for it to match ends with.
+  */
+  if(domainToSearchFor){
+    domainToSearchFor = `%${ encodeURIComponent(validator.escape(domainToSearchFor)) }`
+  }
   var searchTerms = processedSearchTerms.processedSearchTerms
   var dateFilter = {
       dateFilterStartDate: req.body.dateFilterStartDate,
@@ -29,6 +38,8 @@ function search(req, res) {
       /****
        * Omiting the pageText as that will be fairly large and we don't need that.
        * Also don't need checkedForExpiry.
+       * Using LIKE for searching for page domain cause of the issues with getting the correct page
+       * domain - see comments in addPage.js for more details.
        */
       knexSQL = pagesdb.db.select(
                   'pageUrl',
@@ -40,8 +51,7 @@ function search(req, res) {
                   'safeBrowsing'
                 )
                 .from('pages')
-                .where('pageDomain', 'like', '%Test%')
-                .where({pageDomain: domainToSearchFor})
+                .where('pageDomain', 'like', domainToSearchFor)
       if(usingDateFilter){
         knexSQL = knexSQL
           .where('dateCreated', '>=', dateFilter.dateFilterStartDate)
@@ -67,6 +77,8 @@ function search(req, res) {
      * fts match ? order by bm25... below seems to still work and search pageText even
      * if it is not selected and returned.
      * Also don't need checkedForExpiry.
+     * Using LIKE for searching for page domain cause of the issues with getting the correct page
+     * domain - see comments in addPage.js for more details.
      */
     knexSQL = pagesdb
       .db
@@ -87,7 +99,7 @@ function search(req, res) {
       .from('fts')
 
     if(domainToSearchFor){
-      knexSQL = knexSQL.where({pageDomain: domainToSearchFor})
+      knexSQL = knexSQL.where('pageDomain', 'like', domainToSearchFor)
     }
     if(usingDateFilter){
       knexSQL = knexSQL

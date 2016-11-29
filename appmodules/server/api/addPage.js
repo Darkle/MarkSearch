@@ -30,24 +30,22 @@ function addPage(req, res) {
   var pageDescription = _.get(req, 'body.pageDescription.length') ? collapseWhiteSpace(req.body.pageDescription) : null
   /*****
   * Getting the proper host domain is a little tough. There are a couple of libraries on npm, but most of
-  * them use a static suffix list to check against, and the ones that dont have trouble with country tlds:
-  * http://bit.ly/2gCKffa
+  * them use a static suffix list to check against, and the ones that dont have trouble with country tlds,
+  * eg: http://bit.ly/2gCKffa
   *
   * So rather than using a suffix list and having to update it periodically, we're gonna grab the hostname
-  * with node's url.parse, then prepend a . to the domain. That way, when they are searching by site, we can
-  * match 'whatever site:bar.com' with results that have the domain '.bar.com' AND 'foo.bar.com' - we're
-  * doing this by using the LIKE clause (http://bit.ly/2fwkWiV) for the WHERE clause when searching by site
-  * in search.js. So searching 'whatever site:bar.com' would result in a WHERE clause something like
-  * where "pageDomain" like '%.bar.com'. So in essence we are saying any rows that have a domain that ends in
-  * '.bar.com'
-  * note: we need the prepended dot, so searching for 'whatever site:abcbar.com' wont return results with
-  * a domain of 'bar.com' as we are searching for rows with domains that end in the site searching for.
+  * with node's url.parse, then prepend a . to the domain. That way, when
+  * they are searching by site, we can match 'whatever site:bar.com' with results that have the
+  * domain '.bar.com' AND '.foo.bar.com' - we're doing this by using the LIKE clause (http://bit.ly/2fwkWiV)
+  * for the WHERE clause when searching by site in search.js. So searching 'whatever site:bar.com' would
+  * result in a WHERE clause something like where "pageDomain" like '%.bar.com'. So in essence we are
+  * saying any rows that have a domain that ends in '.bar.com'
+  * note: we need the prepended dot, as if we didnt, searching for 'whatever site:bar.com' would
+  * return results for the domains 'abcbar.com' and 'bar.com', which is not what we want, but we
+  * would want results from both 'foo.bar.com' and 'bar.com'.
+  * I think this should work ok with localhost and IP addresses too.
   */
-  var pageDomain = url.parse(req.params.pageUrl).hostname
-  if(pageDomain.startsWith('www.')){
-    pageDomain = pageDomain.slice(4)
-  }
-  pageDomain = '.' + pageDomain
+  var pageDomain = `.${ url.parse(req.params.pageUrl).hostname }`
 
   var pageData = {
     pageUrl,
