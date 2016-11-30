@@ -16,8 +16,6 @@ function queryServer(searchTerms, dateFilter) {
     postUrl =`/frontendapi/search/${ searchTerms }`
   }
   /****
-   * jQuery doesn't use proper Promises (<3.0), so using "axio" for ajax.
-   *
    * Converting axio to bluebird promise so I can bind stuff in queryServerAndRender.
    *
    * Using Promise.try to convert rather than Promise.resolve to guard against exceptions.

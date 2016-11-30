@@ -2,7 +2,7 @@
 
 var path = require('path')
 
-var Promise = require("bluebird")
+var Promise = require('bluebird')
 var fsExtra = Promise.promisifyAll(require('fs-extra'))
 var parsePath = require('parse-filepath')
 
