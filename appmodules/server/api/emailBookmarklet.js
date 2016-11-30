@@ -8,7 +8,7 @@ var appLogger = require('../../utils/appLogger')
 var mailGun = new MailGun({
   privateApi: APIKEYS.mailgunPrivateApiKey,
   publicApi: APIKEYS.mailgunPublicApiKey,
-  domainName: 'sandbox6a982675720848c6b1ace1f0b6f4878c.mailgun.org'
+  domainName: 'mailgun.coopcoding.space'
 })
 
 function emailBookmarklet(req, res) {
@@ -17,7 +17,7 @@ function emailBookmarklet(req, res) {
    */
   mailGun.sendEmail({
       to: [req.body.email],
-      from: 'bookmarklet@marksearch.local',
+      from: 'marksearch.bookmarklet@marksearch.local',
       subject: 'MarkSearch Bookmarklet',
       html: `<div style="font-size: 1rem; margin-bottom: 1rem;">
                 Open the page below on your mobile device, then bookmark the link shown on that page:

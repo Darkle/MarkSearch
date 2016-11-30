@@ -13,6 +13,8 @@ REmember to mention that you can search by site and date filter
 
 Remember to mention about the extensions that search by site and date filter also works
 
+Put a note in the readme that sometimes the emailed bookmarklet takes a few minutes to arrive
+
 ### Help
 
 ##### Setting Up The MarkSearch Browser Extension

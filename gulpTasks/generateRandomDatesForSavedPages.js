@@ -39,7 +39,7 @@ if(platform === 'darwin'){
    * (e.g. C:\Users\Darkle\AppData\Local\MarkSearch\MarkSearch), so remove it.
    */
   if(appDataPath.endsWith('\\MarkSearch\\MarkSearch')){
-    appDataPath = appDataPath.slice(0, appDataPath.lastIndexOf(`\MarkSearch`) - 1)
+    appDataPath = appDataPath.slice(0, appDataPath.lastIndexOf(`\MarkSearch`) - 1)  // eslint-disable-line
   }
  }
 
@@ -118,4 +118,3 @@ gulp.task('randomDates', () => {
     })
 
 })
-
