@@ -89,7 +89,6 @@ bookmarkExpiry.updateCheckedForExpiryColumn = (expiryDate) =>
     })
     .update({checkedForExpiry: true})
 
-
 /*****
 * This is called from deletePage.js - more details in there.
 */
