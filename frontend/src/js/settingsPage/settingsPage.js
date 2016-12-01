@@ -141,7 +141,6 @@ function settingsPageInit() {
       .post(
         '/frontendapi/settings/generateExtToken', null, {headers: xhrHeaders})
       .then( response => {
-        console.log('emailBookmarkletButton$.click axios response', response)
         var responseData = response.data
         var bookmarkletJS = generateBookmarkletJS(responseData.protocolIpandPort, responseData.token)
         var generatedBookmarkletText = `javascript:${ encodeURIComponent(bookmarkletJS) }`
@@ -279,8 +278,6 @@ function settingsPageInit() {
     Promise
       .try(() => dbChangePromise)
       .then( newPagesDBFilePath => {
-        console.log('second then after dbChangePromise')
-        console.log('newPagesDBFilePath', newPagesDBFilePath)
         var newSettings = {
           prebrowsing: prebrowsingCheckbox$[0].checked,
           alwaysDisableTooltips: alwaysDisableTooltipsCheckbox$[0].checked,

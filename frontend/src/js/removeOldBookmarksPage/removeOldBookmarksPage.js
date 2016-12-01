@@ -16,7 +16,6 @@ function removeOldBookmarksPageInit() {
 
   axios.post('/frontendapi/getMostRecentlyExpiredBookmarks/', null, {headers: {'X-CSRF-Token': csrfToken}})
     .then( response => {
-      console.log('removeOldBookmarksPageInit axios response', response)
       var rows = response.data
 
       rows.forEach(row => {

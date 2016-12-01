@@ -12,7 +12,6 @@ function exportUrls(typeOfExport) {
   axios
     .post('/frontendapi/getall/', null, {headers: xhrHeaders})
     .then( response => {
-      console.log('exportUrls axios response', response)
       var rows = response.data
       var downloadUrl
       var blobData = ''

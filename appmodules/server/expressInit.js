@@ -26,15 +26,15 @@ function expressInit(express, expressApp) {
   /****
    * Content Security Policy
    */
-  // expressApp.use(helmet.csp({
-  //   directives: {
-  //     defaultSrc: ["'self'"]
-  //   },
-  //   reportOnly: false,
-  //   setAllHeaders: false,
-  //   disableAndroid: false,
-  //   browserSniff: true
-  // }))
+  expressApp.use(helmet.csp({
+    directives: {
+      defaultSrc: ["'self'"]
+    },
+    reportOnly: false,
+    setAllHeaders: false,
+    disableAndroid: false,
+    browserSniff: true
+  }))
   /****
    * xssFilter header FWIW
    * https://github.com/helmetjs/helmet#xss-filter-xssfilter
