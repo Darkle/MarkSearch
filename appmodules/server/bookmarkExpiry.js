@@ -72,7 +72,7 @@ bookmarkExpiry.getAllExpiredBookmarks = (expiryDate) =>
 /*****
 * .update() doesn't return the rows it updated, only the number of rows - that's
 * why we we need a seperate db query in getAllExpiredBookmarks(). We need the rows to send
-* through to sendExpiredBookmarksEmail().
+* through to sendExpiredBookmarksEmail() in checkForExpiredBookmarks().
 *
 * .where('checkedForExpiry', 0) is checking against 0 because SQLite stores Boolean values
 * as a 0 for false or 1 for true.
