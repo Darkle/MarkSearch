@@ -87,9 +87,7 @@ bookmarkExpiry.updateCheckedForExpiryColumn = (expiryDate) =>
       this.where('checkedForExpiry', 0)
         .orWhere('checkedForExpiry', null)
     })
-    .update({
-      checkedForExpiry: true
-    })
+    .update({checkedForExpiry: true})
 
 
 /*****
