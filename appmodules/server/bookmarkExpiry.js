@@ -28,7 +28,6 @@ function shouldWeRunBookmarkExpiryCheck() {
   return Date.now() > timestampMonthsFromLastCheck
 }
 /****
- * sendExpiredBookmarksEmail needs to be inside the if(rows.length){.
  * Put updateCheckedForExpiryColumn() before sendExpiredBookmarksEmail() so it definately runs
  * and doesn't get skipped if sendExpiredBookmarksEmail() errors.
  */
