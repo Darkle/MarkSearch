@@ -13,7 +13,7 @@ var bookmarkExpiry = {
   mostRecentlyExpiredBookmarks: []
 }
 var setTimeoutRef = null
-var checkInterval = 2000
+var checkInterval = ms('3h')
 
 function shouldWeRunBookmarkExpiryCheck() {
   if(!appSettings.settings.bookmarkExpiryEnabled){
