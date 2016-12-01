@@ -20,7 +20,7 @@ function shouldWeRunBookmarkExpiryCheck() {
     return false
   }
   /****
-   * If now is later than (the last time we checked plus 3 months or 6 months).
+   * If now is later than the last time we checked plus 3 months or 6 months.
    */
   var bookmarkExpiryLastCheck = appSettings.settings.bookmarkExpiryLastCheck
   var bookmarkExpiryMonths = appSettings.settings.bookmarkExpiryMonths
