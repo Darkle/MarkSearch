@@ -14,7 +14,7 @@ function search(req, res) {
   /*****
   * The domainToSearchFor is exracted from the search terms, so it doesn't really go
   * through the requestDataValidation, so do some sanitization for it and add a percentage
-  * for the LIKE clause to match ends with. 
+  * for the LIKE clause to match ends with.
   */
   if(domainToSearchFor){
     domainToSearchFor = `%${ encodeURIComponent(validator.escape(domainToSearchFor)) }`
@@ -26,7 +26,6 @@ function search(req, res) {
   }
   var usingDateFilter = !!(dateFilter.dateFilterStartDate && dateFilter.dateFilterEndDate)
   var knexSQL = null
-
   /****
    * note: knex will automatically convert additional WHERE's to AND
    */
