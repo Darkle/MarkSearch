@@ -15,6 +15,8 @@ Remember to mention about the extensions that search by site and date filter als
 
 Put a note in the readme that sometimes the emailed bookmarklet takes a few minutes to arrive
 
+For the extensions, rememeber to say that the extension respects date filters & searching by site
+
 ### Help
 
 ##### Setting Up The MarkSearch Browser Extension

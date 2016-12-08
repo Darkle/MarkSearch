@@ -22,15 +22,7 @@ function removeResults() {
   if(addRemoveDiv){
     resultsContainer$[0].removeChild(addRemoveDiv)
   }
-  /****
-   * Also remove any prebrowsing links we made in the head
-   */
-  var head = document.head
-  var preBrowsingLinks = head.querySelectorAll('.prebrowsing')
-  _.each(preBrowsingLinks, elem => {
-    head.removeChild(elem)
-  })
-  /****
+    /****
    * Hide results count in case the response from the server takes a while
    * - if there were 0 results last time, the user may think there are 0 results
    * this time too because the 0 from last time is still showing, so hide it.

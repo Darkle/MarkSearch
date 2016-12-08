@@ -49,27 +49,6 @@ function renderResults(resultsChunk, searchTerms) {
       }
       _.each(resultsChunk.resultRows, row => {
         resultItemNumber += 1
-        /****
-         * prebrowsing for the first 2 results (if set in settings).
-         * Preconnect for the first and dns-prefetch for the second.
-         * These are removed when results are removed in removeResults.js
-         */
-        if(markSearchSettings.prebrowsing){
-          if(resultItemNumber < 3){
-            var rel
-            if(resultItemNumber === 1){
-              rel = 'preconnect'
-            }
-            else if(resultItemNumber === 2){
-              rel = 'dns-prefetch'
-            }
-            var link = document.createElement('link')
-            link.setAttribute('class', 'prebrowsing')
-            link.setAttribute('href', row.pageUrl)
-            link.setAttribute('rel', rel)
-            document.head.appendChild(link)
-          }
-        }
 
         var resultDiv = document.createElement('div')
         resultDiv.setAttribute('id', `result_${ resultItemNumber }`)
@@ -87,7 +66,7 @@ function renderResults(resultsChunk, searchTerms) {
         var mainResultA = document.createElement('a')
         mainResultA.setAttribute('href', row.pageUrl)
         /*****
-         * If there's no pageTitle text, then just use the page url 
+         * If there's no pageTitle text, then just use the page url
          */
         var pageTitle = ''
         if(row.pageTitle){
@@ -97,6 +76,18 @@ function renderResults(resultsChunk, searchTerms) {
          * unescape should be ok here as we are using textContent and not innerHTML
          */
         mainResultA.textContent = validator.unescape((pageTitle.length > 0) ? pageTitle : row.pageUrl)
+        /****
+         * prebrowsing for the first 2 results (if set in settings).
+         * Preconnect for the first and dns-prefetch for the second.
+         */
+        if(markSearchSettings.prebrowsing){
+          if(resultItemNumber === 1){
+            mainResultA.setAttribute('rel', 'preconnect')
+          }
+          if(resultItemNumber === 2){
+            mainResultA.setAttribute('rel', 'dns-prefetch')
+          }
+        }
         mainResultLink.appendChild(mainResultA)
 
         var resultUrlText = document.createElement('div')
