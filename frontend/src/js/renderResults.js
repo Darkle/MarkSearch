@@ -222,7 +222,10 @@ function renderResults(resultsChunk, searchTerms) {
           metaIconArchive.setAttribute('data-pt-title', 'Archive Link')
           //metaIconArchive.setAttribute('data-pt-gravity', 'bottom 0 3')
           metaIconArchive.setAttribute('target', '_blank')
-          metaIconArchive.setAttribute('rel', 'noopener')
+          /*****
+          * http://bit.ly/2h5Vain
+          */
+          metaIconArchive.setAttribute('rel', 'noopener noreferrer')
           metaIconArchive.className = 'material-icons protip'
           metaIconArchive.textContent = 'account_balance'
           metaIcons.appendChild(metaIconArchive)
