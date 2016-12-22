@@ -78,7 +78,7 @@ function search(req, res) {
      * if it is not selected and returned.
      * Also don't need checkedForExpiry.
      * Using LIKE for searching for page domain cause of the issues with getting the correct page
-     * domain - see comments in addPage.js for more details.
+     * domain - see comments in addPage.js for more details. 
      */
     knexSQL = pagesdb
       .db
