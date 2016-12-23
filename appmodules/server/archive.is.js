@@ -22,8 +22,23 @@ function generateArchiveOfPage(pageUrl) {
           }
         },
         (err, httpResponse) => {
-          var locationHeader = _.get(httpResponse, 'headers.location')
-          if(err || !locationHeader){
+          /*
+          * If it's already saved to archive.is, the url will be sent back in the headers.location, otherwise
+          * the new url will be available in the headers.refresh it'l be something like '0;url=https://archive.is/wYCyZ'
+          */
+          var archiveUrl = null
+          var headerLocation = _.get(httpResponse, 'headers.location')
+          var headerRefresh = _.get(httpResponse, 'headers.refresh')
+          if(headerLocation){
+            archiveUrl = headerLocation
+          }
+          else if(headerRefresh){
+            if(headerRefresh.startsWith('0;url=')){
+              headerRefresh = headerRefresh.slice(6)
+            }
+            archiveUrl = headerRefresh
+          }
+          if(err || (!headerLocation && !headerRefresh)){
             global.devMode && console.error("Couldn't get an archive.is backup:", err)
             /****
              * We're not doing a reject here as we want to continue on to the
@@ -33,7 +48,7 @@ function generateArchiveOfPage(pageUrl) {
           }
           else{
             archiveLink = {
-              archiveLink: locationHeader,
+              archiveLink: archiveUrl,
               pageUrl: pageUrl
             }
           }
