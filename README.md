@@ -17,6 +17,8 @@ Put a note in the readme that sometimes the emailed bookmarklet takes a few minu
 
 For the extensions, rememeber to say that the extension respects date filters & searching by site
 
+Mention that if they have the results box set to be on the left on google, that it will always be hidden, even if you have it set to auto show on page load (cause it would always obscure the google results)
+
 ### Help
 
 ##### Setting Up The MarkSearch Browser Extension
