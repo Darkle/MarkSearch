@@ -19,7 +19,18 @@ function search(req, res) {
   if(domainToSearchFor){
     domainToSearchFor = `%${ encodeURIComponent(validator.escape(domainToSearchFor)) }`
   }
-  var searchTerms = processedSearchTerms.processedSearchTerms
+  /*****
+  * We wrap the search terms as a whole and also individual words with double quotes in case they have
+  * some odd characters like '>' or '.' that would cause a syntax error in the query.
+  */
+  var searchTermsQuotedAsAwhole = `"${ processedSearchTerms.processedSearchTerms }"`
+  var searchTermsAsArray = processedSearchTerms.processedSearchTerms.split(' ')
+  /*****
+  * AND is so for multiple words, our query ends up being `from "fts" where fts match '"tech news" OR ("tech" AND "news")'`
+  */
+  var individualSearchWordsQuoted = searchTermsAsArray.map((searchWord, index) =>
+    index === 0 ? `"${ searchWord }"` : `AND "${ searchWord }"`
+  ).join(' ')
   var dateFilter = {
       dateFilterStartDate: req.body.dateFilterStartDate,
       dateFilterEndDate: req.body.dateFilterEndDate
@@ -29,7 +40,7 @@ function search(req, res) {
   /****
    * note: knex will automatically convert additional WHERE's to AND
    */
-  if(!searchTerms.length){
+  if(!searchTermsQuotedAsAwhole.length > 2){
     /****
      * If user just wants to list all saved pages by a domain (with no text search)
      *
@@ -78,7 +89,7 @@ function search(req, res) {
      * if it is not selected and returned.
      * Also don't need checkedForExpiry.
      * Using LIKE for searching for page domain cause of the issues with getting the correct page
-     * domain - see comments in addPage.js for more details. 
+     * domain - see comments in addPage.js for more details.
      */
     knexSQL = pagesdb
       .db
@@ -113,9 +124,18 @@ function search(req, res) {
      * Note: the SQL operators in the 'searchTerm OR NEAR()` are case-sensitive
      * and must be in uppercase!
      */
+    var knexFTSsearchQueryBinding = searchTermsQuotedAsAwhole
+    /*****
+    * If there is more than one search term (ie more than one word in the search), search for the search
+    * terms as a complete phrase and also as individual words.
+    */
+    if(searchTermsAsArray.length > 1){
+      // knexFTSsearchQueryBinding = `${ searchTermsQuotedAsAwhole } OR NEAR(${ individualSearchWordsQuoted })`
+      knexFTSsearchQueryBinding = `${ searchTermsQuotedAsAwhole } OR (${ individualSearchWordsQuoted })`
+    }
+
     knexSQL = knexSQL
-      //.whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, `"${ searchTerms }" OR NEAR(${ searchTerms })`)
-      .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, searchTerms)
+      .whereRaw(`fts match ? order by bm25(fts, 4.0, 1.0, 2.0)`, knexFTSsearchQueryBinding)
   }
 
   if(global.devMode){

@@ -110,20 +110,15 @@ module.exports = {
           return post
         }
       },
-      // Want to be a bit looser with the search to allow them to search for code.
       // Knex does its own escaping to prevent sql injection: http://bit.ly/2gjv1gF
-      // Note: if decide to do this again, do it properly with http://bit.ly/2gjwWlk or maybe npm 'validator'
       // searchTerms: {
       //   type: 'string',
       //   optional: true,
-      //   exec: function(schema, post){
+      //   exec: function(schema, post) {
       //     if(_.isString(post)){
-      //       post = post.replace(/&/g, '&amp;')
-      //         .replace(/'/g, '&#x27;')
-      //         .replace(/</g, '&lt;')
-      //         .replace(/>/g, '&gt;')
-      //         .replace(/\//g, '&#x2F;')
-      //         .replace(/\`/g, '&#96;')
+      //       console.log('search terms sanitization')
+      //       console.log(SqlString.escape(post))
+      //       post = SqlString.escape(post)
       //     }
       //     return post
       //   }
