@@ -19,6 +19,8 @@ For the extensions, rememeber to say that the extension respects date filters & 
 
 Mention that if they have the results box set to be on the left on google, that it will always be hidden, even if you have it set to auto show on page load (cause it would always obscure the google results)
 
+For extension, remember to mention that you can click on the MarkSearch link at the top of the results box on the search enging to open the results in the MarkSearch server search page (its the light grey MarkSearch text up the top of the MS results box)
+
 ### Help
 
 ##### Setting Up The MarkSearch Browser Extension
