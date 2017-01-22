@@ -7,7 +7,9 @@
   "license": "MIT",
   "main": "appInit.js",
   "scripts": {
-    "start": "",
+    "start": "gulp",
+    "sqlite": "gulp buildSqlite",
+    "bower": "bower install",
     "ban": "ban",
     "dev": "DEBUG='MarkSearch:*' electron appInit.js",
     "test": "snyk test",
@@ -62,6 +64,7 @@
     "babel-polyfill": "^6.5.0",
     "babel-preset-es2015": "^6.5.0",
     "babelify": "^7.3.0",
+    "bower": "^1.8.0",
     "browser-sync": "^2.12.8",
     "browserify": "^13.0.1",
     "co-foreach": "^1.1.1",

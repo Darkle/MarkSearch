@@ -65,12 +65,10 @@ body {
   color: #444;
   font-family: "open_sansregular", sans-serif;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   margin: 0;
@@ -94,7 +92,6 @@ body {
 }
 .showFlex {
   display: -webkit-box !important;
-  display: -webkit-flex !important;
   display: -ms-flexbox !important;
   display: flex !important;
 }
@@ -103,12 +100,10 @@ body {
 }
 .flexWrapperColumn {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
@@ -130,16 +125,13 @@ body {
   z-index: 99;
   width: 100%;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -147,20 +139,16 @@ body {
 .navHeader nav {
   background-color: #3498DB;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 4rem;
       -ms-flex: 1 1 4rem;
           flex: 1 1 4rem;
 }
 .navHeader .helpPageBackButtonContainer {
   display: none;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
-              -ms-grid-row-align: center;
           align-items: center;
   margin-left: 6px;
 }
@@ -173,22 +161,18 @@ body {
   * and a flex container itself for it's child element
   */
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   font-family: 'exoregular';
 }
 .navHeader .brandLogo a {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   color: #77BBEB;
@@ -201,11 +185,9 @@ body {
   margin: 0;
   padding: 0;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
       -ms-flex-pack: end;
           justify-content: flex-end;
   text-rendering: geometricPrecision;
@@ -219,11 +201,9 @@ body {
   * and a flex container itself for it's child element
   */
   -webkit-box-flex: 2;
-  -webkit-flex: 2 2 auto;
       -ms-flex: 2 2 auto;
           flex: 2 2 auto;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   border-top: 3px solid #3498DB;
@@ -231,21 +211,17 @@ body {
 }
 .navHeader #searchForm {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 .navHeader #searchForm > input {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   font-size: 1.5rem;
@@ -260,11 +236,9 @@ body {
 }
 .navHeader .rightContainer {
   -webkit-box-flex: 2;
-  -webkit-flex: 2 1 auto;
       -ms-flex: 2 1 auto;
           flex: 2 1 auto;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
@@ -281,25 +255,20 @@ body {
   * and a flex container itself for it's child element
   */
   -webkit-box-flex: 0;
-  -webkit-flex: 0 1 4rem;
       -ms-flex: 0 1 4rem;
           flex: 0 1 4rem;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 .navHeader .dateFilter a {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   width: 100%;
@@ -307,25 +276,20 @@ body {
 }
 .navHeader .addPage {
   -webkit-box-flex: 0;
-  -webkit-flex: 0 1 4rem;
       -ms-flex: 0 1 4rem;
           flex: 0 1 4rem;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 .navHeader .addPage a {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   width: 100%;
@@ -333,25 +297,20 @@ body {
 }
 .navHeader .settings-etal {
   -webkit-box-flex: 0;
-  -webkit-flex: 0 1 4rem;
       -ms-flex: 0 1 4rem;
           flex: 0 1 4rem;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 .navHeader .settings-etal a {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   width: 100%;
@@ -364,16 +323,13 @@ body {
 .navHeader .subBar {
   background-color: #ECF0F1;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
-  -webkit-justify-content: space-around;
-      -ms-flex-pack: distribute;
-          justify-content: space-around;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
   box-shadow: 0px 15px 67px 0px rgba(0, 0, 0, 0.64);
 }
 /****
@@ -384,33 +340,26 @@ body {
   font-size: 1rem;
   color: #3498DB;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
-              -ms-grid-row-align: center;
           align-items: center;
 }
 .navHeader .dateFilterSettings .formplate {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   margin-right: 1px;
 }
 .navHeader .dateFilterSettings .formplate-select {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
 }
@@ -426,71 +375,57 @@ body {
 }
 .navHeader .dateFilterSettings .fromToContainer {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   padding: 0.45rem 0;
 }
 .navHeader .dateFilterSettings .fromContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
 }
 .navHeader .dateFilterSettings .fromContainer > span {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   width: 3.5rem;
 }
 .navHeader .dateFilterSettings .toContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
 }
 .navHeader .dateFilterSettings .toContainer > span {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: space-around;
-      -ms-flex-pack: distribute;
-          justify-content: space-around;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
   width: 2.2rem;
 }
 .navHeader .dateFilterSettings .shortcutsContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   padding: 0.45rem 0;
@@ -507,22 +442,18 @@ body {
 */
 .navHeader .addPageUrls {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .navHeader .addPageUrls textarea {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   font-size: 0.9rem;
@@ -551,17 +482,14 @@ body {
 }
 .navHeader .addPageUrls .progressInfo {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   text-align: center;
   padding: 2rem;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   font-size: 1.1rem;
@@ -576,7 +504,6 @@ body {
 }
 .navHeader .addPageUrls .addUrlsProgress {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   background-color: #ECF0F1;
@@ -586,7 +513,6 @@ body {
 }
 .navHeader .addPageUrls .addUrlsProgress .progressBar {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   background: #F1C40F;
@@ -594,17 +520,14 @@ body {
 }
 .navHeader .addPageUrls .addUrlsProgress .errorOKbutton {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   background: #F1C40F;
   width: 0;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
 }
@@ -614,11 +537,9 @@ body {
 }
 .navHeader .addPageUrls .addPageButtons {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   color: white;
@@ -628,7 +549,6 @@ body {
 }
 .navHeader .addPageUrls .urlSaveButton {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   border: none;
@@ -641,7 +561,6 @@ body {
 }
 .navHeader .addPageUrls .urlCancelButton {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   background-color: #34495E;
@@ -654,7 +573,6 @@ body {
 }
 .navHeader .settingsAndHelp {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   height: 50px;
@@ -663,7 +581,6 @@ body {
 }
 .navHeader .settingsAndHelp .settingsLinkButton {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   border: none;
@@ -677,7 +594,6 @@ body {
 }
 .navHeader .settingsAndHelp .helpAboutLinkButton {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   border: none;
@@ -695,11 +611,9 @@ body {
 .searchPage #resultsOuterContainer {
   width: 100%;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   margin-top: 140px;
@@ -707,27 +621,22 @@ body {
 }
 .searchPage #resultsContainer {
   -webkit-box-flex: 0;
-  -webkit-flex: 0 1 44rem;
       -ms-flex: 0 1 44rem;
           flex: 0 1 44rem;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   margin: 0 5rem;
 }
 .searchPage #resultsCount {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   position: relative;
@@ -736,12 +645,10 @@ body {
 }
 .searchPage .result {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   margin-bottom: 1.8rem;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
@@ -754,7 +661,6 @@ body {
 }
 .searchPage .mainDetails {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
 }
@@ -768,19 +674,16 @@ body {
 }
 .searchPage .mainResultLink {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .searchPage .mainResultLink.warning {
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
       -ms-flex-direction: row;
           flex-direction: row;
 }
@@ -820,12 +723,10 @@ body {
 }
 .searchPage .safeBrowsing > div {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
@@ -838,27 +739,22 @@ body {
 .searchPage .safeBrowsing .material-icons {
   margin-right: 0.4rem;
   -webkit-box-flex: 0;
-  -webkit-flex: 0 1 auto;
       -ms-flex: 0 1 auto;
           flex: 0 1 auto;
 }
 .searchPage .safeBrowsingBriefDescription {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 .searchPage .safeBrowsingBriefDescription > a {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1;
       -ms-flex: 1 1;
           flex: 1 1;
 }
@@ -877,18 +773,15 @@ body {
 }
 .searchPage .metaIconsContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 0;
-  -webkit-flex: 0 0 auto;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
 }
 .searchPage .metaIcons {
   color: #ECF0F1;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
@@ -904,13 +797,11 @@ body {
 }
 .settingsPage {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   min-height: 100vh;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   padding-bottom: 40px;
@@ -926,7 +817,6 @@ body {
 }
 .settingsPage .navHeader .brandLogo h1 {
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   cursor: default;
@@ -957,20 +847,16 @@ body {
   margin-top: 100px;
   width: 100%;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   -webkit-box-flex: 1;
-  -webkit-flex: 1;
       -ms-flex: 1;
           flex: 1;
 }
@@ -1004,6 +890,7 @@ body {
 }
 .settingsPage .settings .button {
   background-color: #2670A2;
+  font-size: 0.865rem;
 }
 .settingsPage .settings .button:hover {
   background-color: #3498DB;
@@ -1040,12 +927,10 @@ body {
 }
 .settingsPage .settings .genTokenOuterContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   margin-bottom: 1.1rem;
@@ -1054,7 +939,6 @@ body {
   margin-bottom: 0.7rem;
 }
 .settingsPage .genTokenOuterContainer #browserAddonTokenButton {
-  font-size: 0.8rem;
   border-radius: 0;
 }
 .settingsPage .genTokenOuterContainer .settingDetail {
@@ -1062,18 +946,15 @@ body {
 }
 .settingsPage .genTokenContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 .settingsPage .genTokenContainer .formplate {
   margin-left: 0.6rem;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
 }
@@ -1082,11 +963,9 @@ body {
 }
 .settingsPage .genTokenContainer .button {
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
@@ -1095,12 +974,10 @@ body {
 }
 .settingsPage .bookmarkletContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
@@ -1112,11 +989,9 @@ body {
 }
 .settingsPage .bookmarkletContainer .button {
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
@@ -1128,11 +1003,9 @@ body {
 .settingsPage .bookmarkletContainer .formplate {
   margin-left: 0.6rem;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
 }
@@ -1144,47 +1017,39 @@ body {
 }
 .settingsPage .prebrowsingSettingContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .settingsPage .dbLocationContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .settingsPage .dbLocationContainer .currentLocation {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .settingsPage .dbLocationContainer .currentLocation .locationText {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   color: #92C8EF;
   font-size: 0.9rem;
   padding: 0 1rem;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   word-wrap: break-word;
@@ -1197,11 +1062,9 @@ body {
 }
 .settingsPage .dbLocationContainer .changeDBLocationButtonContainer #changeDBLocationButton {
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   width: 7.1rem;
@@ -1211,11 +1074,9 @@ body {
 }
 .settingsPage .dbLocationContainer #dragAndDropContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
 }
@@ -1223,15 +1084,12 @@ body {
   border: 10px dashed #ccc;
   margin: 2rem 0;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   width: 12rem;
@@ -1244,33 +1102,27 @@ body {
 }
 .settingsPage .revokeContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .settingsPage .revokeContainer .revokeButtonsContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .settingsPage .revokeContainer #revokeTokens {
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   width: 7.4rem;
@@ -1278,23 +1130,19 @@ body {
 }
 .settingsPage .bookmarkExpiryContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .settingsPage .bookmarkExpiryContainer .bookmarkExpirySettings {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
@@ -1312,23 +1160,19 @@ body {
 }
 .settingsPage .trayIconContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .settingsPage .trayIconContainer .trayIconSettings {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
@@ -1340,23 +1184,19 @@ body {
 }
 .settingsPage .importContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .settingsPage .importContainer .importButtonsContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
@@ -1368,11 +1208,9 @@ body {
 }
 .settingsPage .importContainer #importHTMLFileButton {
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   width: 11.5rem;
@@ -1380,11 +1218,9 @@ body {
 }
 .settingsPage .importContainer #importTextFileButton {
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   width: 9rem;
@@ -1392,23 +1228,19 @@ body {
 }
 .settingsPage .exportContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .settingsPage .exportContainer .exportButtonsContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
@@ -1420,11 +1252,9 @@ body {
 }
 .settingsPage .exportContainer #exportHTMLFileButton {
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   width: 13rem;
@@ -1432,11 +1262,9 @@ body {
 }
 .settingsPage .exportContainer #exportTextFileButton {
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   width: 10rem;
@@ -1444,11 +1272,9 @@ body {
 }
 .settingsPage .settingsSaveCancelButtons {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   color: white;
@@ -1463,7 +1289,6 @@ body {
 }
 .settingsPage .saveSettingsButton {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   border: none;
@@ -1476,7 +1301,6 @@ body {
 }
 .settingsPage .cancelSettingsButton {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   background-color: #34495E;
@@ -1498,7 +1322,6 @@ body {
 }
 .bookmarkletPage .navHeader .brandLogo h1 {
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   font-weight: bold;
@@ -1509,21 +1332,17 @@ body {
 .bookmarkletPage #bookmarkletPageContainer {
   width: 100%;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   margin-top: 140px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   text-align: center;
@@ -1541,7 +1360,6 @@ body {
 }
 .errorPage .navHeader nav {
   -webkit-box-pack: center !important;
-  -webkit-justify-content: center !important;
       -ms-flex-pack: center !important;
           justify-content: center !important;
 }
@@ -1550,19 +1368,16 @@ body {
 }
 .errorPage .navHeader .brandLogo h1 {
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
 }
 .errorPage .navHeader .brandLogo {
   display: -webkit-box !important;
-  display: -webkit-flex !important;
   display: -ms-flexbox !important;
   display: flex !important;
 }
 .errorPage .navHeader .brandLogo .brandLogoLarge {
   display: -webkit-box !important;
-  display: -webkit-flex !important;
   display: -ms-flexbox !important;
   display: flex !important;
 }
@@ -1571,33 +1386,27 @@ body {
 }
 .errorPage .errorContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   margin-top: 8rem;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 .removeOldBookmarksPage {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   min-height: 100vh;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   padding-bottom: 40px;
@@ -1613,7 +1422,6 @@ body {
 }
 .removeOldBookmarksPage .navHeader .brandLogo h1 {
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   font-weight: bold;
@@ -1625,20 +1433,16 @@ body {
   margin-top: 6.5rem;
   width: 100%;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   -webkit-box-flex: 1;
-  -webkit-flex: 1;
       -ms-flex: 1;
           flex: 1;
 }
@@ -1651,18 +1455,15 @@ body {
 }
 .removeOldBookmarksPage .bookmarkDetailsContainer {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 .removeOldBookmarksPage .bookmarkDetails {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
 }
@@ -1689,11 +1490,9 @@ body {
 }
 .removeOldBookmarksPage .deleteBookmarkButtonContainer .deleteBookmarkButton {
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   background-color: #666;
@@ -1713,7 +1512,6 @@ body {
   }
   .navHeader .brandLogo .brandLogoLarge {
     display: -webkit-box;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
   }
@@ -1728,7 +1526,6 @@ body {
   .searchPage .navHeader .brandLogo {
     padding-left: 0.6rem;
     -webkit-box-flex: 0;
-    -webkit-flex-grow: 0;
         -ms-flex-positive: 0;
             flex-grow: 0;
   }
@@ -1737,7 +1534,6 @@ body {
   }
   .searchPage .navHeader .rightContainer {
     -webkit-box-flex: 0;
-    -webkit-flex-grow: 0;
         -ms-flex-positive: 0;
             flex-grow: 0;
   }
@@ -1758,7 +1554,6 @@ body {
     font-size: 1.5rem;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
         -ms-flex-direction: column;
             flex-direction: column;
     height: 100px;
@@ -1787,9 +1582,8 @@ body {
     font-size: 1.3rem;
   }
   .searchPage #resultsContainer {
-    -webkit-flex-basis: 58rem;
-        -ms-flex-preferred-size: 58rem;
-            flex-basis: 58rem;
+    -ms-flex-preferred-size: 58rem;
+        flex-basis: 58rem;
   }
   .searchPage .mainResultLink {
     font-size: 1.9rem;
@@ -1823,7 +1617,6 @@ body {
 @media (max-width: 40em) {
   .searchPage .navHeader .brandLogo .brandLogoSmall {
     display: -webkit-box;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
   }
@@ -1847,7 +1640,6 @@ body {
   .searchPage .navHeader .dateFilterSettings .fromToContainer {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
         -ms-flex-direction: column;
             flex-direction: column;
   }
@@ -1924,16 +1716,13 @@ body {
 *****/
 @media (max-width: 22.5em) {
   .searchPage .navHeader .searchContainer {
-    -webkit-flex-basis: 14rem;
-        -ms-flex-preferred-size: 14rem;
-            flex-basis: 14rem;
+    -ms-flex-preferred-size: 14rem;
+        flex-basis: 14rem;
   }
   .searchPage .navHeader .searchContainer #searchInput {
-    -webkit-flex-basis: 16rem;
-        -ms-flex-preferred-size: 16rem;
-            flex-basis: 16rem;
+    -ms-flex-preferred-size: 16rem;
+        flex-basis: 16rem;
     -webkit-box-flex: 0;
-    -webkit-flex-grow: 0;
         -ms-flex-positive: 0;
             flex-grow: 0;
   }
@@ -2003,3 +1792,5 @@ body {
 *[data-pt-position="bottom-right-corner"] .protip-arrow {
   border-color: transparent transparent transparent #77BBEB !important;
 }
+
+/*# sourceMappingURL=styles.css.map */
