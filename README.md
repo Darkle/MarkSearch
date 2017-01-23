@@ -21,6 +21,12 @@ Mention that if they have the results box set to be on the left on google, that 
 
 For extension, remember to mention that you can click on the MarkSearch link at the top of the results box on the search enging to open the results in the MarkSearch server search page (its the light grey MarkSearch text up the top of the MS results box)
 
+Remember to add info about keyboard shortcut (Ctrl+M) to show/hide the MarkSearch results box
+
+Also info about searching MS in the omnibox
+
+Add info about choosing the search type (instant or non instant)
+
 ### Help
 
 ##### Setting Up The MarkSearch Browser Extension
