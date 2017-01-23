@@ -27,6 +27,8 @@ Also info about searching MS in the omnibox
 
 Add info about choosing the search type (instant or non instant)
 
+Make a note that the extension should work ok with google search pages that have RTL languages
+
 ### Help
 
 ##### Setting Up The MarkSearch Browser Extension
