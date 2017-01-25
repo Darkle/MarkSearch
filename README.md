@@ -29,6 +29,8 @@ Add info about choosing the search type (instant or non instant)
 
 Make a note that the extension should work ok with google search pages that have RTL languages
 
+Note that at the moment it doesnt support quoting to make the search more accurate - the current search is `from "fts" where fts match '"tech news" OR ("tech" AND "news")'`
+
 ### Help
 
 ##### Setting Up The MarkSearch Browser Extension

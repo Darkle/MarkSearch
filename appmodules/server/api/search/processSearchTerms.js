@@ -1,7 +1,5 @@
 'use strict'
 
-var _ = require('lodash')
-
 var STOPWORDS = require('./lunrStopwordFilter.json')
 
 function processSearchTerms(searchTerms) {
@@ -10,7 +8,7 @@ function processSearchTerms(searchTerms) {
   global.devMode && console.log(searchTerms)
 
   /****
-   * Filter out search terms less than 1 character.
+   * Filter out search terms with less than 1 character.
    *
    * If searching by domain, store domain in domainToSearchFor
    * and remove it from the the array of search terms.
@@ -18,8 +16,14 @@ function processSearchTerms(searchTerms) {
    * Also remove word if it's in the stopword list.
    * Stopword list is based on: http://git.io/T37UJA
    *
-   * If there is a hyphen in any of the search words, then surround
-   * it in double quotes.
+   * Remove any quotes from the string.
+   *
+   * Encapsulate the search terms as a whole inside double-quotes.
+   *
+   * Encapsulate each search term individually inside double-quotes.
+   *
+   * (We wrap the search terms as a whole and also individual words with double quotes in case they have
+   * some odd characters like '>' or '.' that would cause a syntax error in the query).
    *
    * If there is a hyphen at the start of the word, consider
    * it an operator and add NOT to the start of the word.
@@ -32,10 +36,11 @@ function processSearchTerms(searchTerms) {
    * be an AND operator: https://sqlite.org/fts5.html#section_3
    */
 
-  var lowercaseSearchTerms = searchTerms.toLowerCase()
+  var searchTermsQuotesRemoved = searchTerms.replace(/"/g, ``).replace(/'/g, ``)
+  var lowercaseSearchTerms = searchTermsQuotesRemoved.toLowerCase()
   var domainToSearchFor = null
 
-  var processedSearchTerms = lowercaseSearchTerms
+  var filteredSearchTerms = lowercaseSearchTerms
     .split(' ')
     .filter( searchTerm => {
       var useSearchTerm = searchTerm.length > 1
@@ -52,78 +57,37 @@ function processSearchTerms(searchTerms) {
       }
       return useSearchTerm
     })
-    .map(searchTerm => {
-      var hyphenIndex = searchTerm.indexOf('-')
-      var pipeIndex = searchTerm.indexOf('|')
-      if(hyphenIndex > -1){
-        if(hyphenIndex === 0){
-          searchTerm = `NOT ${ searchTerm.slice(1) }`
-        }
-        else{
-          /****
-           * If the hyphenated word itself is already enclosed in quotes, then we
-           * should leave it and not add extra quotes.
-           * e.g. if the search term is "foo-bar"
-           *
-           * Also, if the hyphenated word itself is already enclosed in quotes and preceded by
-           * a pipe, then we should leave it and not add extra quotes.
-           * e.g. if the search term is |"foo-bar"
-           *
-           * Also, if the search term is in double quotes of a bigger phrase, then
-           * we should leave it and not add extra quotes.
-           * e.g. if the user searched for "hello whatevs foo-bar"
-           *
-           * match regex from: http://stackoverflow.com/a/147667/3458681
-           */
-          var searchTermItselfIsEnclosedInQuotes = /^\|?".+"$/.test(searchTerm)
-          if(!searchTermItselfIsEnclosedInQuotes){
-            var searchTermIsInsideLargerQuotedPhrase = false
-            var matchQuotes = lowercaseSearchTerms.match(/[^"]+(?=(" ")|"$)/g)
-            if(_.get(matchQuotes, 'length')){
-              /****
-               * If the search term is at trailing end of a quoted phrase then
-               * it will have a trailing double quote as its last character, so
-               * get rid of it for when checking if the word is in the quoted phrase
-               * we captured with match.
-               */
-              var searchTermSansTrailingQuote = searchTerm.split('"')[0]
-              searchTermIsInsideLargerQuotedPhrase = matchQuotes.some(val => val.indexOf(searchTermSansTrailingQuote) > -1)
-            }
-            if(!searchTermIsInsideLargerQuotedPhrase){
-              /****
-               * If it's not quoted and has a pipe preceding it, then remove pipe,
-               * add quotes and add pipe back for the pipe check and add OR below.
-               */
-              if(pipeIndex === 0){
-                searchTerm = `|"${ searchTerm.slice(1) }"`
-              }
-              else{
-                searchTerm = `"${ searchTerm }"`
-              }
-            }
-          }
-        }
+
+  var searchTermsQuotedAsAwhole = `"${ filteredSearchTerms.join(' ') }"`
+  var numberOfSearchTerms = filteredSearchTerms.length
+
+  var individualSearchWordsQuoted = filteredSearchTerms
+    .map((searchTerm, index) => {
+      if(searchTerm.startsWith('-')){
+        searchTerm = `NOT ${ searchTerm.slice(1) }`
       }
-      /****
-       * Use 'if{}' instead of 'else if{}' as there may be a word
-       * that has a hyphen in it that they also preface with
-       * pipe - another if here will let it be quoted in previous if statment
-       * and so we can then add an OR to it here.
-       */
-      if(pipeIndex === 0){
-        searchTerm = `OR ${ searchTerm.slice(pipeIndex + 1) }`
+      else if(searchTerm.startsWith('|')){
+        searchTerm = `OR ${ searchTerm.slice(1) }`
+      }
+      /*****
+      * AND is so for multiple words, our query ends up being `from "fts" where fts match '"tech news" OR ("tech" AND "news")'`
+      */
+      else{
+        searchTerm = index === 0 ? `"${ searchTerm }"` : `AND "${ searchTerm }"`
       }
       return searchTerm
     })
     .join(' ')
 
   global.devMode && console.log(`searchTerms after process`)
-  global.devMode && console.log(processedSearchTerms)
+  global.devMode && console.log(individualSearchWordsQuoted)
   global.devMode && console.log('Are we searching by domain?', !domainToSearchFor ? ' NO' : ` YES: ${ domainToSearchFor }`)
 
   return {
-    processedSearchTerms,
-    domainToSearchFor
+    individualSearchWordsQuoted,
+    domainToSearchFor,
+    searchTermsQuotedAsAwhole,
+    numberOfSearchTerms
   }
 }
 

@@ -8,9 +8,12 @@ var appLogger = require('../../../utils/appLogger')
 var printSearchSQL = require('./printSearchSQL')
 
 function search(req, res) {
-
-  var processedSearchTerms = processSearchTerms(req.params.searchTerms)
-  var domainToSearchFor = processedSearchTerms.domainToSearchFor
+  var {
+    individualSearchWordsQuoted,
+    domainToSearchFor,
+    searchTermsQuotedAsAwhole,
+    numberOfSearchTerms
+  } = processSearchTerms(req.params.searchTerms)
   /*****
   * The domainToSearchFor is exracted from the search terms, so it doesn't really go
   * through the requestDataValidation, so do some sanitization for it and add a percentage
@@ -19,18 +22,6 @@ function search(req, res) {
   if(domainToSearchFor){
     domainToSearchFor = `%${ encodeURIComponent(validator.escape(domainToSearchFor)) }`
   }
-  /*****
-  * We wrap the search terms as a whole and also individual words with double quotes in case they have
-  * some odd characters like '>' or '.' that would cause a syntax error in the query.
-  */
-  var searchTermsQuotedAsAwhole = `"${ processedSearchTerms.processedSearchTerms }"`
-  var searchTermsAsArray = processedSearchTerms.processedSearchTerms.split(' ')
-  /*****
-  * AND is so for multiple words, our query ends up being `from "fts" where fts match '"tech news" OR ("tech" AND "news")'`
-  */
-  var individualSearchWordsQuoted = searchTermsAsArray.map((searchWord, index) =>
-    index === 0 ? `"${ searchWord }"` : `AND "${ searchWord }"`
-  ).join(' ')
   var dateFilter = {
       dateFilterStartDate: req.body.dateFilterStartDate,
       dateFilterEndDate: req.body.dateFilterEndDate
@@ -129,7 +120,7 @@ function search(req, res) {
     * If there is more than one search term (ie more than one word in the search), search for the search
     * terms as a complete phrase and also as individual words.
     */
-    if(searchTermsAsArray.length > 1){
+    if(numberOfSearchTerms.length > 1){
       // knexFTSsearchQueryBinding = `${ searchTermsQuotedAsAwhole } OR NEAR(${ individualSearchWordsQuoted })`
       knexFTSsearchQueryBinding = `${ searchTermsQuotedAsAwhole } OR (${ individualSearchWordsQuoted })`
     }
