@@ -31,7 +31,7 @@ function search(req, res) {
   /****
    * note: knex will automatically convert additional WHERE's to AND
    */
-  if(!searchTermsQuotedAsAwhole.length > 2){
+  if(!(searchTermsQuotedAsAwhole.length > 2)){
     /****
      * If user just wants to list all saved pages by a domain (with no text search)
      *
@@ -120,7 +120,7 @@ function search(req, res) {
     * If there is more than one search term (ie more than one word in the search), search for the search
     * terms as a complete phrase and also as individual words.
     */
-    if(numberOfSearchTerms.length > 1){
+    if(numberOfSearchTerms > 1){
       // knexFTSsearchQueryBinding = `${ searchTermsQuotedAsAwhole } OR NEAR(${ individualSearchWordsQuoted })`
       knexFTSsearchQueryBinding = `${ searchTermsQuotedAsAwhole } OR (${ individualSearchWordsQuoted })`
     }
