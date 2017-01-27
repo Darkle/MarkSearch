@@ -1389,8 +1389,11 @@ function renderResults(resultsChunk, searchTerms) {
             var highlightOpeningSpan = '<span class="searchHighlight">';
             if (row.snippet.indexOf(highlightOpeningSpan) < 0) {
               searchTerms.toLowerCase().split(' ').filter(function (searchTerm) {
-                return searchTerm.length > 1 && !searchTerm.startsWith('site:') && !STOPWORDS[searchTerm];
+                return searchTerm.length > 1 && !searchTerm.startsWith('site:') && !searchTerm.startsWith('-') && !STOPWORDS[searchTerm];
               }).forEach(function (searchWord) {
+                if (searchWord.startsWith('|')) {
+                  searchWord = searchWord.slice(1);
+                }
                 var stemmedSearchWord = (0, _stemPorter2.default)(searchWord);
                 var regex = new RegExp('(' + stemmedSearchWord + '[a-z]*)', 'gi');
                 var replacement = highlightOpeningSpan + '$1</span>';

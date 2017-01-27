@@ -39,6 +39,7 @@ function processSearchTerms(searchTerms) {
   var searchTermsQuotesRemoved = searchTerms.replace(/"/g, ``).replace(/'/g, ``)
   var lowercaseSearchTerms = searchTermsQuotesRemoved.toLowerCase()
   var domainToSearchFor = null
+  var searchOperatorUsed = false
 
   var filteredSearchTerms = lowercaseSearchTerms
     .split(' ')
@@ -64,10 +65,12 @@ function processSearchTerms(searchTerms) {
   var individualSearchWordsQuoted = filteredSearchTerms
     .map((searchTerm, index) => {
       if(searchTerm.startsWith('-')){
-        searchTerm = `NOT ${ searchTerm.slice(1) }`
+        searchOperatorUsed = true
+        searchTerm = `NOT "${ searchTerm.slice(1) }"`
       }
       else if(searchTerm.startsWith('|')){
-        searchTerm = `OR ${ searchTerm.slice(1) }`
+        searchOperatorUsed = true
+        searchTerm = `OR "${ searchTerm.slice(1) }"`
       }
       /*****
       * AND is so for multiple words, our query ends up being `from "fts" where fts match '"tech news" OR ("tech" AND "news")'`
@@ -87,7 +90,8 @@ function processSearchTerms(searchTerms) {
     individualSearchWordsQuoted,
     domainToSearchFor,
     searchTermsQuotedAsAwhole,
-    numberOfSearchTerms
+    numberOfSearchTerms,
+    searchOperatorUsed
   }
 }
 

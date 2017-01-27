@@ -12,7 +12,8 @@ function search(req, res) {
     individualSearchWordsQuoted,
     domainToSearchFor,
     searchTermsQuotedAsAwhole,
-    numberOfSearchTerms
+    numberOfSearchTerms,
+    searchOperatorUsed
   } = processSearchTerms(req.params.searchTerms)
   /*****
   * The domainToSearchFor is exracted from the search terms, so it doesn't really go
@@ -121,8 +122,16 @@ function search(req, res) {
     * terms as a complete phrase and also as individual words.
     */
     if(numberOfSearchTerms > 1){
-      // knexFTSsearchQueryBinding = `${ searchTermsQuotedAsAwhole } OR NEAR(${ individualSearchWordsQuoted })`
-      knexFTSsearchQueryBinding = `${ searchTermsQuotedAsAwhole } OR (${ individualSearchWordsQuoted })`
+      /*****
+      * If a search operator is used we dont want to try to match the search terms as a whole
+      */
+      if(searchOperatorUsed){
+        knexFTSsearchQueryBinding = `${ individualSearchWordsQuoted }`
+      }
+      else{
+        // knexFTSsearchQueryBinding = `${ searchTermsQuotedAsAwhole } OR NEAR(${ individualSearchWordsQuoted })`
+        knexFTSsearchQueryBinding = `${ searchTermsQuotedAsAwhole } OR (${ individualSearchWordsQuoted })`
+      }
     }
 
     knexSQL = knexSQL

@@ -31,6 +31,8 @@ Make a note that the extension should work ok with google search pages that have
 
 Note that at the moment it doesnt support quoting to make the search more accurate - the current search is `from "fts" where fts match '"tech news" OR ("tech" AND "news")'`
 
+Note that the bookmarklet may not work on some sites due to CSPs
+
 ### Help
 
 ##### Setting Up The MarkSearch Browser Extension

@@ -185,9 +185,12 @@ function renderResults(resultsChunk, searchTerms) {
               .toLowerCase()
               .split(' ')
               .filter( searchTerm =>
-                searchTerm.length > 1 && !searchTerm.startsWith('site:') && !STOPWORDS[searchTerm]
+                searchTerm.length > 1 && !searchTerm.startsWith('site:') && !searchTerm.startsWith('-') && !STOPWORDS[searchTerm]
               )
               .forEach( searchWord => {
+                if(searchWord.startsWith('|')){
+                  searchWord = searchWord.slice(1)
+                }
                 var stemmedSearchWord = stem(searchWord)
                 var regex = new RegExp('(' + stemmedSearchWord + '[a-z]*)', 'gi')
                 var replacement = highlightOpeningSpan + '$1</span>'
