@@ -111,4 +111,4 @@ require('./gulpTasks/build/nosourcemaps')
  * build.js ('packageosx', 'packagewin64', 'packagewin32', 'packagelinux64', 'packagelinux32')
  * Build the app for distribution as an executable.
  */
-require('./gulpTasks/build/package')
+require('./gulpTasks/build/buildPackages')
