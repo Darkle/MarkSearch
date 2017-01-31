@@ -16,6 +16,11 @@
 */
 require('./gulpTasks/startDev')
 
+/*****
+* NOTE: we dont manually build the sqlite bindings any more as we now use the electron-rebuild package
+* which is triggered in the npm task. We also use the default sqlite3 install as it now uses FTS5.
+*/
+
 /****
 * buildSqlite3LibBindings ('buildSqlite')
 * https://github.com/mapbox/node-sqlite3
@@ -28,7 +33,7 @@ require('./gulpTasks/startDev')
 * https://github.com/nodejs/node-gyp
 *
 */
-require('./gulpTasks/buildSqlite3LibBindings')
+// require('./gulpTasks/buildSqlite3LibBindings')
 
 /****
  * buildSqlite3LibBindingsForRandomDates ('buildSqliteForRandomDates')
@@ -40,7 +45,7 @@ require('./gulpTasks/buildSqlite3LibBindings')
  * task to generate the random dates.
  *
  */
-require('./gulpTasks/buildSqlite3LibBindingsForRandomDates')
+// require('./gulpTasks/buildSqlite3LibBindingsForRandomDates')
 
 /****
 * selfsignElectronForDev ('selfsign')

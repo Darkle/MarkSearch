@@ -4,9 +4,18 @@ var path = require('path')
 
 var gulp = require('gulp')
 var packager = require('electron-packager')
+var _ = require('lodash')
 
 var basePath = path.resolve(__dirname, '..', '..')
-var electronVersion = require(path.resolve(__dirname, '..', '..', 'package.json')).dependencies['electron-prebuilt'].slice(1)
+/*****
+* Even thogh electron-packager is supposed to pick up the version automatically from the 'electron' or
+* 'electron-prebuilt' version in the package.json, it doesn't seem to be working for me - it sets it as 1.4.13 instead
+* of 1.4.12, so gonna set it manually.
+*/
+var electronVersion = require(path.resolve(__dirname, '..', '..', 'package.json')).dependencies['electron-prebuilt']
+if(_.isNaN(Number(electronVersion[0]))){
+  electronVersion = electronVersion.slice(1)
+}
 
 var commonPackageProperties = {
   dir: basePath,
@@ -66,28 +75,6 @@ gulp.task('packagewin64', () =>
   )
 )
 
-gulp.task('packagewin32', () =>
-  packager(
-    Object.assign(
-      {},
-      commonPackageProperties,
-      {
-        platform: 'win32',
-        arch: 'ia32',
-        icon: path.join(basePath, 'appmodules', 'electron', 'icons', 'platform', 'ms.ico')
-      }
-    ),
-    function doneCallback(err) {
-      if(err){
-        console.error('there was an error packaging for osx', err)
-      }
-      else{
-        console.log('successfully packaged for osx')
-      }
-    }
-  )
-)
-
 gulp.task('packagelinux64', () =>
   packager(
     Object.assign(
@@ -96,28 +83,6 @@ gulp.task('packagelinux64', () =>
       {
         platform: 'linux',
         arch: 'x64',
-        icon: path.join(basePath, 'appmodules', 'electron', 'icons', 'platform', 'ms.ico')
-      }
-    ),
-    function doneCallback(err) {
-      if(err){
-        console.error('there was an error packaging for osx', err)
-      }
-      else{
-        console.log('successfully packaged for osx')
-      }
-    }
-  )
-)
-
-gulp.task('packagelinux32', () =>
-  packager(
-    Object.assign(
-      {},
-      commonPackageProperties,
-      {
-        platform: 'linux',
-        arch: 'ia32',
         icon: path.join(basePath, 'appmodules', 'electron', 'icons', 'platform', 'ms.ico')
       }
     ),

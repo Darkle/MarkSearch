@@ -8,18 +8,11 @@
   "main": "appInit.js",
   "scripts": {
     "start": "gulp",
-    "sqlite": "gulp buildSqlite",
-    "bower": "bower install",
-    "ban": "ban",
-    "dev": "DEBUG='MarkSearch:*' electron appInit.js",
-    "test": "snyk test",
-    "nsp": "nsp check",
+    "initialSetup": "npm install && bower install && npm run rebuildSqliteForElectron",
     "rebuildSqliteForElectron": "electron-rebuild -f -w sqlite3",
     "packageosx": "cross-env NODE_ENV=production gulp packageosx",
     "packagewin64": "cross-env NODE_ENV=production gulp packagewin64",
-    "packagewin32": "cross-env NODE_ENV=production gulp packagewin32",
     "packagelinux64": "cross-env NODE_ENV=production gulp packagelinux64",
-    "packagelinux32": "cross-env NODE_ENV=production gulp packagelinux32"
   },
   "dependencies": {
     "axios": "^0.15.2",
@@ -32,7 +25,7 @@
     "csurf": "^1.8.3",
     "dompurify": "^0.7.4",
     "electron-positioner": "^3.0.0",
-    "electron-prebuilt": "^1.4.12",
+    "electron-prebuilt": "1.4.12",
     "existent": "^1.0.1",
     "express": "^4.14.0",
     "express-request-id": "^1.1.0",

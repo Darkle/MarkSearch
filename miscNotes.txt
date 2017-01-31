@@ -1,5 +1,8 @@
-* maybe the sqlite corruption occurs when I'm ading stuff to pages db and i also have it open in the
-    sqlite browser?
+* To get set up:
+1 Clone repo
+2 run `npm run initialSetup`
+3 Then if you want to do some development, just run `npm start` or if you want to package, run one of the npm package
+  scripts like `npm run packagelinux64`
 
 * Scripts/Gulp Tasks to run:
   'npm nsp' - runs nsp check which runs https://www.npmjs.com/package/nsp
