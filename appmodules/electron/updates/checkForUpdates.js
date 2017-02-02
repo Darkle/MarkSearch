@@ -10,7 +10,7 @@ var showUpdateNotification = require('./showUpdateNotification')
 var appSettings = require('../../db/appSettings')
 
 var checkInterval = ms('7 days')
-var updateUrlToCheck= 'https://raw.githubusercontent.com/Darkle/MarkSearch-Updates/master/updateInfo.json'
+var updateUrlToCheck= 'https://raw.githubusercontent.com/Darkle/MarkSearch/master/updateInfo.json'
 /****
  * When running electron in dev, Electron reports its own package.json version,
  * so when in devMode, get the MarkSearch application version number from the MarkSearch
