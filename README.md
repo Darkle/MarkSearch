@@ -29,6 +29,8 @@ Add info about choosing the search type (instant or non instant)
 
 Make a note that the extension should work ok with google search pages that have RTL languages
 
+Remember to mention on install under windows, when you first run MarkSearch you may get a firewall popup like this: (show the screenshot in the assets folder) - if you want to be able to search MarkSearch from other computers on your network click "Allow Access", if not, you can click cancel to deny (MarkSearch will still work if you click cancel, it just wont be accessable from other devices on your network).
+
 Note that at the moment it doesnt support quoting to make the search more accurate - the current search is `from "fts" where fts match '"tech news" OR ("tech" AND "news")'`
 
 Note that the bookmarklet may not work on some sites due to CSPs
