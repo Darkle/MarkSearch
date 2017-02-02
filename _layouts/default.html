@@ -37,11 +37,17 @@
       </footer>
     </section>
     <script>
-      var urlHash = new URLSearchParams(window.location.hash)
-      var isUpdating = urlHash.has('installedVersion')
+      var locationHash = window.location.hash
+
+      if(window.location.hash[0] === '#'){
+        locationHash = window.location.hash.slice(1)
+      }
+      
+      var urlParams = new URLSearchParams(locationHash)
+      var isUpdating = urlParams.has('installedVersion')
 
       if(isUpdating){
-        var currentlyInstalledVersion = urlHash.get('installedVersion')
+        var currentlyInstalledVersion = urlParams.get('installedVersion')
       }
     </script>
   </body>
