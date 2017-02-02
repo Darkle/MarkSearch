@@ -12,7 +12,7 @@
     "rebuildSqliteForElectron": "electron-rebuild -f -w sqlite3",
     "packageosx": "cross-env NODE_ENV=production gulp packageosx",
     "packagewin64": "cross-env NODE_ENV=production gulp packagewin64",
-    "packagelinux64": "cross-env NODE_ENV=production gulp packagelinux64",
+    "packagelinux64": "cross-env NODE_ENV=production gulp packagelinux64"
   },
   "dependencies": {
     "axios": "^0.15.2",

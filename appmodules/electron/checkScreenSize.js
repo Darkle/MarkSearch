@@ -14,11 +14,12 @@ function checkScreenSize() {
   }
   var electronScreen = electron.screen
   var displayScreenSize = electronScreen.getPrimaryDisplay().workAreaSize
-  if(displayScreenSize.width < defaultWindowSize.width || displayScreenSize.height < defaultWindowSize.height){
-    defaultWindowSize = {
-      width: displayScreenSize.width,
-      height: displayScreenSize.height
-    }
+
+  if(displayScreenSize.width < defaultWindowSize.width){
+    defaultWindowSize.width = displayScreenSize.width
+  }
+  if(displayScreenSize.height < defaultWindowSize.height){
+    defaultWindowSize.height = displayScreenSize.height
   }
   return defaultWindowSize
 }
