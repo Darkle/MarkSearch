@@ -15,6 +15,8 @@ Remember to mention about the extensions that search by site and date filter als
 
 Put a note in the readme that sometimes the emailed bookmarklet takes a few minutes to arrive
 
+Remember to mention for OSX that when MarkSearch starts, it will show up in the menu bar, not in the dock
+
 For the extensions, rememeber to say that the extension respects date filters & searching by site
 
 Mention that if they have the results box set to be on the left on google, that it will always be hidden, even if you have it set to auto show on page load (cause it would always obscure the google results)
