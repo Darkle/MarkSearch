@@ -1,22 +1,41 @@
 
+##Intro
 MarkSearch is a desktop bookmarking application. It allows you to save and search web pages.
 
-The desktop application runs in the background while you use your browser to access the main MarkSearch search page.
+The desktop application runs in the background while you use your browser to access the main MarkSearch search page. MarkSearch is supposed to work kinda like goolge in that you dont need to use tags or categories, you just do a full text search.
 
 You can save web sites manually from the MarkSearch search page, or use the browser extension to save a site.
 
 The browser extension also has the ability to show your MarkSearch bookmarks on google search pages, so you can see results for you search from Google and from MarkSearch at the same time.
 
-#Features
+##Features
+- Full text search of the web pages you save.
+- Search by site just like google (e.g. site:example.com thingToSearchFor)
+- MarkSearch results integrated in to google results page so you can search both at once.
+- Browser extention to easily save a web page with one click.
+- Fast - because MarkSearch doesn't run on a server on the internet, it should display results as fast as google.
+- Cross platform; MarkSearch runs on Linux, MacOS & Windows.
+- Simple to install; just download the latest release for you operating system and run.
 
 
+##FAQ
+- Why doesn't it have tags?
+⋅⋅* Its focus is full text search and on integration with google and other search engine pages, so just like how you dont really use tags when you search google, the same applies for Marksearch.
+- I like the idea of full text search bookmarks but don't like MarkSearch, are there any alternatives?
+⋅⋅* http://fetching.io
+⋅⋅* http://cottontracks.com/
+⋅⋅* http://region.io/
+⋅⋅* https://www.basketapp.net/
+⋅⋅* http://docs.bmark.us/en/latest/
+⋅⋅* http://pinboard.in/tour/
+⋅⋅* https://github.com/acoffman/indexmarks
+⋅⋅* https://grabduck.com/
+⋅⋅* https://chrome.google.com/webstore/detail/foundit/kckobojmajgneicjgbpcccionajfobbo?hl=en-US
+⋅⋅* http://sebsauvage.net/wiki/doku.php?id=php%3Ashaarli
+⋅⋅* http://getstache.com/
+⋅⋅* https://github.com/kwalo/bookmark-manager
 
-
-#FAQ
-Why doesn't it have tags?
-Its focus is full text search and on integration with google and other search engine pages, so just like how you dont really use tags when you search google, the same applies for Marksearch.
-
-
+##Help
 
 
 
@@ -29,6 +48,8 @@ Make sure i mention how to open the settings via the system tray/menu bar - make
 Also put a note that it may take a few minutes for the email to arrive for the token/bookmarklet
 
 REmember to mention that you can search by site and date filter
+
+Show screenshots of the extension - the right click menu on browser bar and the extension settings
 
 Remember to mention about the extensions that search by site and date filter also works
 
