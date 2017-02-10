@@ -21,29 +21,37 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 ## Screenshots
 
 #### MarkSearch Search Page:
-![Screenshot Of MarkSearch Search Page]("{{ site.github.url }}/assets/screenshots/MSsearch.png")
+![Screenshot Of MarkSearch Search Page](/assets/screenshots/MSsearch.png)
 
 #### MarkSearch Settings Page:
-![Screenshot Of MarkSearch Settings Page]({{ site.github.url }}/assets/screenshots/MSsettingsPage.png)
+![Screenshot Of MarkSearch Settings Page](/assets/screenshots/MSsettingsPage.png)
+
+#### MarkSearch Sitting In The System Tray On Linux & In The Menu Bar On MacOS:
+![Screenshot Of MarkSearch Sitting In The System Tray On Linux](/assets/screenshots/systemtrayLinux.png)
+![Screenshot Of MarkSearch Sitting In The System Tray On MacOS](/assets/screenshots/menuBarMacOS.png)
 
 #### MarkSearch Browser Extension Icon:
-![Screenshot Of MarkSearch Browser Extension Icon]({{ site.github.url }}/assets/screenshots/browserExtensionIcon.png)
+![Screenshot Of MarkSearch Browser Extension Icon](/assets/screenshots/browserExtensionIcon.png)
 
 #### MarkSearch Browser Extension Settings:
-![Screenshot Of MarkSearch Browser Extension Settings]({{ site.github.url }}/assets/screenshots/extensionOptionsTab1.png)
+![Screenshot Of MarkSearch Browser Extension Settings](/assets/screenshots/extensionOptionsTab1.png)
 
 ## Help
 
 ### Installation
 
-#### Desktop App
-
+#### Desktop App:
 Maybe make a note here about the windows firewall - remember got that screenshot in assets folder.
 
-#### Browser Extension
+#### Browser Extension:
 Install from the Google Chrome webstore: https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng
+Then go to the MarkSearch desktop app settings by clicking on the MarkSearch icon in the systme tray/menu bar th
 
 ### Usage
+
+#### Desktop App:
+
+#### Browser Extension:
 
 
 ## FAQ
