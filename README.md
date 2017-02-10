@@ -41,8 +41,10 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 ## Help
 
 ### Installation
-
 #### Desktop App:
+To install the desktop app, download the latest release for your operating system here: https://darkle.github.io/MarkSearch/#downloads
+##### Windows Users:
+Once you have downloaded the .exe file, double click it and run the installer. 
 Maybe make a note here about the windows firewall - remember got that screenshot in assets folder.
 
 #### Browser Extension:
