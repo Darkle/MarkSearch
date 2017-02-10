@@ -18,8 +18,9 @@
       <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
       <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
       <div id="downloads">
-        <!-- {% assign sorted_releases = (site.github.releases.assets | sort: 'name', 'last') %} -->
-        {% for release in (site.github.releases.assets | sort: 'name', 'last') %}
+        <!-- {% assign pages = site.pages | sort:"weight"  %} -->
+        {% assign sorted_releases = site.github.releases.assets | sort: 'name', 'last' %}
+        {% for release in sorted_releases %}
           <p>{{release.browser_download_url}}</p>
         {% endfor %}
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For Windows</a>
