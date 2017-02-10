@@ -2,15 +2,16 @@
 ## Intro
 MarkSearch is a desktop bookmarking application. It allows you to save and search web pages.
 
-The desktop application runs in the background while you use your browser to access the main MarkSearch search page. MarkSearch is supposed to work kinda like goolge in that you dont need to use tags or categories, you just do a full text search.
+The desktop application runs in the background while you use your browser to access the main MarkSearch search page. MarkSearch is supposed to work kinda like google in that you dont need to use tags or categories, you just do a full text search.
 
-You can save web sites manually from the MarkSearch search page, or use the browser extension to save a site.
+You can save web sites manually from the MarkSearch search page, or by using the browser extension to save a site.
 
-The browser extension also has the ability to show your MarkSearch bookmarks on google search pages, so you can see results for you search from Google and from MarkSearch at the same time.
+The browser extension also has the ability to show your MarkSearch bookmarks on google search pages, so you can see results for you search terms from Google and MarkSearch at the same time.
 
 ## Features
 - Full text search of the web pages you save.
 - Search by site just like google (e.g. site:example.com thingToSearchFor)
+- Search by date
 - MarkSearch results integrated in to google results page so you can search both at once.
 - Browser extention to easily save a web page with one click.
 - Fast - because MarkSearch doesn't run on a server on the internet, it should display results as fast as google.
@@ -18,6 +19,7 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 - Simple to install; just download the latest release for you operating system and run.
 
 ## Screenshots
+Put in screenshots of the web search page - searching and adding stuff and the date filter
 
 
 ## Help
@@ -43,7 +45,7 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
   - [https://github.com/kwalo/bookmark-manager](https://github.com/kwalo/bookmark-manager)
 
 
-
+Add that can search by site to features- also add to features that site/date search also work with google search - also add to help also
 For chrome extension - Remember to mention that the reason we need permission to all sites is because we can not know ahead of time
 what ipv4 address the MarkSearch server will use, and we need permission to access that address to send http
 requests to it. - (note - it's all sites on http, not https as the MarkSearch server does not run on https)
