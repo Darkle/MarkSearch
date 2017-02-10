@@ -18,12 +18,9 @@
       <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
       <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
       <div id="downloads">
-        <!-- {% assign pages = site.pages | sort:"weight"  %} -->
-        {% assign releases = site.github.releases.assets %}
-        {% assign sorted_releases = releases | sort: 'name' %}
-        <!-- {% for release in sorted_releases %}
-          <p>{{release.browser_download_url}}</p>
-        {% endfor %} -->
+        {% for release in site.github.releases.assets %}
+          <span>{{release.browser_download_url}}</span>
+        {% endfor %}
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For Windows</a>
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For MacOS</a>
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For Linux</a>
@@ -34,7 +31,7 @@
     </section>
 
     <section class="main-content">
-      <div id="upgradeInfo">
+      <div id="upgradeInfo", class="hide">
         <p>Note: remember to quit MarkSearch before installing the new version.</p>
         <p>Changelog:</p>
       </div>
