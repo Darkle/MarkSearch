@@ -18,14 +18,6 @@
       <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
       <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
       <div id="downloads">
-        <p>next one------</p>
-        <!-- {{ site.github.releases[0] | inspect }} -->
-        <!-- {% assign pages = site.pages | sort:"weight"  %} -->
-        <!-- {% assign releases = site.github.releases.assets | sort: 'name' %} -->
-        <!-- {% assign sorted_releases = site.github.releases[0].assets | sort: 'name', 'last' %}-->
-        {% for release in site.github.releases %}
-          <p>{{ release.assets.browser_download_url }}</p>
-        {% endfor %}
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For Windows</a>
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For MacOS</a>
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For Linux</a>
@@ -52,9 +44,8 @@
       </footer>
     </section>
     <script>
-
-      /*var releases = {{ site.github.releases | jsonify }};
-      console.log(releases)*/
+      var releases = {{ site.github.releases | jsonify }};
+      console.log(releases)
 
       /*****
       * This is because the asset urls are different if viewing on the github repo page compared to the project page.
