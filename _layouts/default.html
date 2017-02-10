@@ -43,6 +43,12 @@
       </footer>
     </section>
     <script>
+      if(window.location.href.startsWith('https://darkle.github.io/MarkSearch/')){
+        Array.from(document.querySelectorAll('img')).forEach(img => {
+          if(img.src.startsWith('https://darkle.github.io/assets/screenshots/'))
+            img.src = img.src.replace('https://darkle.github.io/assets/screenshots/', 'https://darkle.github.io/MarkSearch/assets/screenshots/')
+          })
+      }
       var locationHash = window.location.hash
 
       if(window.location.hash[0] === '#'){
