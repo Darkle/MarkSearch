@@ -19,7 +19,7 @@
       <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
       <div id="downloads">
         {% for release in site.github.releases.assets %}
-          <span>{{release.browser_download_url}}</span>
+          <span>{{release}}</span>
         {% endfor %}
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For Windows</a>
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For MacOS</a>
