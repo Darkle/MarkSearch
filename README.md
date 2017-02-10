@@ -20,8 +20,8 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 
 ## Screenshots
 
-### MarkSearch Search Page
-- ![Screenshot Of MarkSearch Search Page](/assets/screenshots/MSsearch.png)
+### MarkSearch Search Page:
+- ![Screenshot Of MarkSearch Search Page](/MarkSearch/assets/screenshots/MSsearch.png)
 Put in screenshots of the web search page - searching and adding stuff and the date filter
 
 
