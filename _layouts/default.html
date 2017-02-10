@@ -22,12 +22,13 @@
     </section>
 
     <section class="main-content">
-      {{ content }}
-
       <div id="upgradeInfo">
         <p>Note: remember to quit MarkSearch before installing the new version.</p>
         <p>Changelog:</p>
       </div>
+      <h1 class="exofont">MarkSearch</h2>
+      {{ content }}
+
 
       <footer class="site-footer">
         {% if site.github.is_project_page %}
@@ -42,7 +43,7 @@
       if(window.location.hash[0] === '#'){
         locationHash = window.location.hash.slice(1)
       }
-      
+
       var urlParams = new URLSearchParams(locationHash)
       var isUpdating = urlParams.has('installedVersion')
 

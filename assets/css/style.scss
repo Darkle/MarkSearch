@@ -3,6 +3,12 @@
 
 @import "{{ site.theme }}";
 
+@import url('https://fonts.googleapis.com/css?family=Exo');
+
 #upgradeInfo {
   display: none;
+}
+
+.exofont {
+  font-family: 'Exo';
 }

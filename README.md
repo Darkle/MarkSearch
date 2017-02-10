@@ -1,5 +1,24 @@
-# MarkSearch
-A Bookmarking App
+
+MarkSearch is a desktop bookmarking application. It allows you to save and search web pages.
+
+The desktop application runs in the background while you use your browser to access the main MarkSearch search page.
+
+You can save web sites manually from the MarkSearch search page, or use the browser extension to save a site.
+
+The browser extension also has the ability to show your MarkSearch bookmarks on google search pages, so you can see results for you search from Google and from MarkSearch at the same time.
+
+#Features
+
+
+
+
+#FAQ
+Why doesn't it have tags?
+Its focus is full text search and on integration with google and other search engine pages, so just like how you dont really use tags when you search google, the same applies for Marksearch.
+
+
+
+
 
 For chrome extension - Remember to mention that the reason we need permission to all sites is because we can not know ahead of time
 what ipv4 address the MarkSearch server will use, and we need permission to access that address to send http
