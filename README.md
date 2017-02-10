@@ -21,23 +21,29 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 ## Screenshots
 
 #### MarkSearch Search Page:
-![Screenshot Of MarkSearch Search Page](/assets/screenshots/MSsearch.png)
+![Screenshot Of MarkSearch Search Page]({{ site.github.url }}/assets/screenshots/MSsearch.png)
 
 #### MarkSearch Settings Page:
-![Screenshot Of MarkSearch Settings Page](/assets/screenshots/MSsettingsPage.png)
+![Screenshot Of MarkSearch Settings Page]({{ site.github.url }}/assets/screenshots/MSsettingsPage.png)
 
 #### MarkSearch Browser Extension Icon:
-![Screenshot Of MarkSearch Browser Extension Icon](/assets/screenshots/browserExtensionIcon.png)
+![Screenshot Of MarkSearch Browser Extension Icon]({{ site.github.url }}/assets/screenshots/browserExtensionIcon.png)
 
 #### MarkSearch Browser Extension Settings:
-![Screenshot Of MarkSearch Browser Extension Settings](/assets/screenshots/extensionOptionsTab1.png)
-
-Put in screenshots of the web search page - searching and adding stuff and the date filter
-
+![Screenshot Of MarkSearch Browser Extension Settings]({{ site.github.url }}/assets/screenshots/extensionOptionsTab1.png)
 
 ## Help
+
 ### Installation
-  Maybe make a note here about the windows firewall - remember got that screenshot in assets folder.
+
+#### Desktop App
+
+Maybe make a note here about the windows firewall - remember got that screenshot in assets folder.
+
+#### Browser Extension
+Install from the Google Chrome webstore: https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng
+
+### Usage
 
 
 ## FAQ

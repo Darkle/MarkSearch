@@ -17,12 +17,14 @@
     <section class="page-header">
       <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
       <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
-      {% if site.github.is_project_page %}
-        <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
-      {% endif %}
       {% if site.show_downloads %}
-        <a href="{{ site.github.zip_url }}" class="btn">Download .zip</a>
-        <a href="{{ site.github.tar_url }}" class="btn">Download .tar.gz</a>
+        <div id="downloads">
+          <a href="{{ site.github.zip_url }}" class="btn">Download .zip</a>
+          <a href="{{ site.github.tar_url }}" class="btn">Download .tar.gz</a>
+        </div>
+      {% endif %}
+      {% if site.github.is_project_page %}
+      <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
       {% endif %}
     </section>
 
@@ -43,12 +45,12 @@
       </footer>
     </section>
     <script>
-      if(window.location.href.startsWith('https://darkle.github.io/MarkSearch/')){
+      /*if(window.location.href.startsWith('https://darkle.github.io/MarkSearch/')){
         Array.from(document.querySelectorAll('img')).forEach(img => {
           if(img.src.startsWith('https://darkle.github.io/assets/screenshots/'))
             img.src = img.src.replace('https://darkle.github.io/assets/screenshots/', 'https://darkle.github.io/MarkSearch/assets/screenshots/')
           })
-      }
+      }*/
       var locationHash = window.location.hash
 
       if(window.location.hash[0] === '#'){
