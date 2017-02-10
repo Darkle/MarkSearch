@@ -19,7 +19,8 @@
       <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
       <div id="downloads">
         <!-- {% assign pages = site.pages | sort:"weight"  %} -->
-        {% assign sorted_releases = site.github.releases.assets | sort: 'name', 'last' %}
+        {% assign releases = site.github.releases.assets %}
+        {% assign sorted_releases = releases | sort: 'name' %}
         {% for release in sorted_releases %}
           <p>{{release.browser_download_url}}</p>
         {% endfor %}
