@@ -21,3 +21,5 @@
 
 * Consider switching to using https://github.com/electron-userland/electron-builder rather than electron-packager as it can do produce
   windows installers and seems to do MacOS apps with code signing.
+
+* When doing a new release, double check the jekyll code points to the latest release download.
