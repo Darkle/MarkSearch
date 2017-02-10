@@ -18,12 +18,15 @@
       <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
       <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
       <div id="downloads">
+        {{ site.github.releases | inspect }}
+        <p>next one------</p>
+        {{ site.github.releases[0] | inspect }}
         <!-- {% assign pages = site.pages | sort:"weight"  %} -->
         <!-- {% assign releases = site.github.releases.assets | sort: 'name' %} -->
-        {% assign sorted_releases = site.github.releases[0].assets | sort: 'name', 'last' %}
+        <!-- {% assign sorted_releases = site.github.releases[0].assets | sort: 'name', 'last' %}
         {% for release in sorted_releases %}
           <p>{{release.browser_download_url}}</p>
-        {% endfor %}
+        {% endfor %} -->
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For Windows</a>
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For MacOS</a>
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For Linux</a>
