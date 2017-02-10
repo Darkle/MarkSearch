@@ -1,5 +1,5 @@
 
-##Intro
+## Intro
 MarkSearch is a desktop bookmarking application. It allows you to save and search web pages.
 
 The desktop application runs in the background while you use your browser to access the main MarkSearch search page. MarkSearch is supposed to work kinda like goolge in that you dont need to use tags or categories, you just do a full text search.
@@ -8,7 +8,7 @@ You can save web sites manually from the MarkSearch search page, or use the brow
 
 The browser extension also has the ability to show your MarkSearch bookmarks on google search pages, so you can see results for you search from Google and from MarkSearch at the same time.
 
-##Features
+## Features
 - Full text search of the web pages you save.
 - Search by site just like google (e.g. site:example.com thingToSearchFor)
 - MarkSearch results integrated in to google results page so you can search both at once.
@@ -18,10 +18,10 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 - Simple to install; just download the latest release for you operating system and run.
 
 
-##FAQ
+## FAQ
 - Why doesn't it have tags?
 ⋅⋅* Its focus is full text search and on integration with google and other search engine pages, so just like how you dont really use tags when you search google, the same applies for Marksearch.
-- I like the idea of full text search bookmarks but don't like MarkSearch, are there any alternatives?
+- I like the idea of full text search for bookmarks, but I don't like MarkSearch, are there any alternatives?
 ⋅⋅* http://fetching.io
 ⋅⋅* http://cottontracks.com/
 ⋅⋅* http://region.io/
@@ -35,7 +35,7 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 ⋅⋅* http://getstache.com/
 ⋅⋅* https://github.com/kwalo/bookmark-manager
 
-##Help
+## Help
 
 
 
