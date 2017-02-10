@@ -22,18 +22,18 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 - Why doesn't it have tags?
   - Its focus is full text search and on integration with google and other search engine pages, so just like how you dont really use tags when you search google, the same applies for Marksearch.
 - I like the idea of full text search for bookmarks, but I don't like MarkSearch, are there any alternatives?
-  - http://fetching.io
-  - http://cottontracks.com/
-  - http://region.io/
-  - https://www.basketapp.net/
-  - http://docs.bmark.us/en/latest/
-  - http://pinboard.in/tour/
-  - https://github.com/acoffman/indexmarks
-  - https://grabduck.com/
-  - https://chrome.google.com/webstore/detail/foundit/kckobojmajgneicjgbpcccionajfobbo?hl=en-US
-  - http://sebsauvage.net/wiki/doku.php?id=php%3Ashaarli
-  - http://getstache.com/
-  - https://github.com/kwalo/bookmark-manager
+  - [http://fetching.io](http://fetching.io)
+  - [http://cottontracks.com/](http://cottontracks.com/)
+  - [http://region.io/](http://region.io/)
+  - [https://www.basketapp.net/](https://www.basketapp.net/)
+  - [http://docs.bmark.us/en/latest/](http://docs.bmark.us/en/latest/)
+  - [http://pinboard.in/tour/](http://pinboard.in/tour/)
+  - [https://github.com/acoffman/indexmarks](https://github.com/acoffman/indexmarks)
+  - [https://grabduck.com/](https://grabduck.com/)
+  - [https://chrome.google.com/webstore/detail/foundit/kckobojmajgneicjgbpcccionajfobbo?hl=en-US](https://chrome.google.com/webstore/detail/foundit/kckobojmajgneicjgbpcccionajfobbo?hl=en-US)
+  - [http://sebsauvage.net/wiki/doku.php?id=php%3Ashaarli](http://sebsauvage.net/wiki/doku.php?id=php%3Ashaarli)
+  - [http://getstache.com/](http://getstache.com/)
+  - [https://github.com/kwalo/bookmark-manager](https://github.com/kwalo/bookmark-manager)
 
 ## Help
 
