@@ -24,7 +24,7 @@
         <!-- {% assign releases = site.github.releases.assets | sort: 'name' %} -->
         <!-- {% assign sorted_releases = site.github.releases[0].assets | sort: 'name', 'last' %}-->
         {% for release in site.github.releases %}
-          <p>{{ release }}</p>
+          <p>{{ release.assets.browser_download_url }}</p>
         {% endfor %}
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For Windows</a>
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For MacOS</a>
