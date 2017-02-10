@@ -17,10 +17,17 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 - Cross platform; MarkSearch runs on Linux, MacOS & Windows.
 - Simple to install; just download the latest release for you operating system and run.
 
+## Screenshots
+
+
+## Help
+### Installation
+  Maybe make a note here about the windows firewall - remember got that screenshot in assets folder.
+
 
 ## FAQ
 - Why doesn't it have tags?
-  - Its focus is full text search and on integration with google and other search engine pages, so just like how you dont really use tags when you search google, the same applies for Marksearch.
+  - Its focus is full text search and on integration with google and other search engines, so just like how you dont really use tags when you search google, the same applies for Marksearch.
 - I like the idea of full text search for bookmarks, but I don't like MarkSearch, are there any alternatives?
   - [http://fetching.io](http://fetching.io)
   - [http://cottontracks.com/](http://cottontracks.com/)
@@ -34,8 +41,6 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
   - [http://sebsauvage.net/wiki/doku.php?id=php%3Ashaarli](http://sebsauvage.net/wiki/doku.php?id=php%3Ashaarli)
   - [http://getstache.com/](http://getstache.com/)
   - [https://github.com/kwalo/bookmark-manager](https://github.com/kwalo/bookmark-manager)
-
-## Help
 
 
 
