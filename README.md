@@ -26,6 +26,12 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 #### MarkSearch Settings Page:
 ![Screenshot Of MarkSearch Settings Page](/assets/screenshots/MSsettingsPage.png)
 
+#### MarkSearch Browser Extension Icon:
+![Screenshot Of MarkSearch Browser Extension Icon](/assets/screenshots/browserExtensionIcon.png)
+
+#### MarkSearch Browser Extension Settings:
+![Screenshot Of MarkSearch Browser Extension Settings](/assets/screenshots/extensionOptionsTab1.png)
+
 Put in screenshots of the web search page - searching and adding stuff and the date filter
 
 
