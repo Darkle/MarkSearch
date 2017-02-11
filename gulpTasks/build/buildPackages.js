@@ -4,7 +4,9 @@ var path = require('path')
 
 var gulp = require('gulp')
 var packager = require('electron-packager')
+var Zip = require('node-7z')
 
+var archive = new Zip()
 var basePath = path.resolve(__dirname, '..', '..')
 
 var commonPackageProperties = {
@@ -55,10 +57,10 @@ gulp.task('packagewin64', () =>
     ),
     function doneCallback(err) {
       if(err){
-        console.error('there was an error packaging for osx', err)
+        console.error('there was an error packaging for win64', err)
       }
       else{
-        console.log('successfully packaged for osx')
+        console.log('successfully packaged for win64')
       }
     }
   )
@@ -77,10 +79,20 @@ gulp.task('packagelinux64', () =>
     ),
     function doneCallback(err) {
       if(err){
-        console.error('there was an error packaging for osx', err)
+        console.error('there was an error packaging for linux64', err)
       }
       else{
-        console.log('successfully packaged for osx')
+        console.log('successfully packaged for linux64, now compressing using 7zip')
+        archive.add(
+          path.join(commonPackageProperties.out, 'MarkSearch-linux-x64.7z'),
+          path.join(commonPackageProperties.out, 'MarkSearch-linux-x64')
+        )
+        .then(() => {
+          console.log('successfully compressed linux package')
+        })
+        .catch(error => {
+          console.error('there was an error compressing the linux package: ', error)
+        })
       }
     }
   )
