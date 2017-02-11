@@ -4,18 +4,8 @@ var path = require('path')
 
 var gulp = require('gulp')
 var packager = require('electron-packager')
-// var _ = require('lodash')
 
 var basePath = path.resolve(__dirname, '..', '..')
-/*****
-* Even thogh electron-packager is supposed to pick up the version automatically from the 'electron'
-* version in the package.json, it doesn't seem to be working for me - it sets it as 1.4.13 instead
-* of 1.4.12, so gonna set it manually.
-*/
-// var electronVersion = require(path.resolve(__dirname, '..', '..', 'package.json')).dependencies['electron']
-// if(_.isNaN(Number(electronVersion[0]))){
-//   electronVersion = electronVersion.slice(1)
-// }
 
 var commonPackageProperties = {
   dir: basePath,
