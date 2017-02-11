@@ -15,9 +15,7 @@
 
 * Some urls to try that have issues saving: https://gist.github.com/Darkle/26c453d6778adeaf2f84c6c53e2bfe16
 
-* Note: may need to swap over electron-prebuilt to electron in the future: http://electron.atom.io/blog/2016/08/16/npm-install-electron
-  - if that's the case, remember to update references in the code to where we use the electron-prebuilt version number
-    in code and in npm/gulp scripts
+* Note: we dont use electron-prebuilt any more: http://electron.atom.io/blog/2016/08/16/npm-install-electron
 
 * Consider switching to using https://github.com/electron-userland/electron-builder rather than electron-packager as it can do produce
   windows installers and seems to do MacOS apps with code signing.

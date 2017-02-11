@@ -6,7 +6,7 @@ var gulp = require('gulp')
 var exeq = require('exeq')
 
 var platform = process.platform
-var electronVersion = require(path.resolve(__dirname, '..', 'package.json')).dependencies['electron-prebuilt'].slice(1)
+var electronVersion = require(path.resolve(__dirname, '..', 'package.json')).dependencies['electron'].slice(1)
 var useExternalSQLite = false
 
 gulp.task('buildSqlite', () => {

@@ -44,7 +44,7 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 #### Desktop App:
 To install the desktop app, download the latest release for your operating system here: https://darkle.github.io/MarkSearch/#downloads
 ##### Windows Users:
-Once you have downloaded the .exe file, double click it and run the installer. 
+Once you have downloaded the .exe file, double click it and run the installer.
 Maybe make a note here about the windows firewall - remember got that screenshot in assets folder.
 
 #### Browser Extension:
@@ -62,6 +62,7 @@ Then go to the MarkSearch desktop app settings by clicking on the MarkSearch ico
 - Why doesn't it have tags?
   - Its focus is full text search and on integration with google and other search engines, so just like how you dont really use tags when you search google, the same applies for Marksearch.
 - I like the idea of full text search for bookmarks, but I don't like MarkSearch, are there any alternatives?
+  - [https://historio.us/](https://historio.us/)
   - [http://fetching.io](http://fetching.io)
   - [http://cottontracks.com/](http://cottontracks.com/)
   - [http://region.io/](http://region.io/)

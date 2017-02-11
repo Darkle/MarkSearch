@@ -8,7 +8,7 @@ var exeq = require('exeq')
 var basePath = path.resolve(__dirname, '..')
 
 gulp.task('selfsign', () => {
-  var electronAppPath = path.join(basePath, 'node_modules', 'electron-prebuilt', 'dist', 'Electron.app')
+  var electronAppPath = path.join(basePath, 'node_modules', 'electron', 'dist', 'Electron.app')
   var shellTask = `codesign -s - -f ${ electronAppPath }`
   /****
    * I'm not sure why, but signing it with or without --deep on it's own doesn't
