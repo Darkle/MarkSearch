@@ -117,3 +117,5 @@ require('./gulpTasks/build/nosourcemaps')
  * Build the app for distribution as an executable.
  */
 require('./gulpTasks/build/buildPackages')
+
+require('./gulpTasks/bumpVersion')

@@ -13,7 +13,8 @@
     "packageosx": " electron-rebuild -f -w sqlite3 && cross-env NODE_ENV=production gulp packageosx && npm run createDMG",
     "packagewin64": " electron-rebuild -f -w sqlite3 && cross-env NODE_ENV=production gulp packagewin64",
     "packagelinux64": " electron-rebuild -f -w sqlite3 && cross-env NODE_ENV=production gulp packagelinux64",
-    "createDMG": "appdmg InstallationMediaMetadata/node-appdmg.json packagesForPlatforms/MarkSearch-darwin-x64/MarkSearch.dmg"
+    "createDMG": "appdmg InstallationMediaMetadata/node-appdmg.json packagesForPlatforms/MarkSearch-darwin-x64/MarkSearch.dmg",
+    "bumpVersion": "gulp bumpVersion"
   },
   "dependencies": {
     "axios": "^0.15.2",
