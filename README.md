@@ -43,11 +43,19 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 ## Help
 
 ### Installation
+
 #### Desktop App:
+
 To install the desktop app, download the latest release for your operating system here: https://darkle.github.io/MarkSearch/#downloads
+
 ##### Windows Users:
-Once you have downloaded the .exe file, double click it and run the installer.
-Maybe make a note here about the windows firewall - remember got that screenshot in assets folder.
+
+Once you have downloaded the .exe file, double click it and run the installer. When you run MarkSearch for the first time, you may get a Windows firewall prompt like this: ![Screenshot Of Windows Firwall Prompt](/assets/screenshots/windowsFirewall.png), if you wish to access the MarkSearch search page from other devices on your network (e.g. your phone), click "Allow access", if you don't, click "Cancel".
+
+##### Linux Users:
+
+Unzip the file and put the folder wherever you want (you can rename it too). Then double click the MarkSearch file.
+Note: if you create a .desktop file and need an icon, you can use this large one: https://github.com/Darkle/MarkSearch/blob/master/appmodules/electron/icons/MSlargeIcon.png
 
 #### Browser Extension:
 Install from the Google Chrome webstore: https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng
