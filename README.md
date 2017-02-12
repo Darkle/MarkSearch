@@ -61,9 +61,24 @@ if you wish to access the MarkSearch search page from other devices on your netw
 Unzip the file and put the folder wherever you want (you can rename it too). Then double click the MarkSearch file.
 Note: if you create a .desktop file and need an icon, you can use this large one: [https://github.com/Darkle/MarkSearch/blob/master/appmodules/electron/icons/MSlargeIcon.png](https://github.com/Darkle/MarkSearch/blob/master/appmodules/electron/icons/MSlargeIcon.png)
 
+##### MacOS Users:
+
+Mount the DMG file and copy the MarkSearch.app to the applications directory.
+Mount the DMG file and copy the MarkSearch.app to the applications directory.
+
 #### Browser Extension:
-Install from the Google Chrome webstore: https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng
-Then go to the MarkSearch desktop app settings by clicking on the MarkSearch icon in the systme tray/menu bar th
+Install from the Google Chrome webstore: [https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng](https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng)
+
+When you first install the MarkSearch browser extension, the extension options page will automatically open to the setup.
+
+![Screenshot Of MarkSearch Extension Setup](/assets/screenshots/extensionToken.png)
+
+You need to get an extension token from the MarkSearch desktop app settings and paste it in here.
+
+If you are on Windows, right click on the MarkSearch icon in the system tray and select the Settings. If you are on Linux, click on the MarkSearch icon in the system tray and select Settings. If you are on MacOS, click the MarkSearch icon in the system tray and select Settings.
+
+Once the MarkSearch dekstop app settings window is displayed, click on the "Gernerate Extension Token" button. Then click the clipboard button to the right to copy the token to the clipboard. Once you have done that, go back to the MarkSearch browser extenstion settings in your browser and paste in the token.
+
 
 ### Usage
 
