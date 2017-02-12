@@ -15,16 +15,7 @@ latestRelease.assets.forEach(download => {
     }
 })
 
-/*****
-* This is because the asset urls are different if viewing on the github repo page compared to the project page.
-*/
-if(window.location.href.startsWith('https://darkle.github.io/MarkSearch/')){
-  Array.from(document.querySelectorAll('img')).forEach(img => {
-    if(img.src.startsWith('https://darkle.github.io/assets/screenshots/'))
-      img.src = img.src.replace('https://darkle.github.io/assets/screenshots/', 'https://darkle.github.io/MarkSearch/assets/screenshots/')
-    })
-}
-const locationHash = window.location.hash
+let locationHash = window.location.hash
 
 if(window.location.hash[0] === '#'){
   locationHash = window.location.hash.slice(1)
@@ -35,4 +26,5 @@ const isUpdating = urlParams.has('installedVersion')
 
 if(isUpdating){
   const currentlyInstalledVersion = urlParams.get('installedVersion')
+  console.log(currentlyInstalledVersion)
 }
