@@ -46,8 +46,19 @@
     <script>
       var releases = {{ site.github.releases | jsonify }};
       var latestRelease = releases.sort((r1, r2) => new Date(r2.published_at) - new Date(r1.published_at))[0]
+      var downloadsContainer = document.querySelectorAll('#downloads a')
 
-      console.log(latestRelease)
+      latestRelease.assets.forEach(download => {
+          if(download.name.toLowerCase().indexOf('windows') > -1){
+              downloadsContainer[0].href = download.browser_download_url
+          }
+          if(download.name.toLowerCase().indexOf('macos') > -1){
+              downloadsContainer[1].href = download.browser_download_url
+          }
+          if(download.name.toLowerCase().indexOf('linux') > -1){
+              downloadsContainer[2].href = download.browser_download_url
+          }
+      })
 
       /*****
       * This is because the asset urls are different if viewing on the github repo page compared to the project page.
