@@ -3,6 +3,8 @@ var path = require('path')
 var gulp = require('gulp')
 var exeq = require('exeq')
 var moment = require('moment')
+var chalk = require('chalk')
+var notifier = require('node-notifier')
 var Promise = require('bluebird')
 var fsExtra = Promise.promisifyAll(require('fs-extra'))
 var basePath = path.resolve(__dirname, '..')
@@ -23,6 +25,15 @@ gulp.task('bumpVersion', () => {
         Object.assign({}, updateInfoObj, {latestUpdateVersion: newVersionString})
       )
     )
+    .then(() => {
+      var message = 'IMPORTANT! - after bumping version, you MUST bust the github pages cache, so go to gh-pages branch and run the buildProduction npm task and then push that branch'
+      console.log('bumpVersion task succeded')
+      console.log(chalk.red.bold(message))
+      notifier.notify({
+        'title': 'bumpVersion',
+        'message': message
+      })
+    })
     .catch(function(err) {
       console.error('There was an error running bumpVersion', err)
     })
