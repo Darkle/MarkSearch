@@ -26,8 +26,10 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 #### MarkSearch Settings Page:
 ![Screenshot Of MarkSearch Settings Page](/assets/screenshots/MSsettingsPage.png)
 
-#### MarkSearch Sitting In The System Tray On Linux & In The Menu Bar On MacOS:
+#### MarkSearch Sitting In The System Tray On Linux & Windows & In The Menu Bar On MacOS:
 ![Screenshot Of MarkSearch Sitting In The System Tray On Linux](/assets/screenshots/systemtrayLinux.png)
+
+![Screenshot Of MarkSearch Sitting In The System Tray On Windows](/assets/screenshots/systemtrayWin10.png)
 
 
 ![Screenshot Of MarkSearch Sitting In The System Tray On MacOS](/assets/screenshots/menuBarMacOS.png)
