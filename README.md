@@ -42,7 +42,7 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 
 ## Help
 
-### Installation
+### Installation & Setup
 
 #### Desktop App:
 
