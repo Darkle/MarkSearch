@@ -45,7 +45,7 @@
     </section>
     <script>
       var releases = {{ site.github.releases | jsonify }};
-      var latestRelease = releases.sort((r1, r2) => new Date(r1.published_at) - new Date(r2.published_at))[0]
+      var latestRelease = releases.sort((r1, r2) => new Date(r2.published_at) - new Date(r1.published_at))[0]
 
       console.log(latestRelease)
 
