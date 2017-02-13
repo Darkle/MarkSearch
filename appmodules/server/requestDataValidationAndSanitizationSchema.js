@@ -82,7 +82,7 @@ var validator = require('validator')
 
 function allowedToOpenUrl(urlWantToOpen) {
   return [
-      'http://blog.cloudimage.io/2015/10/19/what-is-prebrowsing-and-how-it-can-drastically-improve-your-page-loading-time/',
+      'https://css-tricks.com/prefetching-preloading-prebrowsing/',
       /****
        * The two 'global.msServerAddr.combined' are for when an error has occured
        * importing in the settings and we show a link to the MarkSearch search page
@@ -90,6 +90,7 @@ function allowedToOpenUrl(urlWantToOpen) {
        */
       `${ global.msServerAddr.combined }`,
       `${ global.msServerAddr.combined }/`,
+      `https://darkle.github.io/MarkSearch/#help`,
       `https://github.com/Darkle/MarkSearch#help`,
       `https://github.com/Darkle/MarkSearch#setting-up-the-marksearch-browser-extension`,
       `https://github.com/Darkle/MarkSearch#setting-up-the-marksearch-bookmarklet`

@@ -8,8 +8,9 @@ block content
 
 
   #settingsContainer
-
-    //.settingsHeader Changes Are Automatically Saved
+    .settingsHeader
+      span Help Available Here:&nbsp;
+      a.externalLink(href="https://darkle.github.io/MarkSearch/#help", target="_blank") MarkSearch Help
     .settings
       input#csrfInput(type="hidden", name="_csrf", value="#{csrfToken}")
       .genTokenOuterContainer
@@ -49,7 +50,7 @@ block content
           When enabled, the first two results on the MarkSearch search page will have prebrowsing applied to them.
           Prebrowsing can make bookmark links load faster when you click on
           them from the search page. (The first result will have "preconnect" applied, while the second
-          result will have "dns-prefetch" applied. More info <a class='externalLink' target="_blank" href='https://css-tricks.com/prefetching-preloading-prebrowsing/here'>here</a>)
+          result will have "dns-prefetch" applied. More info <a class='externalLink' target="_blank" href='https://css-tricks.com/prefetching-preloading-prebrowsing/'>here</a>)
       .alwaysDisableTooltipsSettingContainer
         .formplate
           input#alwaysDisableTooltipsCheckbox(type="checkbox", name="alwaysDisableTooltipsCheckbox")
