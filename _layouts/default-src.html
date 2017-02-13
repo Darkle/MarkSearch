@@ -22,6 +22,9 @@
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For MacOS</a>
         <a href="https://github.com/Darkle/MarkSearch/releases" class="btn">Download For Linux</a>
       </div>
+      {% if site.github.is_project_page %}
+        <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
+      {% endif %}
     </section>
 
     <section class="main-content">

@@ -9,14 +9,18 @@ You can save web sites manually from the MarkSearch search page, or by using the
 The browser extension also has the ability to show your MarkSearch bookmarks on google search pages, so you can see results for you search terms from Google and MarkSearch at the same time.
 
 ## Features
-- Full text search of the web pages you save.
+- Full text search of the web pages you save
 - Search by site just like google (e.g. site:example.com thingToSearchFor)
 - Search by date
-- MarkSearch results integrated in to google results page so you can search both at once.
-- Browser extention to easily save a web page with one click.
-- Fast - because MarkSearch doesn't run on a server on the internet, it should display results as fast as google.
-- Cross platform; MarkSearch runs on Linux, MacOS & Windows.
-- Simple to install; just download the latest release for you operating system and run.
+- An archive of the page you save is also created so that you can view the page even if it is no longer online
+- MarkSearch results integrated in to google results page so you can search both at once
+- Browser extention to easily save a web page with one click
+- Fast - because MarkSearch doesn't run on a server on the internet, it should display results as fast as google
+- Bookmark expiry - get an email with old bookmarks that you can delete
+- You can change the location of the MarkSearch database to make it easy to back it up to Dropbox
+- Easily import and export bookmarks en masse
+- Cross platform; MarkSearch runs on Linux, MacOS & Windows
+- Simple to install; just download the latest release for you operating system and run
 
 ## Screenshots
 
@@ -42,11 +46,15 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 
 ## Help
 
+To find this help page again, right-click the MarkSearch icon in the system tray (or left-click the MarkSearch icon in the menu bar if you're on MacOS), then click on "Help".
+
+Note: if you need help with something that isn't mentioned here, you can open a ticket here: [https://github.com/Darkle/MarkSearch/issues](https://github.com/Darkle/MarkSearch/issues)
+
 ### Installation & Setup
 
 #### Desktop App:
 
-To install the desktop app, download the latest release for your operating system here: https://darkle.github.io/MarkSearch/#downloads
+To install the desktop app, download the latest release for your operating system here: [Downloads]({{ '#downloads' | relative_url }})
 
 ##### Windows Users:
 
@@ -64,7 +72,6 @@ Note: if you create a .desktop file and need an icon, you can use this large one
 ##### MacOS Users:
 
 Mount the DMG file and copy the MarkSearch.app to the applications directory.
-Mount the DMG file and copy the MarkSearch.app to the applications directory.
 
 #### Browser Extension:
 Install from the Google Chrome webstore: [https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng](https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng)
@@ -75,14 +82,111 @@ When you first install the MarkSearch browser extension, the extension options p
 
 You need to get an extension token from the MarkSearch desktop app settings and paste it in here.
 
-If you are on Windows, right click on the MarkSearch icon in the system tray and select the Settings. If you are on Linux, click on the MarkSearch icon in the system tray and select Settings. If you are on MacOS, click the MarkSearch icon in the system tray and select Settings.
+You can open the MarkSearch desktop settings by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Settings".
 
 Once the MarkSearch dekstop app settings window is displayed, click on the "Gernerate Extension Token" button. Then click the clipboard button to the right to copy the token to the clipboard. Once you have done that, go back to the MarkSearch browser extenstion settings in your browser and paste in the token.
-
 
 ### Usage
 
 #### Desktop App:
+
+When MarkSearch runs for the first time, it will open the MarkSearch search page automatically in your browser. From this page you can search MarkSearch and all add web sites to MarkSearch.
+
+##### Search
+
+If you havent already bookmarked the MarkSearch search page, you can open it by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Search". This will open the MarkSearch search page in your browser.
+
+Typing in the search box will search MarkSearch.
+
+To search by site, use the following format: `site:reddit.com foo bar` where reddit.com is the site you want to limit the search too and "foo bar" are the search terms you want to search for.
+
+To search by date, click on the date icon on the search page. This will show a date filter bar like so:
+
+![Screenshot Of MarkSearch Date Filter]({{ '/assets/screenshots/dateFilterBar.png' | relative_url }})
+
+You can choose one of the quick date filter shortcuts on the right to search the past 3 days, the past week, the past month etc, or you can set the start and end month/year for the date filter manually.
+
+To remove the date filter, click on the date icon.
+
+##### Adding Pages
+
+To add a web page to MarkSearch, click on the plus icon on the top right of the MarkSearch search page. This will open the box where you can add multiple web pages at once like so:
+
+![Screenshot Of MarkSearch Add Pages Box]({{ '/assets/screenshots/addPagesToMS.png' | relative_url }})
+
+After you have pasted all the pages you want to save in to the box, click the "Save URLs" button. Note: it will take a few moments to save them as the MarkSearch desktop app has to download the sites internally.
+
+##### Removing Pages
+
+To remove a page from MarkSearch, just click on the trash icon to the right of the link:
+
+![Screenshot Of MarkSearch Delete Icon]({{ '/assets/screenshots/deleteIcon.png' | relative_url }})
+
+##### Viewing Page Archive
+
+Whenever a page is saved to MarkSearch, an archive is also created of that page on [archive.is](https://archive.is/). To view the archive, just click on the archive icon to the right of the link:
+
+![Screenshot Of MarkSearch Archive Icon]({{ '/assets/screenshots/archiveIcon.png' | relative_url }})
+
+##### Settings
+
+You can open the MarkSearch desktop settings by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Settings".
+
+Once you have changed a setting, click on the "Save" button at the bottom.
+
+###### Bookmarklet
+
+You can use the bookmarklet to save pages from browsers that cant run extensions (e.g. mobile browsers). You can either generate the bookmarklet text and copy & paste, or you can have the bookmarklet emailed to you. Note: unfortunately the bookmarklet will not work on https pages.
+
+###### Prebrowsing
+
+When enabled, the first two results on the MarkSearch search page will have prebrowsing applied to them. Prebrowsing can make bookmark links load faster when you click on them from the search page. (The first result will have "preconnect" applied, while the second result will have "dns-prefetch" applied. More info [here](https://css-tricks.com/prefetching-preloading-prebrowsing/)
+
+###### Always Disable Tooltips
+
+MarkSearch shows tooltips when you hover over icons on the MarkSearch search page. It does this until there have been pages saved to the database and there has been at least one result shown. This is done to help the user know what the icons do. If you are always running in incognito mode, then you probably want to always disable the tooltips.
+
+###### Bookmark Expiry
+
+MarkSearch can check every 3 or 6 months for old bookmarks and then email you with details of the old bookmarks. In the email, you are given a link to a page where you can delete the old bookmarks from MarkSearch.
+
+MarkSearch remembers which links it has already checked, so you wont get an email with previously checked links.
+
+###### Current Database Location
+
+You can change where your MarkSearch database is stored. This is useful for if you want to have your bookmarks automatically backed up (e.g. putting them in a Dropbox folder). **Note: if you already have a file named "MarkSearchPages.db" in that directory, it will be overwritten.**
+
+###### Revoke All Tokens
+
+Use this button to revoke all tokens generated for extensions or bookmarklets.
+
+###### Tray Icon Color
+
+This setting allows you to change the color of the MarkSearch system tray icon. The 3 options are Blue, Black or White.
+
+Note: once you save this setting, you will have to restart MarkSearch for the new icon to be shown.
+
+###### Import Bookmarks
+
+You can import Bookmarks into MarkSearch using either a Netscape Bookmarks html file or a Plain Text file.
+
+Netscape Bookmarks html files can be exported by Chrome, Firefox and IE, so you can export your bookmarks from those browsers and then import them into MarkSearch.
+
+You can also import bookmarks from Instapaper, Pocket & Pinboard using the "Import Bookmarks.html File" method. Note: make sure when exporting your bookmarks from Instapaper or Pinboard, that you choose the "html" export method.
+
+You can also import Bookmarks via a plain text file. The plain text file must contain a URL on each new line.
+
+When importing, MarkSearch scrapes the web page for each Bookmark URL you are importing, so the import may take some time if there are a large number of URLs to import/scrape.
+
+###### Export Bookmarks
+
+Exporting as a Bookmarks.html file (aka Netscape Bookmarks html file) will allow you to import your MarkSearch Bookmarks into Chrome, Firefox & IE.
+
+Exporting as a Plain Text file will export all your MarkSearch Bookmarks as plain text with each Bookmarks URL on a new line in the file.
+
+
+
+
 
 #### Browser Extension:
 
@@ -140,6 +244,8 @@ Add info about choosing the search type (instant or non instant)
 Make a note that the extension should work ok with google search pages that have RTL languages
 
 Remember to mention on install under windows, when you first run MarkSearch you may get a firewall popup like this: (show the screenshot in the assets folder) - if you want to be able to search MarkSearch from other computers on your network click "Allow Access", if not, you can click cancel to deny (MarkSearch will still work if you click cancel, it just wont be accessable from other devices on your network).
+
+Remember to do a bit on the archive.is backups
 
 Go through all the features in the desktop app settings
 

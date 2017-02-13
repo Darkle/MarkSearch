@@ -25,7 +25,6 @@ const randomBytes = Crypto.randomBytes(20).toString('hex')
 const outputFilename = isProduction ? `index-build-${ randomBytes }.js` : 'index-build-[hash].js'
 
 const webpackConfig = {
-  devtool: 'source-map',
   target: 'web',
   entry: {
     srcJS: path.join(paths.srcJS, 'index-src.js'),

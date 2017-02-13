@@ -33,4 +33,4 @@ if(isUpdating){
   console.log(currentlyInstalledVersion)
 }
 
-console.log('test7')
+console.log('test7s')
