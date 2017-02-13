@@ -5,7 +5,6 @@ var Crypto = require('crypto')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const bell = require('bell-on-bundler-error-plugin')
 const WebpackCleanupPlugin = require('webpack-cleanup-plugin')
-const BabiliPlugin = require('babili-webpack-plugin')
 
 const paths = {
   srcJS: path.join(__dirname, 'assets', 'js', 'src'),
@@ -91,7 +90,6 @@ const webpackConfig = {
 if(process.env.production){
   console.log('Running production build.')
   webpackConfig.devtool = 'cheap-module-source-map'
-  webpackConfig.plugins.push(new BabiliPlugin({comments: false, sourceMap: false}))
 }
 
 module.exports = webpackConfig
