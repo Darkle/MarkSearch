@@ -21,12 +21,8 @@ const randomBytes = Crypto.randomBytes(20).toString('hex')
 * github jekyll metadata relase data. - we could do this by changing a character in the html, but I'm gonna do
 * it by changing the name of the js file that is inserted into the html by the HtmlWebpackPlugin. It's kind of
 * a round a bout way of changing the html, but it's the easiest.
-*
-* Also we need to change the public path for production so it points to the github pages url, as the path is
-* different when we're in dev and jekyll is serving it from localhost.
 */
 const outputFilename = isProduction ? `index-build-${ randomBytes }.js` : 'index-build-[hash].js'
-const publicPath = isProduction ? `{{ site.github.url | replace_first: 'http://', 'https://' }}/assets/js/build/` : `/assets/js/build/`
 
 const webpackConfig = {
   devtool: 'source-map',
@@ -38,7 +34,6 @@ const webpackConfig = {
     path: paths.buildJS,
     filename: outputFilename,
     sourceMapFilename: '[file].map',
-    publicPath
   },
   module: {
     rules: [
@@ -81,10 +76,8 @@ const webpackConfig = {
     new HtmlWebpackPlugin({
       filename: path.resolve(paths.htmlSrc, 'default.html'),
       template: path.resolve(paths.htmlSrc, 'default-src.html'),
-      chunks: [
-        'srcJS'
-      ],
-      cache: false
+      cache: false,
+      inject: false
     }),
   ]
 }
