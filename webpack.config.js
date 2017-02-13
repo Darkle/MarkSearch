@@ -5,6 +5,7 @@ var Crypto = require('crypto')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const bell = require('bell-on-bundler-error-plugin')
 const WebpackCleanupPlugin = require('webpack-cleanup-plugin')
+const BabiliPlugin = require('babili-webpack-plugin')
 
 const paths = {
   srcJS: path.join(__dirname, 'assets', 'js', 'src'),
@@ -13,11 +14,15 @@ const paths = {
 }
 const randomBytes = Crypto.randomBytes(20).toString('hex')
 /*****
-* We want to change the filename for production task so that it busts the github pages cache on the github servers
-* as the repo metadata for the github pages doesn't seem to be updated on the github pages unless there has been a change
-* to one of the files. - we use the metadata in the js for the download links.
+* Note: we use the github jekyll metadata in the js in the default.html (in a script tag), and since jekyll compiles
+* the `{{ site.github.releases | jsonify }}` into the script tag as json, when we create a new release, we also
+* need to get github's jekyll build to re-build the html so that it recompiles that javascript with the new
+* github jekyll metadata relase data. - we could do this by changing a character in the html, but I'm gonna do
+* it by changing the name of the js file that is inserted into the html by the HtmlWebpackPlugin. It's kind of
+* a round a bout way of changing the html, but it's the easiest.
 *
-* Also we need to change the public path for production so it points to the github pages url.
+* Also we need to change the public path for production so it points to the github pages url, as the path is
+* different when we're in dev and jekyll is serving it from localhost.
 */
 const outputFilename = process.env.production ? `index-build-${ randomBytes }.js` : 'index-build-[hash].js'
 const publicPath = process.env.production ? '{{ site.github.url }}/assets/js/build/' : '/assets/js/build/'
@@ -55,7 +60,7 @@ const webpackConfig = {
           {
             loader: 'babel-loader',
             query: {
-              presets: ['es2015']
+              presets: ['latest']
             }
           },
         ],
@@ -83,5 +88,10 @@ const webpackConfig = {
   ]
 }
 
+if(process.env.production){
+  console.log('Running production build.')
+  webpackConfig.devtool = 'cheap-module-source-map'
+  webpackConfig.plugins.push(new BabiliPlugin({comments: false, sourceMap: false}))
+}
 
 module.exports = webpackConfig
