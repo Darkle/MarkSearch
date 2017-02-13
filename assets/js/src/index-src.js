@@ -32,3 +32,5 @@ if(isUpdating){
   const currentlyInstalledVersion = urlParams.get('installedVersion')
   console.log(currentlyInstalledVersion)
 }
+
+console.log('test7')

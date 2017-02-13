@@ -34,6 +34,7 @@ const webpackConfig = {
     path: paths.buildJS,
     filename: outputFilename,
     sourceMapFilename: '[file].map',
+    // publicPath
   },
   module: {
     rules: [
