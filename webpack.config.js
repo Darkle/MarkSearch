@@ -6,6 +6,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const bell = require('bell-on-bundler-error-plugin')
 const WebpackCleanupPlugin = require('webpack-cleanup-plugin')
 
+const isProduction = process.env.production
+console.log('isProduction', isProduction)
 const paths = {
   srcJS: path.join(__dirname, 'assets', 'js', 'src'),
   buildJS: path.join(__dirname, 'assets', 'js', 'build'),
@@ -23,8 +25,8 @@ const randomBytes = Crypto.randomBytes(20).toString('hex')
 * Also we need to change the public path for production so it points to the github pages url, as the path is
 * different when we're in dev and jekyll is serving it from localhost.
 */
-const outputFilename = process.env.production ? `index-build-${ randomBytes }.js` : 'index-build-[hash].js'
-const publicPath = process.env.production ? '{{ site.github.url }}/assets/js/build/' : '/assets/js/build/'
+const outputFilename = isProduction ? `index-build-${ randomBytes }.js` : 'index-build-[hash].js'
+const publicPath = isProduction ? '{{ site.github.url }}/assets/js/build/' : '/assets/js/build/'
 
 const webpackConfig = {
   devtool: 'source-map',
@@ -85,11 +87,6 @@ const webpackConfig = {
       cache: false
     }),
   ]
-}
-
-if(process.env.production){
-  console.log('Running production build.')
-  webpackConfig.devtool = 'cheap-module-source-map'
 }
 
 module.exports = webpackConfig
