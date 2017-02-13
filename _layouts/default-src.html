@@ -7,7 +7,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ relative_url | '/assets/favicons/apple-touch-icon.png'}}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/favicons/apple-touch-icon.png' | relative_url }}">
     <link rel="icon" type="image/png" href="{{ '/assets/favicons/favicon-32x32.png' | relative_url }}" sizes="32x32">
     <link rel="icon" type="image/png" href="{{ '/assets/favicons/favicon-16x16.png' | relative_url }}" sizes="16x16">
     <link rel="mask-icon" href="{{ '/assets/favicons/safari-pinned-tab.svg' | relative_url }}" color="#5bbad5">
@@ -27,7 +27,7 @@
     <section class="main-content">
       <div id="upgradeInfo", class="hide">
         <p>Note: remember to quit MarkSearch before installing the new version.</p>
-        <p>Changelog: </p>
+        <p>Changelog:</p>
       </div>
       <!-- <h1 class="exofont">MarkSearch</h2> -->
       {{ content }}
