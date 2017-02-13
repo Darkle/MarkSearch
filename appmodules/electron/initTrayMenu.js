@@ -86,7 +86,7 @@ function trayMenu() {
     {
       label: 'Help',
       click: function() {
-        shell.openExternal(`https://github.com/Darkle/MarkSearch#help`)
+        shell.openExternal(`https://darkle.github.io/MarkSearch/#help`)
       }
     },
     {
@@ -133,7 +133,7 @@ function trayMenu() {
             aboutWindow.close()
             shell.openExternal('https://github.com/Darkle/MarkSearch')
           })
-          
+
         }
       }
     },
