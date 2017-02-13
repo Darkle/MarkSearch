@@ -21,7 +21,7 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 ## Screenshots
 
 #### MarkSearch Search Page:
-![Screenshot Of MarkSearch Search Page](/assets/screenshots/MSsearch.png)
+![Screenshot Of MarkSearch Search Page]({{ '/assets/screenshots/MSsearch.png' | relative_url }})
 
 #### MarkSearch Settings Page:
 ![Screenshot Of MarkSearch Settings Page](/assets/screenshots/MSsettingsPage.png)
