@@ -24,21 +24,21 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 ![Screenshot Of MarkSearch Search Page]({{ '/assets/screenshots/MSsearch.png' | relative_url }})
 
 #### MarkSearch Settings Page:
-![Screenshot Of MarkSearch Settings Page](/assets/screenshots/MSsettingsPage.png)
+![Screenshot Of MarkSearch Settings Page]({{ '/assets/screenshots/MSsettingsPage.png' | relative_url }})
 
 #### MarkSearch Sitting In The System Tray On Linux & Windows & In The Menu Bar On MacOS:
-![Screenshot Of MarkSearch Sitting In The System Tray On Linux](/assets/screenshots/systemtrayLinux.png)
+![Screenshot Of MarkSearch Sitting In The System Tray On Linux]({{ '/assets/screenshots/systemtrayLinux.png' | relative_url }})
 
-![Screenshot Of MarkSearch Sitting In The System Tray On Windows](/assets/screenshots/systemtrayWin10.png)
+![Screenshot Of MarkSearch Sitting In The System Tray On Windows]({{ '/assets/screenshots/systemtrayWin10.png' | relative_url }})
 
 
-![Screenshot Of MarkSearch Sitting In The System Tray On MacOS](/assets/screenshots/menuBarMacOS.png)
+![Screenshot Of MarkSearch Sitting In The System Tray On MacOS]({{ '/assets/screenshots/menuBarMacOS.png' | relative_url }})
 
 #### MarkSearch Browser Extension Icon:
-![Screenshot Of MarkSearch Browser Extension Icon](/assets/screenshots/browserExtensionIcon.png)
+![Screenshot Of MarkSearch Browser Extension Icon]({{ '/assets/screenshots/browserExtensionIcon.png' | relative_url }})
 
 #### MarkSearch Browser Extension Settings:
-![Screenshot Of MarkSearch Browser Extension Settings](/assets/screenshots/extensionOptionsTab1.png)
+![Screenshot Of MarkSearch Browser Extension Settings]({{ '/assets/screenshots/extensionOptionsTab1.png' | relative_url }})
 
 ## Help
 
@@ -52,7 +52,7 @@ To install the desktop app, download the latest release for your operating syste
 
 Once you have downloaded the .exe file, double click it and run the installer. When you run MarkSearch for the first time, you may get a Windows firewall prompt like this:
 
-![Screenshot Of Windows Firwall Prompt](/assets/screenshots/windowsFirewall.png)
+![Screenshot Of Windows Firwall Prompt]({{ '/assets/screenshots/windowsFirewall.png' | relative_url }})
 
 if you wish to access the MarkSearch search page from other devices on your network (e.g. your phone), click "Allow access", if you don't, click "Cancel".
 
@@ -71,7 +71,7 @@ Install from the Google Chrome webstore: [https://chrome.google.com/webstore/det
 
 When you first install the MarkSearch browser extension, the extension options page will automatically open to the setup.
 
-![Screenshot Of MarkSearch Extension Setup](/assets/screenshots/extensionToken.png)
+![Screenshot Of MarkSearch Extension Setup]({{ '/assets/screenshots/extensionToken.png' | relative_url }})
 
 You need to get an extension token from the MarkSearch desktop app settings and paste it in here.
 
