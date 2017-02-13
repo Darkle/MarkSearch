@@ -1,4 +1,3 @@
-http://mycyberuniverse.com/web/fixing-jekyll-github-metadata-warning.html
 * To get set up:
 1 Clone repo
 2 Install node-gyp requirements: https://github.com/nodejs/node-gyp#installation
