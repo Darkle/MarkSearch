@@ -8,11 +8,6 @@
 4 Then if you want to do some development, just run `npm start` or if you want to package, run one of the npm package
   scripts like `npm run packagelinux64`
 
-* Scripts/Gulp Tasks to run:
-  'npm nsp' - runs nsp check which runs https://www.npmjs.com/package/nsp
-  'npm test' - runks synk test https://snyk.io/project/1a7ece78-9528-4e3a-9590-afc3d23c20fb/
-  'npm ban' - checks for sensitive files in repo https://github.com/bahmutov/ban-sensitive-files
-
 * Some urls to try that have issues saving: https://gist.github.com/Darkle/26c453d6778adeaf2f84c6c53e2bfe16
 
 * Note: we dont use electron-prebuilt any more: http://electron.atom.io/blog/2016/08/16/npm-install-electron
