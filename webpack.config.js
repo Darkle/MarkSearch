@@ -26,7 +26,7 @@ const randomBytes = Crypto.randomBytes(20).toString('hex')
 * different when we're in dev and jekyll is serving it from localhost.
 */
 const outputFilename = isProduction ? `index-build-${ randomBytes }.js` : 'index-build-[hash].js'
-const publicPath = isProduction ? '{{ site.github.url }}/assets/js/build/' : '/assets/js/build/'
+const publicPath = isProduction ? `{{ site.github.url | replace_first: 'http://', 'https://' }}/assets/js/build/` : `/assets/js/build/`
 
 const webpackConfig = {
   devtool: 'source-map',
