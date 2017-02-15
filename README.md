@@ -57,6 +57,8 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
 To install the desktop app, download the latest release for your operating system here: [Downloads]({{ '#downloads' | relative_url }})
 
+Note: if you are updating, remember to exit MarkSearch first before you install the new version. To exit, just right-click the MarkSearch icon in the system tray (or left-click the MarkSearch icon in the menu bar if you're on MacOS), then click on "Quit MarkSearch".
+
 ##### Windows Users:
 
 Once you have downloaded the .exe file, double click it and run the installer. When you run MarkSearch for the first time, you may get a Windows firewall prompt like this:
@@ -118,7 +120,13 @@ Note: you can also open the MarkSearch search page by using the browser extensio
 
 Typing in the search box will search MarkSearch.
 
-To search by site, use the following format: `site:reddit.com foo bar` where reddit.com is the site you want to limit the search too and "foo bar" are the search terms you want to search for.
+You can use the `-` operator to indicate you don't want a word to appear in a search result, so searching for `foo -bar` would search for results that have the word "foo" but not "bar" in it. Note: the `-` must be right next to the word, so `foo -bar` would work, but `foo - bar` would not work as an operator.
+
+You can use the `|` operator to indicate an OR search, so searching for `foo |bar` would search for results with the word "foo" or "bar" in it. Note: the `|` must be right next to the word, so `foo |bar` would work, but `foo | bar` would not work as an operator.
+
+To search by site, use the following format: `site:reddit.com foo bar` where reddit.com is the site you want to limit the search too and "foo bar" are the search terms you want to search for. Note: the `site:` must be right next to the domain, so `site:reddit.com foo bar` would work, but `site: reddit.com foo bar` would not work as a search by site.
+
+If you want to list all the sites you have saved from a single domain, you can use `site:reddit.com` without any search terms following it.
 
 To search by date, click on the date icon on the search page. This will show a date filter bar like so:
 
@@ -204,6 +212,13 @@ Exporting as a Bookmarks.html file (aka Netscape Bookmarks html file) will allow
 
 Exporting as a Plain Text file will export all your MarkSearch Bookmarks as plain text with each Bookmarks URL on a new line in the file.
 
+##### MarkSearch Desktop App Updates
+
+MarkSearch will check on startup for updates and then once a week while it's running. If there is an update available, you will get an update window like this:
+
+![Screenshot Of MarkSearch Desktop Updated Notification]({{ '/assets/screenshots/MSupdateNotification.png' | relative_url }})
+
+Note: once you have downloaded the updated, remember to exit MarkSearch first before you install the new version. To exit, just right-click the MarkSearch icon in the system tray (or left-click the MarkSearch icon in the menu bar if you're on MacOS), then click on "Quit MarkSearch".
 
 #### Browser Extension:
 
@@ -310,3 +325,9 @@ The first result will have "preconnect" applied, while the second result will ha
   - [http://sebsauvage.net/wiki/doku.php?id=php%3Ashaarli](http://sebsauvage.net/wiki/doku.php?id=php%3Ashaarli)
   - [http://getstache.com/](http://getstache.com/)
   - [https://github.com/kwalo/bookmark-manager](https://github.com/kwalo/bookmark-manager)
+- Why is the code so shit?
+  - It's my first day.
+- I'd like to donate
+  - You can donate via Bitcoin. Click the image below if you have a bitcoin app installed, or use it as a QR code. Or copy the address manually below.
+    - [![Bitcoin Address QR Code](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOQAAADkAQAAAACgLLUgAAADH0lEQVR4nO2Y3Y0kMQiEzSYAGZB/WM4AIvB95Xnve5jmpJO2V5rpNZIZ/qrK/jkPT/2sp+fX+l9YzSy6V8fqtSL45kuLw379HD5sbVvWWrOwz+JwNhRZe6wTZ+0VVV2fxfkquK+z4liuVa2P13Z+thoRrzKKvDN2+Xs7P1hPkeIOMu0UtWrxpsVhv222cCm3KzwjM1ZocdivALH523XrWor4Lo738zKPE4lzDRIDvDvijZ0frbjU3OxKxnZtvIYzS2saN9p2klyQqs52XApB+g7xLF65796u+prjLJP2pru+3/kv1gYpvJPH1clgVhN1jef5rPIAKmjpz2IGtbbxPAsxFJ1bKs2t/7aP48aml8N29wYpu+o4nrNiOs+5VVSIwS9eQkRUd0eN4wZ5PR6ABnSPawYomeDxeOsUM9PpnviHf8n1NvPvd362Bu3E/FLgggw1UC06Gs/zPhBvLsVsaUwVEBnh/f3Oz1baF33TfOaN9zbY6nG8itvD5Y6o1AxvUW/nP5hfp52JE6A+7XxV8zLez5IZLRmJo3DYYUfysqb7CnckGUQWYKHfIaXWy/c7P1tLMmOrnfAp3CLvbW/s/Gx1cILm2lKyoBWFNnjw7On6WkaUH7AxklIDVAc6ivH6SkMCjhT37E2kjJHmdxwnmZyABUg0Yyy0OMrAGtfP8uT3lAAz6GdYFTUf15OBWgYljuaJbF8K7OMv7PxslZS8JQa56CjYV/z/xs7P1jTSCw8unQkP1F8QobT7eD9z+IQHmyPoJaTmHBp7f7/zs7XhgAuLWWUAJipH//k4L9jRMaWyLCWzOCBR4BznfbCReUVAmsjIQhcqOpzNn0Nd8X7ukYRUO6Wgx3kfqtWJ8KCzwkLnfiih58+/93oDIoiW3tAoMVXHx/H5Xs2lvOqeo/QrmKMb8SwvnLMkXtVJ98KMwQIxx+O9V3NQQeoWZyVN1noZP+/rCcllVCRx3sOgbizf2fkvVth3nd0SeH3Vpc/zLw290XTEm1LTEgL1D/TGvZqDDyrvjV0UP8IuXg7P7znIOmHW56JO1MDn/H3dr3Xe+gdaueWsaAiRewAAAABJRU5ErkJggg==)](bitcoin:1D8rwE8rmAzASPaJadcaMFxdjXtyJZpGQP)
+    - `1D8rwE8rmAzASPaJadcaMFxdjXtyJZpGQP`
