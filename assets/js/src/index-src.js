@@ -22,3 +22,7 @@ latestRelease.assets.forEach(download => {
 if(window.location.href === 'https://darkle.github.io/MarkSearch/#downloads'){
   document.querySelector('#upgradeInfo').classList.toggle('hide')
 }
+
+const chromeExtensionUrl = 'https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng'
+
+document.querySelector(`.main-content a[href="${ chromeExtensionUrl }"]`).setAttribute('target', '_blank')

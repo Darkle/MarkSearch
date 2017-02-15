@@ -19,6 +19,9 @@ ul li {
   list-style-type: none;
 }
 
+#bitcoinAddress {
+  list-style-type: none !important;
+}
 
 #faq + ul li, #features + ul li {
   list-style-type: disc;
