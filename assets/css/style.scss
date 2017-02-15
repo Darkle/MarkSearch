@@ -5,6 +5,11 @@
 
 // @import url('https://fonts.googleapis.com/css?family=Exo');
 
+@media all and (max-width: 560px) {
+  ul ul {
+    padding-left: 0;
+  }
+}
 
 .hide{
   display: none;
@@ -19,6 +24,9 @@ ul li {
   list-style-type: disc;
 }
 
+#faq + ul ul {
+    padding-left: 20px;
+}
 
 // .exofont {
 //   font-family: 'Exo';
