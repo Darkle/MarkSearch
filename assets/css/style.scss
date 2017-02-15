@@ -10,6 +10,14 @@
   display: none;
 }
 
+ul li {
+  list-style-type: none;
+}
+
+
+#faq + ul li, #features + ul li {
+  list-style-type: disc;
+}
 
 
 // .exofont {

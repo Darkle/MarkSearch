@@ -1,5 +1,3 @@
-
-## Intro
 MarkSearch is a desktop bookmarking application. It allows you to save and search web pages.
 
 The desktop application runs in the background while you use your browser to access the main MarkSearch search page. MarkSearch is supposed to work kinda like google in that you dont need to use tags or categories, you just do a full text search.
@@ -8,7 +6,7 @@ You can save web sites manually from the MarkSearch search page, or by using the
 
 The browser extension also has the ability to show your MarkSearch bookmarks on google search pages, so you can see results for you search terms from Google and MarkSearch at the same time.
 
-## Features
+## Features:
 - Full text search of the web pages you save
 - Search by site just like google (e.g. site:example.com thingToSearchFor)
 - Search by date
@@ -23,27 +21,27 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 - Simple to install; just download the latest release for you operating system and run
 - Automatic update checks
 
-## Screenshots
+## Screenshots:
 
-#### MarkSearch Search Page:
-![Screenshot Of MarkSearch Search Page]({{ '/assets/screenshots/MSsearch.png' | relative_url }})
+- #### MarkSearch Search Page
+  - ![Screenshot Of MarkSearch Search Page]({{ '/assets/screenshots/MSsearch.png' | relative_url }})
 
-#### MarkSearch Settings Page:
-![Screenshot Of MarkSearch Settings Page]({{ '/assets/screenshots/MSsettingsPage.png' | relative_url }})
+- #### MarkSearch Settings Page
+  - ![Screenshot Of MarkSearch Settings Page]({{ '/assets/screenshots/MSsettingsPage.png' | relative_url }})
 
-#### MarkSearch Sitting In The System Tray On Linux & Windows & In The Menu Bar On MacOS:
-![Screenshot Of MarkSearch Sitting In The System Tray On Linux]({{ '/assets/screenshots/systemtrayLinux.png' | relative_url }})
+- #### MarkSearch Sitting In The System Tray On Linux & Windows & In The Menu Bar On MacOS
+  - ![Screenshot Of MarkSearch Sitting In The System Tray On Linux]({{ '/assets/screenshots/systemtrayLinux.png' | relative_url }})
 
-![Screenshot Of MarkSearch Sitting In The System Tray On Windows]({{ '/assets/screenshots/systemtrayWin10.png' | relative_url }})
+  - ![Screenshot Of MarkSearch Sitting In The System Tray On Windows]({{ '/assets/screenshots/systemtrayWin10.png' | relative_url }})
 
 
-![Screenshot Of MarkSearch Sitting In The System Tray On MacOS]({{ '/assets/screenshots/menuBarMacOS.png' | relative_url }})
+  - ![Screenshot Of MarkSearch Sitting In The System Tray On MacOS]({{ '/assets/screenshots/menuBarMacOS.png' | relative_url }})
 
-#### MarkSearch Browser Extension Icon:
-![Screenshot Of MarkSearch Browser Extension Icon]({{ '/assets/screenshots/browserExtensionIcon.png' | relative_url }})
+- #### MarkSearch Browser Extension Icon
+  - ![Screenshot Of MarkSearch Browser Extension Icon]({{ '/assets/screenshots/browserExtensionIcon.png' | relative_url }})
 
-#### MarkSearch Browser Extension Settings:
-![Screenshot Of MarkSearch Browser Extension Settings]({{ '/assets/screenshots/extensionOptionsTab1.png' | relative_url }})
+- #### MarkSearch Browser Extension Settings
+  - ![Screenshot Of MarkSearch Browser Extension Settings]({{ '/assets/screenshots/extensionOptionsTab1.png' | relative_url }})
 
 ## Help
 
@@ -51,262 +49,278 @@ To find this help page again, right-click the MarkSearch icon in the system tray
 
 Note: if you need help with something that isn't mentioned here, you can open a ticket here: [https://github.com/Darkle/MarkSearch/issues](https://github.com/Darkle/MarkSearch/issues)
 
-### Installation & Setup
+- ### Installation & Setup:
 
-#### Desktop App:
+  - #### Desktop App:
 
-To install the desktop app, download the latest release for your operating system here: [Downloads]({{ '#downloads' | relative_url }})
+    - To install the desktop app, download the latest release for your operating system here: [Downloads]({{ '#downloads' | relative_url }})
 
-Note: if you are updating, remember to exit MarkSearch first before you install the new version. To exit, just right-click the MarkSearch icon in the system tray (or left-click the MarkSearch icon in the menu bar if you're on MacOS), then click on "Quit MarkSearch".
+    - Note: if you are updating, remember to exit MarkSearch first before you install the new version. To exit, just right-click the MarkSearch icon in the system tray (or left-click the MarkSearch icon in the menu bar if you're on MacOS), then click on "Quit MarkSearch".
 
-##### Windows Users:
+    - ##### Windows Users:
 
-Once you have downloaded the .exe file, double click it and run the installer. When you run MarkSearch for the first time, you may get a Windows firewall prompt like this:
+      - Once you have downloaded the .exe file, double click it and run the installer. When you run MarkSearch for the first time, you may get a Windows firewall prompt like this:
 
-![Screenshot Of Windows Firwall Prompt]({{ '/assets/screenshots/windowsFirewall.png' | relative_url }})
+      - ![Screenshot Of Windows Firwall Prompt]({{ '/assets/screenshots/windowsFirewall.png' | relative_url }})
 
-if you wish to access the MarkSearch search page from other devices on your network (e.g. your phone), click "Allow access", if you don't, click "Cancel".
+      - if you wish to access the MarkSearch search page from other devices on your network (e.g. your phone), click "Allow access", if you don't, click "Cancel".
 
-##### Linux Users:
+    - ##### Linux Users:
 
-Unzip the file and put the folder wherever you want (you can rename the folder if you want). Then double click the MarkSearch file to run it.
+      - Unzip the file and put the folder wherever you want (you can rename the folder if you want). Then double click the MarkSearch file to run it.
 
-Add the MarkSearch file to your startup applications to have it run on startup.
+      - Add the MarkSearch file to your startup applications to have it run on startup.
 
-If you are running a firewall and want to access the MarkSearch search page from other devices on your network, you will have to allow incomming connections for the port MarkSearch is running on. You will see the port it is running on in the address url when you have the MarkSearch search page open.
+      - If you are running a firewall and want to access the MarkSearch search page from other devices on your network, you will have to allow incomming connections for the port MarkSearch is running on. You will see the port it is running on in the address url when you have the MarkSearch search page open.
 
-Note: if you create a .desktop file and need an icon, you can use this large one: [https://github.com/Darkle/MarkSearch/blob/master/appmodules/electron/icons/MSlargeIcon.png](https://github.com/Darkle/MarkSearch/blob/master/appmodules/electron/icons/MSlargeIcon.png)
+      - Note: if you create a .desktop file and need an icon, you can use this large one: [https://github.com/Darkle/MarkSearch/blob/master/appmodules/electron/icons/MSlargeIcon.png](https://github.com/Darkle/MarkSearch/blob/master/appmodules/electron/icons/MSlargeIcon.png)
 
-##### MacOS Users:
+    - ##### MacOS Users:
 
-Mount the DMG file and copy the MarkSearch.app to the applications directory. Note: on MacOS, when MarkSearch runs, it will not show in the dock, it will only be available from the menu bar.
+      - Mount the DMG file and copy the MarkSearch.app to the applications directory. Note: on MacOS, when MarkSearch runs, it will not show in the dock, it will only be available from the menu bar.
+      - &nbsp;
 
-#### Browser Extension:
-Install from the Google Chrome webstore: [https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng](https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng)
+  - #### Browser Extension:
 
-When you first install the MarkSearch browser extension, the extension options page will automatically open to the setup.
+    - Install from the Google Chrome webstore: [https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng](https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng)
 
-![Screenshot Of MarkSearch Extension Setup]({{ '/assets/screenshots/extensionToken.png' | relative_url }})
+    - When you first install the MarkSearch browser extension, the extension options page will automatically open to the setup.
 
-You need to get an extension token from the MarkSearch desktop app settings and paste it in here.
+    - ![Screenshot Of MarkSearch Extension Setup]({{ '/assets/screenshots/extensionToken.png' | relative_url }})
 
-You can open the MarkSearch desktop settings by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Settings".
+    - You need to get an extension token from the MarkSearch desktop app settings and paste it in here.
 
-Once the MarkSearch dekstop app settings window is displayed, click on the "Gernerate Extension Token" button. Then click the clipboard button to the right to copy the token to the clipboard. Once you have done that, go back to the MarkSearch browser extenstion settings in your browser and paste in the token.
+    - You can open the MarkSearch desktop settings by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Settings".
 
-Then click on the "Look & Behaviour" tab in the settings. There you will see a setting to choose the search type that google is using. If you have never changed the google search settings on the google search page, then leave the search type as "Instant", if you have changed your google search type in the google search page settings to "Never Show Instant Results" then you need to change the search type to "Non Instant Search".
+    - Once the MarkSearch dekstop app settings window is displayed, click on the "Gernerate Extension Token" button. Then click the clipboard button to the right to copy the token to the clipboard. Once you have done that, go back to the MarkSearch browser extenstion settings in your browser and paste in the token.
 
-You can check what your google search settings are by clicking on the "Settings" button on the google search page and then clicking on "Search settings" as seen here:
+    - Then click on the "Look & Behaviour" tab in the settings. There you will see a setting to choose the search type that google is using. If you have never changed the google search settings on the google search page, then leave the search type as "Instant", if you have changed your google search type in the google search page settings to "Never Show Instant Results" then you need to change the search type to "Non Instant Search".
 
-![Screenshot Of Google Search Settings Button]({{ '/assets/screenshots/googleSearchSettingsButton.png' | relative_url }})
+    - You can check what your google search settings are by clicking on the "Settings" button on the google search page and then clicking on "Search settings" as seen here:
 
-This will take you to a page where you will see whether google instant search is enabled/disabled:
+    - ![Screenshot Of Google Search Settings Button]({{ '/assets/screenshots/googleSearchSettingsButton.png' | relative_url }})
 
-![Screenshot Of Google Search Settings Button]({{ '/assets/screenshots/googleInstantSearchSettings.png' | relative_url }})
+    - This will take you to a page where you will see whether google instant search is enabled/disabled:
 
-### Usage
+    - ![Screenshot Of Google Search Settings Button]({{ '/assets/screenshots/googleInstantSearchSettings.png' | relative_url }})
 
-#### Desktop App:
+- ### Usage
 
-When MarkSearch runs for the first time, it will open the MarkSearch search page automatically in your browser. From this page you can search MarkSearch and all add web sites to MarkSearch.
+  - #### Desktop App:
 
-##### Search
+    - When MarkSearch runs for the first time, it will open the MarkSearch search page automatically in your browser. From this page you can search MarkSearch and all add web sites to MarkSearch.
 
-If you havent already bookmarked the MarkSearch search page, you can open it by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Search". This will open the MarkSearch search page in your browser.
+    - ##### Search:
 
-Note: you can also open the MarkSearch search page by using the browser extension right-click menu as seen here:
+      - If you havent already bookmarked the MarkSearch search page, you can open it by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Search". This will open the MarkSearch search page in your browser.
 
-![Screenshot Of MarkSearch Extension MarkSearch Button Menu]({{ '/assets/screenshots/rightClickMenuExtensionIcon.png' | relative_url }})
+      - Note: you can also open the MarkSearch search page by using the browser extension right-click menu as seen here:
 
-Typing in the search box will search MarkSearch.
+      - ![Screenshot Of MarkSearch Extension MarkSearch Button Menu]({{ '/assets/screenshots/rightClickMenuExtensionIcon.png' | relative_url }})
 
-You can use the `-` operator to indicate you don't want a word to appear in a search result, so searching for `foo -bar` would search for results that have the word "foo" but not "bar" in it. Note: the `-` must be right next to the word, so `foo -bar` would work, but `foo - bar` would not work as an operator.
+      - Typing in the search box will search MarkSearch.
 
-You can use the `|` operator to indicate an OR search, so searching for `foo |bar` would search for results with the word "foo" or "bar" in it. Note: the `|` must be right next to the word, so `foo |bar` would work, but `foo | bar` would not work as an operator.
+      - You can use the `-` operator to indicate you don't want a word to appear in a search result, so searching for `foo -bar` would search for results that have the word "foo" but not "bar" in it. Note: the `-` must be right next to the word, so `foo -bar` would work, but `foo - bar` would not work as an operator.
 
-To search by site, use the following format: `site:reddit.com foo bar` where reddit.com is the site you want to limit the search too and "foo bar" are the search terms you want to search for. Note: the `site:` must be right next to the domain, so `site:reddit.com foo bar` would work, but `site: reddit.com foo bar` would not work as a search by site.
+      - You can use the `|` operator to indicate an OR search, so searching for `foo |bar` would search for results with the word "foo" or "bar" in it. Note: the `|` must be right next to the word, so `foo |bar` would work, but `foo | bar` would not work as an operator.
 
-If you want to list all the sites you have saved from a single domain, you can use `site:reddit.com` without any search terms following it.
+      - To search by site, use the following format: `site:reddit.com foo bar` where reddit.com is the site you want to limit the search too and "foo bar" are the search terms you want to search for. Note: the `site:` must be right next to the domain, so `site:reddit.com foo bar` would work, but `site: reddit.com foo bar` would not work as a search by site.
 
-To search by date, click on the date icon on the search page. This will show a date filter bar like so:
+      - If you want to list all the sites you have saved from a single domain, you can use `site:reddit.com` without any search terms following it.
 
-![Screenshot Of MarkSearch Date Filter]({{ '/assets/screenshots/dateFilterBar.png' | relative_url }})
+      - To search by date, click on the date icon on the search page. This will show a date filter bar like so:
 
-You can choose one of the quick date filter shortcuts on the right to search the past 3 days, the past week, the past month etc, or you can set the start and end month/year for the date filter manually.
+      - ![Screenshot Of MarkSearch Date Filter]({{ '/assets/screenshots/dateFilterBar.png' | relative_url }})
 
-To remove the date filter, click on the date icon.
+      - You can choose one of the quick date filter shortcuts on the right to search the past 3 days, the past week, the past month etc, or you can set the start and end month/year for the date filter manually.
 
-##### Adding Pages
+      - To remove the date filter, click on the date icon.
 
-To add a web page to MarkSearch, click on the plus icon on the top right of the MarkSearch search page. This will open the box where you can add multiple web pages at once like so:
+    - ##### Adding Pages:
 
-![Screenshot Of MarkSearch Add Pages Box]({{ '/assets/screenshots/addPagesToMS.png' | relative_url }})
+      - To add a web page to MarkSearch, click on the plus icon on the top right of the MarkSearch search page. This will open the box where you can add multiple web pages at once like so:
 
-After you have pasted all the pages you want to save in to the box, click the "Save URLs" button. Note: it will take a few moments to save them as the MarkSearch desktop app has to download the sites internally.
+      - ![Screenshot Of MarkSearch Add Pages Box]({{ '/assets/screenshots/addPagesToMS.png' | relative_url }})
 
-##### Removing Pages
+      - After you have pasted all the pages you want to save in to the box, click the "Save URLs" button. Note: it will take a few moments to save them as the MarkSearch desktop app has to download the sites internally.
 
-To remove a page from MarkSearch, just click on the trash icon to the right of the link:
+    - ##### Removing Pages:
 
-![Screenshot Of MarkSearch Delete Icon]({{ '/assets/screenshots/deleteIcon.png' | relative_url }})
+      - To remove a page from MarkSearch, just click on the trash icon to the right of the link:
 
-##### Viewing Page Archive
+      - ![Screenshot Of MarkSearch Delete Icon]({{ '/assets/screenshots/deleteIcon.png' | relative_url }})
 
-Whenever a page is saved to MarkSearch, an archive is also created of that page on [archive.is](https://archive.is/). To view the archive, just click on the archive icon to the right of the link:
+    - ##### Viewing Page Archive:
 
-![Screenshot Of MarkSearch Archive Icon]({{ '/assets/screenshots/archiveIcon.png' | relative_url }})
+      - Whenever a page is saved to MarkSearch, an archive is also created of that page on [archive.is](https://archive.is/). To view the archive, just click on the archive icon to the right of the link:
 
-##### Settings
+      - ![Screenshot Of MarkSearch Archive Icon]({{ '/assets/screenshots/archiveIcon.png' | relative_url }})
 
-You can open the MarkSearch desktop settings by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Settings".
+    - ##### Settings:
 
-Once you have changed a setting, click on the "Save" button at the bottom.
+      - You can open the MarkSearch desktop settings by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Settings".
 
-###### Bookmarklet
+      - Once you have changed a setting, click on the "Save" button at the bottom.
 
-You can use the bookmarklet to save pages from browsers that cant run extensions (e.g. mobile browsers). You can either generate the bookmarklet text and copy & paste, or you can have the bookmarklet emailed to you. Note: unfortunately the bookmarklet will not work on https pages - also, the email may take a few minutes to arrive.
+      - ###### Bookmarklet:
 
-###### Prebrowsing
+        - You can use the bookmarklet to save pages from browsers that cant run extensions (e.g. mobile browsers). You can either generate the bookmarklet text and copy & paste, or you can have the bookmarklet emailed to you. Note: unfortunately the bookmarklet will not work on https pages - also, the email may take a few minutes to arrive.
+        - &nbsp;
 
-When enabled, the first two results on the MarkSearch search page will have prebrowsing applied to them. Prebrowsing can make bookmark links load faster when you click on them from the search page. (The first result will have "preconnect" applied, while the second result will have "dns-prefetch" applied. More info [here](https://css-tricks.com/prefetching-preloading-prebrowsing/)
+      - ###### Prebrowsing:
 
-###### Always Disable Tooltips
+        - When enabled, the first two results on the MarkSearch search page will have prebrowsing applied to them. Prebrowsing can make bookmark links load faster when you click on them from the search page. (The first result will have "preconnect" applied, while the second result will have "dns-prefetch" applied. More info [here](https://css-tricks.com/prefetching-preloading-prebrowsing/)
+        - &nbsp;
 
-MarkSearch shows tooltips when you hover over icons on the MarkSearch search page. It does this until there have been pages saved to the database and there has been at least one result shown. This is done to help the user know what the icons do. If you are always running in incognito mode, then you probably want to always disable the tooltips.
+      - ###### Always Disable Tooltips
 
-###### Bookmark Expiry
+        - MarkSearch shows tooltips when you hover over icons on the MarkSearch search page. It does this until there have been pages saved to the database and there has been at least one result shown. This is done to help the user know what the icons do. If you are always running in incognito mode, then you probably want to always disable the tooltips.
+        - &nbsp;
 
-MarkSearch can check every 3 or 6 months for old bookmarks and then email you with details of the old bookmarks. In the email, you are given a link to a page where you can delete the old bookmarks from MarkSearch.
+      - ###### Bookmark Expiry:
 
-MarkSearch remembers which links it has already checked, so you wont get an email with previously checked links.
+        - MarkSearch can check every 3 or 6 months for old bookmarks and then email you with details of the old bookmarks. In the email, you are given a link to a page where you can delete the old bookmarks from MarkSearch.
 
-###### Current Database Location
+        - MarkSearch remembers which links it has already checked, so you wont get an email with previously checked links.
+        - &nbsp;
 
-You can change where your MarkSearch database is stored. This is useful for if you want to have your bookmarks automatically backed up (e.g. putting them in a Dropbox folder). **Note: if you already have a file named "MarkSearchPages.db" in that directory, it will be overwritten.**
+      - ###### Current Database Location:
 
-###### Revoke All Tokens
+        - You can change where your MarkSearch database is stored. This is useful for if you want to have your bookmarks automatically backed up (e.g. putting them in a Dropbox folder). **Note: if you already have a file named "MarkSearchPages.db" in that directory, it will be overwritten.**
+        - &nbsp;
 
-Use this button to revoke all tokens generated for extensions or bookmarklets.
+      - ###### Revoke All Tokens:
 
-###### Tray Icon Color
+        - Use this button to revoke all tokens generated for extensions or bookmarklets.
+        - &nbsp;
 
-This setting allows you to change the color of the MarkSearch system tray icon. The 3 options are Blue, Black or White.
+      - ###### Tray Icon Color:
 
-Note: once you save this setting, you will have to restart MarkSearch for the new icon to be shown.
+        - This setting allows you to change the color of the MarkSearch system tray icon. The 3 options are Blue, Black or White.
 
-###### Import Bookmarks
+        - Note: once you save this setting, you will have to restart MarkSearch for the new icon to be shown.
+        - &nbsp;
 
-You can import Bookmarks into MarkSearch using either a Netscape Bookmarks html file or a Plain Text file.
+      - ###### Import Bookmarks:
 
-Netscape Bookmarks html files can be exported by Chrome, Firefox and IE, so you can export your bookmarks from those browsers and then import them into MarkSearch.
+        - You can import Bookmarks into MarkSearch using either a Netscape Bookmarks html file or a Plain Text file.
 
-You can also import bookmarks from Instapaper, Pocket & Pinboard using the "Import Bookmarks.html File" method. Note: make sure when exporting your bookmarks from Instapaper or Pinboard, that you choose the "html" export method.
+        - Netscape Bookmarks html files can be exported by Chrome, Firefox and IE, so you can export your bookmarks from those browsers and then import them into MarkSearch.
 
-You can also import Bookmarks via a plain text file. The plain text file must contain a URL on each new line.
+        - You can also import bookmarks from Instapaper, Pocket & Pinboard using the "Import Bookmarks.html File" method. Note: make sure when exporting your bookmarks from Instapaper or Pinboard, that you choose the "html" export method.
 
-When importing, MarkSearch scrapes the web page for each Bookmark URL you are importing, so the import may take some time if there are a large number of URLs to import/scrape.
+        - You can also import Bookmarks via a plain text file. The plain text file must contain a URL on each new line.
 
-###### Export Bookmarks
+        - When importing, MarkSearch scrapes the web page for each Bookmark URL you are importing, so the import may take some time if there are a large number of URLs to import/scrape.
+        - &nbsp;
 
-Exporting as a Bookmarks.html file (aka Netscape Bookmarks html file) will allow you to import your MarkSearch Bookmarks into Chrome, Firefox & IE.
+      - ###### Export Bookmarks:
 
-Exporting as a Plain Text file will export all your MarkSearch Bookmarks as plain text with each Bookmarks URL on a new line in the file.
+        - Exporting as a Bookmarks.html file (aka Netscape Bookmarks html file) will allow you to import your MarkSearch Bookmarks into Chrome, Firefox & IE.
 
-##### MarkSearch Desktop App Updates
+        - Exporting as a Plain Text file will export all your MarkSearch Bookmarks as plain text with each Bookmarks URL on a new line in the file.
+        - &nbsp;
 
-MarkSearch will check on startup for updates and then once a week while it's running. If there is an update available, you will get an update window like this:
+    - ##### MarkSearch Desktop App Updates:
 
-![Screenshot Of MarkSearch Desktop Updated Notification]({{ '/assets/screenshots/MSupdateNotification.png' | relative_url }})
+      - MarkSearch will check on startup for updates and then once a week while it's running. If there is an update available, you will get an update window like this:
 
-Note: once you have downloaded the updated, remember to exit MarkSearch first before you install the new version. To exit, just right-click the MarkSearch icon in the system tray (or left-click the MarkSearch icon in the menu bar if you're on MacOS), then click on "Quit MarkSearch".
+      - ![Screenshot Of MarkSearch Desktop Updated Notification]({{ '/assets/screenshots/MSupdateNotification.png' | relative_url }})
 
-#### Browser Extension:
+      - Note: once you have downloaded the update, remember to exit MarkSearch first before you install the new version. To exit, just right-click the MarkSearch icon in the system tray (or left-click the MarkSearch icon in the menu bar if you're on MacOS), then click on "Quit MarkSearch".
 
-When you first install the MarkSearch browser extension, the extension options page will automatically open to the setup.
+  - #### Browser Extension:
 
-![Screenshot Of MarkSearch Extension Setup]({{ '/assets/screenshots/extensionToken.png' | relative_url }})
+    - When you first install the MarkSearch browser extension, the extension options page will automatically open to the setup.
 
-You need to get an extension token from the MarkSearch desktop app settings and paste it in here.
+    - ![Screenshot Of MarkSearch Extension Setup]({{ '/assets/screenshots/extensionToken.png' | relative_url }})
 
-You can open the MarkSearch desktop settings by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Settings".
+    - You need to get an extension token from the MarkSearch desktop app settings and paste it in here.
 
-Once the MarkSearch dekstop app settings window is displayed, click on the "Gernerate Extension Token" button. Then click the clipboard button to the right to copy the token to the clipboard. Once you have done that, go back to the MarkSearch browser extenstion settings in your browser and paste in the token.
+    - You can open the MarkSearch desktop settings by right-clicking the MarkSearch icon in the system tray (or left-clicking the MarkSearch icon in the menu bar if you're on MacOS), then click on "Settings".
 
-Note: if you need to open the MarkSearch browser extension settings again later, you can do so by right-clicking on the MarkSearch icon in the browser and selecting "Options" as seen here:
+    - Once the MarkSearch dekstop app settings window is displayed, click on the "Gernerate Extension Token" button. Then click the clipboard button to the right to copy the token to the clipboard. Once you have done that, go back to the MarkSearch browser extenstion settings in your browser and paste in the token.
 
-![Screenshot Of MarkSearch Extension MarkSearch Button Menu]({{ '/assets/screenshots/rightClickMenuExtensionIcon.png' | relative_url }})
+    - Note: if you need to open the MarkSearch browser extension settings again later, you can do so by right-clicking on the MarkSearch icon in the browser and selecting "Options" as seen here:
 
-##### Search
+    - ![Screenshot Of MarkSearch Extension MarkSearch Button Menu]({{ '/assets/screenshots/rightClickMenuExtensionIcon.png' | relative_url }})
 
-The MarkSearch browser extension integrates with google. When you search for something in gooogle, you also search for it in MarkSearch. So typing "hacker news" into google would result in the following:
+      - ##### Search:
 
-![Screenshot Of MarkSearch Extension Default Search]({{ '/assets/screenshots/extensionDefaultSearch.png' | relative_url }})
+        - The MarkSearch browser extension integrates with google. When you search for something in gooogle, you also search for it in MarkSearch. So typing "hacker news" into google would result in the following:
 
-The MarkSearch results box by default is on the right of the page and hidden. You can see the MarkSearch results in the box by either clicking the blue bar or by using the keyboard shortcut Ctrl+M.
+        - ![Screenshot Of MarkSearch Extension Default Search]({{ '/assets/screenshots/extensionDefaultSearch.png' | relative_url }})
 
-When the MarkSearch results box is displayed it looks like this:
+        - The MarkSearch results box by default is on the right of the page and hidden. You can see the MarkSearch results in the box by either clicking the blue bar or by using the keyboard shortcut Ctrl+M.
 
-![Screenshot Of MarkSearch Extension MarkSearch Results Box]({{ '/assets/screenshots/extensionResultsBox.png' | relative_url }})
+        - When the MarkSearch results box is displayed it looks like this:
 
-By default the MarkSearch results box will not expand to show the results on page load so as not to annoy you. You can change this behaviour and have it always auto expand in the extension settings.
+        - ![Screenshot Of MarkSearch Extension MarkSearch Results Box]({{ '/assets/screenshots/extensionResultsBox.png' | relative_url }})
 
-Note: if your browsers current width is wide enough, the MarkSearch results box when expanded will show to the right of the google results (this is handy if you have a widescreen monitor). However if your browser is not wide enough, the MarkSearch results box will expand to the full width of the browser and show on top of the google results like this:
+        - By default the MarkSearch results box will not expand to show the results on page load so as not to annoy you. You can change this behaviour and have it always auto expand in the extension settings.
 
-![Screenshot Of MarkSearch Extension MarkSearch Results Box Shown Narrow Browser]({{ '/assets/screenshots/extensionResultsNarrowBrowser.png' | relative_url }})
+        - Note: if your browsers current width is wide enough, the MarkSearch results box when expanded will show to the right of the google results (this is handy if you have a widescreen monitor). However if your browser is not wide enough, the MarkSearch results box will expand to the full width of the browser and show on top of the google results like this:
 
-If you wish to open the MarkSearch search page with the current google search terms, you can either click on the blue MarkSearch search button seen here at the top right of the google search box:
+        - ![Screenshot Of MarkSearch Extension MarkSearch Results Box Shown Narrow Browser]({{ '/assets/screenshots/extensionResultsNarrowBrowser.png' | relative_url }})
 
-![Screenshot Of MarkSearch Extension MarkSearch Search Button]({{ '/assets/screenshots/extensionSearchButton.png' | relative_url }})
+        - If you wish to open the MarkSearch search page with the current google search terms, you can either click on the blue MarkSearch search button seen here at the top right of the google search box:
 
-or you can click the word MarkSearch at the top of the MarkSearch results box seen here:
+        - ![Screenshot Of MarkSearch Extension MarkSearch Search Button]({{ '/assets/screenshots/extensionSearchButton.png' | relative_url }})
 
-![Screenshot Of MarkSearch Extension MarkSearch Results Box Shortcut Link]({{ '/assets/screenshots/MSresultsBoxShortcutLink.png' | relative_url }})
+        - or you can click the word MarkSearch at the top of the MarkSearch results box seen here:
 
-Both the MarkSearch search button and results box on the google results page should also work with google search pages that use rtl languages like arabic, hebrew etc.
+        - ![Screenshot Of MarkSearch Extension MarkSearch Results Box Shortcut Link]({{ '/assets/screenshots/MSresultsBoxShortcutLink.png' | relative_url }})
 
-If you want to search by site, MarkSearch uses the same syntax that google uses, so if you search for `site:reddit.com foo bar` in to google, MarkSearch will also search for pages with "foo bar" in them from the site reddit.com. (note, make sure when you use this syntax that you don't put a space between `site:` and the domain)
+        - Both the MarkSearch search button and results box on the google results page should also work with google search pages that use rtl languages like arabic, hebrew etc.
 
-MarkSearch will also respect any date filters you use with your google search, so if you set the google search fitlers (as seen in the screenshot below), MarkSearch will also apply the same date filter to the search.
+        - If you want to search by site, MarkSearch uses the same syntax that google uses, so if you search for `site:reddit.com foo bar` in to google, MarkSearch will also search for pages with "foo bar" in them from the site reddit.com. (note, make sure when you use this syntax that you don't put a space between `site:` and the domain)
 
-![Screenshot Of Google Date Filters]({{ '/assets/screenshots/googleDateFilters.png' | relative_url }})
+        - MarkSearch will also respect any date filters you use with your google search, so if you set the google search fitlers (as seen in the screenshot below), MarkSearch will also apply the same date filter to the search.
 
-You can also search MarkSearch via the omnibox in Chrome. Just click on the url bar in chrome and type 'ms', then press tab and you will now be able to search MarkSearch from the Chrome omnibox. Screenshot:
+        - ![Screenshot Of Google Date Filters]({{ '/assets/screenshots/googleDateFilters.png' | relative_url }})
 
-![Screenshot Of MarkSearch Extension Omnibox Search]({{ '/assets/screenshots/omniboxSearch.png' | relative_url }})
+        - MarkSearch will also use the google search operators `-` and `|` if you use them, but note that you must make sure to put them next to the word without a space - e.g. `foo -bar` not `foo - bar` and `foo |bar` not `foo | bar`
 
-##### Saving & Removing Pages
+        - You can also search MarkSearch via the omnibox in Chrome. Just click on the url bar in chrome and type 'ms', then press tab and you will now be able to search MarkSearch from the Chrome omnibox. Screenshot:
 
-To save a page to MarkSearch, click on the MS icon seen here:
+        - ![Screenshot Of MarkSearch Extension Omnibox Search]({{ '/assets/screenshots/omniboxSearch.png' | relative_url }})
 
-![Screenshot Of MarkSearch Extension Icon]({{ '/assets/screenshots/extensionIcon.png' | relative_url }})
+      - ##### Saving & Removing Pages:
 
-A notice will display on the page that it has been saved to MarkSearch and the icon will also change to say "Saved":
+        - To save a page to MarkSearch, click on the MS icon seen here:
 
-![Screenshot Of MarkSearch Saved Page]({{ '/assets/screenshots/extensionSavePage.png' | relative_url }})
+        - ![Screenshot Of MarkSearch Extension Icon]({{ '/assets/screenshots/extensionIcon.png' | relative_url }})
 
-To remove a page from MarkSearch, just click on the MS icon and it will be removed. A notification will show on the page and the MS icon will no longer say "Saved":
+        - A notice will display on the page that it has been saved to MarkSearch and the icon will also change to say "Saved":
 
-![Screenshot Of MarkSearch Removed Page]({{ '/assets/screenshots/extensionRemovedPage.png' | relative_url }})
+        - ![Screenshot Of MarkSearch Saved Page]({{ '/assets/screenshots/extensionSavePage.png' | relative_url }})
 
-##### Extension Options
+        - To remove a page from MarkSearch, just click on the MS icon and it will be removed. A notification will show on the page and the MS icon will no longer say "Saved":
 
-![Screenshot Of MarkSearch Extension Options]({{ '/assets/screenshots/extensionOptions.png' | relative_url }})
+        - ![Screenshot Of MarkSearch Removed Page]({{ '/assets/screenshots/extensionRemovedPage.png' | relative_url }})
 
-###### MarkSearch Results Box
+      - ##### Extension Options:
 
-You can set the MarkSearch results box to show on the right or left of the google results page. You can also set the box to autoexpand on page load.
+        - ![Screenshot Of MarkSearch Extension Options]({{ '/assets/screenshots/extensionOptions.png' | relative_url }})
 
-###### MarkSearch Search Button
+        - ###### MarkSearch Results Box:
 
-You can disable showing the MarkSearch search button next to the google search box as seen here:
+          - You can set the MarkSearch results box to show on the right or left of the google results page. You can also set the box to autoexpand on page load.
+          - &nbsp;
 
-![Screenshot Of MarkSearch Extension MarkSearch Search Button]({{ '/assets/screenshots/extensionSearchButton.png' | relative_url }})
+        - ###### MarkSearch Search Button:
 
-###### Prebrowsing
+          - You can disable showing the MarkSearch search button next to the google search box as seen here:
 
-When enabled, the first two results in the MarkSearch results will have prebrowsing applied to them. Prebrowsing can make links load faster.
+          - ![Screenshot Of MarkSearch Extension MarkSearch Search Button]({{ '/assets/screenshots/extensionSearchButton.png' | relative_url }})
+          - &nbsp;
 
-The first result will have "preconnect" applied, while the second result will have "dns-prefetch" applied. More info on how prebrowsing works is available here: [https://css-tricks.com/prefetching-preloading-prebrowsing/](https://css-tricks.com/prefetching-preloading-prebrowsing/)
+        - ###### Prebrowsing:
+
+          - When enabled, the first two results in the MarkSearch results will have prebrowsing applied to them. Prebrowsing can make links load faster.
+
+          - The first result will have "preconnect" applied, while the second result will have "dns-prefetch" applied. More info on how prebrowsing works is available here: [https://css-tricks.com/prefetching-preloading-prebrowsing/](https://css-tricks.com/prefetching-preloading-prebrowsing/)
+          - &nbsp;
 
 ## FAQ
 - Why doesn't it have tags?
