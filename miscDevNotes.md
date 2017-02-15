@@ -15,13 +15,13 @@
 
 * When doing a new release, double check the download links point to the latest release downloads. Note: remember to run webpack in the gh-pages branch and push the changes with the new file hash name, otherwise the js on the page wont point to the latest releases because the github metadata only seems to be updated for the github pages when something is changed in the gh-pages branch and pushed.
 
-Doing the github pages stuff:
-IMPORTANT: DON'T rebase or merge the master into the gh-pages branch or vice versa. There's nothing in either branch that needs to be in the other branch. Effectively think of them as seperate repos.
-(to clone the pages branch, create a new folder and run `git clone -b gh-pages --single-branch https://github.com/Darkle/MarkSearch.git`)
-http://mycyberuniverse.com/web/fixing-jekyll-github-metadata-warning.html
-https://help.github.com/articles/using-jekyll-as-a-static-site-generator-with-github-pages/
-https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll/
-https://help.github.com/articles/user-organization-and-project-pages/
-https://help.github.com/articles/repository-metadata-on-github-pages/
+* Doing the github pages stuff:
+  * IMPORTANT: DON'T rebase or merge the master into the gh-pages branch or vice versa. There's nothing in either branch that needs to be in the other branch. Effectively think of them as seperate repos.
+  * (to clone the pages branch, create a new folder and run `git clone -b gh-pages --single-branch https://github.com/Darkle/MarkSearch.git`)
+  * http://mycyberuniverse.com/web/fixing-jekyll-github-metadata-warning.html
+  * https://help.github.com/articles/using-jekyll-as-a-static-site-generator-with-github-pages/
+  * https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll/
+  * https://help.github.com/articles/user-organization-and-project-pages/
+  * https://help.github.com/articles/repository-metadata-on-github-pages/
 running `jekyll serve` should show you a preview of what it will look like
-When you are done editing, remember to run buildProduction npm task and then push that branch to github.
+  * When you are done editing, remember to run buildProduction npm task and then push that branch to github.
