@@ -1,9 +1,9 @@
 * To get set up:
-1 Clone repo
-2 Install node-gyp requirements: https://github.com/nodejs/node-gyp#installation
+  1. Clone repo
+  2. Install node-gyp requirements: https://github.com/nodejs/node-gyp#installation
   Note: for windows setup, you can use the setupForNodeGypForWindows npm task.
-3 run `npm run initialSetup`
-4 Then if you want to do some development, just run `npm start` or if you want to package, run one of the npm package
+  3. run `npm run initialSetup`
+  4. Then if you want to do some development, just run `npm start` or if you want to package, run one of the npm package
   scripts like `npm run packagelinux64`
 
 * Some urls to try that have issues saving: https://gist.github.com/Darkle/26c453d6778adeaf2f84c6c53e2bfe16
