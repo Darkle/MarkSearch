@@ -1,14 +1,5 @@
 'use strict'
 
-/**
- * note: run these via gulp in default cmd.exe when on Windows as opposed to MinGW et.al., as had an issue
- * with MinGW not finding python on Win10 for the sqlite3 build task.
- *
- * Also, remember to run `bower install`, `npm install` and `gulp buildSqlite` before running startDev for the first time.
- * first time.
- */
-
-
 /****
 * startDev ('default', 'browserify', 'nodemon', 'browser-sync', 'watch-less', 'watch-js')
 * Runs nodemon, browsersync and watch tasks for .less and .js.
