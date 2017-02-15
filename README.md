@@ -233,6 +233,8 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
       - ![Screenshot Of MarkSearch Desktop Updated Notification]({{ '/assets/screenshots/screenshots-optimized/MSupdateNotification.png' | relative_url }})
 
+      - If you click the "Go To Download Page", it will open the download page in your browser. If you click "Skip This Update", it will not pester you again for this update. If you close the update window without clicking any of the buttons, it will show the update window again in a week or the next time you run MarkSearch.
+
       - Note: once you have downloaded the update, remember to exit MarkSearch first before you install the new version. To exit, just right-click the MarkSearch icon in the system tray (or left-click the MarkSearch icon in the menu bar if you're on MacOS), then click on "Quit MarkSearch".
 
   - #### Browser Extension:
