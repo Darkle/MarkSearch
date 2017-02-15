@@ -31,7 +31,7 @@ function showUpdateNotification(latestUpdateVersion) {
 
   /****
    * http://electron.atom.io/docs/v0.37.5/api/browser-window/#new-browserwindowoptions
-   */ 
+   */
   notificationWindow = new BrowserWindow(
     {
       width: noticationWindowWidth,
@@ -69,9 +69,9 @@ function showUpdateNotification(latestUpdateVersion) {
 
   ipcMain.on('openUpdatePage', function() {
     notificationWindow.close()
-    electronShell.openExternal('https://github.com/Darkle/MarkSearch-Updates')
+    electronShell.openExternal('https://darkle.github.io/MarkSearch/#downloads')
   })
-  
+
   ipcMain.on('skipThisVersion', function(event, versionToSkip) {
     notificationWindow.close()
     if(!_.isString(versionToSkip) || !versionToSkip.length){
