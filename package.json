@@ -9,6 +9,7 @@
   "scripts": {
     "start": "gulp",
     "initialSetup": "npm install && bower install && npm run rebuildSqliteForElectron",
+    "setupForNodeGypForWindows": "npm --add-python-to-path install --global windows-build-tools",
     "rebuildSqliteForElectron": "electron-rebuild -f -w sqlite3",
     "packagewin64": "npm run rebuildSqliteForElectron && cross-env NODE_ENV=production gulp packagewin64",
     "packagelinux64": "npm run rebuildSqliteForElectron && cross-env NODE_ENV=production gulp packagelinux64",

@@ -1,9 +1,7 @@
 * To get set up:
 1 Clone repo
 2 Install node-gyp requirements: https://github.com/nodejs/node-gyp#installation
-  Note: for windows setup, if you use the `npm install --global --production windows-build-tools` option it will not
-  add python to the PATH. The easiest way to fix, is after installed windows-build-tools, download the python 2.7 installer
-  from python homepage and enable the add python to PATH feature in the installer window.
+  Note: for windows setup, you can use the setupForNodeGypForWindows npm task.
 3 run `npm run initialSetup`
 4 Then if you want to do some development, just run `npm start` or if you want to package, run one of the npm package
   scripts like `npm run packagelinux64`
