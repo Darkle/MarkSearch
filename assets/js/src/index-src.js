@@ -19,18 +19,6 @@ latestRelease.assets.forEach(download => {
     }
 })
 
-let locationHash = window.location.hash
-
-if(window.location.hash[0] === '#'){
-  locationHash = window.location.hash.slice(1)
+if(window.location.href === 'https://darkle.github.io/MarkSearch/#downloads'){
+  document.querySelector('#upgradeInfo').classList.toggle('hide')
 }
-
-const urlParams = new URLSearchParams(locationHash)
-const isUpdating = urlParams.has('installedVersion')
-
-if(isUpdating){
-  const currentlyInstalledVersion = urlParams.get('installedVersion')
-  console.log(currentlyInstalledVersion)
-}
-
-console.log('test7s')

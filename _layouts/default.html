@@ -25,13 +25,12 @@
       {% if site.github.is_project_page %}
         <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
       {% endif %}
+      <div id="upgradeInfo", class="hide">
+        <p>Note: once you have downloaded the updated, remember to exit MarkSearch first before you install the new version. To exit, just right-click the MarkSearch icon in the system tray (or left-click the MarkSearch icon in the menu bar if you're on MacOS), then click on "Quit MarkSearch".</p>
+      </div>
     </section>
 
     <section class="main-content">
-      <div id="upgradeInfo", class="hide">
-        <p>Note: remember to quit MarkSearch before installing the new version.</p>
-        <p>Changelog:</p>
-      </div>
       <!-- <h1 class="exofont">MarkSearch</h2> -->
       {{ content }}
 
@@ -46,6 +45,6 @@
     <script>
       var releases = {{ site.github.releases | jsonify }}
     </script>
-    <script type="text/javascript" src="{{ '../assets/js/build/index-build-833b67f611109523b777.js' | replace_first: '../', '/' | relative_url }}"></script>
+    <script type="text/javascript" src="{{ '../assets/js/build/index-build-f83954e125c1cfdeaa06b0112a4b5c65e4cd9dc8.js' | replace_first: '../', '/' | relative_url }}"></script>
   </body>
 </html>
