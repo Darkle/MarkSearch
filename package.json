@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "setup": "npm install && npm install multiview -g",
-    "dev": "multiview [webpack --progress --colors --watch] [jekyll serve] [browser-sync start --config ./bs-config.js]",
+    "dev": "multiview [webpack --progress --colors --watch] [jekyll serve --skip-initial-build] [browser-sync start --config ./bs-config.js]",
     "buildProduction": "cross-env production=true webpack --progress --colors --optimize-minimize"
   },
   "repository": {
