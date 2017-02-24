@@ -26,7 +26,7 @@ gulp.task('bumpVersion', () => {
       )
     )
     .then(() => {
-      var message = 'IMPORTANT! - after bumping version, you MUST bust the github pages cache, so go to gh-pages branch and run the buildProduction npm task and then push that branch'
+      var message = 'IMPORTANT! - after you create a new release on the github releases page, you MUST bust the github pages cache, so go to gh-pages branch and run the buildProduction npm task and then push that branch'
       console.log('bumpVersion task succeded')
       console.log(chalk.red.bold(message))
       notifier.notify({
