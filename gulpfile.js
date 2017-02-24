@@ -110,3 +110,5 @@ require('./gulpTasks/build/nosourcemaps')
 require('./gulpTasks/build/buildPackages')
 
 require('./gulpTasks/bumpVersion')
+
+require('./gulpTasks/build/createWindowsInstaller')
