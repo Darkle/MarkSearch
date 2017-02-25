@@ -115,7 +115,7 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
   - #### Desktop App:
 
-    - When MarkSearch runs for the first time, it will open the MarkSearch search page automatically in your browser. From this page you can search MarkSearch and all add websites to MarkSearch.
+    - When MarkSearch runs for the first time, it will open the MarkSearch search page automatically in your browser. From this page you can search MarkSearch and add websites to MarkSearch.
 
     - ##### Search:
 
