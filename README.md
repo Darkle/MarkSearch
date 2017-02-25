@@ -78,6 +78,12 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
       - Mount the DMG file and copy the MarkSearch.app to the applications directory.
 
+      - When you run MarkSearch for the first time, you may get a firewall prompt like this:
+
+      - ![Screenshot Of MacOS Firewall Prompt]({{ '/assets/screenshots/screenshots-optimized/OSX-Firewall-SS-opt.png' | relative_url }})
+
+      - if you wish to access the MarkSearch search page from other devices on your network (e.g. your phone), click "Allow", if you don't, click "Deny".
+
       - Note: when MarkSearch runs on MacOS, it will not show in the dock, it will only be available from the menu bar.
       - &nbsp;
 
