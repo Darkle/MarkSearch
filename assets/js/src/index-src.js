@@ -8,13 +8,13 @@ const latestRelease = releases.sort((r1, r2) => new Date(r2.published_at) - new 
 const downloadsContainer = document.querySelectorAll('#downloads a')
 
 latestRelease.assets.forEach(download => {
-    if(download.name.includes('windows')){
+    if(download.name.toLowerCase().includes('windows')){
         downloadsContainer[0].href = download.browser_download_url
     }
-    if(download.name.includes('macos')){
+    if(download.name.toLowerCase().endsWith('.dmg')){
         downloadsContainer[1].href = download.browser_download_url
     }
-    if(download.name.includes('linux')){
+    if(download.name.toLowerCase().includes('linux')){
         downloadsContainer[2].href = download.browser_download_url
     }
 })
