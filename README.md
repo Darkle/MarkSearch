@@ -4,4 +4,4 @@ See [https://darkle.github.io/MarkSearch/](https://darkle.github.io/MarkSearch/)
 
 ### Privacy Policy:
 
-MarkSearch does no tracking and has no analytics and sends nothing to the internet.
+MarkSearch does not collect any information about yout. It does no tracking and has no analytics and sends nothing to the internet.
