@@ -3,7 +3,9 @@
   2. Install node-gyp requirements: https://github.com/nodejs/node-gyp#installation
   Note: for windows setup, you can use the setupForNodeGypForWindows npm task.
   3. run `npm run initialSetup`
-  4. Then if you want to do some development, just run `npm start` or if you want to package, run one of the npm package
+  4. Create a folder called `config` in the project directory, then in the `config` folder, create a file called `apikeys.json`. In the `apikeys.json` file put the following: https://gist.github.com/Darkle/e80746ccc0e30d675b3dc5b5046659ea
+  5. Sign up for a free account on https://www.mailgun.com/ and put your mailgun keys in the apikeys.json.
+  6. Then if you want to do some development, just run `npm start` or if you want to package, run one of the npm package
   scripts like `npm run packagelinux64`
 
 * Some urls to try that have issues saving: https://gist.github.com/Darkle/26c453d6778adeaf2f84c6c53e2bfe16
