@@ -1,8 +1,8 @@
 #### A note about security and updates
 
-Recently there was a vulnerability discovered in Electron: https://www.trustwave.com/Resources/SpiderLabs-Blog/CVE-2018-1000136---Electron-nodeIntegration-Bypass/ . I have updated the Windows version of MarkSearch to a version of Electron that includes a patch for this issue. Unfortunately I ran in to some issues building on MacOS and Linux and was unable to produce builds of the latest version of MarkSearch for those operating systems. If you need to use MarkSearch on MacOS or Linux, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page - only add pages to MarkSearch via the chrome extension.
+Recently there was a [vulnerability discovered](https://www.trustwave.com/Resources/SpiderLabs-Blog/CVE-2018-1000136---Electron-nodeIntegration-Bypass/) in Electron. I have updated the Windows version of MarkSearch to a version of Electron that includes a patch for this issue. 
 
-
+Unfortunately I ran in to some issues building on MacOS and Linux and was unable to produce builds of the latest version of MarkSearch for those operating systems. If you need to use MarkSearch on MacOS or Linux, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page - only add pages to MarkSearch via the chrome extension.
 
 MarkSearch is a desktop bookmarking application. It allows you to save and search web pages.
 
@@ -13,6 +13,7 @@ You can save websites manually from the MarkSearch search page, or by using the 
 The browser extension also has the ability to show your MarkSearch bookmarks on google search pages, so you can see results for you search terms from Google and MarkSearch at the same time.
 
 ## Features:
+
 - Full text search of the web pages you save
 - Search by site just like google (e.g. site:example.com thingToSearchFor)
 - Search by date
@@ -30,20 +31,23 @@ The browser extension also has the ability to show your MarkSearch bookmarks on 
 ## Screenshots:
 
 - #### MarkSearch Search Page
+
   - ![Screenshot Of MarkSearch Search Page]({{ '/assets/screenshots/screenshots-optimized/MSsearch.png' | relative_url }})
 
 - #### MarkSearch Sitting In The System Tray On Linux & Windows And In The Menu Bar On MacOS
+
   - ![Screenshot Of MarkSearch Sitting In The System Tray On Linux]({{ '/assets/screenshots/screenshots-optimized/systemtrayLinux.png' | relative_url }})
 
   - ![Screenshot Of MarkSearch Sitting In The System Tray On Windows]({{ '/assets/screenshots/screenshots-optimized/systemtrayWin10.png' | relative_url }})
 
-
-  - ![Screenshot Of MarkSearch Sitting In The System Tray On MacOS]({{ '/assets/screenshots/screenshots-optimized/menuBarMacOS.png' | relative_url }})
+- ![Screenshot Of MarkSearch Sitting In The System Tray On MacOS]({{ '/assets/screenshots/screenshots-optimized/menuBarMacOS.png' | relative_url }})
 
 - #### MarkSearch Browser Extension Icon
+
   - ![Screenshot Of MarkSearch Browser Extension Icon]({{ '/assets/screenshots/screenshots-optimized/browserExtensionIcon.png' | relative_url }})
 
 - #### MarkSearch Results On The Google Results Page
+
   - ![Screenshot Of MarkSearch Extension MarkSearch Results Box]({{ '/assets/screenshots/screenshots-optimized/extensionResultsBox.png' | relative_url }})
 
 ## Help
@@ -91,7 +95,8 @@ Note: if you need help with something that isn't mentioned here, you can open a 
       - if you wish to access the MarkSearch search page from other devices on your network (e.g. your phone), click "Allow", if you don't, click "Deny".
 
       - Note: when MarkSearch runs on MacOS, it will not show in the dock, it will only be available from the menu bar.
-      - &nbsp;
+
+      -  
 
   - #### Browser Extension:
 
@@ -178,46 +183,42 @@ Note: if you need help with something that isn't mentioned here, you can open a 
       - Screenshot of the MarkSearch settings window:
 
         - ![Screenshot Of MarkSearch Settings Page]({{ '/assets/screenshots/screenshots-optimized/MSsettingsPage.png' | relative_url }})
-        - &nbsp;
-
+        - 
       - ###### Bookmarklet:
 
         - You can use the bookmarklet to save pages from browsers that can't run extensions (e.g. mobile browsers). You can either generate the bookmarklet text and copy & paste, or you can have the bookmarklet emailed to you. Note: unfortunately the bookmarklet will not work on https pages - also, the email may take a few minutes to arrive.
-        - &nbsp;
-
+        - 
       - ###### Prebrowsing:
 
         - When enabled, the first two results on the MarkSearch search page will have prebrowsing applied to them. Prebrowsing can make bookmark links load faster when you click on them from the search page. (The first result will have "preconnect" applied, while the second result will have "dns-prefetch" applied. More info [here](https://css-tricks.com/prefetching-preloading-prebrowsing/)
-        - &nbsp;
-
+        - 
       - ###### Always Disable Tooltips
 
         - MarkSearch shows tooltips when you hover over icons on the MarkSearch search page. It does this until there have been pages saved to the database and there has been at least one result shown. This is done to help the user know what the icons do. If you are always running in incognito mode, then you probably want to always disable the tooltips.
-        - &nbsp;
-
+        - 
       - ###### Bookmark Expiry:
 
         - MarkSearch can check every 3 or 6 months for old bookmarks and then email you with details of the old bookmarks. In the email, you are given a link to a page where you can delete the old bookmarks from MarkSearch.
 
         - MarkSearch remembers which links it has already checked, so you won't get an email with previously checked links.
-        - &nbsp;
+
+        -  
 
       - ###### Current Database Location:
 
         - You can change where your MarkSearch database is stored. This is useful for if you want to have your bookmarks automatically backed up (e.g. putting them in a Dropbox folder). **Note: if you already have a file named "MarkSearchPages.db" in that directory, it will be overwritten.**
-        - &nbsp;
-
+        - 
       - ###### Revoke All Tokens:
 
         - Use this button to revoke all tokens generated for extensions or bookmarklets.
-        - &nbsp;
-
+        - 
       - ###### Tray Icon Color:
 
         - This setting allows you to change the color of the MarkSearch system tray icon. The 3 options are Blue, Black or White.
 
         - Note: once you save this setting, you will have to restart MarkSearch for the new icon to be shown.
-        - &nbsp;
+
+        -  
 
       - ###### Import Bookmarks:
 
@@ -230,14 +231,16 @@ Note: if you need help with something that isn't mentioned here, you can open a 
         - You can also import Bookmarks via a plain text file. The plain text file must contain a URL on each new line.
 
         - When importing, MarkSearch scrapes the web page for each Bookmark URL you are importing, so the import may take some time if there are a large number of URLs to import/scrape.
-        - &nbsp;
+
+        -  
 
       - ###### Export Bookmarks:
 
         - Exporting as a Bookmarks.html file (aka Netscape Bookmarks html file) will allow you to import your MarkSearch Bookmarks into Chrome, Firefox & IE.
 
         - Exporting as a Plain Text file will export all your MarkSearch Bookmarks as plain text with each Bookmarks URL on a new line in the file.
-        - &nbsp;
+
+        -  
 
     - ##### MarkSearch Desktop App Updates:
 
@@ -326,23 +329,25 @@ Note: if you need help with something that isn't mentioned here, you can open a 
         - ###### MarkSearch Results Box:
 
           - You can set the MarkSearch results box to show on the right or left of the google results page. You can also set the box to autoexpand on page load.
-          - &nbsp;
-
+          - 
         - ###### MarkSearch Search Button:
 
           - You can disable showing the MarkSearch search button next to the google search box as seen here:
 
           - ![Screenshot Of MarkSearch Extension MarkSearch Search Button]({{ '/assets/screenshots/screenshots-optimized/extensionSearchButton.png' | relative_url }})
-          - &nbsp;
+
+          -  
 
         - ###### Prebrowsing:
 
           - When enabled, the first two results in the MarkSearch results will have prebrowsing applied to them. Prebrowsing can make links load faster.
 
           - The first result will have "preconnect" applied, while the second result will have "dns-prefetch" applied. More info on how prebrowsing works is available here: [https://css-tricks.com/prefetching-preloading-prebrowsing/](https://css-tricks.com/prefetching-preloading-prebrowsing/)
-          - &nbsp;
+
+          -  
 
 ## FAQ
+
 - Why doesn't it have tags?
   - Its focus is full text search and on integration with google and other search engines, so just like how you don't really use tags when you search google, the same applies for Marksearch.
 - I like the idea of full text search for bookmarks, but I don't like MarkSearch, are there any alternatives?
@@ -366,4 +371,3 @@ Note: if you need help with something that isn't mentioned here, you can open a 
   - You can also donate via Bitcoin. Click the image below if you have a bitcoin app installed, or use it as a QR code. Or copy the address manually below.
     - {: #bitcoinAddress }[![Bitcoin Address QR Code](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOQAAADkAQAAAACgLLUgAAADH0lEQVR4nO2Y3Y0kMQiEzSYAGZB/WM4AIvB95Xnve5jmpJO2V5rpNZIZ/qrK/jkPT/2sp+fX+l9YzSy6V8fqtSL45kuLw379HD5sbVvWWrOwz+JwNhRZe6wTZ+0VVV2fxfkquK+z4liuVa2P13Z+thoRrzKKvDN2+Xs7P1hPkeIOMu0UtWrxpsVhv222cCm3KzwjM1ZocdivALH523XrWor4Lo738zKPE4lzDRIDvDvijZ0frbjU3OxKxnZtvIYzS2saN9p2klyQqs52XApB+g7xLF65796u+prjLJP2pru+3/kv1gYpvJPH1clgVhN1jef5rPIAKmjpz2IGtbbxPAsxFJ1bKs2t/7aP48aml8N29wYpu+o4nrNiOs+5VVSIwS9eQkRUd0eN4wZ5PR6ABnSPawYomeDxeOsUM9PpnviHf8n1NvPvd362Bu3E/FLgggw1UC06Gs/zPhBvLsVsaUwVEBnh/f3Oz1baF33TfOaN9zbY6nG8itvD5Y6o1AxvUW/nP5hfp52JE6A+7XxV8zLez5IZLRmJo3DYYUfysqb7CnckGUQWYKHfIaXWy/c7P1tLMmOrnfAp3CLvbW/s/Gx1cILm2lKyoBWFNnjw7On6WkaUH7AxklIDVAc6ivH6SkMCjhT37E2kjJHmdxwnmZyABUg0Yyy0OMrAGtfP8uT3lAAz6GdYFTUf15OBWgYljuaJbF8K7OMv7PxslZS8JQa56CjYV/z/xs7P1jTSCw8unQkP1F8QobT7eD9z+IQHmyPoJaTmHBp7f7/zs7XhgAuLWWUAJipH//k4L9jRMaWyLCWzOCBR4BznfbCReUVAmsjIQhcqOpzNn0Nd8X7ukYRUO6Wgx3kfqtWJ8KCzwkLnfiih58+/93oDIoiW3tAoMVXHx/H5Xs2lvOqeo/QrmKMb8SwvnLMkXtVJ98KMwQIxx+O9V3NQQeoWZyVN1noZP+/rCcllVCRx3sOgbizf2fkvVth3nd0SeH3Vpc/zLw290XTEm1LTEgL1D/TGvZqDDyrvjV0UP8IuXg7P7znIOmHW56JO1MDn/H3dr3Xe+gdaueWsaAiRewAAAABJRU5ErkJggg==)](bitcoin:1D8rwE8rmAzASPaJadcaMFxdjXtyJZpGQP)
     - `1D8rwE8rmAzASPaJadcaMFxdjXtyJZpGQP`
-    
