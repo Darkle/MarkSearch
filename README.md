@@ -2,7 +2,7 @@
 
 Recently there was a [vulnerability discovered](https://www.trustwave.com/Resources/SpiderLabs-Blog/CVE-2018-1000136---Electron-nodeIntegration-Bypass/) in Electron. I have updated the Windows version of MarkSearch to a version of Electron that includes a patch for this issue. 
 
-Unfortunately I ran in to some issues building the latest version of MarkSearch on MacOS and Linux, so if you need to use version 2017.2.24 of MarkSearch on MacOS or Linux, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page - only add pages to MarkSearch via the chrome extension.
+Unfortunately I ran in to some issues building the latest version of MarkSearch on MacOS and Linux, so if you need to use version 2017.2.24 of MarkSearch on MacOS or Linux, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page and only add pages to MarkSearch via the chrome extension.
 
 ---
 
