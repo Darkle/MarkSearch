@@ -1,7 +1,7 @@
 * To get set up:
   1. Clone repo
   2. Install node-gyp requirements: https://github.com/nodejs/node-gyp#installation
-    * Note: for windows setup, you can use the setupForNodeGypForWindows npm task.
+      * Note: for windows setup, you can use the setupForNodeGypForWindows npm task.
   3. Install the requirements for node-7z: https://github.com/quentinrossetti/node-7z#installation
   4. run `npm run initialSetup`
   5. Create a folder called `config` in the project directory, then in the `config` folder, create a file called `apikeys.json`. In the `apikeys.json` file put the following: https://gist.github.com/Darkle/e80746ccc0e30d675b3dc5b5046659ea
