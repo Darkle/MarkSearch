@@ -1,3 +1,9 @@
+#### A note about security and updates
+
+Recently there was a vulnerability discovered in Electron: https://www.trustwave.com/Resources/SpiderLabs-Blog/CVE-2018-1000136---Electron-nodeIntegration-Bypass/ . I have updated the Windows version of MarkSearch to a version of Electron that includes a patch for this issue. Unfortunately I ran in to some issues building on MacOS and Linux and was unable to produce builds of the latest version of MarkSearch for those operating systems. If you need to use MarkSearch on MacOS or Linux, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page - only add pages to MarkSearch via the chrome extension.
+
+
+
 MarkSearch is a desktop bookmarking application. It allows you to save and search web pages.
 
 The desktop application runs in the background while you use your browser to access the main MarkSearch search page. MarkSearch is supposed to work kinda like google in that you don't need to use tags or categories, you just do a full text search.
