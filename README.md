@@ -2,7 +2,7 @@
 
 Recently there was a [vulnerability discovered](https://www.trustwave.com/Resources/SpiderLabs-Blog/CVE-2018-1000136---Electron-nodeIntegration-Bypass/) in Electron. I have updated the Windows version of MarkSearch to a version of Electron that includes a patch for this issue. 
 
-Unfortunately I ran in to some issues building the latest version of MarkSearch on MacOS and Linux, so if you need to use MarkSearch on MacOS or Linux, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page - only add pages to MarkSearch via the chrome extension.
+Unfortunately I ran in to some issues building the latest version of MarkSearch on MacOS and Linux, so if you need to use version 2017.2.24 of MarkSearch on MacOS or Linux, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page - only add pages to MarkSearch via the chrome extension.
 
 ---
 
@@ -61,7 +61,6 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 - ### Installation & Setup:
 
   - #### Desktop App:
-
     - To install the desktop app, download the latest release for your operating system here: [Downloads]({{ '#downloads' | relative_url }})
 
     - Note: if you are updating, remember to exit MarkSearch first before you install the new version. To exit, just right-click the MarkSearch icon in the system tray (or left-click the MarkSearch icon in the menu bar if you're on MacOS), then click on "Quit MarkSearch".
@@ -98,9 +97,7 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
       - Note: when MarkSearch runs on MacOS, it will not show in the dock, it will only be available from the menu bar.
 
-      - 
-  - #### Browser Extension:
-
+      -   - #### Browser Extension:
     - Install from the Google Chrome webstore: [https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng](https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng)
 
     - When you first install the MarkSearch browser extension, the extension options page will automatically open to the setup.
@@ -340,12 +337,14 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
           - The first result will have "preconnect" applied, while the second result will have "dns-prefetch" applied. More info on how prebrowsing works is available here: [https://css-tricks.com/prefetching-preloading-prebrowsing/](https://css-tricks.com/prefetching-preloading-prebrowsing/)
 
-          - 
-## FAQ
+          - ## FAQ
 
 - Why doesn't it have tags?
+
   - Its focus is full text search and on integration with google and other search engines, so just like how you don't really use tags when you search google, the same applies for Marksearch.
+
 - I like the idea of full text search for bookmarks, but I don't like MarkSearch, are there any alternatives?
+
   - [https://historio.us/](https://historio.us/)
   - [http://fetching.io](http://fetching.io)
   - [http://cottontracks.com/](http://cottontracks.com/)
@@ -359,9 +358,13 @@ Note: if you need help with something that isn't mentioned here, you can open a 
   - [http://sebsauvage.net/wiki/doku.php?id=php%3Ashaarli](http://sebsauvage.net/wiki/doku.php?id=php%3Ashaarli)
   - [http://getstache.com/](http://getstache.com/)
   - [https://github.com/kwalo/bookmark-manager](https://github.com/kwalo/bookmark-manager)
+
 - Why is the code so shit?
+
   - It's my first day
+
 - I'd like to donate
+
   - <a href="https://www.buymeacoffee.com/2yhzJxd4B" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png?" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
   - You can also donate via Bitcoin. Click the image below if you have a bitcoin app installed, or use it as a QR code. Or copy the address manually below.
     - {: #bitcoinAddress }[![Bitcoin Address QR Code](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOQAAADkAQAAAACgLLUgAAADH0lEQVR4nO2Y3Y0kMQiEzSYAGZB/WM4AIvB95Xnve5jmpJO2V5rpNZIZ/qrK/jkPT/2sp+fX+l9YzSy6V8fqtSL45kuLw379HD5sbVvWWrOwz+JwNhRZe6wTZ+0VVV2fxfkquK+z4liuVa2P13Z+thoRrzKKvDN2+Xs7P1hPkeIOMu0UtWrxpsVhv222cCm3KzwjM1ZocdivALH523XrWor4Lo738zKPE4lzDRIDvDvijZ0frbjU3OxKxnZtvIYzS2saN9p2klyQqs52XApB+g7xLF65796u+prjLJP2pru+3/kv1gYpvJPH1clgVhN1jef5rPIAKmjpz2IGtbbxPAsxFJ1bKs2t/7aP48aml8N29wYpu+o4nrNiOs+5VVSIwS9eQkRUd0eN4wZ5PR6ABnSPawYomeDxeOsUM9PpnviHf8n1NvPvd362Bu3E/FLgggw1UC06Gs/zPhBvLsVsaUwVEBnh/f3Oz1baF33TfOaN9zbY6nG8itvD5Y6o1AxvUW/nP5hfp52JE6A+7XxV8zLez5IZLRmJo3DYYUfysqb7CnckGUQWYKHfIaXWy/c7P1tLMmOrnfAp3CLvbW/s/Gx1cILm2lKyoBWFNnjw7On6WkaUH7AxklIDVAc6ivH6SkMCjhT37E2kjJHmdxwnmZyABUg0Yyy0OMrAGtfP8uT3lAAz6GdYFTUf15OBWgYljuaJbF8K7OMv7PxslZS8JQa56CjYV/z/xs7P1jTSCw8unQkP1F8QobT7eD9z+IQHmyPoJaTmHBp7f7/zs7XhgAuLWWUAJipH//k4L9jRMaWyLCWzOCBR4BznfbCReUVAmsjIQhcqOpzNn0Nd8X7ukYRUO6Wgx3kfqtWJ8KCzwkLnfiih58+/93oDIoiW3tAoMVXHx/H5Xs2lvOqeo/QrmKMb8SwvnLMkXtVJ98KMwQIxx+O9V3NQQeoWZyVN1noZP+/rCcllVCRx3sOgbizf2fkvVth3nd0SeH3Vpc/zLw290XTEm1LTEgL1D/TGvZqDDyrvjV0UP8IuXg7P7znIOmHW56JO1MDn/H3dr3Xe+gdaueWsaAiRewAAAABJRU5ErkJggg==)](bitcoin:1D8rwE8rmAzASPaJadcaMFxdjXtyJZpGQP)
