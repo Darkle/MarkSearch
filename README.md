@@ -2,7 +2,7 @@
 
 Recently there was a [vulnerability discovered](https://www.trustwave.com/Resources/SpiderLabs-Blog/CVE-2018-1000136---Electron-nodeIntegration-Bypass/) in Electron. I have updated the Windows version of MarkSearch to a version of Electron that includes a patch for this issue. 
 
-Unfortunately I ran in to some issues building on MacOS and Linux and was unable to produce builds of the latest version of MarkSearch for those operating systems. If you need to use MarkSearch on MacOS or Linux, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page - only add pages to MarkSearch via the chrome extension.
+Unfortunately I ran in to some issues building the latest version of MarkSearch on MacOS and Linux, so if you need to use MarkSearch on MacOS or Linux, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page - only add pages to MarkSearch via the chrome extension.
 
 ---
 
@@ -98,8 +98,7 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
       - Note: when MarkSearch runs on MacOS, it will not show in the dock, it will only be available from the menu bar.
 
-      -  
-
+      - 
   - #### Browser Extension:
 
     - Install from the Google Chrome webstore: [https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng](https://chrome.google.com/webstore/detail/marksearch-browser-extens/apfcialnncnhpohmofpigaclihopfeng)
@@ -204,8 +203,7 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
         - MarkSearch remembers which links it has already checked, so you won't get an email with previously checked links.
 
-        -  
-
+        - 
       - ###### Current Database Location:
 
         - You can change where your MarkSearch database is stored. This is useful for if you want to have your bookmarks automatically backed up (e.g. putting them in a Dropbox folder). **Note: if you already have a file named "MarkSearchPages.db" in that directory, it will be overwritten.**
@@ -220,8 +218,7 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
         - Note: once you save this setting, you will have to restart MarkSearch for the new icon to be shown.
 
-        -  
-
+        - 
       - ###### Import Bookmarks:
 
         - You can import Bookmarks into MarkSearch using either a Netscape Bookmarks html file or a Plain Text file.
@@ -234,16 +231,14 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
         - When importing, MarkSearch scrapes the web page for each Bookmark URL you are importing, so the import may take some time if there are a large number of URLs to import/scrape.
 
-        -  
-
+        - 
       - ###### Export Bookmarks:
 
         - Exporting as a Bookmarks.html file (aka Netscape Bookmarks html file) will allow you to import your MarkSearch Bookmarks into Chrome, Firefox & IE.
 
         - Exporting as a Plain Text file will export all your MarkSearch Bookmarks as plain text with each Bookmarks URL on a new line in the file.
 
-        -  
-
+        - 
     - ##### MarkSearch Desktop App Updates:
 
       - MarkSearch will check on startup for updates and then once a week while it's running. If there is an update available, you will get an update window like this:
@@ -338,16 +333,14 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
           - ![Screenshot Of MarkSearch Extension MarkSearch Search Button]({{ '/assets/screenshots/screenshots-optimized/extensionSearchButton.png' | relative_url }})
 
-          -  
-
+          - 
         - ###### Prebrowsing:
 
           - When enabled, the first two results in the MarkSearch results will have prebrowsing applied to them. Prebrowsing can make links load faster.
 
           - The first result will have "preconnect" applied, while the second result will have "dns-prefetch" applied. More info on how prebrowsing works is available here: [https://css-tricks.com/prefetching-preloading-prebrowsing/](https://css-tricks.com/prefetching-preloading-prebrowsing/)
 
-          -  
-
+          - 
 ## FAQ
 
 - Why doesn't it have tags?
