@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{AB8896B4-6E3B-495C-8ADF-1496766E2B95}
 AppName=MarkSearch
-AppVersion=2017.2.24
+AppVersion=2018.5.24
 AppPublisher=Coop
 AppPublisherURL=http://darkle.github.io/MarkSearch/
 AppSupportURL=http://darkle.github.io/MarkSearch/
