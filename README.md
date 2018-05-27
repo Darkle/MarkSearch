@@ -1,8 +1,8 @@
 #### A note about security and updates
 
-Recently there was a [vulnerability discovered](https://www.trustwave.com/Resources/SpiderLabs-Blog/CVE-2018-1000136---Electron-nodeIntegration-Bypass/) in Electron. I have updated the Windows version of MarkSearch to a version of Electron that includes a patch for this issue. 
+Recently there was a [vulnerability discovered](https://www.trustwave.com/Resources/SpiderLabs-Blog/CVE-2018-1000136---Electron-nodeIntegration-Bypass/) in Electron. I have updated the Windows & Linux versions of MarkSearch to a version of Electron that includes a patch for this issue.
 
-Unfortunately I ran in to some issues building the latest version of MarkSearch on MacOS and Linux, so if you need to use version 2017.2.24 of MarkSearch on MacOS or Linux, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page and only add pages to MarkSearch via the chrome extension.
+Unfortunately I ran in to some issues building the latest version of MarkSearch on MacOS, so if you need to use version 2017.2.24 of MarkSearch on MacOS, it is recommended that you do not add links manually from the MarkSearch search page or via the MarkSearch settings page and only add pages to MarkSearch via the chrome extension.
 
 ---
 
@@ -181,41 +181,41 @@ Note: if you need help with something that isn't mentioned here, you can open a 
       - Screenshot of the MarkSearch settings window:
 
         - ![Screenshot Of MarkSearch Settings Page]({{ '/assets/screenshots/screenshots-optimized/MSsettingsPage.png' | relative_url }})
-        - 
+        -
       - ###### Bookmarklet:
 
         - You can use the bookmarklet to save pages from browsers that can't run extensions (e.g. mobile browsers). You can either generate the bookmarklet text and copy & paste, or you can have the bookmarklet emailed to you. Note: unfortunately the bookmarklet will not work on https pages - also, the email may take a few minutes to arrive.
-        - 
+        -
       - ###### Prebrowsing:
 
         - When enabled, the first two results on the MarkSearch search page will have prebrowsing applied to them. Prebrowsing can make bookmark links load faster when you click on them from the search page. (The first result will have "preconnect" applied, while the second result will have "dns-prefetch" applied. More info [here](https://css-tricks.com/prefetching-preloading-prebrowsing/)
-        - 
+        -
       - ###### Always Disable Tooltips
 
         - MarkSearch shows tooltips when you hover over icons on the MarkSearch search page. It does this until there have been pages saved to the database and there has been at least one result shown. This is done to help the user know what the icons do. If you are always running in incognito mode, then you probably want to always disable the tooltips.
-        - 
+        -
       - ###### Bookmark Expiry:
 
         - MarkSearch can check every 3 or 6 months for old bookmarks and then email you with details of the old bookmarks. In the email, you are given a link to a page where you can delete the old bookmarks from MarkSearch.
 
         - MarkSearch remembers which links it has already checked, so you won't get an email with previously checked links.
 
-        - 
+        -
       - ###### Current Database Location:
 
         - You can change where your MarkSearch database is stored. This is useful for if you want to have your bookmarks automatically backed up (e.g. putting them in a Dropbox folder). **Note: if you already have a file named "MarkSearchPages.db" in that directory, it will be overwritten.**
-        - 
+        -
       - ###### Revoke All Tokens:
 
         - Use this button to revoke all tokens generated for extensions or bookmarklets.
-        - 
+        -
       - ###### Tray Icon Color:
 
         - This setting allows you to change the color of the MarkSearch system tray icon. The 3 options are Blue, Black or White.
 
         - Note: once you save this setting, you will have to restart MarkSearch for the new icon to be shown.
 
-        - 
+        -
       - ###### Import Bookmarks:
 
         - You can import Bookmarks into MarkSearch using either a Netscape Bookmarks html file or a Plain Text file.
@@ -228,14 +228,14 @@ Note: if you need help with something that isn't mentioned here, you can open a 
 
         - When importing, MarkSearch scrapes the web page for each Bookmark URL you are importing, so the import may take some time if there are a large number of URLs to import/scrape.
 
-        - 
+        -
       - ###### Export Bookmarks:
 
         - Exporting as a Bookmarks.html file (aka Netscape Bookmarks html file) will allow you to import your MarkSearch Bookmarks into Chrome, Firefox & IE.
 
         - Exporting as a Plain Text file will export all your MarkSearch Bookmarks as plain text with each Bookmarks URL on a new line in the file.
 
-        - 
+        -
     - ##### MarkSearch Desktop App Updates:
 
       - MarkSearch will check on startup for updates and then once a week while it's running. If there is an update available, you will get an update window like this:
@@ -323,14 +323,14 @@ Note: if you need help with something that isn't mentioned here, you can open a 
         - ###### MarkSearch Results Box:
 
           - You can set the MarkSearch results box to show on the right or left of the google results page. You can also set the box to autoexpand on page load.
-          - 
+          -
         - ###### MarkSearch Search Button:
 
           - You can disable showing the MarkSearch search button next to the google search box as seen here:
 
           - ![Screenshot Of MarkSearch Extension MarkSearch Search Button]({{ '/assets/screenshots/screenshots-optimized/extensionSearchButton.png' | relative_url }})
 
-          - 
+          -
         - ###### Prebrowsing:
 
           - When enabled, the first two results in the MarkSearch results will have prebrowsing applied to them. Prebrowsing can make links load faster.
