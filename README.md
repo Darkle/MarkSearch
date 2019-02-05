@@ -1,4 +1,5 @@
 
+## Note: I am no longer maintaining this app.
 
 See [https://darkle.github.io/MarkSearch/](https://darkle.github.io/MarkSearch/) for details and help.
 
